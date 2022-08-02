@@ -1,10 +1,11 @@
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { newIntraUserDto } from './dto/newIntraUser.dto';
 export declare class UserService {
     private prisma;
     constructor(prisma: PrismaService);
     newUser(data: any): Promise<User>;
-    newUserIntra(email: string, usernames: string): Promise<User>;
+    createIntraUser(user: newIntraUserDto): Promise<User>;
     findAll(): Promise<User[]>;
     findOne(id: number): Promise<User>;
     findByEmail(iemail: string): Promise<User | undefined>;

@@ -19,16 +19,23 @@ let UserService = class UserService {
     async newUser(data) {
         return await this.prisma.user.create({ data });
     }
-    async newUserIntra(email, usernames) {
+    async createIntraUser(user) {
         return await this.prisma.user.create({
             data: {
-                email: email,
+                email: user.email,
                 password: '',
+                intra_name: user.intra_name,
+                intra_id: user.intra_id,
+                avatar_url: user.avatar_url,
+                displayname: user.displayname
             }
         });
     }
     async findAll() {
-        return await this.prisma.user.findMany();
+        const users = (await this.prisma.user.findMany());
+        for (const user of users)
+            delete user['password'];
+        return users;
     }
     async findOne(id) {
         try {
@@ -40,7 +47,7 @@ let UserService = class UserService {
             return user;
         }
         catch (error) {
-            throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
+            throw new common_1.NotFoundException({ message: 'User ' + id + ' not exist' });
         }
     }
     async findByEmail(iemail) {

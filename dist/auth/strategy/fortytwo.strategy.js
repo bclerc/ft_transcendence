@@ -27,10 +27,16 @@ let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStr
     }
     async validate(accessToken, refreshToken, profile) {
         console.log(profile);
-        const intraUser = profile;
+        const intraUser = {
+            email: profile.emails[0].value,
+            intra_name: profile.username,
+            intra_id: Number.parseInt(profile.id),
+            avatar_url: profile.photos[0].value,
+            displayname: profile.displayName,
+        };
         const user = await this.userService.findByEmail(profile.emails[0].value);
         if (!user) {
-            return await this.userService.newUserIntra(profile.emails[0].value, intraUser.username);
+            return await this.userService.createIntraUser(intraUser);
         }
         return user;
     }

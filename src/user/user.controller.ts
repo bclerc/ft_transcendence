@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Request, Get, HttpException, Param, Post, UseFilters, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { StaffGuard } from '../auth/guards/staff.guard';
 import { newUserDto } from './dto/newUser.dto';
 import { User } from '@prisma/client';
 import { FortyTwoGuard } from '../auth/guards/FortyTwo.guard';
+import { HttpExceptionFilter } from './filter/http-exception.filter';
 
 
 @Controller('user')
@@ -12,18 +14,23 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(StaffGuard)
   async findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
 
-  @UseGuards(FortyTwoGuard)
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(Number.parseInt(id));
+  @UseGuards(JwtAuthGuard)
+  async findOne(@Request() req: any, @Param('id') id): Promise<User>{
+    if (req.user.id != id && !req.user.staff)
+      throw new ForbiddenException();
+    return this.userService.findOne(id);
   }
+
   @Post()
-  @UseGuards(FortyTwoGuard)
+  @UseGuards(JwtAuthGuard)
   async newUser(@Body() data: newUserDto): Promise<User> {
     return await this.userService.newUser(data);
   }
 }
+

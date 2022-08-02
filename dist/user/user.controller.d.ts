@@ -5,6 +5,6 @@ export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
     findAll(): Promise<User[]>;
-    findOne(id: string): Promise<User>;
+    findOne(req: any, id: any): Promise<User>;
     newUser(data: newUserDto): Promise<User>;
 }

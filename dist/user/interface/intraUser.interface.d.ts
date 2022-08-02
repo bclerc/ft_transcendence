@@ -1,7 +1,7 @@
 export interface IntraUser {
-    readonly id: number;
-    readonly username: string;
-    readonly displayname: string;
     readonly email: string;
-    readonly photos: string;
+    readonly intra_name: string;
+    readonly intra_id: number;
+    readonly avatar_url: string;
+    readonly displayname: string;
 }

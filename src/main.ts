@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import { HttpExceptionFilter } from './user/filter/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,15 +12,15 @@ async function bootstrap() {
 	resave: false,
 	saveUninitialized: false,
 	cookie: {
-		maxAge: process.env.COOKIE_MAX_AGE,
+		maxAge: Number.parseInt(process.env.COOKIE_MAX_AGE),
 		httpOnly: false,
 		sameSite: 'strict',
 		secure:  false,
 	},
 }));
-
+  app.useGlobalFilters(new HttpExceptionFilter())
 	app.use(passport.initialize());
-  	app.use(passport.session())
+  app.use(passport.session())
 
   await app.listen(3000);
 }

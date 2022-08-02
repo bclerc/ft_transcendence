@@ -14,9 +14,12 @@ datasource db {
 model User {
   id          Int     @default(autoincrement()) @id
   email       String  @unique
-  intra_name  String?  @unique
-  displayname String? @unique
-  description String?  
   password    String
-  admin       Boolean @default(false)
+  intra_name  String? @unique
+  intra_id    Int?    @unique
+  avatar_url  String? @unique
+  displayname String? @unique
+  description String?
+  staff       Boolean @default(false)
+  createdAt DateTime @default(now())  
 }
