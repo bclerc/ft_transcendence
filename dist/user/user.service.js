@@ -19,6 +19,14 @@ let UserService = class UserService {
     async newUser(data) {
         return await this.prisma.user.create({ data });
     }
+    async newUserIntra(email, usernames) {
+        return await this.prisma.user.create({
+            data: {
+                email: email,
+                password: '',
+            }
+        });
+    }
     async findAll() {
         return await this.prisma.user.findMany();
     }
@@ -26,7 +34,7 @@ let UserService = class UserService {
         try {
             const user = await this.prisma.user.findUniqueOrThrow({
                 where: {
-                    id: Number.parseInt(id),
+                    id: Number(id),
                 },
             });
             return user;
@@ -35,10 +43,10 @@ let UserService = class UserService {
             throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
         }
     }
-    async findByEmail(email) {
+    async findByEmail(iemail) {
         return await this.prisma.user.findUnique({
             where: {
-                email: email,
+                email: String(iemail),
             },
         });
     }

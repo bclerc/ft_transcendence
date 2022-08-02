@@ -4,25 +4,25 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { newUserDto } from './dto/newUser.dto';
 import { User } from '@prisma/client';
+import { FortyTwoGuard } from '../auth/guards/FortyTwo.guard';
+
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(FortyTwoGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(id);
+    return this.userService.findOne(Number.parseInt(id));
   }
-
-  @UseGuards(JwtAuthGuard)
   @Post()
+  @UseGuards(FortyTwoGuard)
   async newUser(@Body() data: newUserDto): Promise<User> {
     return await this.userService.newUser(data);
   }

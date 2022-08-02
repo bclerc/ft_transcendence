@@ -26,7 +26,7 @@ let AppController = class AppController {
     }
     async login42() { }
     async callback(req) {
-        this.authService.login(req.user);
+        return this.authService.login(req.user);
     }
 };
 __decorate([

@@ -38,10 +38,9 @@ let AuthService = class AuthService {
         return null;
     }
     async login(user) {
-        const payload = { username: user.username, sub: user.id };
-        console.log('Good Redirection ? Or not hahaha');
+        const payload = { username: user.email, sub: user.id };
         return {
-            access_token: this.jwtService.sign(payload),
+            access_token: { access_token: this.jwtService.sign(payload), message: 'Token access for ' + user.email },
         };
     }
 };

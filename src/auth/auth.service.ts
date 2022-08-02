@@ -22,10 +22,10 @@ export class AuthService {
     return null;
   }
 
-  async login(user: IntraUser) {
-    const payload = { username: user.username, sub: user.id };
+  async login(user: User) {
+    const payload = { username: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: { access_token: this.jwtService.sign(payload), message: 'Token access for ' + user.email },
     };
   }
 }

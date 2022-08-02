@@ -16,8 +16,8 @@ exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const common_2 = require("@nestjs/common");
-const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const newUser_dto_1 = require("./dto/newUser.dto");
+const FortyTwo_guard_1 = require("../auth/guards/FortyTwo.guard");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -26,21 +26,20 @@ let UserController = class UserController {
         return this.userService.findAll();
     }
     async findOne(id) {
-        return this.userService.findOne(id);
+        return this.userService.findOne(Number.parseInt(id));
     }
     async newUser(data) {
         return await this.userService.newUser(data);
     }
 };
 __decorate([
-    (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findAll", null);
 __decorate([
-    (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_2.UseGuards)(FortyTwo_guard_1.FortyTwoGuard),
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -48,8 +47,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findOne", null);
 __decorate([
-    (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)(),
+    (0, common_2.UseGuards)(FortyTwo_guard_1.FortyTwoGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [newUser_dto_1.newUserDto]),

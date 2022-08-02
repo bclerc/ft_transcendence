@@ -14,10 +14,10 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
   ){
     super({
       clientID:
-        '#',
+        process.env.INTRA_CLIENT_ID,
       clientSecret:
-        '#',
-      callbackURL: 'http://localhost:3000/auth/42/callback',
+		process.env.INTRA_CLIENT_SECRET,
+      callbackURL: 'http://localhost:3000/api/v1/auth/42/callback',
 
     });
   }
@@ -26,9 +26,13 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     accessToken: string,
     refreshToken: string,
     profile: any,
-  ): Promise<IntraUser> {
+  ): Promise<any> {
     console.log(profile);
     const intraUser: IntraUser = profile;
-    return intraUser;
+	const user = await this.userService.findByEmail(profile.emails[0].value);
+	if (!user) {
+		return await this.userService.newUserIntra(profile.emails[0].value, intraUser.username);
+	}
+    return user;
   }
 }

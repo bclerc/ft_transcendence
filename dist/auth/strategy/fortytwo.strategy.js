@@ -18,9 +18,9 @@ const user_service_1 = require("../../user/user.service");
 let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStrategy)(passport_42_1.Strategy) {
     constructor(authService, userService) {
         super({
-            clientID: '45a7b907d51c017ab6c0383b76cec28bfef2b9f1fcd31cdaf63aea083ec8db99',
-            clientSecret: 'c8e3bc5c29fd0ee24d757313c7e735f1739ecf5ba180cf298fede76372b89b3b',
-            callbackURL: 'http://localhost:3000/auth/42/callback',
+            clientID: process.env.INTRA_CLIENT_ID,
+            clientSecret: process.env.INTRA_CLIENT_SECRET,
+            callbackURL: 'http://localhost:3000/api/v1/auth/42/callback',
         });
         this.authService = authService;
         this.userService = userService;
@@ -28,7 +28,11 @@ let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStr
     async validate(accessToken, refreshToken, profile) {
         console.log(profile);
         const intraUser = profile;
-        return intraUser;
+        const user = await this.userService.findByEmail(profile.emails[0].value);
+        if (!user) {
+            return await this.userService.newUserIntra(profile.emails[0].value, intraUser.username);
+        }
+        return user;
     }
 };
 FortyTwoStrategy = __decorate([

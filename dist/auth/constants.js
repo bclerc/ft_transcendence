@@ -2,6 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.jwtConstants = void 0;
 exports.jwtConstants = {
-    secret: 'secretKey',
+    secret: `${process.env.JWT_SECRET}`,
 };
 //# sourceMappingURL=constants.js.map

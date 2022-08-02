@@ -6,19 +6,27 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async newUser(data: Prisma.UserCreateInput): Promise<User> {
+  async newUser(data: any): Promise<User> {
     return await this.prisma.user.create({ data });
+  }
+
+  async newUserIntra(email: string, usernames: string): Promise<User> {
+    return await this.prisma.user.create({ 
+		data: {
+			email: email,
+			password: '',
+	}});
   }
 
   async findAll(): Promise<User[]> {
     return await this.prisma.user.findMany();
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(id: number): Promise<User> {
     try {
       const user = await this.prisma.user.findUniqueOrThrow({
         where: {
-          id: Number.parseInt(id),
+          id: Number(id),
         },
       });
       return user;
@@ -27,10 +35,10 @@ export class UserService {
     }
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
+  async findByEmail(iemail: string): Promise<User | undefined> {
     return await this.prisma.user.findUnique({
       where: {
-        email: email,
+        email: String(iemail),
       },
     });
   }

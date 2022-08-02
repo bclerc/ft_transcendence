@@ -16,6 +16,7 @@ const passport_1 = require("@nestjs/passport");
 const jwt_1 = require("@nestjs/jwt");
 const constants_1 = require("./constants");
 const fortytwo_strategy_1 = require("./strategy/fortytwo.strategy");
+const sessionSerializer_1 = require("./passport/sessionSerializer");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
@@ -28,7 +29,7 @@ AuthModule = __decorate([
                 signOptions: { expiresIn: '60s' },
             }),
         ],
-        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, fortytwo_strategy_1.FortyTwoStrategy],
+        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, fortytwo_strategy_1.FortyTwoStrategy, sessionSerializer_1.sessionSerializer],
         exports: [auth_service_1.AuthService],
     })
 ], AuthModule);

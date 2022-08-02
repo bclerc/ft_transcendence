@@ -20,6 +20,6 @@ export class AppController {
   @Get('auth/42/callback')
   @UseGuards(FortyTwoGuard)
   async callback(@Req() req: any) {
-    this.authService.login(req.user);
+    return this.authService.login(req.user);
   }
 }

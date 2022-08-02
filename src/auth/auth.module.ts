@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { FortyTwoStrategy } from './strategy/fortytwo.strategy';
+import { sessionSerializer } from './passport/sessionSerializer';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { FortyTwoStrategy } from './strategy/fortytwo.strategy';
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, FortyTwoStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, FortyTwoStrategy, sessionSerializer],
   exports: [AuthService],
 })
 export class AuthModule {}
