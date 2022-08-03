@@ -15,6 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+    console.log("coucou ??");
     return this.userService.findOne(Number.parseInt(payload.sub));
   }
 }

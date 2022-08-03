@@ -55,4 +55,27 @@ export class UserService {
     });
   }
 
+  async set2FASsecret(userId: number, secret: string) {
+	await this.prisma.user.update({
+	    where: {
+		    id: Number(userId),
+	    },
+	    data: {
+		    twoFactorAuthenticationSecret: secret,
+	    },
+	  });
+  }
+
+
+  async set2FAEnable(userId: number) {
+    await this.prisma.user.update({
+        where: {
+          id: Number(userId),
+        },
+        data: {
+          twoFactorEnabled: true,
+        },
+      });
+    }
+
 }

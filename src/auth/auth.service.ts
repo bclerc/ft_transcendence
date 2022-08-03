@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-import { IntraUser } from 'src/user/interface/intraUser.interface';
-import { UserController } from 'src/user/user.controller';
+import { authenticator } from 'otplib';
 
 import { UserService } from '../user/user.service';
 
@@ -22,10 +21,31 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
-    const payload = { username: user.email, sub: user.id };
+  async generate2FASecret(user: User) {
+    const secret = authenticator.generateSecret();
+	
+    const otpauthUrl = authenticator.keyuri(user.email, 'Transcendence42', secret);
+	
+    await this.usersService.set2FASsecret(user.id, secret);
+	
     return {
-      access_token: { access_token: this.jwtService.sign(payload), message: 'Token access for ' + user.email },
-    };
+		secret,
+		otpauthUrl
+    }
+ }
+
+  async verify2FACode(user: User, code: string): Promise<Boolean> {
+    return authenticator.verify({ 
+      token: code,
+      secret: user.twoFactorAuthenticationSecret
+    });;
   }
+
+
+  async login(userid: number, isTwoFactorAuthenticated: boolean) {
+	  const payload = { isTwoFactorAuthenticate: isTwoFactorAuthenticated, sub: userid };
+	  return {
+	  	access_token: { access_token: this.jwtService.sign(payload), message: 'Login successful' },
+	  };
+	}
 }

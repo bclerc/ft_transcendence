@@ -21,5 +21,7 @@ model User {
   displayname String? @unique
   description String?
   staff       Boolean @default(false)
+  twoFactorEnabled Boolean @default(false)
+  twoFactorAuthenticationSecret String? @unique
   createdAt DateTime @default(now())  
 }

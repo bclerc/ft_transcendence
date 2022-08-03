@@ -7,6 +7,7 @@ import { newUserDto } from './dto/newUser.dto';
 import { User } from '@prisma/client';
 import { FortyTwoGuard } from '../auth/guards/FortyTwo.guard';
 import { HttpExceptionFilter } from './filter/http-exception.filter';
+import { Jwt2faAuthGuard } from 'src/auth/guards/jwt2fa.guard';
 
 
 @Controller('user')
@@ -14,7 +15,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(StaffGuard)
+  @UseGuards()
   async findAll(): Promise<User[]> {
     return this.userService.findAll();
   }

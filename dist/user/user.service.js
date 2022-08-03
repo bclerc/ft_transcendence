@@ -57,6 +57,26 @@ let UserService = class UserService {
             },
         });
     }
+    async set2FASsecret(userId, secret) {
+        await this.prisma.user.update({
+            where: {
+                id: Number(userId),
+            },
+            data: {
+                twoFactorAuthenticationSecret: secret,
+            },
+        });
+    }
+    async set2FAEnable(userId) {
+        await this.prisma.user.update({
+            where: {
+                id: Number(userId),
+            },
+            data: {
+                twoFactorEnabled: true,
+            },
+        });
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

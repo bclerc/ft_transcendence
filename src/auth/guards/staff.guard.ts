@@ -9,7 +9,6 @@ export class StaffGuard extends JwtAuthGuard {
       }
       async canActivate(context: ExecutionContext) {
         await super.canActivate(context);
-
         const request = context.switchToHttp().getRequest();
         if (!request.user.staff) {
             throw new ForbiddenException();

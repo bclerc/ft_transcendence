@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const common_2 = require("@nestjs/common");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
-const staff_guard_1 = require("../auth/guards/staff.guard");
 const newUser_dto_1 = require("./dto/newUser.dto");
 let UserController = class UserController {
     constructor(userService) {
@@ -37,7 +36,7 @@ let UserController = class UserController {
 };
 __decorate([
     (0, common_1.Get)(),
-    (0, common_2.UseGuards)(staff_guard_1.StaffGuard),
+    (0, common_2.UseGuards)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

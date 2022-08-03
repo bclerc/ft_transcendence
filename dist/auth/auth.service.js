@@ -23,6 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
+const otplib_1 = require("otplib");
 const user_service_1 = require("../user/user.service");
 let AuthService = class AuthService {
     constructor(usersService, jwtService) {
@@ -37,10 +38,26 @@ let AuthService = class AuthService {
         }
         return null;
     }
-    async login(user) {
-        const payload = { username: user.email, sub: user.id };
+    async generate2FASecret(user) {
+        const secret = otplib_1.authenticator.generateSecret();
+        const otpauthUrl = otplib_1.authenticator.keyuri(user.email, 'Transcendence42', secret);
+        await this.usersService.set2FASsecret(user.id, secret);
         return {
-            access_token: { access_token: this.jwtService.sign(payload), message: 'Token access for ' + user.email },
+            secret,
+            otpauthUrl
+        };
+    }
+    async verify2FACode(user, code) {
+        return otplib_1.authenticator.verify({
+            token: code,
+            secret: user.twoFactorAuthenticationSecret
+        });
+        ;
+    }
+    async login(userid, isTwoFactorAuthenticated) {
+        const payload = { isTwoFactorAuthenticate: isTwoFactorAuthenticated, sub: userid };
+        return {
+            access_token: { access_token: this.jwtService.sign(payload), message: 'Login successful' },
         };
     }
 };

@@ -9,4 +9,6 @@ export declare class UserService {
     findAll(): Promise<User[]>;
     findOne(id: number): Promise<User>;
     findByEmail(iemail: string): Promise<User | undefined>;
+    set2FASsecret(userId: number, secret: string): Promise<void>;
+    set2FAEnable(userId: number): Promise<void>;
 }
