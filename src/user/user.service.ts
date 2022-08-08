@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
+import { AuthController } from 'src/auth/auth.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { string } from 'yargs';
 import { newIntraUserDto } from './dto/newIntraUser.dto';
@@ -41,6 +42,7 @@ export class UserService {
           id: Number(id),
         },
       });
+
       return user;
     } catch (error) {
       throw new NotFoundException({message: 'User ' + id + ' not exist'});
@@ -66,16 +68,18 @@ export class UserService {
 	  });
   }
 
-
-  async set2FAEnable(userId: number) {
+  async set2FAEnable(userId: number, enable: boolean) {
     await this.prisma.user.update({
         where: {
           id: Number(userId),
         },
         data: {
-          twoFactorEnabled: true,
+          twoFactorEnabled: enable
+          ,
         },
       });
+    return {
+        message: enable ? '2FA enabled' : '2FA disabled',
+      }
     }
-
 }

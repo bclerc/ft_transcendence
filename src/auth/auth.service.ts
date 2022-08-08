@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { authenticator } from 'otplib';
-
+import { toDataURL } from 'qrcode';
 import { UserService } from '../user/user.service';
+import { JwtNewToken } from './interfaces/jwttoken.interface';
 
 @Injectable()
 export class AuthService {
@@ -21,31 +22,36 @@ export class AuthService {
     return null;
   }
 
-  async generate2FASecret(user: User) {
-    const secret = authenticator.generateSecret();
-	
-    const otpauthUrl = authenticator.keyuri(user.email, 'Transcendence42', secret);
-	
+  async get2FASecret(user: User) {
+    const secret =  await user.twoFactorAuthenticationSecret || authenticator.generateSecret();
+    const otpauthUrl =  await authenticator.keyuri(user.intra_name, 'Transcendence42', secret);
+    const qrcode = await toDataURL(otpauthUrl);
     await this.usersService.set2FASsecret(user.id, secret);
-	
     return {
-		secret,
-		otpauthUrl
-    }
+  		secret,
+	  	otpauthUrl,
+      qrcode,      
+    };
  }
 
   async verify2FACode(user: User, code: string): Promise<Boolean> {
     return authenticator.verify({ 
       token: code,
       secret: user.twoFactorAuthenticationSecret
-    });;
+    });
   }
 
+  async reset2FASecret(user: User) {
+    await this.usersService.set2FASsecret(user.id, null);
+    return await this.get2FASecret(user);
+  }
 
-  async login(userid: number, isTwoFactorAuthenticated: boolean) {
+  async login(userid: number, isTwoFactorAuthenticated: boolean): Promise<JwtNewToken> {
 	  const payload = { isTwoFactorAuthenticate: isTwoFactorAuthenticated, sub: userid };
+    console.log(payload);
 	  return {
-	  	access_token: { access_token: this.jwtService.sign(payload), message: 'Login successful' },
+	  	access_token: this.jwtService.sign(payload),
+      message: 'Login successful',
 	  };
 	}
 }

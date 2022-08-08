@@ -36,7 +36,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
       displayname: profile.displayName, 
     };
 	
-    const user = await this.userService.findByEmail(profile.emails[0].value);
+    const user = await this.userService.findByEmail(intraUser.email);
 	if (!user) {
 		return await this.userService.createIntraUser(intraUser);
 	}

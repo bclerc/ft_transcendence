@@ -18,6 +18,7 @@ const constants_1 = require("./constants");
 const fortytwo_strategy_1 = require("./strategy/fortytwo.strategy");
 const sessionSerializer_1 = require("./passport/sessionSerializer");
 const jwt2fa_Strategy_1 = require("./strategy/jwt2fa.Strategy");
+const auth_controller_1 = require("./auth.controller");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
@@ -32,6 +33,7 @@ AuthModule = __decorate([
         ],
         providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt2fa_Strategy_1.Jwt2faStrategy, jwt_strategy_1.JwtStrategy, fortytwo_strategy_1.FortyTwoStrategy, sessionSerializer_1.sessionSerializer],
         exports: [auth_service_1.AuthService],
+        controllers: [auth_controller_1.AuthController],
     })
 ], AuthModule);
 exports.AuthModule = AuthModule;

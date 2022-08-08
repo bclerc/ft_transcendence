@@ -1,29 +1,31 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserService } from '../../user/user.service';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { jwtConstants } from '../constants';
+import { UserService } from 'src/user/user.service';
+import { JwtPayload } from '../interfaces/jwtpayload.interface';
 
 @Injectable()
 export class Jwt2faStrategy extends PassportStrategy(Strategy, 'jwt-2fa') {
-  constructor(private readonly userService: UserService) {
-    console.log('coucou');
+  constructor(@Inject(UserService) private readonly userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'secret',
+      ignoreExpiration: false,
+      secretOrKey: jwtConstants.secret,
     });
-
   }
 
-  async validate(payload: any) {
-    console.log('payload', payload);
-    const user = await this.userService.findOne(payload.sub);
+  async validate(payload: JwtPayload) {
+    const user = await this.userService.findOne(Number.parseInt(payload.sub));
 
+    console.log(payload);
     if (!user.twoFactorEnabled) {
       return user;
     }
-    if (payload.isTwoFactorAuthenticated) {
+    if (payload.isTwoFactorAuthenticate) {
       return user;
     }
+
     throw new UnauthorizedException({message: '2FA is required'});
   }
 }

@@ -10,6 +10,7 @@ import { jwtConstants } from './constants';
 import { FortyTwoStrategy } from './strategy/fortytwo.strategy';
 import { sessionSerializer } from './passport/sessionSerializer';
 import { Jwt2faStrategy } from './strategy/jwt2fa.Strategy';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -22,5 +23,6 @@ import { Jwt2faStrategy } from './strategy/jwt2fa.Strategy';
   ],
   providers: [AuthService, LocalStrategy, Jwt2faStrategy, JwtStrategy, FortyTwoStrategy, sessionSerializer],
   exports: [AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule {}

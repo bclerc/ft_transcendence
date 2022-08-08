@@ -24,6 +24,7 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const otplib_1 = require("otplib");
+const qrcode_1 = require("qrcode");
 const user_service_1 = require("../user/user.service");
 let AuthService = class AuthService {
     constructor(usersService, jwtService) {
@@ -38,13 +39,15 @@ let AuthService = class AuthService {
         }
         return null;
     }
-    async generate2FASecret(user) {
-        const secret = otplib_1.authenticator.generateSecret();
-        const otpauthUrl = otplib_1.authenticator.keyuri(user.email, 'Transcendence42', secret);
+    async get2FASecret(user) {
+        const secret = await user.twoFactorAuthenticationSecret || otplib_1.authenticator.generateSecret();
+        const otpauthUrl = await otplib_1.authenticator.keyuri(user.intra_name, 'Transcendence42', secret);
+        const qrcode = await (0, qrcode_1.toDataURL)(otpauthUrl);
         await this.usersService.set2FASsecret(user.id, secret);
         return {
             secret,
-            otpauthUrl
+            otpauthUrl,
+            qrcode,
         };
     }
     async verify2FACode(user, code) {
@@ -52,12 +55,17 @@ let AuthService = class AuthService {
             token: code,
             secret: user.twoFactorAuthenticationSecret
         });
-        ;
+    }
+    async reset2FASecret(user) {
+        await this.usersService.set2FASsecret(user.id, null);
+        return await this.get2FASecret(user);
     }
     async login(userid, isTwoFactorAuthenticated) {
         const payload = { isTwoFactorAuthenticate: isTwoFactorAuthenticated, sub: userid };
+        console.log(payload);
         return {
-            access_token: { access_token: this.jwtService.sign(payload), message: 'Login successful' },
+            access_token: this.jwtService.sign(payload),
+            message: 'Login successful',
         };
     }
 };

@@ -28,7 +28,6 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         this.userService = userService;
     }
     async validate(payload) {
-        console.log("coucou ??");
         return this.userService.findOne(Number.parseInt(payload.sub));
     }
 };

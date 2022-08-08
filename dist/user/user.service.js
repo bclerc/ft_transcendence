@@ -67,15 +67,18 @@ let UserService = class UserService {
             },
         });
     }
-    async set2FAEnable(userId) {
+    async set2FAEnable(userId, enable) {
         await this.prisma.user.update({
             where: {
                 id: Number(userId),
             },
             data: {
-                twoFactorEnabled: true,
+                twoFactorEnabled: enable,
             },
         });
+        return {
+            message: enable ? '2FA enabled' : '2FA disabled',
+        };
     }
 };
 UserService = __decorate([

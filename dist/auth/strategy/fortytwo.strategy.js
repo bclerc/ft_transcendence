@@ -34,7 +34,7 @@ let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStr
             avatar_url: profile.photos[0].value,
             displayname: profile.displayName,
         };
-        const user = await this.userService.findByEmail(profile.emails[0].value);
+        const user = await this.userService.findByEmail(intraUser.email);
         if (!user) {
             return await this.userService.createIntraUser(intraUser);
         }
