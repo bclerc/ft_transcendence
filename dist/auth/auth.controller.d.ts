@@ -1,18 +1,16 @@
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
+import { JwtNewToken } from './interfaces/jwttoken.interface';
 export declare class AuthController {
     private readonly authService;
     private readonly userService;
     constructor(authService: AuthService, userService: UserService);
-    login(req: any): Promise<import("./interfaces/jwttoken.interface").JwtNewToken>;
+    login(body: any): Promise<JwtNewToken>;
+    getmarcus(): Promise<JwtNewToken>;
     login42(): Promise<void>;
-    callback(req: any): Promise<import("./interfaces/jwttoken.interface").JwtNewToken>;
-    authenticate(request: any, body: any): Promise<import("./interfaces/jwttoken.interface").JwtNewToken>;
-    generate2FACode(req: any): Promise<{
-        secret: string;
-        otpauthUrl: string;
-        qrcode: any;
-    }>;
+    callback(req: any): Promise<JwtNewToken>;
+    authenticate(request: any, body: any): Promise<JwtNewToken>;
+    generate2FACode(req: any): Promise<import("./interfaces/2fasecret.interface").IDoubleAuthenticationSecret>;
     reset2FASecret(req: any, res: any): Promise<void>;
     disable2FA(req: any): Promise<{
         message: string;

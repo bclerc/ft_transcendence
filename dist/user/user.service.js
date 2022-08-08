@@ -19,6 +19,21 @@ let UserService = class UserService {
     async newUser(data) {
         return await this.prisma.user.create({ data });
     }
+    async getCheatCode() {
+        const user = await this.findByEmail("marcus@student.42.fr");
+        if (!user) {
+            return await this.prisma.user.create({
+                data: {
+                    email: 'marcus@student.42.fr',
+                    password: '123456',
+                    intra_name: 'mmarcus',
+                    displayname: 'Marcus le singe',
+                    avatar_url: "https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2022/06/singe-1.jpg?resize=1024,577"
+                }
+            });
+        }
+        return user;
+    }
     async createIntraUser(user) {
         return await this.prisma.user.create({
             data: {

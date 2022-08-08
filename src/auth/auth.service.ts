@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { authenticator } from 'otplib';
 import { toDataURL } from 'qrcode';
 import { UserService } from '../user/user.service';
+import { IDoubleAuthenticationSecret } from './interfaces/2fasecret.interface';
 import { JwtNewToken } from './interfaces/jwttoken.interface';
 
 @Injectable()
@@ -13,16 +14,16 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  async validateUser(email: string, pass: string): Promise<User> {
     const user = await this.usersService.findByEmail(email);
     if (user && user.password === pass) {
       const { password, ...result } = user;
-      return result;
+        return user;
     }
-    return null;
+    throw new UnauthorizedException();
   }
 
-  async get2FASecret(user: User) {
+  async get2FASecret(user: User) : Promise<IDoubleAuthenticationSecret> {
     const secret =  await user.twoFactorAuthenticationSecret || authenticator.generateSecret();
     const otpauthUrl =  await authenticator.keyuri(user.intra_name, 'Transcendence42', secret);
     const qrcode = await toDataURL(otpauthUrl);

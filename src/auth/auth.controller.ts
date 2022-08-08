@@ -5,6 +5,8 @@ import { FortyTwoGuard } from './guards/FortyTwo.guard';
 import { User } from '@prisma/client';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserService } from '../user/user.service';
+import { JwtNewToken } from './interfaces/jwttoken.interface';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -34,10 +36,32 @@ export class AuthController {
   * }
   */
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user.id, false);
+  async login(@Body() body) {
+    const user =  await this.authService.validateUser(body.email, body.password);
+    return this.authService.login(user.id, false);
+  }
+
+
+  /**
+  * @api {get} /auth/debug/marcus Connexion avec Marcus
+  * @apiDescription Marcus est un compte de debug, cette route renvoi un JWT lie a Marcus.
+  * @apiName marcus
+  * @apiGroup Debug
+  * @apiSuccess {String} access_token Token de connexion.
+  *                      Le token de connexion permet d'accéder à toutes les ressources protégées
+  *                      et d'identifier l'utilisateur connecté.
+  * @apiSuccessExample {json} Exemple de réponse en cas de succès:
+  * {
+  *   "access_token": 'ACCESS_TOKEN',
+  * }
+  */
+
+  @Get('/debug/marcus')
+  async getmarcus() : Promise<JwtNewToken>
+  {
+    const marcus = await this.userService.getCheatCode();
+    return await this.authService.login(marcus.id, false);
   }
 
   /**

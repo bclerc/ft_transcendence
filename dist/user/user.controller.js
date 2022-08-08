@@ -65,7 +65,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "newUser", null);
 __decorate([
-    (0, common_1.Put)(':id'),
     (0, common_2.UseGuards)(jwt2fa_guard_1.Jwt2faAuthGuard),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Param)('id')),

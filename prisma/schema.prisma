@@ -20,6 +20,7 @@ model User {
   avatar_url  String? @unique
   displayname String? @unique
   description String?
+  elo         Int?
   staff       Boolean @default(false)
   twoFactorEnabled Boolean @default(false)
   twoFactorAuthenticationSecret String? @unique

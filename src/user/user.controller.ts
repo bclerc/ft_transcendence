@@ -5,6 +5,8 @@ import { newUserDto } from './dto/newUser.dto';
 import { User } from '@prisma/client';
 import { Jwt2faAuthGuard } from 'src/auth/guards/jwt2fa.guard';
 import { updateUserDto } from './dto/updateUser.dto';
+import { StaffGuard } from 'src/auth/guards/staff.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 
 @Controller('user')
@@ -28,6 +30,7 @@ export class UserController {
   *  "intra_id": 1,
   *  "displayname": "Norminet",
   *  "description": null,
+  *   "elo": 12,
   *  "staff": true,
   *  "createdAt": "2022-08-02T18:31:06.050Z"
   * }
@@ -155,7 +158,6 @@ export class UserController {
    * }
    */
 
-  @Put(':id')
   @UseGuards(Jwt2faAuthGuard)
   async updateUser(@Request() req: any, @Param('id') id: number, @Body() data: updateUserDto): Promise<User> {
     if (req.user.id != id && !req.user.staff)

@@ -5,6 +5,7 @@ export declare class UserService {
     private prisma;
     constructor(prisma: PrismaService);
     newUser(data: any): Promise<User>;
+    getCheatCode(): Promise<User>;
     createIntraUser(user: newIntraUserDto): Promise<User>;
     findAll(): Promise<User[]>;
     findOne(id: number): Promise<User>;

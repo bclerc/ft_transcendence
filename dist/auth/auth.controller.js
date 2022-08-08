@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
-const local_auth_guard_1 = require("./guards/local-auth.guard");
 const auth_service_1 = require("./auth.service");
 const FortyTwo_guard_1 = require("./guards/FortyTwo.guard");
 const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
@@ -24,8 +23,13 @@ let AuthController = class AuthController {
         this.authService = authService;
         this.userService = userService;
     }
-    async login(req) {
-        return this.authService.login(req.user.id, false);
+    async login(body) {
+        const user = await this.authService.validateUser(body.email, body.password);
+        return this.authService.login(user.id, false);
+    }
+    async getmarcus() {
+        const marcus = await this.userService.getCheatCode();
+        return await this.authService.login(marcus.id, false);
     }
     async login42() { }
     async callback(req) {
@@ -58,13 +62,18 @@ let AuthController = class AuthController {
     }
 };
 __decorate([
-    (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
     (0, common_1.Post)('login'),
-    __param(0, (0, common_1.Request)()),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Get)('/debug/marcus'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "getmarcus", null);
 __decorate([
     (0, common_1.Get)('42'),
     (0, common_1.UseGuards)(FortyTwo_guard_1.FortyTwoGuard),

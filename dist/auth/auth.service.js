@@ -35,9 +35,9 @@ let AuthService = class AuthService {
         const user = await this.usersService.findByEmail(email);
         if (user && user.password === pass) {
             const { password } = user, result = __rest(user, ["password"]);
-            return result;
+            return user;
         }
-        return null;
+        throw new common_1.UnauthorizedException();
     }
     async get2FASecret(user) {
         const secret = await user.twoFactorAuthenticationSecret || otplib_1.authenticator.generateSecret();

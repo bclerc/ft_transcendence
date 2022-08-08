@@ -4,6 +4,7 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { jwtConstants } from '../constants';
 import { UserService } from 'src/user/user.service';
 import { JwtPayload } from '../interfaces/jwtpayload.interface';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class Jwt2faStrategy extends PassportStrategy(Strategy, 'jwt-2fa') {
@@ -16,7 +17,7 @@ export class Jwt2faStrategy extends PassportStrategy(Strategy, 'jwt-2fa') {
   }
 
   async validate(payload: JwtPayload) {
-    const user = await this.userService.findOne(Number.parseInt(payload.sub));
+    const user: User = await this.userService.findOne(Number.parseInt(payload.sub));
 
     console.log(payload);
     if (!user.twoFactorEnabled) {
