@@ -22,6 +22,9 @@ async function bootstrap() {
     app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
     app.use(passport.initialize());
     app.use(passport.session());
+    app.enableCors({
+        origin: "http://localhost:4200"
+    });
     await app.listen(3000);
 }
 bootstrap();

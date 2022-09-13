@@ -21,7 +21,9 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter())
 	app.use(passport.initialize());
   app.use(passport.session())
-
+	app.enableCors({
+		origin: "http://localhost:4200"
+	});
 
 
   

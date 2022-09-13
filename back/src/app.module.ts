@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { AuthController } from './app.controller';
 import { AppService } from './app.service';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
@@ -13,7 +13,7 @@ import { HttpExceptionFilter } from './user/filter/http-exception.filter';
 
 @Module({
   imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot()],
-  controllers: [AppController, UserController],
+  controllers: [AuthController, UserController],
   providers: [AppService, UserService, PrismaService, {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
