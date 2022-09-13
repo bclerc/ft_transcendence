@@ -11,8 +11,12 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './user/filter/http-exception.filter';
 
+import { HttpModule } from '@nestjs/axios';
+import { PongModule } from './pong/pong.module';
+
+
 @Module({
-  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot()],
+  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), HttpModule, PongModule],
   controllers: [AuthController, UserController],
   providers: [AppService, UserService, PrismaService, {
       provide: APP_FILTER,

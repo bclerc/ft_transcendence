@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+/* @font-face {
+    font-family: spritefontgraffitishadow;
+    src: url(/assets/fonts/SpriteFont/SpriteGraffitiShadow.otf) format("opentype");
+  }
+
+  @font-face {
+  font-family: spritefontgraffiti;
+  src: url(/assets/fonts/SpriteFont/SpriteGraffiti.otf) format("opentype");
+  } */
+
+  @font-face {
+    font-family: streetartfont;
+    src: url(/assets/fonts/StreetArtFonts/BOZART.ttf) format("truetype");
+    }

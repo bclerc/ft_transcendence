@@ -1,0 +1,17 @@
+import { BallI } from "./ball.interface";
+import { PlayerI } from "./player.interface";
+import { PointI } from "./point.interface";
+import { UserI } from "./user.interface";
+
+export interface GameI {
+	id?: string;			//id de la partie actuelle
+	player1?: PlayerI; 		//info du playeur 1
+	player2?: PlayerI;		//info du playeur 2
+	ball?: BallI;		//info de la balle
+	// acceleration?: number;	//option de partie
+	// direction?: PointI;		//option de partie
+
+	spectators?: UserI[]; //tableau des utilisateurs qui regardent le match
+	id_interval?:any;
+	type?: number;			//type de la partie; normal/classé 
+}

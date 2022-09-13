@@ -25,6 +25,11 @@ import { ModifyMyProfileComponent } from './pages/modify-my-profile/modify-my-pr
 import { UserService } from './services/user/user.service';
 import { UserResolver } from './resolver';
 
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+// import { PongService } from './pages/play-pong-pages/play-pong-pages.component';
+
+const config: SocketIoConfig = { url: 'http://localhost:4321', options: {} };
+
 export function tokenGetter() {
   return localStorage.getItem("auth-token");
 }
@@ -60,10 +65,14 @@ export function tokenGetter() {
         allowedDomains: ['localhost:3000']
       }
     }),
+    SocketIoModule.forRoot(config)
     //
   ],
-  providers: [    UserService,
-    UserResolver],
+  providers: [
+    UserService,
+    UserResolver,
+    // PongService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
