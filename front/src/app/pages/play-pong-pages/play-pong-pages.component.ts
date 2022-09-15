@@ -22,21 +22,22 @@ const MISS = 2;
 @Component({
   selector: 'app-root',
   templateUrl: './play-pong-pages.component.html',
-  styleUrls: ['./play-pong-pages.component.scss']
+  styleUrls: ['./play-pong-pages.component.css']
 })
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable(
+  // {providedIn: 'root'}
+)
 export class PlayPongPagesComponent {
   title = 'Best Pong Ever'; //titre page
   user: UserI = {};
   private var_interval: number;
 
-  private audio1;
-  private audio2;
-  private audio3;
+  // private audio1;
+  // private audio2;
+  // private audio3;
 
   constructor(private router: Router, private socket: Socket) {
+    console.log("constructor");
     socket.on('score', this.updateScore);
     socket.on('draw', this.drawMessage);
     socket.on('id', this.idMessage);
@@ -49,17 +50,18 @@ export class PlayPongPagesComponent {
     socket.on('lose', this.lose);
     socket.on('play', this.playAudio);
     this.var_interval = 0;
+    console.log("constructor end");
 
-    this.audio1 = new Audio();
-    this.audio2 = new Audio();
-    this.audio3 = new Audio();
+    // this.audio1 = new Audio();
+    // this.audio2 = new Audio();
+    // this.audio3 = new Audio();
 
-    this.audio1.src = "../../../assets/audio/ping_pong_8bit_plop.wav";
-    this.audio1.load();
-    this.audio2.src = "../../../assets/audio/ping_pong_8bit_beeep.wav";
-    this.audio2.load();
-    this.audio3.src = "../../../assets/audio/ping_pong_8bit_peeeeeep.wav";
-    this.audio3.load();
+    // this.audio1.src = "../../../assets/audio/ping_pong_8bit_plop.wav";
+    // this.audio1.load();
+    // this.audio2.src = "../../../assets/audio/ping_pong_8bit_beeep.wav";
+    // this.audio2.load();
+    // this.audio3.src = "../../../assets/audio/ping_pong_8bit_peeeeeep.wav";
+    // this.audio3.load();
   } 
 
   // @HostListener('document:keypress', ['$event'])
@@ -539,4 +541,4 @@ export class PlayPongPagesComponent {
           }
         }
     }
-}
+  };

@@ -28,7 +28,7 @@ import { UserResolver } from './resolver';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 // import { PongService } from './pages/play-pong-pages/play-pong-pages.component';
 
-const config: SocketIoConfig = { url: 'http://localhost:4321', options: {} };
+const config: SocketIoConfig = { url: 'http://localhost:4242', options: {} };
 
 export function tokenGetter() {
   return localStorage.getItem("auth-token");

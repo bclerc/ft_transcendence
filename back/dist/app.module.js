@@ -19,11 +19,13 @@ const prisma_module_1 = require("./prisma/prisma.module");
 const config_1 = require("@nestjs/config");
 const core_1 = require("@nestjs/core");
 const http_exception_filter_1 = require("./user/filter/http-exception.filter");
+const axios_1 = require("@nestjs/axios");
+const pong_module_1 = require("./pong/pong.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, user_module_1.UserModule, prisma_module_1.PrismaModule, config_1.ConfigModule.forRoot()],
+        imports: [auth_module_1.AuthModule, user_module_1.UserModule, prisma_module_1.PrismaModule, config_1.ConfigModule.forRoot(), axios_1.HttpModule, pong_module_1.PongModule],
         controllers: [app_controller_1.AuthController, user_controller_1.UserController],
         providers: [app_service_1.AppService, user_service_1.UserService, prisma_service_1.PrismaService, {
                 provide: core_1.APP_FILTER,

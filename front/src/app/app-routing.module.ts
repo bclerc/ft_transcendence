@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterPageComponent },
   //{ path: 'myprofile', component: ProfilePageComponent },
   { path: 'login/:id', component: GetTokenComponent},
-  { path: 'playpong', component: PlayPongPagesComponent, canActivate: [AuthGuard] }, 
+  { path: 'playpong', component: PlayPongPagesComponent }, 
   { path: 'playpong/ranked', component: PlayRankedPongPagesComponent, canActivate: [AuthGuard]  },
   { path: 'playpong/fun', component: PlayFunPongPagesComponent, canActivate: [AuthGuard]  },
   { path: 'chat', component: ChatPageComponent, canActivate: [AuthGuard]  },
