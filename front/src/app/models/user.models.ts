@@ -6,10 +6,10 @@ export interface UserI {
     intra_name? :       string;
     avatar_url? :        string;
     intra_id? :         number;
-    displayname? :      string; 
+    displayname? :      string;
+    description? :      string;
     //password? :         string;
     username? :         string;
-    elo? :              number;
     staff? :            boolean;
     createdAt? :        Date;
 }

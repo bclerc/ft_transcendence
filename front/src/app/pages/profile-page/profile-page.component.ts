@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable, observable, tap } from 'rxjs';
+import { map, Observable, observable, Subscription, tap } from 'rxjs';
 import { User, UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { UserService } from 'src/app/services/user/user.service';
@@ -18,6 +18,7 @@ export class ProfilePageComponent implements OnInit {
   constructor(private userService: UserService, private router: Router, private route : ActivatedRoute) { }
   id! : number;
   imageUrl? : string;
+  subscription! : Subscription;
   /*ngOnInit(): void {
 
 		this.authService.getUserId().pipe(
@@ -34,10 +35,9 @@ export class ProfilePageComponent implements OnInit {
     userList2$!: Observable <UserI[]>;
 
   ngOnInit(): void {
-
     this.userList2$ =  this.route.data.pipe(
       map(data => data['userList']));
-      this.userList2$.subscribe(
+      this.subscription = this.userList2$.subscribe(
         (data : any) => {
           console.log("data =",data);
           this.userList = data;
@@ -46,11 +46,23 @@ export class ProfilePageComponent implements OnInit {
         );
         this.id= Number( this.router.url.split('/')[2]);
         this.userService.changeUserList(this.userList);
-        this.user = this.userService.getUserById(this.id);
+        
+        try {
+          this.user = this.userService.getUserById(this.id);
+        } catch (error) {
+          this.router.navigate(['error'])
+        }
+        /*if (this.user === null)
+          this.router.navigate([''])*/
    
 
     
 
+  }
+
+  ngOnDestroy() : void
+  {
+    this.subscription.unsubscribe;
   }
 
 }

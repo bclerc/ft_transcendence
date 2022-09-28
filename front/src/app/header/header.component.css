@@ -1,17 +1,19 @@
 header {
     text-align: center;
-    background-color: #EEE;
+    background-color: rgb(201, 204, 201, 0.919);
     margin-bottom: 20px;
     padding: 10px;
+    border: 10px solid rgb(201, 204, 201, 0.919);
+    border-radius: 9px;
   }
   a {
     margin: 0 10px;
-    color: #333;
+    color: rgb(67, 19, 244);
     text-decoration: none;
 
   }
   
   .active {
-    color: #666;
+    color: rgb(40, 5, 5);
     text-decoration: underline;
   }

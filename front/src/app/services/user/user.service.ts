@@ -174,4 +174,19 @@ export class UserService {
         return this.http.get<User[]>("http://localhost:3000/api/v1/user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
     }
 
+    ChangeDbInformation(id: number, user : UserI): Observable<any>
+    {
+      //console.log("coucou");
+       return this.http.put<Observable<any>>("http://localhost:3000/api/v1/user/" + id, user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    }
+
+    ActivateFacode(code : number) : Observable<any>
+    {
+      return this.http.post<Observable<any>>("http://localhost:3000/api/v1/auth/2fa/enable",{"twoFactorAuthenticationCode" : "038712",}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    }
+
+    ValidateFaCode():Observable<any>
+    {
+      return this.http.post<Observable<any>>("http://localhost:3000/api/v1/auth/2fa",{"twoFactorAuthenticationCode" : "955186",}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    }
     }
