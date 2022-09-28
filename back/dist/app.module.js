@@ -24,7 +24,7 @@ let AppModule = class AppModule {
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [auth_module_1.AuthModule, user_module_1.UserModule, prisma_module_1.PrismaModule, config_1.ConfigModule.forRoot()],
-        controllers: [app_controller_1.AppController, user_controller_1.UserController],
+        controllers: [app_controller_1.AuthController, user_controller_1.UserController],
         providers: [app_service_1.AppService, user_service_1.UserService, prisma_service_1.PrismaService, {
                 provide: core_1.APP_FILTER,
                 useClass: http_exception_filter_1.HttpExceptionFilter,

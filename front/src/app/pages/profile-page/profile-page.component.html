@@ -1,0 +1,7 @@
+<app-header></app-header>
+<div>
+<p>{{user?.displayname| json}}</p>
+<p>{{user?.email| json}}</p>
+<p>{{user?.createdAt | json }}</p>
+<img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/>
+</div>
