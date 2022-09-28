@@ -11,7 +11,19 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
   
   async newUser(data: any): Promise<User> {
-    return await this.prisma.user.create({ data });
+    try {
+      const user = await this.prisma.user.create({ data });
+      return user;
+    }
+    catch(e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError)
+      {
+        if (e.code == 'P2002') {
+          throw new HttpException(e.meta.target[0] + " already used", HttpStatus.CONFLICT); 
+        }
+      }
+      throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async getCheatCode()

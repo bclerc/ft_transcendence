@@ -27,13 +27,16 @@ let AuthController = class AuthController {
         const user = await this.authService.validateUser(body.email, body.password);
         return this.authService.login(user.id, false);
     }
-    async getmarcus() {
+    async getmarcus(res) {
         const marcus = await this.userService.getCheatCode();
-        return await this.authService.login(marcus.id, false);
+        const token = await this.authService.login(marcus.id, false);
+        res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
     }
     async login42() { }
-    async callback(req) {
-        return this.authService.login(req.user.id, false);
+    async callback(req, res) {
+        const token = await this.authService.login(req.user.id, true);
+        res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
+        return token;
     }
     async authenticate(request, body) {
         const isCodeValid = await this.authService.verify2FACode(request.user, body.twoFactorAuthenticationCode);
@@ -70,8 +73,9 @@ __decorate([
 ], AuthController.prototype, "login", null);
 __decorate([
     (0, common_1.Get)('/debug/marcus'),
+    __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "getmarcus", null);
 __decorate([
@@ -85,8 +89,9 @@ __decorate([
     (0, common_1.Get)('42/callback'),
     (0, common_1.UseGuards)(FortyTwo_guard_1.FortyTwoGuard),
     __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "callback", null);
 __decorate([

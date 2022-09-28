@@ -19,16 +19,19 @@ const prisma_module_1 = require("./prisma/prisma.module");
 const config_1 = require("@nestjs/config");
 const core_1 = require("@nestjs/core");
 const http_exception_filter_1 = require("./user/filter/http-exception.filter");
+const chat_gateway_1 = require("./chat/chat.gateway");
+const jwt_1 = require("@nestjs/jwt");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, user_module_1.UserModule, prisma_module_1.PrismaModule, config_1.ConfigModule.forRoot()],
+        imports: [auth_module_1.AuthModule,
+            user_module_1.UserModule, prisma_module_1.PrismaModule, jwt_1.JwtModule, config_1.ConfigModule.forRoot()],
         controllers: [app_controller_1.AppController, user_controller_1.UserController],
         providers: [app_service_1.AppService, user_service_1.UserService, prisma_service_1.PrismaService, {
                 provide: core_1.APP_FILTER,
                 useClass: http_exception_filter_1.HttpExceptionFilter,
-            }],
+            }, chat_gateway_1.ChatGateway],
     })
 ], AppModule);
 exports.AppModule = AppModule;

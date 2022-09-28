@@ -113,7 +113,6 @@ export class UserController {
    */
 
   @Post()
-  @UseGuards(Jwt2faAuthGuard)
   async newUser(@Body() data: newUserDto): Promise<User> {
     return await this.userService.newUser(data);
   }

@@ -12,8 +12,8 @@ import { AuthGuard } from '@nestjs/passport';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UserService
-    ) {}
+    private readonly userService: UserService,
+  ) {}
 
   /**
   * @api {post} /auth/login Connexion locale
@@ -58,10 +58,11 @@ export class AuthController {
   */
 
   @Get('/debug/marcus')
-  async getmarcus() : Promise<JwtNewToken>
+  async getmarcus(@Res() res)
   {
     const marcus = await this.userService.getCheatCode();
-    return await this.authService.login(marcus.id, false);
+    const token = await this.authService.login(marcus.id, false);
+    res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
   }
 
   /**
@@ -84,8 +85,11 @@ export class AuthController {
 
   @Get('42/callback')
   @UseGuards(FortyTwoGuard)
-  async callback(@Req() req: any) {
-    return this.authService.login(req.user.id, false);
+  async callback(@Req() req: any, @Res() res: any) {
+    
+    const token = await this.authService.login(req.user.id, true);
+    res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
+    return token;
   }
   
   /**

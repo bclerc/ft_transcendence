@@ -8,36 +8,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth/auth.service");
 const user_service_1 = require("./user/user.service");
-const jwt2fa_guard_1 = require("./auth/guards/jwt2fa.guard");
+const prisma_service_1 = require("./prisma/prisma.service");
 let AppController = class AppController {
-    constructor(authService, userService) {
+    constructor(authService, userService, prismaService) {
         this.authService = authService;
         this.userService = userService;
-    }
-    async lol(req) {
-        return (req.user);
+        this.prismaService = prismaService;
     }
 };
-__decorate([
-    (0, common_1.Get)('/'),
-    (0, common_1.UseGuards)(jwt2fa_guard_1.Jwt2faAuthGuard),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AppController.prototype, "lol", null);
 AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [auth_service_1.AuthService,
-        user_service_1.UserService])
+        user_service_1.UserService,
+        prisma_service_1.PrismaService])
 ], AppController);
 exports.AppController = AppController;
 //# sourceMappingURL=app.controller.js.map

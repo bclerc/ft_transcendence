@@ -19,6 +19,10 @@ async function bootstrap() {
             secure: false,
         },
     }));
+    app.enableCors({
+        origin: '*',
+        methods: 'GET, POST'
+    });
     app.useGlobalFilters(new http_exception_filter_1.HttpExceptionFilter());
     app.use(passport.initialize());
     app.use(passport.session());

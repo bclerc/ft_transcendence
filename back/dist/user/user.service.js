@@ -11,13 +11,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
+const client_1 = require("@prisma/client");
 const prisma_service_1 = require("../prisma/prisma.service");
 let UserService = class UserService {
     constructor(prisma) {
         this.prisma = prisma;
     }
     async newUser(data) {
-        return await this.prisma.user.create({ data });
+        try {
+            const user = await this.prisma.user.create({ data });
+            return user;
+        }
+        catch (e) {
+            if (e instanceof client_1.Prisma.PrismaClientKnownRequestError) {
+                if (e.code == 'P2002') {
+                    throw new common_1.HttpException(e.meta.target[0] + " already used", common_1.HttpStatus.CONFLICT);
+                }
+            }
+            throw new common_1.HttpException(e, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     async getCheatCode() {
         const user = await this.findByEmail("marcus@student.42.fr");

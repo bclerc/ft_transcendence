@@ -20,7 +20,7 @@ export class AuthService {
       const { password, ...result } = user;
         return user;
     }
-    throw new UnauthorizedException();
+    throw new UnauthorizedException("Invalid credentials");
   }
 
   async get2FASecret(user: User) : Promise<IDoubleAuthenticationSecret> {

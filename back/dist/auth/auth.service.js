@@ -37,7 +37,7 @@ let AuthService = class AuthService {
             const { password } = user, result = __rest(user, ["password"]);
             return user;
         }
-        throw new common_1.UnauthorizedException();
+        throw new common_1.UnauthorizedException("Invalid credentials");
     }
     async get2FASecret(user) {
         const secret = await user.twoFactorAuthenticationSecret || otplib_1.authenticator.generateSecret();

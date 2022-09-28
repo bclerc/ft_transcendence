@@ -27,6 +27,8 @@
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/platform-socket.io": "^9.0.9",
+    "@nestjs/websockets": "^9.0.9",
     "@prisma/client": "^4.1.1",
     "apidoc": "^0.52.0",
     "dash-apidoc-template": "^1.0.0",

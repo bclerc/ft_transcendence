@@ -8,21 +8,39 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-
 }
 
 model User {
-  id          Int     @default(autoincrement()) @id
-  email       String  @unique
-  password    String
-  intra_name  String? @unique
-  intra_id    Int?    @unique
-  avatar_url  String? @unique
-  displayname String? @unique
+  id                            Int              @id @default(autoincrement())
+  email                         String           @unique
+  password                      String
+  intra_name                    String?          @unique
+  intra_id                      Int?             @unique
+  avatar_url                    String?          @default("https://static.cnews.fr/sites/default/files/styles/image_750_422/public/raw_62c3e2f1a9694_0.jpg")
+  displayname                   String?          @unique
+  description                   String?
+  elo                           Int?
+  channels                      UserOnChatRoom[]
+  staff                         Boolean          @default(false)
+  twoFactorEnabled              Boolean          @default(false)
+  twoFactorAuthenticationSecret String?          @unique
+  createdAt                     DateTime         @default(now())
+  updatedAt                     DateTime         @updatedAt
+}
+
+model ChatRoom {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
   description String?
-  elo         Int?
-  staff       Boolean @default(false)
-  twoFactorEnabled Boolean @default(false)
-  twoFactorAuthenticationSecret String? @unique
-  createdAt DateTime @default(now())  
+  users       UserOnChatRoom[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+model UserOnChatRoom {
+  id         Int      @id @default(autoincrement())
+  chatRoomId Int      @unique
+  ChatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+  userId     Int      @unique
+  User       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
 }

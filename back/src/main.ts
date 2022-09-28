@@ -1,3 +1,4 @@
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
@@ -18,6 +19,10 @@ async function bootstrap() {
 		secure:  false,
 	},
 }));
+  app.enableCors({
+  origin: '*',
+  methods: 'GET, POST'
+  })
   app.useGlobalFilters(new HttpExceptionFilter())
 	app.use(passport.initialize());
   app.use(passport.session())
