@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { AuthController } from './app.controller';
 import { AppService } from './app.service';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
@@ -15,9 +15,8 @@ import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
-  imports: [AuthModule,
-    UserModule, PrismaModule, JwtModule, ConfigModule.forRoot()],
-  controllers: [AppController, UserController],
+  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot()],
+  controllers: [AuthController, UserController],
   providers: [AppService, UserService, PrismaService, {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,

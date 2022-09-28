@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { AuthService } from './auth/auth.service';
 import { UserService } from './user/user.service';
 import { PrismaService } from './prisma/prisma.service';
@@ -7,3 +8,26 @@ export declare class AppController {
     private readonly prismaService;
     constructor(authService: AuthService, userService: UserService, prismaService: PrismaService);
 }
+=======
+import { AuthService } from './auth/auth.service';
+import { UserService } from './user/user.service';
+import { JwtNewToken } from './auth/interfaces/jwttoken.interface';
+export declare class AuthController {
+    private readonly authService;
+    private readonly userService;
+    constructor(authService: AuthService, userService: UserService);
+    login(body: any): Promise<JwtNewToken>;
+    getmarcus(res: any): Promise<void>;
+    login42(): Promise<void>;
+    callback(req: any, res: any): Promise<JwtNewToken>;
+    authenticate(request: any, body: any): Promise<JwtNewToken>;
+    generate2FACode(req: any): Promise<import("./auth/interfaces/2fasecret.interface").IDoubleAuthenticationSecret>;
+    reset2FASecret(req: any, res: any): Promise<void>;
+    disable2FA(req: any): Promise<{
+        message: string;
+    }>;
+    enable2FA(req: any, data: any): Promise<{
+        message: string;
+    }>;
+}
+>>>>>>> 7406b1852e29f1f76253b888f55cad003536fb7c
