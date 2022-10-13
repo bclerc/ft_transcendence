@@ -28,21 +28,10 @@ export class DashboardComponent implements OnInit {
    
 
   ngOnInit(): void {
+  
     
-    this.chatService.getMessages().subscribe((message: string) => {
-        this.msg.push(message);
-      });
-    
-     this.chatService.sendMessage('Hello World');
-      this.snackbar.open(`Welcome ${user.displayname}, ${user.email}`, 'Close', {
-        duration: 3000, horizontalPosition: 'right', verticalPosition: 'top', 
-      })
-    }
-    );
-
-    }
-    );
   }
+
   sendMessage()
   {
     if (this.form.valid)

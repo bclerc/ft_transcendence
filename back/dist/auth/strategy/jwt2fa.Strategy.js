@@ -29,7 +29,6 @@ let Jwt2faStrategy = class Jwt2faStrategy extends (0, passport_1.PassportStrateg
     }
     async validate(payload) {
         const user = await this.userService.findOne(Number.parseInt(payload.sub));
-        console.log(payload);
         if (!user.twoFactorEnabled) {
             return user;
         }

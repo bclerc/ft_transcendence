@@ -1,6 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
+import { Http2ServerRequest } from 'http2';
 import { authenticator } from 'otplib';
 import { toDataURL } from 'qrcode';
 import { UserService } from '../user/user.service';
@@ -34,10 +35,12 @@ export class AuthService {
       qrcode,      
     };
  }
-
+ // todo
   async verify2FACode(user: User, code: string): Promise<Boolean> {
+    if (!user.twoFactorAuthenticationSecret)
+      throw new UnauthorizedException("User have not secret set");
     return authenticator.verify({ 
-      token: code,
+      token:  code,
       secret: user.twoFactorAuthenticationSecret
     });
   }

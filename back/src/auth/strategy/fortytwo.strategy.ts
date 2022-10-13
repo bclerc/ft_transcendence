@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { doesNotMatch } from 'assert';
 import { IntraUser } from 'src/user/interface/intraUser.interface';
 import { UserService } from 'src/user/user.service';
+import { getConfigToken } from '@nestjs/config';
 
 @Injectable()
 export class FortyTwoStrategy extends PassportStrategy(Strategy) {
@@ -27,7 +28,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     refreshToken: string,
     profile: any,
   ): Promise<any> {
-    console.log(profile);
     const intraUser = {
       email: profile.emails[0].value,
       intra_name: profile.username,
@@ -35,7 +35,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
       avatar_url: profile.photos[0].value,
       displayname: profile.displayName, 
     };
-	
     const user = await this.userService.findByEmail(intraUser.email);
 	if (!user) {
 		return await this.userService.createIntraUser(intraUser);

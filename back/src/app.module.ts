@@ -12,14 +12,16 @@ import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './user/filter/http-exception.filter';
 import { ChatGateway } from './chat/chat.gateway';
 import { JwtModule } from '@nestjs/jwt';
+import { ChatModule } from './chat/chat.module';
+import { ChatService } from './chat/chat.service';
+import { MessageService } from './message/message.service';
 
 
 @Module({
-  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot()],
-  controllers: [AuthController, UserController],
+  imports: [JwtModule, AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), ChatModule],
   providers: [AppService, UserService, PrismaService, {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
-  }, ChatGateway],
+  }, ChatGateway, ChatService, MessageService],
 })
 export class AppModule {}

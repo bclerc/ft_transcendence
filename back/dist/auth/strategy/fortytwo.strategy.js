@@ -26,7 +26,6 @@ let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStr
         this.userService = userService;
     }
     async validate(accessToken, refreshToken, profile) {
-        console.log(profile);
         const intraUser = {
             email: profile.emails[0].value,
             intra_name: profile.username,

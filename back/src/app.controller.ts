@@ -62,7 +62,7 @@ export class AuthController {
   {
     const marcus = await this.userService.getCheatCode();
     const token = await this.authService.login(marcus.id, false);
-    res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
+    res.status('200').redirect(`http://localhost:4200/login/${token.access_token}`);
   }
 
   /**
@@ -78,6 +78,7 @@ export class AuthController {
   *   "access_token": 'ACCESS_TOKEN',
   * }
   */
+
 
   @Get('42')
   @UseGuards(FortyTwoGuard)
@@ -121,7 +122,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async authenticate(@Request() request, @Body() body: any) {
     const isCodeValid = await this.authService.verify2FACode(request.user, body.twoFactorAuthenticationCode);
-    console.log(isCodeValid);
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }

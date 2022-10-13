@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import { AuthService } from './auth/auth.service';
-import { UserService } from './user/user.service';
-import { PrismaService } from './prisma/prisma.service';
-export declare class AppController {
-    private readonly authService;
-    private readonly userService;
-    private readonly prismaService;
-    constructor(authService: AuthService, userService: UserService, prismaService: PrismaService);
-}
-=======
 import { AuthService } from './auth/auth.service';
 import { UserService } from './user/user.service';
 import { JwtNewToken } from './auth/interfaces/jwttoken.interface';
@@ -30,4 +19,3 @@ export declare class AuthController {
         message: string;
     }>;
 }
->>>>>>> 7406b1852e29f1f76253b888f55cad003536fb7c

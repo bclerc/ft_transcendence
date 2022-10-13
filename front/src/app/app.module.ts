@@ -24,10 +24,35 @@ import { MyProfileComponent } from './pages/my-profile/my-profile.component';
 import { ModifyMyProfileComponent } from './pages/modify-my-profile/modify-my-profile.component';
 import { UserService } from './services/user/user.service';
 import { UserResolver } from './resolver';
+//
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatCardModule} from '@angular/material/card';
+import {MatListModule} from '@angular/material/list';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatIconModule} from '@angular/material/icon';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { UserselectComponent } from './userselect/userselect.component';
+import { CommonModule } from '@angular/common';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RoomComponent } from './pages/chat-page/room/room.component';
+
+const config: SocketIoConfig = {
+  url: 'http://localhost:81', options: {
+    query: {
+      token: sessionStorage.getItem('auth-token')
+    }
+  }
+};
 
 export function tokenGetter() {
   return localStorage.getItem("auth-token");
 }
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,6 +71,8 @@ export function tokenGetter() {
     UnfoundPagesComponent,
     MyProfileComponent,
     ModifyMyProfileComponent,
+    UserselectComponent,
+    RoomComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,20 +80,33 @@ export function tokenGetter() {
     //
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
+    HttpClientModule, 
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
         allowedDomains: ['localhost:3000']
       }
     }),
+    SocketIoModule.forRoot(config),
     //
+    BrowserAnimationsModule,
+    CommonModule,
+    MatListModule,
+    MatCardModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatSnackBarModule,
   ],
   providers: [    UserService,
     UserResolver],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
-  
+
 }
 

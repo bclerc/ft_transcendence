@@ -43,6 +43,12 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @Get("me")
+  @UseGuards(Jwt2faAuthGuard)
+  async getLoggedUser(@Request() req: any) {
+    return await this.userService.findOne(req.user.id);
+  }
+
   /**
   * @api {get} /user/:id Récupérer un utilisateur par son id
   * @apiName GetUser
@@ -112,6 +118,12 @@ export class UserController {
    * }
    */
 
+  @Get('search/:name')
+  @UseGuards(Jwt2faAuthGuard)
+  async findUserByName(@Param('name') name: string): Promise<User[]> {
+    return await this.userService.findByName(name);
+  }
+
   @Post()
   async newUser(@Body() data: newUserDto): Promise<User> {
     return await this.userService.newUser(data);
@@ -157,11 +169,10 @@ export class UserController {
    * }
    */
 
+  @Put()
   @UseGuards(Jwt2faAuthGuard)
-  async updateUser(@Request() req: any, @Param('id') id: number, @Body() data: updateUserDto): Promise<User> {
-    if (req.user.id != id && !req.user.staff)
-      throw new ForbiddenException();
-    return ;
+  async updateUser(@Request() req: any, @Body() data: updateUserDto) {
+    return await this.userService.updateUser(req.user.id, data);
   }
 }
 

@@ -27,11 +27,6 @@ let AuthController = class AuthController {
         const user = await this.authService.validateUser(body.email, body.password);
         return this.authService.login(user.id, false);
     }
-    async getmarcus(res) {
-        const marcus = await this.userService.getCheatCode();
-        const token = await this.authService.login(marcus.id, false);
-        res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
-    }
     async login42() { }
     async callback(req, res) {
         const token = await this.authService.login(req.user.id, true);
@@ -40,7 +35,6 @@ let AuthController = class AuthController {
     }
     async authenticate(request, body) {
         const isCodeValid = await this.authService.verify2FACode(request.user, body.twoFactorAuthenticationCode);
-        console.log(isCodeValid);
         if (!isCodeValid) {
             throw new common_1.UnauthorizedException('Wrong authentication code');
         }
@@ -71,13 +65,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
-__decorate([
-    (0, common_1.Get)('/debug/marcus'),
-    __param(0, (0, common_1.Res)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "getmarcus", null);
 __decorate([
     (0, common_1.Get)('42'),
     (0, common_1.UseGuards)(FortyTwo_guard_1.FortyTwoGuard),
@@ -129,7 +116,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "disable2FA", null);
 __decorate([
-    (0, common_1.Post)('2fa/enable'),
+    (0, common_1.Post)('2fa/enable3'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),

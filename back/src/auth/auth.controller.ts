@@ -57,13 +57,6 @@ export class AuthController {
   * }
   */
 
-  @Get('/debug/marcus')
-  async getmarcus(@Res() res)
-  {
-    const marcus = await this.userService.getCheatCode();
-    const token = await this.authService.login(marcus.id, false);
-    res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
-  }
 
   /**
   * @api {get} /auth/42 Connexion avec 42
@@ -121,7 +114,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async authenticate(@Request() request, @Body() body: any) {
     const isCodeValid = await this.authService.verify2FACode(request.user, body.twoFactorAuthenticationCode);
-    console.log(isCodeValid);
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }
@@ -233,9 +225,10 @@ export class AuthController {
    * @apiError {String} message Message d'erreur.
     */
   
-  @Post('2fa/enable')
+  @Post('2fa/enable3')
   @UseGuards(JwtAuthGuard)
   async enable2FA(@Request() req: any, @Body() data: any) {
+
     const isCodeValid = await this.authService.verify2FACode(req.user, data.twoFactorAuthenticationCode);
     if (isCodeValid) {
        return await this.userService.set2FAEnable(req.user.id, true);

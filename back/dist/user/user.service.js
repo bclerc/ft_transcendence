@@ -47,16 +47,28 @@ let UserService = class UserService {
         return user;
     }
     async createIntraUser(user) {
-        return await this.prisma.user.create({
-            data: {
-                email: user.email,
-                password: '',
-                intra_name: user.intra_name,
-                intra_id: user.intra_id,
-                avatar_url: user.avatar_url,
-                displayname: user.displayname
+        let newUser;
+        try {
+            newUser = await this.prisma.user.create({
+                data: {
+                    email: user.email,
+                    password: '',
+                    intra_name: user.intra_name,
+                    intra_id: user.intra_id,
+                    avatar_url: user.avatar_url,
+                    displayname: user.displayname
+                }
+            });
+        }
+        catch (e) {
+            if (e instanceof client_1.Prisma.PrismaClientKnownRequestError) {
+                if (e.code == 'P2002') {
+                    throw new common_1.HttpException(e.meta.target[0] + " already used", common_1.HttpStatus.CONFLICT);
+                }
             }
-        });
+            throw new common_1.HttpException(e, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return newUser;
     }
     async findAll() {
         const users = (await this.prisma.user.findMany());
@@ -84,6 +96,25 @@ let UserService = class UserService {
             },
         });
     }
+    async findByName(name) {
+        console.log("coucou");
+        const users = await this.prisma.user.findMany({
+            where: {
+                intra_name: {
+                    contains: name,
+                    mode: 'insensitive',
+                },
+            },
+            select: {
+                id: true,
+                intra_name: true,
+                email: true,
+                avatar_url: true,
+                displayname: true,
+            },
+        });
+        return users;
+    }
     async set2FASsecret(userId, secret) {
         await this.prisma.user.update({
             where: {
@@ -105,6 +136,17 @@ let UserService = class UserService {
         });
         return {
             message: enable ? '2FA enabled' : '2FA disabled',
+        };
+    }
+    async updateUser(id, update) {
+        await this.prisma.user.update({
+            where: {
+                id: Number(id),
+            },
+            data: update
+        });
+        return {
+            message: "User was been updated",
         };
     }
 };

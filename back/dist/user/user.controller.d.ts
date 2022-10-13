@@ -6,7 +6,11 @@ export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
     findAll(): Promise<User[]>;
+    getLoggedUser(req: any): Promise<User>;
     findOne(req: any, id: number): Promise<User>;
+    findUserByName(name: string): Promise<User[]>;
     newUser(data: newUserDto): Promise<User>;
-    updateUser(req: any, id: number, data: updateUserDto): Promise<User>;
+    updateUser(req: any, data: updateUserDto): Promise<{
+        message: string;
+    }>;
 }

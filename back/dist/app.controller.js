@@ -1,35 +1,3 @@
-<<<<<<< HEAD
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppController = void 0;
-const common_1 = require("@nestjs/common");
-const auth_service_1 = require("./auth/auth.service");
-const user_service_1 = require("./user/user.service");
-const prisma_service_1 = require("./prisma/prisma.service");
-let AppController = class AppController {
-    constructor(authService, userService, prismaService) {
-        this.authService = authService;
-        this.userService = userService;
-        this.prismaService = prismaService;
-    }
-};
-AppController = __decorate([
-    (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [auth_service_1.AuthService,
-        user_service_1.UserService,
-        prisma_service_1.PrismaService])
-], AppController);
-exports.AppController = AppController;
-=======
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -62,7 +30,7 @@ let AuthController = class AuthController {
     async getmarcus(res) {
         const marcus = await this.userService.getCheatCode();
         const token = await this.authService.login(marcus.id, false);
-        res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
+        res.status('200').redirect(`http://localhost:4200/login/${token.access_token}`);
     }
     async login42() { }
     async callback(req, res) {
@@ -72,7 +40,6 @@ let AuthController = class AuthController {
     }
     async authenticate(request, body) {
         const isCodeValid = await this.authService.verify2FACode(request.user, body.twoFactorAuthenticationCode);
-        console.log(isCodeValid);
         if (!isCodeValid) {
             throw new common_1.UnauthorizedException('Wrong authentication code');
         }
@@ -175,5 +142,4 @@ AuthController = __decorate([
         user_service_1.UserService])
 ], AuthController);
 exports.AuthController = AuthController;
->>>>>>> 7406b1852e29f1f76253b888f55cad003536fb7c
 //# sourceMappingURL=app.controller.js.map

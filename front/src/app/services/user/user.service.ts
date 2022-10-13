@@ -103,6 +103,18 @@ export class UserService {
         //console.log("coucou il faut me destroy");
     }
 
+    getLoggedUser(): Observable<UserI>
+    {
+      const token = this.token.getToken();
+      if (token)
+      {
+        const decodedToken = this.jwtService.decodeToken(token);
+        const userId = decodedToken.userId;
+        return this.http.get<UserI>("http://localhost:3000/api/v1/user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+      }
+      throw new Error('No token');
+    }
+
     changeUserList(tab: UserI[]): void
     {
       this.userList= tab;
@@ -189,4 +201,9 @@ export class UserService {
     {
       return this.http.post<Observable<any>>("http://localhost:3000/api/v1/auth/2fa",{"twoFactorAuthenticationCode" : "955186",}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
+
+    FindByName(name : string): Observable<UserI[]>
+    {
+        return this.http.get<User[]>("http://localhost:3000/api/v1/user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
     }
+}

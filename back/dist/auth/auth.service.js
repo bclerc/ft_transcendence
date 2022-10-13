@@ -51,6 +51,8 @@ let AuthService = class AuthService {
         };
     }
     async verify2FACode(user, code) {
+        if (!user.twoFactorAuthenticationSecret)
+            throw new common_1.UnauthorizedException("User have not secret set");
         return otplib_1.authenticator.verify({
             token: code,
             secret: user.twoFactorAuthenticationSecret

@@ -1,0 +1,69 @@
+<div>
+
+  <div class="flexbox">
+    <div class="chat-box">
+      <div class="chat-box-header">
+        <h3>{{ room.name }}<br />
+          <small>
+            <!-- all users in room like user1, user2, user3, ... 
+          with user_avatar before each name -->
+            Avec
+            <span *ngFor="let user of room.users">
+              {{user.intra_name}}
+              <span>, </span>
+            </span>
+          </small>
+        </h3>
+      </div>
+      <div id="chat_box_body" class="chat-box-body">
+        <div id="chat_messages">
+
+          <div *ngFor="let message of (messages | async)">
+
+            <div *ngIf="message.user.id === user.id">
+              <div class="profile my-profile">
+                <img src="{{ message.user.avatar_url }}" width="30" height="30" />
+                <span> Moi</span>
+              </div>
+              <div class="message my-message">
+                {{ message.content }}
+              </div>
+
+            </div>
+
+            
+
+            <div *ngIf="message.user.id !== user.id">
+              <div class="profile other-profile">
+                <img src="{{ message.user.avatar_url }}" width="30" height="30" />
+                <span> {{ message.user.intra_name }} </span>
+                <div class="message other-message">
+                  {{ message.content }}
+                </div>
+              </div>
+
+            </div>
+
+            
+            
+            
+          </div>
+          
+        </div>
+      </div>
+      <div class="chat-box-footer">
+        <textarea id="chat_input" placeholder="Entrez votre message ici"></textarea>
+        <button id="send">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="#006ae3" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <ng-template #no_room>
+    <mat-error>Aucun groupe sélectionné</mat-error>
+  </ng-template>

@@ -26,18 +26,22 @@ let UserController = class UserController {
     async findAll() {
         return this.userService.findAll();
     }
+    async getLoggedUser(req) {
+        return await this.userService.findOne(req.user.id);
+    }
     async findOne(req, id) {
         if (req.user.id != id && !req.user.staff)
             throw new common_1.ForbiddenException();
         return this.userService.findOne(id);
     }
+    async findUserByName(name) {
+        return await this.userService.findByName(name);
+    }
     async newUser(data) {
         return await this.userService.newUser(data);
     }
-    async updateUser(req, id, data) {
-        if (req.user.id != id && !req.user.staff)
-            throw new common_1.ForbiddenException();
-        return;
+    async updateUser(req, data) {
+        return await this.userService.updateUser(req.user.id, data);
     }
 };
 __decorate([
@@ -48,6 +52,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findAll", null);
 __decorate([
+    (0, common_1.Get)("me"),
+    (0, common_2.UseGuards)(jwt2fa_guard_1.Jwt2faAuthGuard),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getLoggedUser", null);
+__decorate([
     (0, common_1.Get)(':id'),
     (0, common_2.UseGuards)(jwt2fa_guard_1.Jwt2faAuthGuard),
     __param(0, (0, common_1.Request)()),
@@ -57,6 +69,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findOne", null);
 __decorate([
+    (0, common_1.Get)('search/:name'),
+    (0, common_2.UseGuards)(jwt2fa_guard_1.Jwt2faAuthGuard),
+    __param(0, (0, common_1.Param)('name')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "findUserByName", null);
+__decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -64,12 +84,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "newUser", null);
 __decorate([
+    (0, common_1.Put)(),
     (0, common_2.UseGuards)(jwt2fa_guard_1.Jwt2faAuthGuard),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, common_1.Body)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number, updateUser_dto_1.updateUserDto]),
+    __metadata("design:paramtypes", [Object, updateUser_dto_1.updateUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updateUser", null);
 UserController = __decorate([

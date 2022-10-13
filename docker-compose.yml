@@ -31,7 +31,18 @@ services:
         - trans_network
       depends_on:
         - postgresdb
-      
+
+  frontend:
+      image: frond-end
+      container_name: trans_front-end
+      build:
+        context: front/
+        dockerfile: Dockerfile
+      restart: always
+      ports:
+        - 80:4200
+      networks:
+        - trans_network
 
 volumes:
   pgdata:
