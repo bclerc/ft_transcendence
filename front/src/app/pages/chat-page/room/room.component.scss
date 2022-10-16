@@ -2,7 +2,7 @@
 
 $chat-bg-color: #fff;
 $font-size: 16px;
-$font-color: #2f2f2f;
+$font-color: #000000;
 $font-color-muted: #afafaf;
 $standard-padding: 20px 15px;
 $standard-radius: 13px;
@@ -24,6 +24,7 @@ body {
 }
 
 .flexbox {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,10 +34,11 @@ body {
   background-color: $chat-bg-color;
   margin: 20px;
   width: 100%;
-  height: 100%;
+  height: 500px;
   max-height: calc(100% - 40px);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   border-radius: $standard-radius;
   box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
   > .chat-box-header {
@@ -78,9 +80,14 @@ body {
         background-color: #e2e2e2;
       }
       .profile {
-        margin: 2px 0;
+        margin: 4px 0;
         overflow: hidden;
         transition: height 0.3s ease-in-out;
+        .date {
+          color: $font-color-muted;
+          font-size: 0.4em;  
+  
+        }
         &.hide {
           height: 0;
         }
@@ -90,6 +97,17 @@ body {
           padding: 0;
           vertical-align: middle;
           border-radius: 50%;
+        }
+        // Online status litle green dot on the right of the profile picture
+        .online-status {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #00ff00;
+          margin-left: -5px;
+          margin-bottom: -5px;
+          border: solid 2px #fff;
         }
       }
       .my-profile {
@@ -152,6 +170,7 @@ body {
       box-sizing: border-box;
       border-radius: $standard-radius;
       transition: 0.3s background-color;
+      margin-right: 5px;
       &:focus {
         background-color: #efefef;
       }

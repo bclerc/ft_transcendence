@@ -33,11 +33,15 @@ model ChatRoom {
   id          Int       @id @default(autoincrement())
   name        String
   description String?
-  users       User[]
+  public      Boolean   @default(false)
   ownerId     Int
+  users       User[]    @relation(fields: [usersId], references: [id])
+  usersId     Int[]
+  admins      User[]    @relation(fields: [adminsID], references: [id])
+  adminsID    Int[]
+  messages     Message[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  messages     Message[]
 }
 
 model Message {

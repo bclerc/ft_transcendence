@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ChatRoom, Message, prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { newChatRoomI } from './interfaces/chatRoom.interface';
+import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 
 
 
@@ -11,9 +11,28 @@ export class ChatService {
   constructor(private prisma: PrismaService) {}
 
 
+  async newMessage(message: MessageI) { 
+    const newMessage = await this.prisma.message.create({
+      data: {
+        content: message.content,
+        user: {
+          connect: {
+            id: message.user.id,
+          },
+        },
+        room: {
+          connect: {
+            id: message.room.id,
+          },
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+  }
+
   async getRoomsFromUser(userId: number): Promise<ChatRoom[]> {
-    // get all info of room where user is in, including the other user
-    // and all messages
     const rooms = await this.prisma.chatRoom.findMany({
       where: {
         users: {
@@ -45,6 +64,20 @@ export class ChatService {
     return messages;
   }
   
+  async getMessagesFromRoomId(roomId: number): Promise<Message[]> {
+    const messages = await this.prisma.message.findMany({
+      where: {
+        room: {
+
+          id: roomId,
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+    return messages;
+  }
 
   async createRoom(owner: User, newRoom: newChatRoomI ): Promise<ChatRoom>
   {
@@ -66,6 +99,19 @@ export class ChatService {
       }
     });
     return ret;
+  }
+
+  async getRoomById(roomId: number): Promise<ChatRoom> {
+    const room = await this.prisma.chatRoom.findUnique({
+      where: {
+        id: roomId,
+      },
+      include: {
+        users: true,
+        messages: true,
+      },
+    });
+    return room;
   }
 
   async addUsersToRoom(roomId: number, userId: number): Promise<ChatRoom> {
@@ -99,4 +145,6 @@ export class ChatService {
     });
     return newRoom;
   }
+
+  
 }

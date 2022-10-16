@@ -1,13 +1,15 @@
-import { Inject, Logger, UseGuards } from '@nestjs/common';
+import { ConsoleLogger, Inject, Logger, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { ChatRoom, User } from '@prisma/client';
+import { ChatRoom, Message, User } from '@prisma/client';
 import { Socket } from 'socket.io';
 import { jwtConstants } from 'src/auth/constants';
 import { Jwt2faAuthGuard } from 'src/auth/guards/jwt2fa.guard';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from './chat.service';
-import { newChatRoomI } from './interfaces/chatRoom.interface';
+import { MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
+
+
 
 @WebSocketGateway(81, { cors: {origin: '*'} } )
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -35,7 +37,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.onlineUsers.set(socket.id, user);
       socket.data.user = user;
       const rooms = await this.chatService.getRoomsFromUser(user.id);
-      console.log("")
       return this.server.to(socket.id).emit('rooms', rooms);
     } catch (error) {
       socket.disconnect(true);
@@ -49,10 +50,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('message')
-  async handleMessage(@ConnectedSocket() client: Socket, payload: any, @MessageBody() message: string) {
-    console.log('Message received: ' + message);
-    const user = await this.onlineUsers.get(client.id);
-    this.server.emit('message',  user.intra_name + ': ' + message);
+  async handleMessage(@ConnectedSocket() client: Socket, payload: any, @MessageBody() message: MessageI) {
+     const user = await this.onlineUsers.get(client.id);
+     const room = message.room;
+     let  messages: Message[];
+    
+     await this.chatService.newMessage(message);
+     messages = await this.chatService.getMessagesFromRoomId(room.id);
+     for (const user of room.users)
+
+      {
+        for (const [key, value] of this.onlineUsers.entries()) {
+          if (value.id == user.id)
+          {
+            this.server.to(key).emit('messages', messages);
+          }
+        }
+      }
   }
 
   @SubscribeMessage('createRoom')
@@ -63,9 +77,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     for (const user of this.onlineUsers) {
       if (newRoom.users.find((u: User) => (u.id === user[1].id) || (user[1].id === room.ownerId))) 
       {
-    
-        this.server.to(user[0].toString()).emit('rooms', room);
-        console.log('emitted to ' + user[1].intra_name + ' ' + room);
+        this.server.to(user[0]).emit('rooms', await this.chatService.getRoomsFromUser(user[1].id));
       }
     }
   }
@@ -75,4 +87,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const messages = await this.chatService.getMessagesFromRoom(room);
     this.server.to(client.id).emit('messages', messages);
   }
+
+  @SubscribeMessage('leaveRoom')
+  async onLeaveRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoom) {
+    const user = await this.onlineUsers.get(client.id);
+    await this.chatService.removeUsersFromRoom(room.id, user.id);
+    this.server.to(client.id).emit('rooms', await this.chatService.getRoomsFromUser(user.id));
+  }
+
 }

@@ -4,7 +4,7 @@ import { MatSelectionListChange } from '@angular/material/list';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatService } from 'src/app/services/chat/chat.service';
-import { ChatRoom } from 'src/app/services/chat/chatRoom.interface';
+import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -18,6 +18,7 @@ import { UserService } from 'src/app/services/user/user.service';
 export class ChatPageComponent implements OnInit {
 
   selectedRoom: ChatRoom = {};
+  haveSelectedRoom: boolean = false;
   rooms$: Observable<ChatRoom[]> = this.chatService.getRooms();
   messages$: Observable<Message[]> = this.chatService.getMessages(this.selectedRoom);
   actualUser: UserI = {};
@@ -31,11 +32,13 @@ export class ChatPageComponent implements OnInit {
   constructor(private chatService: ChatService,
               private userService: UserService) { }
 
-  ngOnInit(): void {
+  async ngOnInit(){
+    console.log("COucou");
     this.userService.getLoggedUser().subscribe((user: UserI) => {
       this.actualUser = user;
     }
     );
+    this.rooms$  = await this.chatService.getRooms();
   }
 
   create() {
@@ -58,6 +61,14 @@ export class ChatPageComponent implements OnInit {
     this.users.push(userFormControl);
   }
 
+  async leaveRoom(room: ChatRoom)
+  {
+    this.chatService.leaveRoom(room);
+    this.rooms$ = await this.chatService.getRooms();
+    this.haveSelectedRoom = false;
+    this.selectedRoom = {};
+  }
+
   removeUser(userId: any) {
     this.users.removeAt(this.users.value.findIndex((user: UserI) => user.id === userId));
   }
@@ -76,6 +87,7 @@ export class ChatPageComponent implements OnInit {
 
   onSelectedRoom(event: MatSelectionListChange) {
     this.selectedRoom = event.source.selectedOptions.selected[0].value;
+    this.haveSelectedRoom = true;
   }
 
 }

@@ -41,7 +41,6 @@ let ChatGateway = class ChatGateway {
             this.onlineUsers.set(socket.id, user);
             socket.data.user = user;
             const rooms = await this.chatService.getRoomsFromUser(user.id);
-            console.log("");
             return this.server.to(socket.id).emit('rooms', rooms);
         }
         catch (error) {
@@ -53,23 +52,36 @@ let ChatGateway = class ChatGateway {
         socket.disconnect();
     }
     async handleMessage(client, payload, message) {
-        console.log('Message received: ' + message);
         const user = await this.onlineUsers.get(client.id);
-        this.server.emit('message', user.intra_name + ': ' + message);
+        const room = message.room;
+        let messages;
+        await this.chatService.newMessage(message);
+        messages = await this.chatService.getMessagesFromRoomId(room.id);
+        for (const user of room.users) {
+            for (const [key, value] of this.onlineUsers.entries()) {
+                if (value.id == user.id) {
+                    this.server.to(key).emit('messages', messages);
+                }
+            }
+        }
     }
     async onCreateRoom(client, payload, newRoom) {
         const user = await this.onlineUsers.get(client.id);
         const room = await this.chatService.createRoom(user, newRoom);
         for (const user of this.onlineUsers) {
             if (newRoom.users.find((u) => (u.id === user[1].id) || (user[1].id === room.ownerId))) {
-                this.server.to(user[0].toString()).emit('rooms', room);
-                console.log('emitted to ' + user[1].intra_name + ' ' + room);
+                this.server.to(user[0]).emit('rooms', await this.chatService.getRoomsFromUser(user[1].id));
             }
         }
     }
     async onJoinRoom(client, payload, room) {
         const messages = await this.chatService.getMessagesFromRoom(room);
         this.server.to(client.id).emit('messages', messages);
+    }
+    async onLeaveRoom(client, payload, room) {
+        const user = await this.onlineUsers.get(client.id);
+        await this.chatService.removeUsersFromRoom(room.id, user.id);
+        this.server.to(client.id).emit('rooms', await this.chatService.getRoomsFromUser(user.id));
     }
 };
 __decorate([
@@ -81,7 +93,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object, String]),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "handleMessage", null);
 __decorate([
@@ -100,6 +112,14 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onJoinRoom", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('leaveRoom'),
+    __param(0, (0, websockets_1.ConnectedSocket)()),
+    __param(2, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "onLeaveRoom", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(81, { cors: { origin: '*' } }),
     __param(0, (0, common_1.Inject)(user_service_1.UserService)),

@@ -5,7 +5,7 @@ import { ChatRoom, User } from '@prisma/client';
 import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from './chat.service';
-import { newChatRoomI } from './interfaces/chatRoom.interface';
+import { MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 export declare class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly userService;
     private readonly jwtService;
@@ -16,7 +16,8 @@ export declare class ChatGateway implements OnGatewayConnection, OnGatewayDiscon
     constructor(userService: UserService, jwtService: JwtService, chatService: ChatService);
     handleConnection(socket: Socket): Promise<any>;
     handleDisconnect(socket: Socket): Promise<void>;
-    handleMessage(client: Socket, payload: any, message: string): Promise<void>;
+    handleMessage(client: Socket, payload: any, message: MessageI): Promise<void>;
     onCreateRoom(client: Socket, payload: any, newRoom: newChatRoomI): Promise<void>;
     onJoinRoom(client: Socket, payload: any, room: ChatRoom): Promise<void>;
+    onLeaveRoom(client: Socket, payload: any, room: ChatRoom): Promise<void>;
 }

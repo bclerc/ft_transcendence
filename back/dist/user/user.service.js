@@ -97,7 +97,6 @@ let UserService = class UserService {
         });
     }
     async findByName(name) {
-        console.log("coucou");
         const users = await this.prisma.user.findMany({
             where: {
                 intra_name: {

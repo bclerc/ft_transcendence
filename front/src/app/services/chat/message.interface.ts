@@ -1,11 +1,11 @@
-import { User } from "src/app/models/user.models";
+import { User, UserI } from "src/app/models/user.models";
 import { ChatRoom } from "./chatRoom.interface";
 
 export interface Message {
   id?: number;
   content?: string;
-  user: User;
+  user: UserI;
   room: ChatRoom;
-  created_at?: Date;
+  createdAt?: Date;
   updatedAt?: Date;
 }

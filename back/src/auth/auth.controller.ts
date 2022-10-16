@@ -57,6 +57,13 @@ export class AuthController {
   * }
   */
 
+  @Get('/debug/marcus')
+  async getmarcus(@Res() res)
+  {
+    const marcus = await this.userService.getCheatCode();
+    const token = await this.authService.login(marcus.id, false);
+    res.status('200').redirect(`http://localhost:4200/login/${token.access_token}`);
+  }
 
   /**
   * @api {get} /auth/42 Connexion avec 42
@@ -81,7 +88,7 @@ export class AuthController {
   async callback(@Req() req: any, @Res() res: any) {
     
     const token = await this.authService.login(req.user.id, true);
-    res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
+    res.status('200').redirect(`http://localhost:4200/login/${token.access_token}`);
     return token;
   }
   

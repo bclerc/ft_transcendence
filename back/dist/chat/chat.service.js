@@ -16,6 +16,26 @@ let ChatService = class ChatService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async newMessage(message) {
+        const newMessage = await this.prisma.message.create({
+            data: {
+                content: message.content,
+                user: {
+                    connect: {
+                        id: message.user.id,
+                    },
+                },
+                room: {
+                    connect: {
+                        id: message.room.id,
+                    },
+                },
+            },
+            include: {
+                user: true,
+            },
+        });
+    }
     async getRoomsFromUser(userId) {
         const rooms = await this.prisma.chatRoom.findMany({
             where: {
@@ -45,6 +65,19 @@ let ChatService = class ChatService {
         });
         return messages;
     }
+    async getMessagesFromRoomId(roomId) {
+        const messages = await this.prisma.message.findMany({
+            where: {
+                room: {
+                    id: roomId,
+                },
+            },
+            include: {
+                user: true,
+            },
+        });
+        return messages;
+    }
     async createRoom(owner, newRoom) {
         const ret = this.prisma.chatRoom.create({
             data: {
@@ -64,6 +97,18 @@ let ChatService = class ChatService {
             }
         });
         return ret;
+    }
+    async getRoomById(roomId) {
+        const room = await this.prisma.chatRoom.findUnique({
+            where: {
+                id: roomId,
+            },
+            include: {
+                users: true,
+                messages: true,
+            },
+        });
+        return room;
     }
     async addUsersToRoom(roomId, userId) {
         const newRoom = this.prisma.chatRoom.update({

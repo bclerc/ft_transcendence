@@ -29,7 +29,6 @@ export class UserselectComponent implements OnInit {
         debounceTime(300),
         distinctUntilChanged(),
         tap((value) => {
-          console.log(value);
           if (value !== '') {
             this.userService.FindByName(value).subscribe((users) => {
               this.filteredUsers = users;
@@ -58,11 +57,8 @@ export class UserselectComponent implements OnInit {
     this.selectedUser = user;
   }
 
-  displayFn(user: any): string {
-    if (typeof(user) == 'object') {
-      return user.intra_name;
-    }
-    return '';
+  displayFn(user: any ): string {
+    return user && user.intra_name ? user.intra_name : '';
   }
 
 

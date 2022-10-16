@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
@@ -17,17 +17,22 @@ export class ChatService {
     }
 
     getMessages(room: ChatRoom): Observable<Message[]> {  
-      return this.socket.fromEvent<Message[]>(`messages`);
+      return Observable.create((observer: any) => {
+        this.socket.on('messages', (msgs: Message[]) => {
+            console.log(msgs);
+          // const audio = new Audio();
+          // audio.src = 'assets/sounds/wizz.mp3';
+          // audio.load();
+          // audio.play();
+
+            observer.next(msgs);
+        });
+    });
     }
     
 
     getRooms(): Observable<ChatRoom[]> {
-      return Observable.create((observer: any) => {
-        this.socket.on('rooms', (rooms: ChatRoom[]) => {
-          observer.next(rooms);
-        });
-    });
-     
+      return this.socket.fromEvent<ChatRoom[]>('rooms');
     }
     
     createRoom(room: ChatRoom) {
