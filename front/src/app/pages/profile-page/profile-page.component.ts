@@ -14,10 +14,10 @@ import { UserService } from 'src/app/services/user/user.service';
 export class ProfilePageComponent implements OnInit {
   user2! : UserI;
   user? : UserI;
+  currentProfile? : Boolean;
   //user? : Observable<User>;
-  constructor(private userService: UserService, private router: Router, private route : ActivatedRoute) { }
+  constructor(private userService: UserService, private router: Router, private route : ActivatedRoute, private token : TokenStorageService) { }
   id! : number;
-  imageUrl? : string;
   subscription! : Subscription;
   /*ngOnInit(): void {
 
@@ -35,6 +35,7 @@ export class ProfilePageComponent implements OnInit {
     userList2$!: Observable <UserI[]>;
 
   ngOnInit(): void {
+    this.currentProfile = false;
     this.userList2$ =  this.route.data.pipe(
       map(data => data['userList']));
       this.subscription = this.userList2$.subscribe(
@@ -52,6 +53,8 @@ export class ProfilePageComponent implements OnInit {
         } catch (error) {
           this.router.navigate(['error'])
         }
+        if (this.id === this.token.getId() )
+          this.currentProfile = true;
         /*if (this.user === null)
           this.router.navigate([''])*/
    

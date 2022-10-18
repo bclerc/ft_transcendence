@@ -35,8 +35,7 @@ export class User {
     id! :               number;
     email? :            string;
     intra_name? :       string;
-    avatarURL! :          string;
-    avatar_url? :        string;
+    avatarURL! :        string;
     intra_id? :         number; 
     //password? :         string;
     username! :         string;

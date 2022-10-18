@@ -1,7 +1,13 @@
-<app-header></app-header>
 <div>
-<p>{{user?.displayname| json}}</p>
-<p>{{user?.email| json}}</p>
-<p>{{user?.createdAt | json }}</p>
+<p>{{user?.displayname}}</p>
+<p>{{user?.email}}</p>
+<p>{{user?.createdAt | date}}</p>
 <img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/>
+<p>historique des matchs :</p>
+<div *ngIf="currentProfile; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock></ng-template>
+<ng-template #elseBlock>
+    <p>Ajouter en amis</p>
+    <p>Blocker l'utilisateur</p>
+</ng-template>
 </div>
