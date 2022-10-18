@@ -8,7 +8,10 @@ export interface ChatRoom {
   users?: UserI[];
   messages?: Message[];
   ownerId?: number;
-  created_at?: Date;
+  admins?: UserI[];
+  public?: boolean;
+  password?: string;
+  createdAt?: Date;
   updatedAt?: Date;
 }
 
@@ -17,6 +20,9 @@ export interface ChatRoomI {
   name: string;
   description: string;
   users: UserI[];
-  created_date: Date;
+  admins: UserI[];
+  public: boolean;
+  password?: string;
+  createdAt: Date;
   updatedAt: Date;
 }

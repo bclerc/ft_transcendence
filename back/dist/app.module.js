@@ -22,6 +22,7 @@ const jwt_1 = require("@nestjs/jwt");
 const chat_module_1 = require("./chat/chat.module");
 const chat_service_1 = require("./chat/chat.service");
 const message_service_1 = require("./message/message.service");
+const wschat_service_1 = require("./wschat/wschat.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -30,7 +31,7 @@ AppModule = __decorate([
         providers: [app_service_1.AppService, user_service_1.UserService, prisma_service_1.PrismaService, {
                 provide: core_1.APP_FILTER,
                 useClass: http_exception_filter_1.HttpExceptionFilter,
-            }, chat_gateway_1.ChatGateway, chat_service_1.ChatService, message_service_1.MessageService],
+            }, chat_gateway_1.ChatGateway, chat_service_1.ChatService, message_service_1.MessageService, wschat_service_1.WschatService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

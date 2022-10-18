@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { FormControl } from '@angular/forms';
 import { ConnectableObservable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { User, UserI } from '../models/user.models';
 import { UserService } from '../services/user/user.service';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-userselect',
@@ -17,6 +19,9 @@ export class UserselectComponent implements OnInit {
   @Output() addUser: EventEmitter<UserI> = new EventEmitter<UserI>();
   @Output() removeuser: EventEmitter<UserI>= new EventEmitter<UserI>();
 
+
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  addOnBlur = true;
   searchUsername = new FormControl();
   filteredUsers: UserI[] = [];
   selectedUser: UserI = {};
@@ -47,6 +52,7 @@ export class UserselectComponent implements OnInit {
       this.selectedUser = {};
       this.searchUsername.setValue("");
   }
+
 
   removeUserFromForm(user: UserI) {
     this.removeuser.emit(user);

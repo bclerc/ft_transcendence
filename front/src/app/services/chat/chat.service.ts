@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { ElementRef, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
@@ -9,22 +10,18 @@ import { Message } from './message.interface';
 })
 export class ChatService {
 
-  constructor(public socket: Socket,
-              private snackBar: MatSnackBar) { }
 
-    sendMessage(message: Message) {
+  constructor(public socket: Socket,
+              private snackBar: MatSnackBar,
+              private http: HttpClient) { }
+
+   sendMessage(message: Message) {
       this.socket.emit('message', message);
     }
 
     getMessages(room: ChatRoom): Observable<Message[]> {  
       return Observable.create((observer: any) => {
         this.socket.on('messages', (msgs: Message[]) => {
-            console.log(msgs);
-          // const audio = new Audio();
-          // audio.src = 'assets/sounds/wizz.mp3';
-          // audio.load();
-          // audio.play();
-
             observer.next(msgs);
         });
     });
@@ -32,11 +29,34 @@ export class ChatService {
     
 
     getRooms(): Observable<ChatRoom[]> {
-      return this.socket.fromEvent<ChatRoom[]>('rooms');
+
+      return Observable.create((observer: any) => {
+        this.socket.on('rooms', (rooms: ChatRoom[]) => {
+          console.log(rooms);
+          observer.next(rooms);
+        });
+      });
+    }
+    
+    getPublicRooms(): Observable<ChatRoom[]> {
+     return  this.http.get<ChatRoom[]>('http://localhost:3000/api/v1/chat/rooms/public');
     }
     
     createRoom(room: ChatRoom) {
       this.socket.emit('createRoom', room);
+    }
+
+    editRoom(room: ChatRoom) {
+      this.socket.emit('editRoom', room);
+    }
+
+    subscribeRoom(room: ChatRoom, pass?: string | null) {
+      let object = {
+        roomId: room.id,
+        password: pass,
+      }
+  
+      this.socket.emit('subscribeRoom', object);
     }
 
     joinRoom(room: ChatRoom) {

@@ -29,6 +29,9 @@ let ChatController = class ChatController {
     async leaveRoom(req, id) {
         return await this.chatService.removeUsersFromRoom(id, req.user.id);
     }
+    async getPublicRooms() {
+        return await this.chatService.getPublicRooms();
+    }
 };
 __decorate([
     (0, common_1.Get)("room"),
@@ -56,6 +59,12 @@ __decorate([
     __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "leaveRoom", null);
+__decorate([
+    (0, common_1.Get)("rooms/public"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getPublicRooms", null);
 ChatController = __decorate([
     (0, common_1.Controller)('chat'),
     __metadata("design:paramtypes", [chat_service_1.ChatService])

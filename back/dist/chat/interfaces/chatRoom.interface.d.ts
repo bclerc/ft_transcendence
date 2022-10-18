@@ -12,12 +12,17 @@ export interface newChatRoomI {
     name?: string;
     description?: string;
     users?: User[];
+    public?: boolean;
+    password?: string;
 }
 export interface ChatRoomI {
     id: number;
     name: string;
     description: string;
+    ownerId: number;
     users: User[];
+    admins: User[];
+    public: Boolean;
     messages: Message[];
 }
 export interface ChatRoomUserI {

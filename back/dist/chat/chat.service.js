@@ -47,8 +47,20 @@ let ChatService = class ChatService {
             },
             include: {
                 users: true,
+                admins: true,
                 messages: true,
             },
+        });
+        return rooms;
+    }
+    async getPublicRooms() {
+        const rooms = await this.prisma.chatRoom.findMany({
+            where: {
+                public: true,
+            },
+            include: {
+                users: true,
+            }
         });
         return rooms;
     }
@@ -84,6 +96,13 @@ let ChatService = class ChatService {
                 name: newRoom.name || owner.intra_name + '\'s room',
                 description: newRoom.description || 'Another room created by ' + owner.intra_name,
                 ownerId: owner.id,
+                public: newRoom.public,
+                password: newRoom.password || null,
+                admins: {
+                    connect: {
+                        id: owner.id,
+                    },
+                },
                 users: {
                     connect: newRoom.users.map((user) => {
                         return {
@@ -104,11 +123,33 @@ let ChatService = class ChatService {
                 id: roomId,
             },
             include: {
-                users: true,
+                admins: true,
+                users: {
+                    include: {
+                        friends: true,
+                    },
+                },
                 messages: true,
             },
         });
         return room;
+    }
+    async canJoin(roomId, password) {
+        const room = await this.prisma.chatRoom.findUnique({
+            where: {
+                id: roomId,
+            },
+            select: {
+                password: true,
+                public: true,
+            },
+        });
+        if (!room)
+            return false;
+        if (!room.password && room.public)
+            return true;
+        console.log(room.password, password);
+        return room.password === password;
     }
     async addUsersToRoom(roomId, userId) {
         const newRoom = this.prisma.chatRoom.update({
@@ -118,6 +159,36 @@ let ChatService = class ChatService {
             data: {
                 users: {
                     connect: {
+                        id: userId,
+                    }
+                }
+            }
+        });
+        return newRoom;
+    }
+    async addAdminsToRoom(roomId, userId) {
+        const newRoom = this.prisma.chatRoom.update({
+            where: {
+                id: Number(roomId)
+            },
+            data: {
+                admins: {
+                    connect: {
+                        id: userId,
+                    }
+                }
+            }
+        });
+        return newRoom;
+    }
+    async removeAdminsFromRoom(roomId, userId) {
+        const newRoom = this.prisma.chatRoom.update({
+            where: {
+                id: Number(roomId)
+            },
+            data: {
+                admins: {
+                    disconnect: {
                         id: userId,
                     }
                 }
@@ -139,6 +210,27 @@ let ChatService = class ChatService {
             }
         });
         return newRoom;
+    }
+    async editRoom(roomId, newRoom) {
+        const ret = this.prisma.chatRoom.update({
+            where: {
+                id: roomId,
+            },
+            data: {
+                name: newRoom.name,
+                description: newRoom.description,
+                public: newRoom.public,
+                password: newRoom.password,
+                users: {
+                    connect: newRoom.users.map((user) => {
+                        return {
+                            id: user.id
+                        };
+                    })
+                }
+            },
+        });
+        return ret;
     }
 };
 ChatService = __decorate([

@@ -40,6 +40,13 @@ import { UserselectComponent } from './userselect/userselect.component';
 import { CommonModule } from '@angular/common';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RoomComponent } from './pages/chat-page/room/room.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { ChatInfoComponent } from './chat-info/chat-info.component';
+import {MatTableModule} from '@angular/material/table';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatBadgeModule} from '@angular/material/badge';
+import { EditRoomChatComponent } from './edit-room-chat/edit-room-chat.component';
 
 const config: SocketIoConfig = {
   url: 'http://localhost:81', options: {
@@ -73,6 +80,9 @@ export function tokenGetter() {
     ModifyMyProfileComponent,
     UserselectComponent,
     RoomComponent,
+    ChatInfoComponent,
+    EditRoomChatComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -101,6 +111,12 @@ export function tokenGetter() {
     MatAutocompleteModule,
     MatIconModule,
     MatSnackBarModule,
+    MatGridListModule,
+    MatTabsModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatCheckboxModule,
+    MatBadgeModule,
   ],
   providers: [    UserService,
     UserResolver],

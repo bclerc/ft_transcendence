@@ -6,4 +6,5 @@ export declare class ChatController {
     getRooms(req: any): Promise<ChatRoom[]>;
     joinRoom(req: any, id: number): Promise<ChatRoom>;
     leaveRoom(req: any, id: number): Promise<ChatRoom>;
+    getPublicRooms(): Promise<ChatRoom[]>;
 }

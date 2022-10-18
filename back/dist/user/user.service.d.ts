@@ -12,6 +12,7 @@ export declare class UserService {
     findOne(id: number): Promise<User>;
     findByEmail(iemail: string): Promise<User | undefined>;
     findByName(name: string): Promise<any>;
+    getFriends(user: User): Promise<User[]>;
     set2FASsecret(userId: number, secret: string): Promise<void>;
     set2FAEnable(userId: number, enable: boolean): Promise<{
         message: string;

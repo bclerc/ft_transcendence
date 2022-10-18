@@ -32,6 +32,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
               
               
   async sendMessage() {
+
     if (this.form.valid) {
       this.chatService.sendMessage({ 
         content: this.form.value.message,
@@ -53,6 +54,14 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   }
   
   ngOnInit(): void {
+
+    this.messages$.subscribe((messages: Message[]) => {
+      const element = document.getElementById('chat_box_body');
+      if (element) {
+        element.scrollTop = element.scrollHeight;
+      }
+    }
+    );
   }
 
   get message(): FormControl {

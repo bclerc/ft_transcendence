@@ -1,23 +1,31 @@
-import { Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit } from '@nestjs/websockets';
 import { ChatRoom, User } from '@prisma/client';
 import { Socket } from 'socket.io';
+import { EjectRoomI } from 'src/eject-room-i.interface';
+import { DemoteUserI, PromoteUserI } from 'src/promote-user-i.interface';
 import { UserService } from 'src/user/user.service';
+import { WschatService } from 'src/wschat/wschat.service';
 import { ChatService } from './chat.service';
+import { SubscribeRoomDto } from './dto/subscribe-room.dto';
 import { MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
-export declare class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export declare class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     private readonly userService;
     private readonly jwtService;
     private readonly chatService;
+    private readonly wschatService;
     server: any;
-    logger: Logger;
     onlineUsers: Map<String, User>;
-    constructor(userService: UserService, jwtService: JwtService, chatService: ChatService);
-    handleConnection(socket: Socket): Promise<any>;
+    constructor(userService: UserService, jwtService: JwtService, chatService: ChatService, wschatService: WschatService);
+    afterInit(server: any): void;
+    handleConnection(socket: Socket): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;
     handleDisconnect(socket: Socket): Promise<void>;
     handleMessage(client: Socket, payload: any, message: MessageI): Promise<void>;
     onCreateRoom(client: Socket, payload: any, newRoom: newChatRoomI): Promise<void>;
+    onSubscribeRoom(client: Socket, payload: any, room: SubscribeRoomDto): Promise<void>;
     onJoinRoom(client: Socket, payload: any, room: ChatRoom): Promise<void>;
     onLeaveRoom(client: Socket, payload: any, room: ChatRoom): Promise<void>;
+    onEjectRoom(client: Socket, payload: any, event: EjectRoomI): Promise<void>;
+    onPromoteUser(client: Socket, payload: any, event: PromoteUserI): Promise<void>;
+    onDemoteUser(client: Socket, payload: any, event: DemoteUserI): Promise<void>;
 }

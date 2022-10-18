@@ -1,0 +1,61 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Information du groupe {{room.name}}
+      </mat-card-title>
+      <mat-card-subtitle>
+       <h2> <mat-icon  *ngIf="room.public && !room.password" matTooltip="Groupe public" matTooltipPosition="above" style="color: green; margin-top: 10px">public</mat-icon>
+        <mat-icon *ngIf="room.public && room.password " matTooltip="Groupe protégé par mot de passe" matTooltipPosition="above" style="color: orange; margin-top: 20px">key</mat-icon>
+        <mat-icon *ngIf="!room.public" matTooltip="Groupe privée" matTooltipPosition="above" style="color: red; margin-top: 20px">lock</mat-icon>
+        {{room.description}} 
+      </h2>
+       <h4>Créer le {{room.createdAt | date}}</h4>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let user of room.users">
+          <img matListAvatar [src]="user.avatar_url" [alt]="user.intra_name">
+          <h4 matLine>{{user.intra_name}}</h4>
+          <p matLine>
+            <span>{{ user.email }} </span>
+          </p>
+          <p matLine>
+            <span *ngIf="isAdministrator(user)" style="color: darkorange">
+              Administrateur du groupe
+            </span>
+          </p>
+          <button matTooltip="Envoyer une requete d'ami" matTooltipPosition="above" mat-button
+            style="color:greenyellow">
+            <mat-icon>favorite</mat-icon>
+          </button>
+          <button mat-button matTooltip="Inviter dans une partie" matTooltipPosition="above" style="color:blueviolet">
+            <mat-icon>sports_basketball</mat-icon>
+          </button>
+
+
+          <ng-container *ngIf="isAdministrator(actualUser)">
+          <button *ngIf="isAdministrator(user)" matTooltip="Enlever les droits d'administration" (click)="demoteUser(user)" matTooltipPosition="above" mat-button
+            style="color:red">
+            <mat-icon>arrow_downward</mat-icon>
+          </button>
+          <button *ngIf="!isAdministrator(user)" mat-button matTooltip="Promouvoir administrateur" (click)="promoteUser(user)" matTooltipPosition="above" style="color:darkorange">
+  
+            <mat-icon>upgrade</mat-icon>
+          </button>
+          <button mat-button matTooltip="Éjecter du groupe {{room.name}}" (click)="ejectUser(user)"
+            matTooltipPosition="above" style="color:red">
+            <mat-icon>person_removee</mat-icon>
+          </button>
+          </ng-container>
+
+
+          <button mat-button matTooltip="Bloquer {{ user.intra_name }}" matTooltipPosition="above" style="color: red">
+            <mat-icon style="">block</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>

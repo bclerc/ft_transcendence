@@ -8,6 +8,7 @@ export interface UserI {
     intra_id? :         number;
     displayname? :      string;
     description? :      string;
+    friends? :          UserI[];
     //password? :         string;
     username? :         string;
     staff? :            boolean;

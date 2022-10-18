@@ -114,6 +114,18 @@ let UserService = class UserService {
         });
         return users;
     }
+    async getFriends(user) {
+        const friends = await this.prisma.user.findMany({
+            where: {
+                friends: {
+                    some: {
+                        id: user.id,
+                    },
+                },
+            },
+        });
+        return friends;
+    }
     async set2FASsecret(userId, secret) {
         await this.prisma.user.update({
             where: {

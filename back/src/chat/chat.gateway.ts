@@ -1,28 +1,38 @@
-import { ConsoleLogger, Inject, Logger, UseGuards } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { ChatRoom, Message, User } from '@prisma/client';
+import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { ChatRoom, User } from '@prisma/client';
 import { Socket } from 'socket.io';
 import { jwtConstants } from 'src/auth/constants';
-import { Jwt2faAuthGuard } from 'src/auth/guards/jwt2fa.guard';
+import { EjectRoomI } from 'src/eject-room-i.interface';
+import { DemoteUserI, PromoteUserI } from 'src/promote-user-i.interface';
 import { UserService } from 'src/user/user.service';
+import { WschatService } from 'src/wschat/wschat.service';
 import { ChatService } from './chat.service';
-import { MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
+import { SubscribeRoomDto } from './dto/subscribe-room.dto';
+import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 
 
 
-@WebSocketGateway(81, { cors: {origin: '*'} } )
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+@WebSocketGateway(81, { cors: { origin: '*' } })
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
 
-    @WebSocketServer() server;
-    logger: Logger = new Logger('ChatGateway');
-    onlineUsers: Map<String, User> = new Map(); 
+  @WebSocketServer() server;
+  onlineUsers: Map<String, User> = new Map();
 
-   constructor (
+  constructor(
     @Inject(UserService) private readonly userService: UserService,
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(ChatService) private readonly chatService: ChatService,
-  ) {}
+    @Inject(WschatService) private readonly wschatService: WschatService,
+  ) { }
+
+  afterInit(server: any) {
+    this.wschatService.server = server;
+  }
+
+  
+
 
   async handleConnection(socket: Socket) {
     try {
@@ -34,65 +44,58 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const user = await this.userService.findOne(res.sub);
       if (!user)
         return socket.disconnect();
-      this.onlineUsers.set(socket.id, user);
+      this.wschatService.initUser(socket.id, user);
       socket.data.user = user;
-      const rooms = await this.chatService.getRoomsFromUser(user.id);
-      return this.server.to(socket.id).emit('rooms', rooms);
     } catch (error) {
       socket.disconnect(true);
-   
+
     }
   }
 
   async handleDisconnect(socket: Socket) {
-    this.onlineUsers.delete(socket.id);
+    this.wschatService.removeOnlineUser(socket.id);
     socket.disconnect();
   }
 
   @SubscribeMessage('message')
   async handleMessage(@ConnectedSocket() client: Socket, payload: any, @MessageBody() message: MessageI) {
-     const user = await this.onlineUsers.get(client.id);
-     const room = message.room;
-     let  messages: Message[];
-    
-     await this.chatService.newMessage(message);
-     messages = await this.chatService.getMessagesFromRoomId(room.id);
-     for (const user of room.users)
-
-      {
-        for (const [key, value] of this.onlineUsers.entries()) {
-          if (value.id == user.id)
-          {
-            this.server.to(key).emit('messages', messages);
-          }
-        }
-      }
+    this.wschatService.newMessage(client.id, message);
   }
 
   @SubscribeMessage('createRoom')
   async onCreateRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() newRoom: newChatRoomI) {
-    const user = await this.onlineUsers.get(client.id);
-    const room = await this.chatService.createRoom(user, newRoom);
+    this.wschatService.newRoom(client.id, newRoom);
+  }
 
-    for (const user of this.onlineUsers) {
-      if (newRoom.users.find((u: User) => (u.id === user[1].id) || (user[1].id === room.ownerId))) 
-      {
-        this.server.to(user[0]).emit('rooms', await this.chatService.getRoomsFromUser(user[1].id));
-      }
-    }
+  @SubscribeMessage('subscribeRoom')
+  async onSubscribeRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: SubscribeRoomDto) {
+    this.wschatService.subscribeToRoom(client.id, room);
   }
 
   @SubscribeMessage('joinRoom')
   async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoom) {
     const messages = await this.chatService.getMessagesFromRoom(room);
+
     this.server.to(client.id).emit('messages', messages);
   }
 
   @SubscribeMessage('leaveRoom')
   async onLeaveRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoom) {
-    const user = await this.onlineUsers.get(client.id);
-    await this.chatService.removeUsersFromRoom(room.id, user.id);
-    this.server.to(client.id).emit('rooms', await this.chatService.getRoomsFromUser(user.id));
+    this.wschatService.leaveRoom(client.id, room.id);
+  } 
+
+  @SubscribeMessage('ejectRoom')
+  async onEjectRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() event: EjectRoomI) {
+    this.wschatService.ejectUserFromRoom(client.id, event);
   }
 
+  @SubscribeMessage('promoteUser')
+  async onPromoteUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() event: PromoteUserI) {
+    this.wschatService.promoteUser(client.id, event);
+  }
+
+  @SubscribeMessage('demoteUser')
+  async onDemoteUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() event: DemoteUserI) {
+    this.wschatService.demoteUser(client.id, event);
+  }
 }

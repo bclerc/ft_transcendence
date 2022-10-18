@@ -1,6 +1,6 @@
 <div *ngIf="room.id else no_room">
   <div class="flexbox">
-    <div #scroll class="chat-box" >
+    <div #scroll id="chat_box" class="chat-box" >
       <div class="chat-box-header">
         <h3>{{ room.name }}<br />
           <small>
@@ -28,7 +28,7 @@
                 <img class="" src="{{ message.user.avatar_url }}" width="30" height="30" />
                 
                 <span> {{ message.user.intra_name }} </span>
-                <div class="message other-message">
+                <div id="{{message.id}}" class="message other-message">
                   {{ message.content }}
                 </div>
                 <span class="date">

@@ -15,6 +15,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ChatModule } from './chat/chat.module';
 import { ChatService } from './chat/chat.service';
 import { MessageService } from './message/message.service';
+import { WschatService } from './wschat/wschat.service';
 
 
 @Module({
@@ -22,6 +23,6 @@ import { MessageService } from './message/message.service';
   providers: [AppService, UserService, PrismaService, {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
-  }, ChatGateway, ChatService, MessageService],
+  }, ChatGateway, ChatService, MessageService, WschatService],
 })
 export class AppModule {}

@@ -89,4 +89,8 @@ export class ChatController {
     return await this.chatService.removeUsersFromRoom(id, req.user.id);
   }
 
+  @Get("rooms/public")
+  async getPublicRooms(): Promise<ChatRoom[]> {
+    return await this.chatService.getPublicRooms();
+  }
 }

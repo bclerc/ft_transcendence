@@ -19,14 +19,19 @@ const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const constants_1 = require("../auth/constants");
 const user_service_1 = require("../user/user.service");
+const wschat_service_1 = require("../wschat/wschat.service");
 const chat_service_1 = require("./chat.service");
+const subscribe_room_dto_1 = require("./dto/subscribe-room.dto");
 let ChatGateway = class ChatGateway {
-    constructor(userService, jwtService, chatService) {
+    constructor(userService, jwtService, chatService, wschatService) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.chatService = chatService;
-        this.logger = new common_1.Logger('ChatGateway');
+        this.wschatService = wschatService;
         this.onlineUsers = new Map();
+    }
+    afterInit(server) {
+        this.wschatService.server = server;
     }
     async handleConnection(socket) {
         try {
@@ -38,50 +43,41 @@ let ChatGateway = class ChatGateway {
             const user = await this.userService.findOne(res.sub);
             if (!user)
                 return socket.disconnect();
-            this.onlineUsers.set(socket.id, user);
+            this.wschatService.initUser(socket.id, user);
             socket.data.user = user;
-            const rooms = await this.chatService.getRoomsFromUser(user.id);
-            return this.server.to(socket.id).emit('rooms', rooms);
         }
         catch (error) {
             socket.disconnect(true);
         }
     }
     async handleDisconnect(socket) {
-        this.onlineUsers.delete(socket.id);
+        this.wschatService.removeOnlineUser(socket.id);
         socket.disconnect();
     }
     async handleMessage(client, payload, message) {
-        const user = await this.onlineUsers.get(client.id);
-        const room = message.room;
-        let messages;
-        await this.chatService.newMessage(message);
-        messages = await this.chatService.getMessagesFromRoomId(room.id);
-        for (const user of room.users) {
-            for (const [key, value] of this.onlineUsers.entries()) {
-                if (value.id == user.id) {
-                    this.server.to(key).emit('messages', messages);
-                }
-            }
-        }
+        this.wschatService.newMessage(client.id, message);
     }
     async onCreateRoom(client, payload, newRoom) {
-        const user = await this.onlineUsers.get(client.id);
-        const room = await this.chatService.createRoom(user, newRoom);
-        for (const user of this.onlineUsers) {
-            if (newRoom.users.find((u) => (u.id === user[1].id) || (user[1].id === room.ownerId))) {
-                this.server.to(user[0]).emit('rooms', await this.chatService.getRoomsFromUser(user[1].id));
-            }
-        }
+        this.wschatService.newRoom(client.id, newRoom);
+    }
+    async onSubscribeRoom(client, payload, room) {
+        this.wschatService.subscribeToRoom(client.id, room);
     }
     async onJoinRoom(client, payload, room) {
         const messages = await this.chatService.getMessagesFromRoom(room);
         this.server.to(client.id).emit('messages', messages);
     }
     async onLeaveRoom(client, payload, room) {
-        const user = await this.onlineUsers.get(client.id);
-        await this.chatService.removeUsersFromRoom(room.id, user.id);
-        this.server.to(client.id).emit('rooms', await this.chatService.getRoomsFromUser(user.id));
+        this.wschatService.leaveRoom(client.id, room.id);
+    }
+    async onEjectRoom(client, payload, event) {
+        this.wschatService.ejectUserFromRoom(client.id, event);
+    }
+    async onPromoteUser(client, payload, event) {
+        this.wschatService.promoteUser(client.id, event);
+    }
+    async onDemoteUser(client, payload, event) {
+        this.wschatService.demoteUser(client.id, event);
     }
 };
 __decorate([
@@ -105,6 +101,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onCreateRoom", null);
 __decorate([
+    (0, websockets_1.SubscribeMessage)('subscribeRoom'),
+    __param(0, (0, websockets_1.ConnectedSocket)()),
+    __param(2, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object, subscribe_room_dto_1.SubscribeRoomDto]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "onSubscribeRoom", null);
+__decorate([
     (0, websockets_1.SubscribeMessage)('joinRoom'),
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
@@ -120,14 +124,40 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onLeaveRoom", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('ejectRoom'),
+    __param(0, (0, websockets_1.ConnectedSocket)()),
+    __param(2, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "onEjectRoom", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('promoteUser'),
+    __param(0, (0, websockets_1.ConnectedSocket)()),
+    __param(2, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "onPromoteUser", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('demoteUser'),
+    __param(0, (0, websockets_1.ConnectedSocket)()),
+    __param(2, (0, websockets_1.MessageBody)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatGateway.prototype, "onDemoteUser", null);
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(81, { cors: { origin: '*' } }),
     __param(0, (0, common_1.Inject)(user_service_1.UserService)),
     __param(1, (0, common_1.Inject)(jwt_1.JwtService)),
     __param(2, (0, common_1.Inject)(chat_service_1.ChatService)),
+    __param(3, (0, common_1.Inject)(wschat_service_1.WschatService)),
     __metadata("design:paramtypes", [user_service_1.UserService,
         jwt_1.JwtService,
-        chat_service_1.ChatService])
+        chat_service_1.ChatService,
+        wschat_service_1.WschatService])
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;
 //# sourceMappingURL=chat.gateway.js.map
