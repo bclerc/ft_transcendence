@@ -3,6 +3,7 @@ import { EmailValidator, FormBuilder, FormControl, FormGroup, Validators } from 
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map, Observable, Subscription } from 'rxjs';
+import { Secret } from 'src/app/models/secret.models';
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { UserService } from 'src/app/services/user/user.service';
@@ -16,41 +17,22 @@ export class ModifyMyProfileComponent implements OnInit {
 
   userList!: UserI[];
   userList2$!: Observable <UserI[]>;
-  ob!: Observable<any>;
+  Secret!: Secret;
   user! : UserI;
   id? : number | null;
-  name? : string ;
 
-      changeEmailForm: FormGroup = this.fb.group({
-        email: new FormControl(null, [Validators.required, Validators.email]),
-        });
-      changeDisplaynameForm: FormGroup = this.fb.group({
-          displayname: new FormControl(null, [Validators.required]),
-          });
-      changeAvatar_urlForm: FormGroup = this.fb.group({
-        avatar_url: new FormControl(null, [Validators.required]),
-            });
+  ChangeDisplaynameForm!: FormGroup;
 
-            ChangeForm!: FormGroup/* = this.fb.group({
-              email: new FormControl(null, [Validators.required, Validators.email]),
-              password: new FormControl(null, [Validators.required]),
-              descritpion: new FormControl(null, [Validators.required]),
-              displayname: new FormControl(null, [Validators.required]),
-              avatar_url: new FormControl(null, [Validators.required]),
-              });*/
-              FaForm: FormGroup = this.fb.group({
-                codeFa: new FormControl(null, [Validators.required]),
+  ChangeAvatar_UrlForm!: FormGroup 
+
+  FaForm: FormGroup = this.fb.group({
+    codeFa: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern("^[0-9]*$")])
                     });
-              subscription! : Subscription;
 
-
-
+  subscription! : Subscription;
 
   constructor(private fb: FormBuilder, private token : TokenStorageService, private userService: UserService, private jwtHelper : JwtHelperService, private route : ActivatedRoute, private router: Router ) 
-  {
-
-   
-      }
+  {}
     
   
 
@@ -64,48 +46,21 @@ export class ModifyMyProfileComponent implements OnInit {
         },
         error => this.router.navigate([''])
         );
-      this.userService.changeUserList(this.userList);
-      this.id = this.token.getId();
-      if (this.id)
-      {
-        this.user = this.userService.getUserById(this.id);
-      }
-        if (this.user)
-        {
-          //this.name = JSON.parse(this.user.email)
-          this.ChangeForm = this.fb.group({
-            email: new FormControl(this.user.email, [Validators.required, Validators.email]),
-            password: new FormControl(null, [Validators.required]),
-            description: new FormControl(this.user.description, [Validators.required]),
-            displayname: new FormControl(this.user.displayname, [Validators.required]),
-            avatar_url: new FormControl(this.user.avatar_url, [Validators.required]),
-            });
-        }
-        /*if (this.id)
-          this.userService.ChangeDbInformation(this.id).subscribe(
-            (data : any) => {
-              console.log("data =",data);
-             //this.ob = data;
-           },
-          )
-          this.userService.ValidateFaCode().subscribe
-          (
-            (data : any) => {
-               console.log("data =",data);
-              //this.ob = data;
-            },
-            //error => this.router.navigate([''])
-            );*/
-            /*console.log("coucuou");
-          this.userService.ActivateFacode(1234123412341234).subscribe
-          (
-            (data : any) => {
-               console.log("data =",data);
-              //this.ob = data;
-            },
-            //error => this.router.navigate([''])
-            );
-          console.log("null");*/
+    this.userService.changeUserList(this.userList);
+    this.id = this.token.getId();
+    if (this.id)
+    {
+      this.user = this.userService.getUserById(this.id);
+    }
+    if (this.user)
+    {
+      this.ChangeDisplaynameForm = this.fb.group({
+        displayname: new FormControl(this.user.displayname, [Validators.required]),
+        });
+      this.ChangeAvatar_UrlForm = this.fb.group({
+        avatar_url: new FormControl(this.user.avatar_url, [Validators.required]),
+        });
+    }
   }
   
   ngOnDestroy() : void
@@ -114,48 +69,34 @@ export class ModifyMyProfileComponent implements OnInit {
   }
 
 
-  onSubmit(): void {
-    if (this.ChangeForm.valid)
+  ChangeDisplayName(): void {
+    if (this.ChangeDisplaynameForm.valid)
     {
-      //var yolo = this.ChangeForm.controls['displayname'];
-      //if (yolo)
-        this.user.displayname = this.ChangeForm.controls['displayname'].getRawValue();
-        this.user.email = this.ChangeForm.controls['email'].getRawValue();
-        this.user.description = this.ChangeForm.controls['description'].getRawValue();
-        if (this.id)
-          this.userService.ChangeDbInformation(this.id, this.user).subscribe
-          (
-            (data : any) => {
-               console.log("data =",data);
-              //this.ob = data;
+      this.user.displayname = this.ChangeDisplaynameForm.controls['displayname'].getRawValue();
+      if (this.id)
+        this.userService.ChangeDbInformation(this.id, this.user).subscribe(
+          (data : any) => {
+            console.log("data =",data);
             },
             //error => this.router.navigate([''])
-            );
+          );
     }
   }
 
-  ActivateFa(): void {
-    if (this.FaForm.valid)
-    {
-      this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe
-      (
-        (data : any) => {
-           console.log("data =",data);
-          //this.ob = data;
-        },
-        //error => this.router.navigate([''])
-        );
-    }
+
+
+  DesactivateFa(): void {
+    this.userService.DesactivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe(
+      (data : any) => {
+         console.log("data =",data);
+        //this.ob = data;
+      },
+      //error => this.router.navigate([''])
+      );
   }
   
 
-  changeEmail(): void{
-
-  }
-  changeDisplayname(): void{
-
-  }
-  changeAvatar_url(): void{
+  ChangeAvatar_url(): void{
 
   }
 }

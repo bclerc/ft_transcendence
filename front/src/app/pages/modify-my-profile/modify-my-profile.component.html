@@ -1,36 +1,19 @@
-<app-header></app-header>
-<!-- 
-<form class="form" [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
-    <input matInput placeholder="Email" formControlName="email">
-    <button [disabled]="!changeEmailForm.valid" type="submit" id="login-button">Submit change</button>
-</form>
-<form class="form" [formGroup]="changeDisplaynameForm" (ngSubmit)="changeDisplayname()">
-    <input matInput placeholder="Displayname" formControlName="displayname">
-    <button [disabled]="!changeDisplaynameForm.valid" type="submit" id="login-button">Submit change</button>
-</form>
-<form class="form" [formGroup]="changeAvatar_urlForm" (ngSubmit)="changeAvatar_url()">
-    <input matInput placeholder="Avatar_url" formControlName="avatar_url">
-    <button [disabled]="!changeAvatar_urlForm.valid" type="submit" id="login-button">Submit change</button>
-</form>
-
-<p></p>!-->
-<form class="form" [formGroup]="ChangeForm" (ngSubmit)="onSubmit()">
-    <input matInput placeholder="Email" formControlName="email">
-    <p></p>
+<form class="form" [formGroup]="ChangeDisplaynameForm" (ngSubmit)="ChangeDisplayName()">
     <input matInput placeholder="Displayname" formControlName="displayname">
     <p></p>
-    <input matInput placeholder="Password" formControlName="password">
-    <p></p>
-    <input matInput placeholder="Description" formControlName="description">
-    <p></p>
-    <input matInput placeholder="Avatar_url" formControlName="avatar_url">
-    <p></p>
-    <button [disabled]="!ChangeForm.valid" type="submit" id="change-button">Submit change</button>
+    <button [disabled]="!ChangeDisplaynameForm.valid" type="submit" id="change-button">Change Display Name</button>
   </form>
   <p></p>
-  <form class="form" [formGroup]="FaForm" (ngSubmit)="ActivateFa()">
-    <input matInput placeholder="Code2Fa" formControlName="codeFa">
+  <form class="form" [formGroup]="ChangeAvatar_UrlForm" (ngSubmit)="ChangeAvatar_url()">
+    <input matInput placeholder="Avatar_Url" formControlName="avatar_url">
     <p></p>
-    <button [disabled]="!FaForm.valid" type="submit" id="change-button">validate Fa Code</button>
-</form>
-
+    <button [disabled]="!ChangeAvatar_UrlForm.valid" type="submit" id="change-button">Change Avatar</button>
+  </form>
+  <p></p>
+  <!-- A Mettre dans un if 2fa activated !-->
+  <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a>
+<p></p>
+<form class="form" [formGroup]="FaForm" (ngSubmit)="DesactivateFa()">
+  <input matInput placeholder="Code2Fa" formControlName="codeFa">
+  <p></p>
+  <button [disabled]="!FaForm.valid" type="submit" id="change-button">Desactivate 2 Fa</button>
