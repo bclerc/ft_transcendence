@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+<app-header></app-header>
+<!--<div *ngIf="filtersLoaded | async">!-->
+<p>{{user?.displayname| json}}</p>
+<p>{{user?.email| json}}</p>
+<p>{{user?.createdAt | json }}</p>
+<img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/>
+<p><a routerLink="/modifymyprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Modifier mon profil</a>
+</p>
+=======
 <!--<div *ngIf="filtersLoaded | async">!-->
 <div>
 <p>{{user?.displayname}}</p>
@@ -8,4 +18,5 @@
 </p>
 <p>historique des matchs</p>
 </div>
+>>>>>>> merge
 <!--</div>!-->

@@ -1,6 +1,18 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { JwtModule } from '@auth0/angular-jwt';
+
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { LoginPagesComponent } from './pages/login-pages/login-pages.component';
+import { UserComponent } from './user/user.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { PlayPongPagesComponent } from './pages/play-pong-pages/play-pong-pages.component';
+import { PlayRankedPongPagesComponent } from './pages/play-ranked-pong-pages/play-ranked-pong-pages.component';
+import { PlayFunPongPagesComponent } from './pages/play-fun-pong-pages/play-fun-pong-pages.component';
+
+import { RegisterPageComponent } from './pages/register-page/register-page.component';
+import { GetTokenComponent } from './get-token/get-token.component';
+import { UnfoundPagesComponent } from './unfound-pages/unfound-pages.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -52,6 +64,21 @@ export function tokenGetter() {
 @NgModule({
   declarations: [
     AppComponent,
+    LandingPageComponent,
+    HeaderComponent,
+    LoginPagesComponent,
+    UserComponent,
+    UserListComponent,
+    PlayPongPagesComponent,
+    PlayRankedPongPagesComponent,
+    PlayFunPongPagesComponent,
+    ChatPageComponent,
+    RegisterPageComponent,
+    ProfilePageComponent,
+    GetTokenComponent,
+    UnfoundPagesComponent,
+    MyProfileComponent,
+    ModifyMyProfileComponent,
     HeaderComponent,
     ProfilePageComponent,
     MyProfileComponent,
@@ -80,6 +107,7 @@ export function tokenGetter() {
         allowedDomains: ['localhost:3000']
       }
     }),
+
     SocketIoModule.forRoot(config),
     BrowserAnimationsModule,
     MatTabsModule,

@@ -1,0 +1,33 @@
+import { OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect } from "@nestjs/websockets";
+import { Server, Socket } from "socket.io";
+import { GameI } from "./interfaces/game.interface";
+import { UserI } from "./interfaces/user.interface";
+import { PongService } from "./services/pong.service";
+export declare class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+    private pongService;
+    server: Server;
+    state: GameI;
+    allGames: GameI[];
+    connectedUsers: UserI[];
+    constructor(pongService: PongService);
+    afterInit(server: Server): void;
+    handleDisconnect(client: Socket): void;
+    handleConnection(client: Socket, ...args: any[]): void;
+    init(client: Socket): void;
+    keydownZ(client: Socket): void;
+    keydownW(client: Socket): void;
+    keydownS(client: Socket): void;
+    keyupZ(client: Socket): void;
+    keyupW(client: Socket): void;
+    keyupS(client: Socket): void;
+    newGame(client: Socket): Promise<void>;
+    varSearchLoop(client: Socket, id: number): void;
+    private addNewUser;
+    startGame(game: GameI): Promise<void>;
+    stopgame(client: Socket): void;
+    searchGameAwaiting(): GameI;
+    creatNewGame(client: Socket): GameI;
+    joinGame(client: Socket, game: GameI): void;
+    deleteGame(g: GameI): void;
+    delay(ms: number): Promise<unknown>;
+}
