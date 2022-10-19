@@ -15,6 +15,38 @@ import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { Activate2FaComponent } from './pages/activate2-fa/activate2-fa.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { MatTabsModule} from '@angular/material/tabs';
+import { MatCardModule} from '@angular/material/card';
+import { MatListModule} from '@angular/material/list';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatIconModule} from '@angular/material/icon';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { UserselectComponent } from './userselect/userselect.component';
+import { CommonModule } from '@angular/common';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RoomComponent } from './pages/chat-page/room/room.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { ChatInfoComponent } from './chat-info/chat-info.component';
+import {MatTableModule} from '@angular/material/table';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatBadgeModule} from '@angular/material/badge';
+import { EditRoomChatComponent } from './edit-room-chat/edit-room-chat.component';
+import { SendCodeComponent } from './pages/send-code/send-code.component';
+import { Activate2FaComponent } from './pages/activate2-fa/activate2-fa.component';
+
+const config: SocketIoConfig = {
+  url: 'http://localhost:81', options: {
+    query: {
+      token: sessionStorage.getItem('auth-token')
+    }
+  }
+};
 
 export function tokenGetter() {
   return localStorage.getItem("auth-token");
@@ -26,6 +58,13 @@ export function tokenGetter() {
     ProfilePageComponent,
     MyProfileComponent,
     ModifyMyProfileComponent,
+    SendCodeComponent,
+    Activate2FaComponent,
+    ChatPageComponent,
+    UserselectComponent,
+    RoomComponent,
+    ChatInfoComponent,
+    EditRoomChatComponent,
     SendCodeComponent,
     Activate2FaComponent,
     ChatPageComponent,
@@ -44,7 +83,6 @@ export function tokenGetter() {
       }
     }),
     BrowserAnimationsModule,
-    //
   ],
   providers: [    UserService,
     UserResolver],

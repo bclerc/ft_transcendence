@@ -22,7 +22,6 @@ export class UserService {
   ngOnInit(): void 
   {}
 
-
   getLoggedUser(): Observable<UserI>
   {
     const token = this.token.getToken();
@@ -34,7 +33,7 @@ export class UserService {
     }
     throw new Error('No token');
   }
-  
+
   changeUserList(tab: UserI[]): void
   {
     this.userList= tab;
