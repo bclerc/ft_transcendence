@@ -11,9 +11,16 @@
   </form>
   <p></p>
   <!-- A Mettre dans un if 2fa activated !-->
+
+  <div *ngIf="user?.twoFactorEnabled; then thenBlock else elseBlock"></div>
+  <ng-template #thenBlock>
+    <form class="form" [formGroup]="FaForm" (ngSubmit)="DesactivateFa()">
+      <input matInput placeholder="Code2Fa" formControlName="codeFa">
+      <p></p>
+      <button [disabled]="!FaForm.valid" type="submit" id="change-button">Desactivate 2 Fa</button>
+    </form>
+    </ng-template>
+  <ng-template #elseBlock>
   <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a>
-<p></p>
-<form class="form" [formGroup]="FaForm" (ngSubmit)="DesactivateFa()">
-  <input matInput placeholder="Code2Fa" formControlName="codeFa">
-  <p></p>
-  <button [disabled]="!FaForm.valid" type="submit" id="change-button">Desactivate 2 Fa</button>
+ </ng-template>
+  

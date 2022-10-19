@@ -12,6 +12,7 @@ export interface UserI {
     username? :         string;
     staff? :            boolean;
     createdAt? :        Date;
+    twoFactorEnabled? : boolean;
 }
 
 export class User {

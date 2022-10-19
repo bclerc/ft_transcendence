@@ -22,6 +22,19 @@ export class UserService {
   ngOnInit(): void 
   {}
 
+
+  getLoggedUser(): Observable<UserI>
+  {
+    const token = this.token.getToken();
+    if (token)
+    {
+      const decodedToken = this.jwtService.decodeToken(token);
+      const userId = decodedToken.userId;
+      return this.http.get<UserI>("http://localhost:3000/api/v1/user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    }
+    throw new Error('No token');
+  }
+  
   changeUserList(tab: UserI[]): void
   {
     this.userList= tab;
@@ -66,7 +79,7 @@ export class UserService {
 
   ActivateFacode(code : string) : Observable<any>
   {
-    return this.http.post<Observable<any>>("http://localhost:3000/api/v1/auth/2fa/enable",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.post<Observable<any>>("http://localhost:3000/api/v1/auth/2fa/enable3",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   DesactivateFacode(code : string) : Observable<any>

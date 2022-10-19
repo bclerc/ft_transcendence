@@ -13,6 +13,8 @@ import { UserService } from './services/user/user.service';
 import { UserResolver } from './resolver';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { Activate2FaComponent } from './pages/activate2-fa/activate2-fa.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 
 export function tokenGetter() {
   return localStorage.getItem("auth-token");
@@ -26,6 +28,7 @@ export function tokenGetter() {
     ModifyMyProfileComponent,
     SendCodeComponent,
     Activate2FaComponent,
+    ChatPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,6 +43,7 @@ export function tokenGetter() {
         allowedDomains: ['localhost:3000']
       }
     }),
+    BrowserAnimationsModule,
     //
   ],
   providers: [    UserService,
