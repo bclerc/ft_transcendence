@@ -23,7 +23,7 @@ export class PongService {
     //     clearInterval(state.id);
     // }
 
-    loopGame(game: GameI){
+    loopGameNormal(game: GameI){
         // var player1: PlayerI = game.player1;
         // var player2: PlayerI = game.player2;
         // var ball: BallI = game.ball;
@@ -58,8 +58,8 @@ export class PongService {
             //inversement de la direction y
             game.ball.dy *= -1;
             game.ball.y = 0
-            game.player1.socket.emit('play', 0);
-            game.player2.socket.emit('play', 0);
+            // game.player1.socket.emit('play', 0);
+            // game.player2.socket.emit('play', 0);
         }
         //rebond vertical bas
         else if (game.ball.y > HEIGHTCANVAS - game.ball.height)
@@ -67,8 +67,8 @@ export class PongService {
             //inversement de la direction y
             game.ball.dy *= -1;
             game.ball.y = HEIGHTCANVAS - game.ball.height;
-            game.player1.socket.emit('play', 0);
-            game.player2.socket.emit('play', 0);
+            // game.player1.socket.emit('play', 0);
+            // game.player2.socket.emit('play', 0);
         }
 
         ////horizontalement
@@ -79,8 +79,8 @@ export class PongService {
             //mise a jour des scores et emission au front
             game.ball.x <= (0 - game.ball.width) ? game.player2.points++ : 42;
             game.ball.x >= (WIDTHCANVAS + game.ball.width) ? game.player1.points++ : 42;
-            game.player1.socket.emit('play', 2);
-            game.player2.socket.emit('play', 2);
+            // game.player1.socket.emit('play', 2);
+            // game.player2.socket.emit('play', 2);
             game.player1.socket.emit('score', {
                 score1: game.player1.points,
                 score2: game.player2.points
@@ -123,8 +123,8 @@ export class PongService {
         //sil y a rebond entre balle et paddle
         else if (((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) || ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle)))
         {
-            game.player1.socket.emit('play', 1);
-            game.player2.socket.emit('play', 1);
+            // game.player1.socket.emit('play', 1);
+            // game.player2.socket.emit('play', 1);
             if (this.colision(game.ball, game.player1.paddle))
                 this.rebond(game.ball, game.player1.paddle);
             else
