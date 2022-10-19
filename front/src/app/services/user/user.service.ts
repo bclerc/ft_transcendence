@@ -100,4 +100,9 @@ export class UserService {
   {
     return this.http.post<Secret>("http://localhost:3000/api/v1/auth/2fa/reset", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
+
+  FindByName(name : string): Observable<UserI[]>
+  {
+      return this.http.get<User[]>("http://localhost:3000/api/v1/user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
 }

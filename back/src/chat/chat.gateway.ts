@@ -31,9 +31,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.wschatService.server = server;
   }
 
-  
-
-
   async handleConnection(socket: Socket) {
     try {
       const token = socket.handshake.query['token'] as string;
@@ -98,4 +95,5 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async onDemoteUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() event: DemoteUserI) {
     this.wschatService.demoteUser(client.id, event);
   }
+
 }

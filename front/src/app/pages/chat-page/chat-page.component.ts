@@ -38,7 +38,8 @@ export class ChatPageComponent implements OnInit {
               private userService: UserService) { }
 
   async ngOnInit() {
-    this.publicrooms = await this.chatService.getPublicRooms();
+    this.publicrooms
+     = await this.chatService.getPublicRooms();
     this.rooms$ = await this.chatService.getRooms();
     this.userService.getLoggedUser().subscribe((user: UserI) => {
       this.actualUser = user;
