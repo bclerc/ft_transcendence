@@ -280,7 +280,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "stopgame", null);
 PongGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(4242, {
+    (0, websockets_1.WebSocketGateway)(81, {
         cors: {
             origin: "*"
         }
