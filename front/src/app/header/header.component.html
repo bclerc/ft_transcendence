@@ -2,14 +2,19 @@
     <h1>Best pong game ever</h1>
     <nav>
         <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-        <a routerLink="/playpong" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Play Pong</a>
-        <!--<a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Login</a>!-->
-        <a routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">My profile</a>
-        <a routerLink="/chat" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Chat</a>
-            
-            <a class="log-reg-dir"  href= "http://localhost:3000/api/v1/auth/42">
-              <span>Log in with </span>
-              <img style="width: 20px"src="/assets/img/42.svg.png" >
-            </a>
+
+            <div *ngIf="connect; then thenBlock else elseBlock"></div>
+<ng-template #thenBlock>
+    <a routerLink="/playpong" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Play Pong</a>
+    <a routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">My profile</a>
+    <a routerLink="/chat" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Chat</a>
+    <a href="javascript:void(0);" (click)="logOut()">Log Out</a>
+    </ng-template>
+<ng-template #elseBlock>
+<a class="log-reg-dir"  href= "http://localhost:3000/api/v1/auth/42">
+  <span>Log in with </span>
+  <img style="width: 20px"src="/assets/img/42.svg.png" >
+</a></ng-template>
+
     </nav>
 </header>

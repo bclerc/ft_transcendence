@@ -55,7 +55,6 @@ export class ChatService {
         roomId: room.id,
         password: pass,
       }
-  
       this.socket.emit('subscribeRoom', object);
     }
 

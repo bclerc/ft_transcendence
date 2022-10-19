@@ -73,6 +73,7 @@ export class ChatService {
       include: {
         user: true,
       },
+    
     });
     return messages;
   }
