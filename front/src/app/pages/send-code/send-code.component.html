@@ -1,0 +1,6 @@
+
+<form class="form" [formGroup]="FaForm" (ngSubmit)="onSubmit()">
+    <input matInput placeholder="Code" formControlName="Code">
+    <p></p>
+    <button [disabled]="!FaForm.valid" type="submit" id="change-button">validate Fa Code</button>
+</form>

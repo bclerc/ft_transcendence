@@ -8,11 +8,11 @@ export interface UserI {
     intra_id? :         number;
     displayname? :      string;
     description? :      string;
-    friends? :          UserI[];
     //password? :         string;
     username? :         string;
     staff? :            boolean;
     createdAt? :        Date;
+    twoFactorEnabled? : boolean;
 }
 
 export class User {
@@ -36,8 +36,7 @@ export class User {
     id! :               number;
     email? :            string;
     intra_name? :       string;
-    avatarURL! :          string;
-    avatar_url? :        string;
+    avatarURL! :        string;
     intra_id? :         number; 
     //password? :         string;
     username! :         string;
