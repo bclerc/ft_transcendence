@@ -18,7 +18,11 @@ export class GetTokenComponent implements OnInit {
     this.tokenString = this.router.url.split('/')[2];
     this.token.saveToken(this.tokenString);
     //console.log("this.tokenString")
+<<<<<<< HEAD
     console.log("id = ", this.jwtHelper.decodeToken(this.tokenString).sub);
+=======
+    //console.log("id = ", this.jwtHelper.decodeToken(this.tokenString).sub);
+>>>>>>> merge
     //console.log(this.tokenString); 
     this.router.navigate(['']);
   }

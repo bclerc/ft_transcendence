@@ -1,24 +1,35 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Catch, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { AuthController } from 'src/auth/auth.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { string } from 'yargs';
 import { newIntraUserDto } from './dto/newIntraUser.dto';
+import { updateUserDto } from './dto/updateUser.dto';
 
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
-  
+  constructor(private prisma: PrismaService) { }
+
   async newUser(data: any): Promise<User> {
-    return await this.prisma.user.create({ data });
+    try {
+      const user = await this.prisma.user.create({ data });
+      return user;
+    }
+    catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code == 'P2002') {
+          throw new HttpException(e.meta.target[0] + " already used", HttpStatus.CONFLICT);
+        }
+      }
+      throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  async getCheatCode()
-  {
+  async getCheatCode() {
     const user = await this.findByEmail("marcus@student.42.fr");
-    if (!user)
-    {
+    if (!user) {
       return await this.prisma.user.create({
         data: {
           email: 'marcus@student.42.fr',
@@ -33,21 +44,34 @@ export class UserService {
   }
 
   async createIntraUser(user: newIntraUserDto): Promise<User> {
-    return await this.prisma.user.create({
-      data: {
-        email: user.email,
-        password: '',
-        intra_name: user.intra_name,
-        intra_id: user.intra_id,
-        avatar_url: user.avatar_url,
-        displayname: user.displayname
+    let newUser: User;
+
+    try {
+      newUser = await this.prisma.user.create({
+        data: {
+          email: user.email,
+          password: '',
+          intra_name: user.intra_name,
+          intra_id: user.intra_id,
+          avatar_url: user.avatar_url,
+          displayname: user.displayname
+        }
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code == 'P2002') {
+          throw new HttpException(e.meta.target[0] + " already used", HttpStatus.CONFLICT);
+        }
       }
-    });
+      throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return newUser;
   }
+
 
   async findAll(): Promise<User[]> {
     const users = (await this.prisma.user.findMany());
-    
+
     for (const user of users)
       delete user['password'];
     return users;
@@ -63,7 +87,7 @@ export class UserService {
 
       return user;
     } catch (error) {
-      throw new NotFoundException({message: 'User ' + id + ' not exist'});
+      throw new NotFoundException({ message: 'User ' + id + ' not exist' });
     }
   }
 
@@ -75,29 +99,74 @@ export class UserService {
     });
   }
 
+  async findByName(name: string): Promise<any> {
+    const users = await this.prisma.user.findMany({
+      where: {
+        intra_name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
+      select: {
+        id: true,
+        intra_name: true,
+        email: true,
+        avatar_url: true,
+        displayname: true,
+      },
+    });
+    return users;
+  }
+
+  async getFriends(user: User): Promise<User[]> {
+    const friends = await this.prisma.user.findMany({
+      where: {
+        friends: {
+          some: {
+            id: user.id,
+          },
+        },
+      },
+    });
+    return friends;
+  }
+
   async set2FASsecret(userId: number, secret: string) {
-	await this.prisma.user.update({
-	    where: {
-		    id: Number(userId),
-	    },
-	    data: {
-		    twoFactorAuthenticationSecret: secret,
-	    },
-	  });
+    await this.prisma.user.update({
+      where: {
+        id: Number(userId),
+      },
+      data: {
+        twoFactorAuthenticationSecret: secret,
+      },
+    });
   }
 
   async set2FAEnable(userId: number, enable: boolean) {
     await this.prisma.user.update({
-        where: {
-          id: Number(userId),
-        },
-        data: {
-          twoFactorEnabled: enable
-          ,
-        },
-      });
+      where: {
+        id: Number(userId),
+      },
+      data: {
+        twoFactorEnabled: enable
+        ,
+      },
+    });
     return {
-        message: enable ? '2FA enabled' : '2FA disabled',
-      }
+      message: enable ? '2FA enabled' : '2FA disabled',
     }
+  }
+
+  async updateUser(id: string, update: updateUserDto) {
+    await this.prisma.user.update({
+      where: {
+        id: Number(id),
+      },
+      data: update
+    });
+    return {
+      message: "User was been updated",
+    }
+  }
+
 }

@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+<<<<<<< HEAD
 import { map, Observable } from 'rxjs';
+=======
+import { map, Observable, Subscription } from 'rxjs';
+>>>>>>> merge
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { UserService } from 'src/app/services/user/user.service';
@@ -25,15 +29,25 @@ export class MyProfileComponent implements OnInit {
   filtersLoaded?: Promise<boolean>;
   userList!: UserI[];
   userList2$!: Observable <UserI[]>;
+<<<<<<< HEAD
 
+=======
+  subscription!: Subscription;
+>>>>>>> merge
   ngOnInit(): void {
     // console.log("start");
 
     this.userList2$ =  this.route.data.pipe(
       map(data => data['userList']));
+<<<<<<< HEAD
       this.userList2$.subscribe(
         (data : any) => {
           // console.log("data =",data);
+=======
+       this.subscription = this.userList2$.subscribe(
+        (data : any) => {
+          console.log("data =",data);
+>>>>>>> merge
           this.userList = data;
         },
         error => this.router.navigate([''])
@@ -49,7 +63,11 @@ export class MyProfileComponent implements OnInit {
 
     ngOnDestroy() : void
     {
+<<<<<<< HEAD
       
+=======
+      this.subscription.unsubscribe;
+>>>>>>> merge
     }
   }
 

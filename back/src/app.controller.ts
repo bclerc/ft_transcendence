@@ -62,7 +62,11 @@ export class AuthController {
   {
     const marcus = await this.userService.getCheatCode();
     const token = await this.authService.login(marcus.id, false);
+<<<<<<< HEAD
     res.status('200').redirect(`http://localhost:4200/public/login/success/${token.access_token}`);
+=======
+    res.status('200').redirect(`http://localhost:4200/login/${token.access_token}`);
+>>>>>>> merge
   }
 
   /**
@@ -79,6 +83,10 @@ export class AuthController {
   * }
   */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> merge
   @Get('42')
   @UseGuards(FortyTwoGuard)
   async login42() {}
@@ -121,7 +129,10 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async authenticate(@Request() request, @Body() body: any) {
     const isCodeValid = await this.authService.verify2FACode(request.user, body.twoFactorAuthenticationCode);
+<<<<<<< HEAD
     console.log(isCodeValid);
+=======
+>>>>>>> merge
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }
@@ -151,6 +162,7 @@ export class AuthController {
    *  "otpauthUrl": "otpauth://totp/Transcendence42:norminet?secret=SECRET&period=30&digits=6&algorithm=SHA1&issuer=Transcendence42",
    *   "qrcode": "qrcode"
    * }
+<<<<<<< HEAD
    */
 
   @Get('2fa/secret')
@@ -213,6 +225,70 @@ export class AuthController {
   }
 
   /**
+=======
+   */
+
+  @Get('2fa/secret')
+  @UseGuards(JwtAuthGuard)
+  async generate2FACode(@Request() req: any) {
+    return this.authService.get2FASecret(req.user);
+  }
+
+  /**
+   * @api {post} /auth/2fa/reset Réinitialiser le secret 
+   * @apiDescription Réinitialise le secret de double authentification et renvoi un nouveau secret.
+   * 
+   * @apiName reset
+   * @apiGroup DoubleAuthentication
+   * @apiHeader {String} access_token Token de connexion.
+   * @apiHeaderExample {json} Header
+   * 
+   * {
+   *      "Authorization": "Bearer ACCESS_TOKEN" 
+   * }  
+   * 
+   * @apiSuccess {String} secret Nouveau secret de double authentification.
+   * @apiSuccess {String} otpauth_url URL du nouveau qrcode de double authentification.
+   * @apiSuccess {String} qrcode QRCode de double authentification.
+   * @apiSuccessExample {json} Exemple de réponse en cas de succès:
+   * {
+   *  "secret": "SECRET",
+   *  "otpauthUrl": "otpauth://totp/Transcendence42:norminet?secret=SECRET&period=30&digits=6&algorithm=SHA1&issuer=Transcendence42",
+   *  "qrcode": "qrcode"
+   * }
+   * @apiErrorExample {json} Exemple de réponse en cas d'erreur:
+   * {
+   *  "message": "Double authentication is not enabled"
+   * } 
+  */
+
+  @Post('2fa/reset')
+  @UseGuards(JwtAuthGuard)
+  async reset2FASecret(@Request() req: any, @Res() res: any) {
+    this.authService.reset2FASecret(req.user);
+    res.status('200').redirect('secret');
+  }
+  
+  /**
+   * @api {post} /auth/2fa/disable Désactiver
+   * @apiDescription Désactive la double authentification.
+   * @apiName disable
+   * @apiGroup DoubleAuthentication
+   * @apiHeaderExample {json} Header: 
+   * {
+   *     "Authorization": "Bearer ACCESS_TOKEN"
+   * }
+   * @apiSuccess {String} message Message de confirmation.
+   */
+
+  @Get('2fa/disable')
+  @UseGuards(JwtAuthGuard)
+  async disable2FA(@Request() req: any) {
+   return await this.userService.set2FAEnable(req.user.id, false);
+  }
+
+  /**
+>>>>>>> merge
    * @api {post} /auth/2fa/enable Activer
    * @apiDescription Active la double authentification.
                      Une fois le code scanné, l'utilisateur doit valider 

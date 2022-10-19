@@ -22,7 +22,7 @@ const WIDTHCANVAS = 500;
 
 // var idInterval :NodeJS.Timer;
 
-@WebSocketGateway(4242, {
+@WebSocketGateway(81, {
 	cors: {
 		origin: "*"
 	}

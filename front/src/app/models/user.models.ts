@@ -6,12 +6,22 @@ export interface UserI {
     intra_name? :       string;
     avatar_url? :        string;
     intra_id? :         number;
+<<<<<<< HEAD
     displayname? :      string; 
     //password? :         string;
     username? :         string;
     elo? :              number;
     staff? :            boolean;
     createdAt? :        Date;
+=======
+    displayname? :      string;
+    description? :      string;
+    //password? :         string;
+    username? :         string;
+    staff? :            boolean;
+    createdAt? :        Date;
+    twoFactorEnabled? : boolean;
+>>>>>>> merge
 }
 
 export class User {

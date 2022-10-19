@@ -10,17 +10,24 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './user/filter/http-exception.filter';
+import { ChatGateway } from './chat/chat.gateway';
+import { JwtModule } from '@nestjs/jwt';
+import { ChatModule } from './chat/chat.module';
+import { ChatService } from './chat/chat.service';
+import { MessageService } from './message/message.service';
+import { WschatService } from './wschat/wschat.service';
+
 
 import { HttpModule } from '@nestjs/axios';
 import { PongModule } from './pong/pong.module';
 
 
 @Module({
-  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), HttpModule, PongModule],
+  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), HttpModule, PongModule, ChatModule],
   controllers: [AuthController, UserController],
   providers: [AppService, UserService, PrismaService, {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
-  }],
+  }, ChatGateway, ChatService, MessageService, WschatService],
 })
 export class AppModule {}

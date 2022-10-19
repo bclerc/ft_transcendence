@@ -1,0 +1,32 @@
+<mat-form-field>
+  <input matInput placeholder="Chercher par un pseudo" [matAutocomplete]="auto" [formControl]="searchUsername">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+   (optionSelected)="setSelectedUser($event.option.value)">
+    <ng-container>
+      <mat-option *ngFor="let user of filteredUsers" [value]="user">
+        <img src="{{user.avatar_url}}" alt="avatar" width="26" height="26" style="border-radius: 50%; margin-top: 15%; margin-right: 10%;">
+        <span>{{user.intra_name}}</span>
+        <mat-divider></mat-divider>
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
+</mat-form-field>
+<button mat-button type="button" [disabled]="!selectedUser.intra_name" (click)="addUserToForm()">
+<mat-icon>add</mat-icon>
+</button>
+
+<mat-chip-list *ngIf="users[0]; else no_users">
+  <mat-chip *ngFor="let user of users " (removed)="removeUserFromForm(user)">
+    <img matChipAvatar [src]="user.avatar_url" [alt]="user.intra_name">
+    {{user.intra_name}} ({{user.id}})
+    <mat-icon matChipRemove>cancel</mat-icon>
+  </mat-chip>
+</mat-chip-list>
+
+
+
+
+
+<ng-template #no_users>
+  <mat-error>Aucun utilisateur ajouté pour le moment</mat-error>
+</ng-template>
