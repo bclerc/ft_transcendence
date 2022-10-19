@@ -25,7 +25,7 @@ const MISS = 2;
   styleUrls: ['./play-pong-pages.component.css']
 })
 @Injectable(
-  // {providedIn: 'root'}
+  {providedIn: 'root'}
 )
 export class PlayPongPagesComponent {
   title = 'Best Pong Ever'; //titre page
@@ -36,34 +36,60 @@ export class PlayPongPagesComponent {
   // private audio2;
   // private audio3;
 
+  
   constructor(private router: Router, private socket: Socket) {
     console.log("constructor");
-    socket.on('score', this.updateScore);
-    socket.on('draw', this.drawMessage);
-    socket.on('id', this.idMessage);
-    socket.on('enableButtonS', this.enableButtonS);
-    socket.on('drawInit', this.drawInit);
-    socket.on('drawText', this.drawText);
-    socket.on('drawName', this.drawName);
-    socket.on('stopSearchLoop', this.stopSearchLoop);
-    socket.on('win', this.win);
-    socket.on('lose', this.lose);
-    socket.on('play', this.playAudio);
+    // socket.on('score', this.updateScore);
+    // socket.on('draw', this.drawMessage);
+    // socket.on('id', this.idMessage);
+    // socket.on('enableButtonS', this.enableButtonS);
+    // socket.on('drawInit', this.drawInit);
+    // socket.on('drawText', this.drawText);
+    // socket.on('drawName', this.drawName);
+    // socket.on('stopSearchLoop', this.stopSearchLoop);
+    // socket.on('win', this.win);
+    // socket.on('lose', this.lose);
+    // socket.on('play', this.playAudio);
     this.var_interval = 0;
     console.log("constructor end");
 
     // this.audio1 = new Audio();
     // this.audio2 = new Audio();
     // this.audio3 = new Audio();
-
+    
     // this.audio1.src = "../../../assets/audio/ping_pong_8bit_plop.wav";
     // this.audio1.load();
     // this.audio2.src = "../../../assets/audio/ping_pong_8bit_beeep.wav";
     // this.audio2.load();
     // this.audio3.src = "../../../assets/audio/ping_pong_8bit_peeeeeep.wav";
     // this.audio3.load();
-  } 
+  }
 
+  ngOnInit(): void {
+    console.log("ngoninit");
+    this.socket.on('score', this.updateScore);
+    this.socket.on('draw', this.drawMessage);
+    this.socket.on('id', this.idMessage);
+    this.socket.on('enableButtonS', this.enableButtonS);
+    this.socket.on('drawInit', this.drawInit);
+    this.socket.on('drawText', this.drawText);
+    this.socket.on('drawName', this.drawName);
+    this.socket.on('stopSearchLoop', this.stopSearchLoop);
+    this.socket.on('win', this.win);
+    this.socket.on('lose', this.lose);
+    // this.socket.on('play', this.playAudio);
+    this.socket.emit('init');
+
+    // this.var_interval = 0;
+    console.log("ngoninit end");
+  }
+  
+  ngOnDestroy(): void {
+    console.log("ngondestroy");
+    this.stopSearchLoop(this.var_interval);
+    this.socket.emit('stopGame', {});
+    console.log("ngondestroy end");
+  }
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
   //   if (event.key === 'z') {

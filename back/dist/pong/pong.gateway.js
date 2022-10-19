@@ -33,7 +33,6 @@ let PongGateway = class PongGateway {
         this.deleteGame(g);
     }
     handleConnection(client, ...args) {
-        this.init(client);
         this.addNewUser(client);
     }
     init(client) {
@@ -162,11 +161,8 @@ let PongGateway = class PongGateway {
     }
     async startGame(game) {
         game.id_interval = setInterval(() => {
-            this.pongService.loopGame(game);
+            this.pongService.loopGameNormal(game);
         }, 1000 / 60);
-    }
-    startGameAnimationFrame(game) {
-        this.pongService.loopGame(game);
     }
     stopgame(client) {
         var game = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
@@ -223,6 +219,12 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", socket_io_1.Server)
 ], PongGateway.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('init'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:returntype", void 0)
+], PongGateway.prototype, "init", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('keydownZ'),
     __metadata("design:type", Function),

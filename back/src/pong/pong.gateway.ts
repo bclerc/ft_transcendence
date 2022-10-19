@@ -60,7 +60,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 	  
 	handleConnection(client: Socket, ...args: any[]) {
-		this.init(client); //draw le pong une premiere fois
+		// this.init(client); //draw le pong une premiere fois
 		this.addNewUser(client); //ajoute le nouveau socket utilisateur au tableau des utilisateurs
 	}
 
@@ -69,8 +69,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	//SOCKET.ON MESSAGES
 	//////
 
-	// @SubscribeMessage('init')
-	private init(client: Socket){
+	@SubscribeMessage('init')
+	init(client: Socket){
 		// afficher le pong au chargement de la page
 		client.emit('drawInit');
 		// client.emit('score', {
@@ -248,7 +248,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	async startGame(game: GameI){
 		game.id_interval = setInterval(() => {
 			// console.log(game);
-			this.pongService.loopGame(game);
+			this.pongService.loopGameNormal(game);
 			// if (game.id_searchinterval1 && game.id_searchinterval1 != 0)
 			// {
 			// 	game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
@@ -265,9 +265,9 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}, 1000/60);
 	}
 
-	startGameAnimationFrame(game: GameI){
-		this.pongService.loopGame(game);
-	}
+	// startGameAnimationFrame(game: GameI){
+	// 	this.pongService.loopGame(game);
+	// }
 
 	@SubscribeMessage("stopGame")
 	stopgame(client: Socket)

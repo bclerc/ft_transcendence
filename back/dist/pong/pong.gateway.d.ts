@@ -13,7 +13,7 @@ export declare class PongGateway implements OnGatewayInit, OnGatewayConnection, 
     afterInit(server: Server): void;
     handleDisconnect(client: Socket): void;
     handleConnection(client: Socket, ...args: any[]): void;
-    private init;
+    init(client: Socket): void;
     keydownZ(client: Socket): void;
     keydownW(client: Socket): void;
     keydownS(client: Socket): void;
@@ -24,7 +24,6 @@ export declare class PongGateway implements OnGatewayInit, OnGatewayConnection, 
     varSearchLoop(client: Socket, id: number): void;
     private addNewUser;
     startGame(game: GameI): Promise<void>;
-    startGameAnimationFrame(game: GameI): void;
     stopgame(client: Socket): void;
     searchGameAwaiting(): GameI;
     creatNewGame(client: Socket): GameI;

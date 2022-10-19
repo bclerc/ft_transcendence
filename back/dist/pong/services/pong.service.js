@@ -17,7 +17,7 @@ const MAX_SCORE = 5;
 const MAX_SPEED = 6;
 const defaultSpeed = 3;
 let PongService = class PongService {
-    loopGame(game) {
+    loopGameNormal(game) {
         game.player1.paddle.y += game.player1.paddle.dy;
         game.player2.paddle.y += game.player2.paddle.dy;
         if (game.player1.paddle.y < 0)
@@ -32,21 +32,15 @@ let PongService = class PongService {
         if (game.ball.y < 0) {
             game.ball.dy *= -1;
             game.ball.y = 0;
-            game.player1.socket.emit('play', 0);
-            game.player2.socket.emit('play', 0);
         }
         else if (game.ball.y > HEIGHTCANVAS - game.ball.height) {
             game.ball.dy *= -1;
             game.ball.y = HEIGHTCANVAS - game.ball.height;
-            game.player1.socket.emit('play', 0);
-            game.player2.socket.emit('play', 0);
         }
         game.ball.x += game.ball.dx;
         if (game.ball.x <= (0 - game.ball.width) || game.ball.x >= (WIDTHCANVAS + game.ball.width)) {
             game.ball.x <= (0 - game.ball.width) ? game.player2.points++ : 42;
             game.ball.x >= (WIDTHCANVAS + game.ball.width) ? game.player1.points++ : 42;
-            game.player1.socket.emit('play', 2);
-            game.player2.socket.emit('play', 2);
             game.player1.socket.emit('score', {
                 score1: game.player1.points,
                 score2: game.player2.points
@@ -74,8 +68,6 @@ let PongService = class PongService {
             this.reinitPlayers(game.player1, game.player2);
         }
         else if (((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) || ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle))) {
-            game.player1.socket.emit('play', 1);
-            game.player2.socket.emit('play', 1);
             if (this.colision(game.ball, game.player1.paddle))
                 this.rebond(game.ball, game.player1.paddle);
             else
