@@ -11,10 +11,14 @@ import { MyProfileComponent } from './pages/my-profile/my-profile.component';
 import { ModifyMyProfileComponent } from './pages/modify-my-profile/modify-my-profile.component';
 import { UserService } from './services/user/user.service';
 import { UserResolver } from './resolver';
+import { SendCodeComponent } from './pages/send-code/send-code.component';
+import { Activate2FaComponent } from './pages/activate2-fa/activate2-fa.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatCardModule} from '@angular/material/card';
-import {MatListModule} from '@angular/material/list';
+import { MatTabsModule} from '@angular/material/tabs';
+import { MatCardModule} from '@angular/material/card';
+import { MatListModule} from '@angular/material/list';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -44,7 +48,6 @@ const config: SocketIoConfig = {
   }
 };
 
-
 export function tokenGetter() {
   return localStorage.getItem("auth-token");
 }
@@ -55,12 +58,16 @@ export function tokenGetter() {
     ProfilePageComponent,
     MyProfileComponent,
     ModifyMyProfileComponent,
+    SendCodeComponent,
+    Activate2FaComponent,
+    ChatPageComponent,
     UserselectComponent,
     RoomComponent,
     ChatInfoComponent,
     EditRoomChatComponent,
     SendCodeComponent,
-    Activate2FaComponent
+    Activate2FaComponent,
+    ChatPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,26 +82,7 @@ export function tokenGetter() {
         allowedDomains: ['localhost:3000']
       }
     }),
-    //
-
     BrowserAnimationsModule,
-    CommonModule,
-    MatListModule,
-    MatCardModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatChipsModule,
-    MatAutocompleteModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatGridListModule,
-    MatTabsModule,
-    MatTableModule,
-    MatTooltipModule,
-    MatCheckboxModule,
-    MatBadgeModule,
   ],
   providers: [    UserService,
     UserResolver],

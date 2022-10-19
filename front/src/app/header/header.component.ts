@@ -15,23 +15,18 @@ export class HeaderComponent implements OnInit {
 
   connect : boolean = false;
 
-  constructor(private token : TokenStorageService,
-              private socket: Socket,
-              private snackBar: MatSnackBar) { }       
-
+  constructor(private token : TokenStorageService, private router : Router) { }
 
   ngOnInit(): void {
     if (this.token.getToken())
       this.connect= true;
 
-      this.socket.on('notification', (notif: string) => {
-        this.snackBar.open(notif, 'OK',
-        {
-          duration: 4000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-      });
+  }
+
+  logOut() : void {
+    this.token.removeToken();
+    this.connect= false;
+    this.router.navigate(['']);
   }
 
   logOut() : void {

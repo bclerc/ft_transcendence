@@ -33,7 +33,7 @@ export class MyProfileComponent implements OnInit {
       map(data => data['userList']));
        this.subscription = this.userList2$.subscribe(
         (data : any) => {
-          // console.log("data =",data);
+          console.log("data =",data);
           this.userList = data;
         },
         error => this.router.navigate([''])

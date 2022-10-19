@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
-import { ConnectableObservable, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
