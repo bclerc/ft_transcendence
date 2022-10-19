@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
+import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
+import { tokenGetter } from '../app.module';
 
 @Component({
   selector: 'app-header',
@@ -29,6 +32,12 @@ export class HeaderComponent implements OnInit {
           verticalPosition: 'top',
         });
       });
+  }
+
+  logOut() : void {
+    this.token.removeToken();
+    this.connect= false;
+    this.router.navigate(['']);
   }
 
 }

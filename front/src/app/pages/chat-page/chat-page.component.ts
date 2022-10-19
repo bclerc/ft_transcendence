@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
 import { ConnectableObservable, Observable } from 'rxjs';
@@ -9,12 +10,10 @@ import { Message } from 'src/app/services/chat/message.interface';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
-
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
-  styleUrls: ['./chat-page.component.scss']
+  styleUrls: ['./chat-page.component.css']
 })
-
 export class ChatPageComponent implements OnInit {
 
   selectedRoom: ChatRoom = {};
