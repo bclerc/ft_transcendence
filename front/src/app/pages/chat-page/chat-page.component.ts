@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
-import { ConnectableObservable, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
@@ -9,12 +10,10 @@ import { Message } from 'src/app/services/chat/message.interface';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
-
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
-  styleUrls: ['./chat-page.component.scss']
+  styleUrls: ['./chat-page.component.css']
 })
-
 export class ChatPageComponent implements OnInit {
 
   selectedRoom: ChatRoom = {};
@@ -39,7 +38,8 @@ export class ChatPageComponent implements OnInit {
               private userService: UserService) { }
 
   async ngOnInit() {
-    this.publicrooms = await this.chatService.getPublicRooms();
+    this.publicrooms
+     = await this.chatService.getPublicRooms();
     this.rooms$ = await this.chatService.getRooms();
     this.userService.getLoggedUser().subscribe((user: UserI) => {
       this.actualUser = user;

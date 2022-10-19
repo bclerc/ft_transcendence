@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 <app-header></app-header>
+<div class="wrapper">
+=======
 <!--<div class="wrapper">
+>>>>>>> merge
 	<div class="container-login" >
     <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <input matInput placeholder="Email" formControlName="email">
@@ -12,6 +16,22 @@
       <a routerLink="/register" class="log-reg-dir">Register</a>
     </form>
       <p>or</p>
+<<<<<<< HEAD
+      <p>
+        <a class="log-reg-dir"  href= "http://localhost:3000/api/v1/auth/42">
+          <span style="color: #8F0000">Log in with</span>
+          <img style="width: 50px"src="/assets/img/42.svg.png" >
+        </a>
+        <button (click)="loginvia42()">Oh Snap!</button>
+        
+      </p>
+
+    </div>
+  </div>
+      <pre>
+      Value: {{ loginForm.value | json }}
+      </pre>
+=======
       !-->
       <div>
         <a class="log-reg-dir"  href= "http://localhost:3000/api/v1/auth/42">
@@ -27,6 +47,7 @@
       <pre>
       Value: {{ loginForm.value | json }}
       </pre>!-->
+>>>>>>> merge
 
 
       

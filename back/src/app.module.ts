@@ -18,8 +18,13 @@ import { MessageService } from './message/message.service';
 import { WschatService } from './wschat/wschat.service';
 
 
+import { HttpModule } from '@nestjs/axios';
+import { PongModule } from './pong/pong.module';
+
+
 @Module({
-  imports: [JwtModule, AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), ChatModule],
+  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), HttpModule, PongModule, ChatModule, JwtModule],
+  controllers: [AuthController, UserController],
   providers: [AppService, UserService, PrismaService, {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,

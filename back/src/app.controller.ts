@@ -79,7 +79,6 @@ export class AuthController {
   * }
   */
 
-
   @Get('42')
   @UseGuards(FortyTwoGuard)
   async login42() {}

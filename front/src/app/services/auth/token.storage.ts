@@ -34,4 +34,8 @@ export class TokenStorageService {
       return this.jwtHelper.decodeToken(tokenString).sub;
     return null;
   }
+  public removeToken(): void
+  {
+    window.sessionStorage.removeItem(TOKEN_KEY);
+  }
 }

@@ -8,7 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const user_controller_1 = require("./user/user.controller");
 const user_service_1 = require("./user/user.service");
 const prisma_service_1 = require("./prisma/prisma.service");
 const auth_module_1 = require("./auth/auth.module");
@@ -23,11 +25,14 @@ const chat_module_1 = require("./chat/chat.module");
 const chat_service_1 = require("./chat/chat.service");
 const message_service_1 = require("./message/message.service");
 const wschat_service_1 = require("./wschat/wschat.service");
+const axios_1 = require("@nestjs/axios");
+const pong_module_1 = require("./pong/pong.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [jwt_1.JwtModule, auth_module_1.AuthModule, user_module_1.UserModule, prisma_module_1.PrismaModule, config_1.ConfigModule.forRoot(), chat_module_1.ChatModule],
+        imports: [auth_module_1.AuthModule, user_module_1.UserModule, prisma_module_1.PrismaModule, config_1.ConfigModule.forRoot(), axios_1.HttpModule, pong_module_1.PongModule, chat_module_1.ChatModule, jwt_1.JwtModule],
+        controllers: [app_controller_1.AuthController, user_controller_1.UserController],
         providers: [app_service_1.AppService, user_service_1.UserService, prisma_service_1.PrismaService, {
                 provide: core_1.APP_FILTER,
                 useClass: http_exception_filter_1.HttpExceptionFilter,
