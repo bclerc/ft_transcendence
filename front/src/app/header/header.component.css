@@ -1,14 +1,5 @@
 header {
     text-align: center;
-<<<<<<< HEAD
-    background-color: #EEE;
-    margin-bottom: 20px;
-    padding: 10px;
-  }
-  a {
-    margin: 0 10px;
-    color: #333;
-=======
     background-color: rgb(201, 204, 201, 0.919);
     margin-bottom: 20px;
     padding: 10px;
@@ -18,16 +9,11 @@ header {
   a {
     margin: 0 10px;
     color: rgb(67, 19, 244);
->>>>>>> merge
     text-decoration: none;
 
   }
   
   .active {
-<<<<<<< HEAD
-    color: #666;
-=======
     color: rgb(40, 5, 5);
->>>>>>> merge
     text-decoration: underline;
   }

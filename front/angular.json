@@ -91,10 +91,7 @@
               "src/assets"
             ],
             "styles": [
-<<<<<<< HEAD
-=======
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
->>>>>>> merge
               "src/styles.css"
             ],
             "scripts": []
