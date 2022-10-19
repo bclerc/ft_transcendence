@@ -1,12 +1,8 @@
-import { Controller, Request, Get, Body, Post, UseGuards, Res, Req, HttpException, HttpCode, UnauthorizedException, ConsoleLogger } from '@nestjs/common';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { Controller, Request, Get, Body, Post, UseGuards, Res, Req, HttpException, UnauthorizedException, ConsoleLogger } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { FortyTwoGuard } from './guards/FortyTwo.guard';
-import { User } from '@prisma/client';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserService } from '../user/user.service';
-import { JwtNewToken } from './interfaces/jwttoken.interface';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
