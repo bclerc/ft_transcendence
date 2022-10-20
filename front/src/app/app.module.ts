@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { JwtModule } from '@auth0/angular-jwt';
 
@@ -11,7 +11,6 @@ import { PlayRankedPongPagesComponent } from './pages/play-ranked-pong-pages/pla
 import { PlayFunPongPagesComponent } from './pages/play-fun-pong-pages/play-fun-pong-pages.component';
 
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
-import { GetTokenComponent } from './get-token/get-token.component';
 import { UnfoundPagesComponent } from './unfound-pages/unfound-pages.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -49,6 +48,10 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { EditRoomChatComponent } from './edit-room-chat/edit-room-chat.component';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { Activate2FaComponent } from './pages/activate2-fa/activate2-fa.component';
+import { BehaviorSubject } from 'rxjs';
+import { HeaderService } from './services/user/header.service';
+
+
 
 const config: SocketIoConfig = {
   url: 'http://localhost:81', options: {
@@ -61,31 +64,19 @@ const config: SocketIoConfig = {
 export function tokenGetter() {
   return localStorage.getItem("auth-token");
 }
+
+
 @NgModule({
   declarations: [
     AppComponent,
     LandingPageComponent,
     HeaderComponent,
-    LoginPagesComponent,
-    UserComponent,
-    UserListComponent,
     PlayPongPagesComponent,
-    PlayRankedPongPagesComponent,
-    PlayFunPongPagesComponent,
-    ChatPageComponent,
     RegisterPageComponent,
-    ProfilePageComponent,
-    GetTokenComponent,
     UnfoundPagesComponent,
-    MyProfileComponent,
-    ModifyMyProfileComponent,
-    HeaderComponent,
     ProfilePageComponent,
     MyProfileComponent,
     ModifyMyProfileComponent,
-    SendCodeComponent,
-    Activate2FaComponent,
-    ChatPageComponent,
     UserselectComponent,
     RoomComponent,
     ChatInfoComponent,
@@ -93,6 +84,7 @@ export function tokenGetter() {
     SendCodeComponent,
     Activate2FaComponent,
     ChatPageComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -129,7 +121,8 @@ export function tokenGetter() {
     SocketIoModule,
   ],
   providers: [    UserService,
-    UserResolver],
+    UserResolver,
+    HeaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
