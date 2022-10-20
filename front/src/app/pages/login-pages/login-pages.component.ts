@@ -2,10 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormsModule, Validators, ReactiveFormsModule, EmailValidator, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';
-<<<<<<< HEAD
-import { RegisterReply } from 'src/app/models/register.reply';
-=======
->>>>>>> merge
 import { UserService } from '../../services/user/user.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
 
