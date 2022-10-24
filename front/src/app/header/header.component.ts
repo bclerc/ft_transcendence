@@ -5,6 +5,7 @@ import { Socket } from 'ngx-socket-io';
 import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { tokenGetter } from '../app.module';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -27,6 +28,11 @@ export class HeaderComponent implements OnInit {
     this.token.removeToken();
     this.connect= false;
     this.router.navigate(['']);
+  }
+
+
+  getEnvHost(){
+    return environment.host;
   }
 
 }

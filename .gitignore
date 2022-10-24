@@ -1,2 +1,5 @@
 .env
 .git
+dist
+nodes_modules
+.vscode

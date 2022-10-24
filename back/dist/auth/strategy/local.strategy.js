@@ -22,6 +22,7 @@ let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)
     async validate(username, password) {
         const user = await this.authService.validateUser(username, password);
         if (!user) {
+            console.log("C MOI");
             throw new common_1.UnauthorizedException();
         }
         return user;

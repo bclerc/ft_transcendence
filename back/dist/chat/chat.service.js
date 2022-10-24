@@ -45,9 +45,30 @@ let ChatService = class ChatService {
                     },
                 },
             },
-            include: {
-                users: true,
-                admins: true,
+            select: {
+                id: true,
+                name: true,
+                users: {
+                    select: {
+                        id: true,
+                        state: true,
+                        intra_name: true,
+                        email: true,
+                        avatar_url: true,
+                    },
+                },
+                admins: {
+                    select: {
+                        id: true,
+                        state: true,
+                        intra_name: true,
+                        email: true,
+                        avatar_url: true,
+                    },
+                },
+                ownerId: true,
+                public: true,
+                description: true,
                 messages: true,
             },
         });
@@ -122,13 +143,14 @@ let ChatService = class ChatService {
             where: {
                 id: roomId,
             },
-            include: {
+            select: {
+                id: true,
+                name: true,
                 admins: true,
-                users: {
-                    include: {
-                        friends: true,
-                    },
-                },
+                ownerId: true,
+                public: true,
+                description: true,
+                users: true,
                 messages: true,
             },
         });

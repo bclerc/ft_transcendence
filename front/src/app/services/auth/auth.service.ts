@@ -25,6 +25,6 @@ import { RegisterReply } from "src/app/models/register.reply";
     
     /*register(user: User): Observable<RegisterReply>
     {
-        return this.http.post<RegisterReply>('http://localhost:3000/api/v1/user/', user).pipe();
+        return this.http.post<RegisterReply>('http://" + process.env.HOST  + ":3000/api/v1/user/', user).pipe();
     }*/
   }

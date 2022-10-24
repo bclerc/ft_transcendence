@@ -1,9 +1,10 @@
 import { Message, User } from "@prisma/client";
+import { BasicUserI } from "src/user/interface/basicUser.interface";
 export interface ChatRoom {
     id?: number;
     name?: string;
     description?: string;
-    users?: User[];
+    users?: BasicUserI[];
     messages?: Message[];
     created_date?: Date;
     updatedAt?: Date;
@@ -11,7 +12,7 @@ export interface ChatRoom {
 export interface newChatRoomI {
     name?: string;
     description?: string;
-    users?: User[];
+    users?: BasicUserI[];
     public?: boolean;
     password?: string;
 }
@@ -20,8 +21,8 @@ export interface ChatRoomI {
     name: string;
     description: string;
     ownerId: number;
-    users: User[];
-    admins: User[];
+    users: BasicUserI[];
+    admins: BasicUserI[];
     public: Boolean;
     messages: Message[];
 }

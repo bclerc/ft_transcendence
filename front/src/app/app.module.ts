@@ -49,9 +49,11 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { EditRoomChatComponent } from './edit-room-chat/edit-room-chat.component';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { Activate2FaComponent } from './pages/activate2-fa/activate2-fa.component';
+import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
+import { environment } from 'src/environments/environment';
 
 const config: SocketIoConfig = {
-  url: 'http://localhost:81', options: {
+  url: 'http://'+ environment.host +':81', options: {
     query: {
       token: sessionStorage.getItem('auth-token')
     }
@@ -93,6 +95,7 @@ export function tokenGetter() {
     SendCodeComponent,
     Activate2FaComponent,
     ChatPageComponent,
+    FriendsPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,7 +107,7 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:3000']
+        allowedDomains: [environment.host + ':3000']
       }
     }),
 

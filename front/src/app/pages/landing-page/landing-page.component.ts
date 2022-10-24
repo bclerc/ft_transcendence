@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD
-=======
 import { HeaderComponent } from '../../header/header.component';
->>>>>>> merge
 
 @Component({
   selector: 'app-landing-page',

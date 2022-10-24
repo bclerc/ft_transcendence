@@ -4,14 +4,15 @@ import { SubscribeRoomDto } from 'src/chat/dto/subscribe-room.dto';
 import { MessageI, newChatRoomI } from 'src/chat/interfaces/chatRoom.interface';
 import { EjectRoomI } from 'src/eject-room-i.interface';
 import { DemoteUserI, PromoteUserI } from 'src/promote-user-i.interface';
+import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 export declare class WschatService {
     private chatService;
     private userService;
-    onlineUsers: Map<String, User>;
+    onlineUsers: Map<String, BasicUserI>;
     server: any;
     constructor(chatService: ChatService, userService: UserService);
-    initUser(socketId: string, user: User): Promise<void>;
+    initUser(socketId: string, user: BasicUserI): Promise<void>;
     subscribeToRoom(socketId: string, subRoom: SubscribeRoomDto): Promise<void>;
     ejectUserFromRoom(socketId: string, room: EjectRoomI): Promise<void>;
     promoteUser(socketId: string, event: PromoteUserI): Promise<void>;
@@ -19,11 +20,11 @@ export declare class WschatService {
     newMessage(socketId: string, message: MessageI): Promise<void>;
     newRoom(socketId: string, room: newChatRoomI): Promise<void>;
     leaveRoom(socketId: string, roomId: number): Promise<void>;
-    updateUserRooms(user: User): Promise<void>;
+    updateUserRooms(user: BasicUserI): Promise<void>;
     updateRoomForUsersInRoom(roomId: number): Promise<void>;
-    sendToUser(user: User, prefix: string, data: any): void;
+    sendToUser(user: BasicUserI, prefix: string, data: any): void;
     sendToUsersInRoom(roomId: number, prefix: string, data: any): Promise<void>;
-    getOnlineUsers(): Map<String, User>;
+    getOnlineUsers(): Map<String, BasicUserI>;
     addOnlineUser(socketId: string, user: User): void;
     removeOnlineUser(socketId: string): void;
 }

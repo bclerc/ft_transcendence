@@ -7,6 +7,7 @@ export declare class AuthController {
     constructor(authService: AuthService, userService: UserService);
     login(body: any): Promise<JwtNewToken>;
     getmarcus(res: any): Promise<void>;
+    getpaul(res: any): Promise<void>;
     login42(): Promise<void>;
     callback(req: any, res: any): Promise<JwtNewToken>;
     authenticate(request: any, body: any): Promise<JwtNewToken>;
