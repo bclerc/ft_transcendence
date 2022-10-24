@@ -73,8 +73,6 @@ export class UserController {
   @Get(':id')
   @UseGuards(Jwt2faAuthGuard)
   async findOne(@Request() req, @Param('id') id: number): Promise<User>{
-    if (req.user.id != id && !req.user.staff)
-      throw new ForbiddenException();
     return this.userService.findOne(id);
   }
 

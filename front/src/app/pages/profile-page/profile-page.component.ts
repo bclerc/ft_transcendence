@@ -16,7 +16,6 @@ export class ProfilePageComponent implements OnInit {
   user2! : UserI;
   user? : UserI;
 
-  currentProfile? : Boolean;
   //user? : Observable<User>;
   constructor(private userService: UserService, private router: Router, private route : ActivatedRoute, private token : TokenStorageService) { }
   id! : number;
@@ -38,8 +37,24 @@ export class ProfilePageComponent implements OnInit {
     userList2$!: Observable <UserI[]>;
 
   ngOnInit(): void {
-    this.currentProfile = false;
-    this.userList2$ =  this.route.data.pipe(
+    this.id= Number( this.router.url.split('/')[2]);
+    this.userService.changeUserList(this.userList);
+    
+    /*try {
+      this.user = this.userService.getUserById(this.id);
+    } catch (error) {
+      this.router.navigate(['error'])
+    }*/
+    this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
+      (data : any) => {
+        console.log("data =",data);
+        this.user = data;
+      },
+      error => this.router.navigate([''])
+      );
+      if (this.id === this.token.getId() )
+        this.router.navigate(['/myprofile']);
+    /*this.userList2$ =  this.route.data.pipe(
       map(data => data['userList']));
       this.subscription = this.userList2$.subscribe(
         (data : any) => {
@@ -57,13 +72,9 @@ export class ProfilePageComponent implements OnInit {
           this.router.navigate(['error'])
         }
         if (this.id === this.token.getId() )
-          this.currentProfile = true;
+          this.router.navigate(['/myprofile'])*/
         /*if (this.user === null)
           this.router.navigate([''])*/
-   
-
-    
-
   }
 
   ngOnDestroy() : void

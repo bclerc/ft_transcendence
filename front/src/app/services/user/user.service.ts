@@ -15,6 +15,7 @@ import { TokenStorageService } from '../auth/token.storage';
 }*/)
 export class UserService {
   userList!: UserI[];
+  private backUrl = 'http://localhost:3000/api/v1/';
       
   constructor(private route: ActivatedRoute ,private http : HttpClient, private token : TokenStorageService, private jwtService : JwtHelperService, private router : Router)
   {}
@@ -29,7 +30,7 @@ export class UserService {
     {
       const decodedToken = this.jwtService.decodeToken(token);
       const userId = decodedToken.userId;
-      return this.http.get<UserI>("http://localhost:3000/api/v1/user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+      return this.http.get<UserI>(this.backUrl + "user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
     throw new Error('No token');
   }
@@ -63,46 +64,46 @@ export class UserService {
 
   getUserIdFromBack(id: number): Observable<UserI>
   {
-    return this.http.get<UserI>("http://localhost:3000/api/v1/user/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<UserI>(this.backUrl + 'user/' + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   getDataUserListFromBack(): Observable<UserI[]>
   {
-    return this.http.get<User[]>("http://localhost:3000/api/v1/user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<User[]>(this.backUrl + "user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ChangeDbInformation(id: number, user : UserI): Observable<any>
   {
-    return this.http.put<Observable<any>>("http://localhost:3000/api/v1/user/" + id, user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.put<Observable<any>>(this.backUrl + "user/" + id, user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ActivateFacode(code : string) : Observable<any>
   {
-    return this.http.post<Observable<any>>("http://localhost:3000/api/v1/auth/2fa/enable3",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.post<Observable<any>>(this.backUrl + "auth/2fa/enable3",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   DesactivateFacode(code : string) : Observable<any>
   {
-    return this.http.get<Observable<any>>("http://localhost:3000/api/v1/auth/2fa/disable", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<Observable<any>>(this.backUrl + "auth/2fa/disable", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ValidateFaCode(code : number):Observable<any>
   {
-    return this.http.post<Observable<any>>("http://localhost:3000/api/v1/auth/2fa",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.post<Observable<any>>(this.backUrl + "auth/2fa",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   GetSecretFa(): Observable<Secret>
   {
-    return this.http.get<Secret>("http://localhost:3000/api/v1/auth/2fa/secret", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<Secret>(this.backUrl + "auth/2fa/secret", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   RegenerateSecretFa(): Observable<Secret>
   {
-    return this.http.post<Secret>("http://localhost:3000/api/v1/auth/2fa/reset", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.post<Secret>(this.backUrl + "auth/2fa/reset", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   FindByName(name : string): Observable<UserI[]>
   {
-      return this.http.get<User[]>("http://localhost:3000/api/v1/user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<UserI[]>(this.backUrl + "user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 }

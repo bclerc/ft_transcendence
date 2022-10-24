@@ -3,14 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
-import { LoginPagesComponent } from './pages/login-pages/login-pages.component';
-import { UserComponent } from './user/user.component';
-import { UserListComponent } from './user-list/user-list.component';
 import { PlayPongPagesComponent } from './pages/play-pong-pages/play-pong-pages.component';
-import { PlayRankedPongPagesComponent } from './pages/play-ranked-pong-pages/play-ranked-pong-pages.component';
-import { PlayFunPongPagesComponent } from './pages/play-fun-pong-pages/play-fun-pong-pages.component';
 
-import { RegisterPageComponent } from './pages/register-page/register-page.component';
 import { UnfoundPagesComponent } from './unfound-pages/unfound-pages.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,8 +42,8 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { EditRoomChatComponent } from './edit-room-chat/edit-room-chat.component';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { Activate2FaComponent } from './pages/activate2-fa/activate2-fa.component';
-import { BehaviorSubject } from 'rxjs';
 import { HeaderService } from './services/user/header.service';
+import { CurrentUserService } from './services/user/current_user.service';
 
 
 
@@ -72,7 +66,6 @@ export function tokenGetter() {
     LandingPageComponent,
     HeaderComponent,
     PlayPongPagesComponent,
-    RegisterPageComponent,
     UnfoundPagesComponent,
     ProfilePageComponent,
     MyProfileComponent,
@@ -84,7 +77,6 @@ export function tokenGetter() {
     SendCodeComponent,
     Activate2FaComponent,
     ChatPageComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -122,7 +114,8 @@ export function tokenGetter() {
   ],
   providers: [    UserService,
     UserResolver,
-    HeaderService],
+    HeaderService,
+  CurrentUserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

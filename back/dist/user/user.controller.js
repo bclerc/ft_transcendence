@@ -30,8 +30,6 @@ let UserController = class UserController {
         return await this.userService.findOne(req.user.id);
     }
     async findOne(req, id) {
-        if (req.user.id != id && !req.user.staff)
-            throw new common_1.ForbiddenException();
         return this.userService.findOne(id);
     }
     async findUserByName(name) {
