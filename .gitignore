@@ -1,5 +1,5 @@
 .env
 .git
 dist/*
-nodes_modules/*
+nodes_modules
 .vscode
