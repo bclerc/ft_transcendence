@@ -210,7 +210,7 @@ export class PlayPongPagesComponent {
   newGameAnimationFrame()
   {
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    var   arr = ["Searching opponent.", "Searching opponent..", "Searching opponent..."];
+    var   arr = ["Searching opponent.", " opponent..", "Searching opponent..."];
     var   i = 1;
     
     this.disableElement('buttonStart');

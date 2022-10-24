@@ -1,10 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Socket } from 'ngx-socket-io';
 import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
-import { tokenGetter } from '../app.module';
+import { environment } from 'src/environments/environment';
 import { HeaderService } from '../services/user/header.service';
 
 @Component({
@@ -26,6 +24,11 @@ export class HeaderComponent implements OnInit {
     this.token.removeToken();
     this.navbar.hide();
     this.router.navigate(['']);
+  }
+
+
+  getEnvHost(){
+    return environment.host;
   }
 
 }

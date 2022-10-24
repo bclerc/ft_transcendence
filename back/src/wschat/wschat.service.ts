@@ -3,16 +3,17 @@ import { WebSocketServer } from '@nestjs/websockets';
 import { ChatRoom, Message, User } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { SubscribeRoomDto } from 'src/chat/dto/subscribe-room.dto';
-import { MessageI, newChatRoomI } from 'src/chat/interfaces/chatRoom.interface';
+import { ChatRoomI, MessageI, newChatRoomI } from 'src/chat/interfaces/chatRoom.interface';
 import { EjectRoomI } from 'src/eject-room-i.interface';
 import { DemoteUserI, PromoteUserI } from 'src/promote-user-i.interface';
+import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class WschatService {
 
 
-  onlineUsers: Map<String, User> = new Map<String, User>();
+  onlineUsers: Map<String, BasicUserI> = new Map<String, BasicUserI>();
 
   @WebSocketServer() server;
 
@@ -21,9 +22,9 @@ export class WschatService {
     private userService: UserService,
   ) { }
 
-  async initUser(socketId: string, user: User) {
+  async initUser(socketId: string, user: BasicUserI) {
 
-    let rooms: ChatRoom[];
+    let rooms: ChatRoomI[];
 
     this.onlineUsers.set(socketId, user);
     rooms = await this.chatService.getRoomsFromUser(user.id);
@@ -132,12 +133,11 @@ export class WschatService {
     }
   }
 
-  async updateUserRooms(user: User) {
+  async updateUserRooms(user: BasicUserI) {
     
     const rooms = await this.chatService.getRoomsFromUser(user.id);
     this.sendToUser(user, 'rooms', rooms);
   }
-
   
   async updateRoomForUsersInRoom(roomId: number) {
     let room = await this.chatService.getRoomById(roomId);
@@ -148,7 +148,7 @@ export class WschatService {
     }
   }
 
-  sendToUser(user: User, prefix: string, data: any) {
+  sendToUser(user: BasicUserI, prefix: string, data: any) {
 
     for (let [socketId, userOnline] of this.onlineUsers) {
       if (userOnline.id == user.id) {

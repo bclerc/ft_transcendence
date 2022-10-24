@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.mat-card {
+  margin: 20px;
+  justify-content: space-between;
+}
+
+.mat-card-content {
+  margin: 10px;
+}

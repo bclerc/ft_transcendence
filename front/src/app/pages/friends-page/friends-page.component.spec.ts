@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlayPongPagesComponent } from './play-pong-pages.component';
+import { FriendsPageComponent } from './friends-page.component';
 
-describe('PlayPongPagesComponent', () => {
-  let component: PlayPongPagesComponent;
-  let fixture: ComponentFixture<PlayPongPagesComponent>;
+describe('FriendsPageComponent', () => {
+  let component: FriendsPageComponent;
+  let fixture: ComponentFixture<FriendsPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlayPongPagesComponent ]
+      declarations: [ FriendsPageComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PlayPongPagesComponent);
+    fixture = TestBed.createComponent(FriendsPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -2,7 +2,6 @@ import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, observable, Subscription, tap } from 'rxjs';
-
 import { User, UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { UserService } from 'src/app/services/user/user.service';
@@ -15,12 +14,10 @@ import { UserService } from 'src/app/services/user/user.service';
 export class ProfilePageComponent implements OnInit {
   user2! : UserI;
   user? : UserI;
-
   //user? : Observable<User>;
   constructor(private userService: UserService, private router: Router, private route : ActivatedRoute, private token : TokenStorageService) { }
   id! : number;
   subscription! : Subscription;
-
   /*ngOnInit(): void {
 
 		this.authService.getUserId().pipe(
@@ -75,6 +72,10 @@ export class ProfilePageComponent implements OnInit {
           this.router.navigate(['/myprofile'])*/
         /*if (this.user === null)
           this.router.navigate([''])*/
+   
+
+    
+
   }
 
   ngOnDestroy() : void
