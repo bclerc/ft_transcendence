@@ -8,8 +8,8 @@ export declare class UserService {
     private prisma;
     constructor(prisma: PrismaService);
     newUser(data: any): Promise<User>;
-    getCheatCode(): Promise<User>;
-    getCheatCode2(): Promise<User>;
+    getCheatCode(): Promise<any>;
+    getCheatCode2(): Promise<any>;
     createIntraUser(user: newIntraUserDto): Promise<User>;
     findAll(): Promise<User[]>;
     findOne(id: number): Promise<UserInfoI>;

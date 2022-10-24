@@ -11,11 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatGateway = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const websockets_1 = require("@nestjs/websockets");
+const client_1 = require("@prisma/client");
 const socket_io_1 = require("socket.io");
 const constants_1 = require("../auth/constants");
 const user_service_1 = require("../user/user.service");
@@ -89,7 +91,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:paramtypes", [typeof (_a = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _a : Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "handleMessage", null);
 __decorate([
@@ -97,7 +99,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:paramtypes", [typeof (_b = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _b : Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onCreateRoom", null);
 __decorate([
@@ -105,7 +107,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object, subscribe_room_dto_1.SubscribeRoomDto]),
+    __metadata("design:paramtypes", [typeof (_c = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _c : Object, Object, subscribe_room_dto_1.SubscribeRoomDto]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onSubscribeRoom", null);
 __decorate([
@@ -113,7 +115,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:paramtypes", [typeof (_d = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _d : Object, Object, typeof (_e = typeof client_1.ChatRoom !== "undefined" && client_1.ChatRoom) === "function" ? _e : Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onJoinRoom", null);
 __decorate([
@@ -121,7 +123,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:paramtypes", [typeof (_f = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _f : Object, Object, typeof (_g = typeof client_1.ChatRoom !== "undefined" && client_1.ChatRoom) === "function" ? _g : Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onLeaveRoom", null);
 __decorate([
@@ -129,7 +131,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:paramtypes", [typeof (_h = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _h : Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onEjectRoom", null);
 __decorate([
@@ -137,7 +139,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:paramtypes", [typeof (_j = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _j : Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onPromoteUser", null);
 __decorate([
@@ -145,7 +147,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(2, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:paramtypes", [typeof (_k = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _k : Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onDemoteUser", null);
 ChatGateway = __decorate([
@@ -154,9 +156,7 @@ ChatGateway = __decorate([
     __param(1, (0, common_1.Inject)(jwt_1.JwtService)),
     __param(2, (0, common_1.Inject)(chat_service_1.ChatService)),
     __param(3, (0, common_1.Inject)(wschat_service_1.WschatService)),
-    __metadata("design:paramtypes", [user_service_1.UserService,
-        jwt_1.JwtService,
-        chat_service_1.ChatService,
+    __metadata("design:paramtypes", [user_service_1.UserService, typeof (_l = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _l : Object, chat_service_1.ChatService,
         wschat_service_1.WschatService])
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;

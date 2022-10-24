@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PongGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
@@ -217,66 +218,66 @@ let PongGateway = class PongGateway {
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
-    __metadata("design:type", socket_io_1.Server)
+    __metadata("design:type", typeof (_a = typeof socket_io_1.Server !== "undefined" && socket_io_1.Server) === "function" ? _a : Object)
 ], PongGateway.prototype, "server", void 0);
 __decorate([
     (0, websockets_1.SubscribeMessage)('init'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:paramtypes", [typeof (_b = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _b : Object]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "init", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('keydownZ'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:paramtypes", [typeof (_c = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _c : Object]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "keydownZ", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('keydownW'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:paramtypes", [typeof (_d = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _d : Object]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "keydownW", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('keydownS'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:paramtypes", [typeof (_e = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _e : Object]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "keydownS", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('keyupZ'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:paramtypes", [typeof (_f = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _f : Object]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "keyupZ", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('keyupW'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:paramtypes", [typeof (_g = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _g : Object]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "keyupW", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('keyupS'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:paramtypes", [typeof (_h = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _h : Object]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "keyupS", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('newGame'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:paramtypes", [typeof (_j = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _j : Object]),
     __metadata("design:returntype", Promise)
 ], PongGateway.prototype, "newGame", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('id_interval'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Number]),
+    __metadata("design:paramtypes", [typeof (_k = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _k : Object, Number]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "varSearchLoop", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)("stopGame"),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:paramtypes", [typeof (_l = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _l : Object]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "stopgame", null);
 PongGateway = __decorate([

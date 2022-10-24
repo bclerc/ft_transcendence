@@ -18,7 +18,7 @@ export declare class ChatGateway implements OnGatewayConnection, OnGatewayDiscon
     onlineUsers: Map<String, User>;
     constructor(userService: UserService, jwtService: JwtService, chatService: ChatService, wschatService: WschatService);
     afterInit(server: any): void;
-    handleConnection(socket: Socket): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;
+    handleConnection(socket: Socket): Promise<any>;
     handleDisconnect(socket: Socket): Promise<void>;
     handleMessage(client: Socket, payload: any, message: MessageI): Promise<void>;
     onCreateRoom(client: Socket, payload: any, newRoom: newChatRoomI): Promise<void>;
