@@ -1,17 +1,10 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
-import { LoginPagesComponent } from './pages/login-pages/login-pages.component';
-import { UserComponent } from './user/user.component';
-import { UserListComponent } from './user-list/user-list.component';
 import { PlayPongPagesComponent } from './pages/play-pong-pages/play-pong-pages.component';
-import { PlayRankedPongPagesComponent } from './pages/play-ranked-pong-pages/play-ranked-pong-pages.component';
-import { PlayFunPongPagesComponent } from './pages/play-fun-pong-pages/play-fun-pong-pages.component';
 
-import { RegisterPageComponent } from './pages/register-page/register-page.component';
-import { GetTokenComponent } from './get-token/get-token.component';
 import { UnfoundPagesComponent } from './unfound-pages/unfound-pages.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -51,6 +44,10 @@ import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { Activate2FaComponent } from './pages/activate2-fa/activate2-fa.component';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
 import { environment } from 'src/environments/environment';
+import { HeaderService } from './services/user/header.service';
+import { CurrentUserService } from './services/user/current_user.service';
+
+
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':81', options: {
@@ -63,31 +60,18 @@ const config: SocketIoConfig = {
 export function tokenGetter() {
   return localStorage.getItem("auth-token");
 }
+
+
 @NgModule({
   declarations: [
     AppComponent,
     LandingPageComponent,
     HeaderComponent,
-    LoginPagesComponent,
-    UserComponent,
-    UserListComponent,
     PlayPongPagesComponent,
-    PlayRankedPongPagesComponent,
-    PlayFunPongPagesComponent,
-    ChatPageComponent,
-    RegisterPageComponent,
-    ProfilePageComponent,
-    GetTokenComponent,
     UnfoundPagesComponent,
-    MyProfileComponent,
-    ModifyMyProfileComponent,
-    HeaderComponent,
     ProfilePageComponent,
     MyProfileComponent,
     ModifyMyProfileComponent,
-    SendCodeComponent,
-    Activate2FaComponent,
-    ChatPageComponent,
     UserselectComponent,
     RoomComponent,
     ChatInfoComponent,
@@ -132,7 +116,9 @@ export function tokenGetter() {
     SocketIoModule,
   ],
   providers: [    UserService,
-    UserResolver],
+    UserResolver,
+    HeaderService,
+  CurrentUserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
-//import { ReactiveFormsModule} from '@angular/forms';
+import { TokenStorageService } from './services/auth/token.storage';
+import { HeaderService } from './services/user/header.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,12 @@ export class AppComponent implements OnInit{
 
   constructor(
               private socket: Socket,
-              private snackBar: MatSnackBar) { }   
+              private snackBar: MatSnackBar,
+              public navbar : HeaderService,
+              private token : TokenStorageService) { 
+                if (token.getToken())
+                navbar.show();
+              }   
 
   ngOnInit(): void {
       this.socket.on('notification', (notif: string) => {

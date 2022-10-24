@@ -17,6 +17,7 @@ import { TokenStorageService } from '../auth/token.storage';
 }*/)
 export class UserService {
   userList!: UserI[];
+  private backUrl = 'http://localhost:3000/api/v1/';
       
   constructor(private route: ActivatedRoute ,private http : HttpClient, private token : TokenStorageService, private jwtService : JwtHelperService, private router : Router)
   {}
