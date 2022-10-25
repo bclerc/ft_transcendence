@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
@@ -12,7 +12,8 @@ import { UserService } from 'src/app/services/user/user.service';
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
-  styleUrls: ['./chat-page.component.css']
+  styleUrls: ['./chat-page.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ChatPageComponent implements OnInit {
 
@@ -140,4 +141,7 @@ export class ChatPageComponent implements OnInit {
     this.isAdmin = false;
   }
 
+    selectRoom(room: ChatRoom) {
+      this.selectedRoom=room;
+    }
 }

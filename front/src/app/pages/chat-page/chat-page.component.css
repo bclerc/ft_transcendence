@@ -1,0 +1,164 @@
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1F1F1F;
+	height: 100%
+}
+a{
+	color: inherit; /*pk ?*/
+}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.center{
+	margin: auto;
+	max-width: 1290px;
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+.mat-tab-groupe {
+	background-color: #FEEFCF;
+}
+
+/* Styles for tab labels */
+.mat-tab-label {
+	min-width:25px !important;
+	padding: 5px;
+	border-radius: 40px;
+	color: #FEEFCF;
+	font-family: ReadexPro-Medium;
+	text-align: center;
+	font-size: 11px;
+	text-decoration: none;
+	letter-spacing: -0,16;
+}
+
+/* Styles for the active tab label */
+.mat-tab-label.mat-tab-label-active {
+	min-width: 55px !important;
+	padding: 15px;
+	background-color: #EE481E;
+	border: 2px solid #FEEFCF;
+	color: #FEEFCF;
+	font-family: ReadexPro-Medium;
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+
+}
+
+/* Styles for the ink bar */
+.mat-ink-bar {
+	display: none;
+}
+
+.mat-selection-list{
+	margin-top:20px;
+}
+
+.roomName{
+	font-family: ReadexPro-Bold;
+	color: #FEEFCF;
+	font-size: 14px;
+}
+
+.button{
+	font-family: Titan One;
+	font-size: 14px;
+	color: #FEEFCF;
+	/* text-align: center; */
+	text-decoration: none;
+	background-color: #EE481E;
+	border-radius: 6px;
+	border: 3px solid #FEEFCF;
+	box-shadow: -3px 3px #FEEFCF;
+	width: 200px;
+	display: block;
+	padding: 18px 25px 17px 25px;
+	margin: 20px 0px 0px 5px;
+}
+.button:hover{
+	background-color: #1F1F1F;
+	/* box-shadow: 3px -3px #EE481E; */
+}
+
+/*------------------------------------------------------------ Grille */
+.demi,
+.quart,
+.tiers,
+.troisquart{
+	float: left;
+	margin-right: 30px;
+    border: 2px solid #FEEFCF;
+    border-radius: 20px;
+    padding: 60px 20px 60px 20px;
+    color: #FEEFCF;
+}
+.demi{
+    width: calc(50% - 15px);
+}
+.tiers{
+    width:calc(33.333% - calc(20px / 3));
+}
+.quart{
+    /* width: calc(25% - 22.5px); */
+	width: 300px;
+    height: 720px;
+}
+.troisquart{
+	min-width: calc(75% - 8px);
+	/* width:auto; */
+	/* display: block; */
+	/* max-width: 960px; */
+	/* flex-wrap:nowrap; */
+    height: 720px;
+}
+.troisquart:last-child,
+.demi:nth-child(2n),
+.tiers:nth-child(3n),
+.quart:nth-child(4n){
+	margin-right: 0px;
+}
+
+/* Moblie Protrait size to Mobile Landscape size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+
+}
