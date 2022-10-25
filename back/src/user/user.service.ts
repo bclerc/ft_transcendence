@@ -160,6 +160,8 @@ export class UserService {
         avatar_url: true,
       },
     });
+    if (user === undefined)
+      return null;
     return user;
   }
 

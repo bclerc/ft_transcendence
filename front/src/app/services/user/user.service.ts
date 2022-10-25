@@ -39,7 +39,7 @@ export class UserService {
 
   changeUserList(tab: UserI[]): void
   {
-    this.userList= tab;
+    this.userList = tab;
   }
 
   getUserList():  UserI[] 
@@ -64,9 +64,10 @@ export class UserService {
     throw new Error('User not found!');
   }
 
-  getUserIdFromBack(id: number): Observable<UserI>
+  
+  getUserIdFromBack(id: number): Observable<UserI | undefined>
   {
-    return this.http.get<UserI>("http://"+ environment.host +":3000/api/v1/user/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<UserI | undefined>("http://"+ environment.host +":3000/api/v1/user/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   getDataUserListFromBack(): Observable<UserI[]>
@@ -106,17 +107,17 @@ export class UserService {
 
   FindByName(name : string): Observable<UserI[]>
   {
-      return this.http.get<User[]>("http://"+ environment.host +":3000/api/v1/user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<UserI[]>("http://"+ environment.host +":3000/api/v1/user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   getFriends(): Observable<UserI[]>
   {
-      return this.http.get<User[]>("http://"+ environment.host +":3000/api/v1/user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<UserI[]>("http://"+ environment.host +":3000/api/v1/user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   getFriendRequests(): Observable<any[]>
   {
-      return this.http.get<User[]>("http://"+ environment.host +":3000/api/v1/user/friends/panding", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<any>("http://"+ environment.host +":3000/api/v1/user/friends/panding", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   acceptFriendRequest(id: number)

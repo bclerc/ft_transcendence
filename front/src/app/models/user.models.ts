@@ -13,6 +13,8 @@ export interface UserI {
     staff? :            boolean;
     createdAt? :        Date;
     twoFactorEnabled? : boolean;
+    friendOf? : UserI[];
+
 }
 
 export class User {

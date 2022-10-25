@@ -10,7 +10,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { env } from 'process';
 import { getSystemErrorMap } from 'util';
 
-@Controller('auth')
+@Controller('app')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

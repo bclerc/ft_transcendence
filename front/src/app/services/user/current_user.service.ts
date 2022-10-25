@@ -26,7 +26,7 @@ export class CurrentUserService {
         }
     }
 
-    getCurrentUser(): Observable<UserI> | undefined
+    getCurrentUser(): Observable<UserI>
     {
         return this.user;
     }
@@ -34,5 +34,10 @@ export class CurrentUserService {
     getCurrentUserFromBack(): Observable<UserI>
     {
       return this.http.get<UserI>(this.backUrl + "user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    }
+
+    getFriendFromBack(): Observable<any>
+    {
+      return this.http.get<any>(this.backUrl + "user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
 }
