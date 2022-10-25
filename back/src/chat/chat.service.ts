@@ -232,7 +232,6 @@ export class ChatService {
     return newRoom;
   }
 
-
   async removeUsersFromRoom(roomId: number, userId: number): Promise<any> {
     const newRoom = this.prisma.chatRoom.update({
       where: {
@@ -270,4 +269,5 @@ export class ChatService {
     });
     return ret;
   }
+  
 }

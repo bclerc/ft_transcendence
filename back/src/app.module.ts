@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './app.controller';
+import { AuthController } from './auth/auth.controller';
 import { AppService } from './app.service';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
@@ -20,14 +20,17 @@ import { WschatService } from './wschat/wschat.service';
 
 import { HttpModule } from '@nestjs/axios';
 import { PongModule } from './pong/pong.module';
+import { OnlineUserService } from './onlineusers/onlineuser.service';
+import { OnlineuserModule } from './onlineusers/onlineuser.module';
+import { FriendsService } from './friends/friends.service';
 
 
 @Module({
-  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), HttpModule, PongModule, ChatModule, JwtModule],
+  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), HttpModule, PongModule, ChatModule, JwtModule, OnlineuserModule],
   controllers: [AuthController, UserController],
   providers: [AppService, UserService, PrismaService, {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
-  }, ChatGateway, ChatService, MessageService, WschatService],
+  }, ChatGateway, ChatService, MessageService, WschatService, FriendsService],
 })
 export class AppModule {}

@@ -25,6 +25,11 @@ export class FriendsPageComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.friends.subscribe(
+      (res: any) => {
+        console.log(res);
+      }
+    )
 
   }
 

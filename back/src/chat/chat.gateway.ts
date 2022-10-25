@@ -5,13 +5,14 @@ import { ChatRoom, User } from '@prisma/client';
 import { Socket } from 'socket.io';
 
 import { jwtConstants } from 'src/auth/constants';
-import { EjectRoomI } from 'src/eject-room-i.interface';
-import { DemoteUserI, PromoteUserI } from 'src/promote-user-i.interface';
+import { EjectRoomI } from 'src/chat/interfaces/eject-room-i.interface';
+import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { UserService } from 'src/user/user.service';
 import { WschatService } from 'src/wschat/wschat.service';
 import { ChatService } from './chat.service';
 import { SubscribeRoomDto } from './dto/subscribe-room.dto';
 import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
+import { DemoteUserI, PromoteUserI } from './interfaces/promote-user-i.interface';
 
 
 
@@ -26,10 +27,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(ChatService) private readonly chatService: ChatService,
     @Inject(WschatService) private readonly wschatService: WschatService,
+    private readonly onlineUserService: OnlineUserService,
   ) { }
 
   afterInit(server: any) {
-    this.wschatService.server = server;
+    this.onlineUserService.server = server;
   }
 
   async handleConnection(socket: Socket) {
@@ -41,8 +43,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       });
       const user = await this.userService.findOne(res.sub);
       if (!user)
-        return socket.disconnect();
-      this.wschatService.initUser(socket.id, user);
+      return socket.disconnect();
+      this.onlineUserService.initUser(socket.id, user);
+      this.wschatService.initUser(user);
       socket.data.user = user;
     } catch (error) {
       socket.disconnect(true);
@@ -51,7 +54,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   async handleDisconnect(socket: Socket) {
-    this.wschatService.removeOnlineUser(socket.id);
+    this.onlineUserService.deleteUser(socket.id);
     socket.disconnect();
   }
 

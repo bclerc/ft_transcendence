@@ -1,14 +1,15 @@
-import { Injectable } from "@angular/core";
+import { EnvironmentInjector, Injectable } from "@angular/core";
 import { UserI } from "src/app/models/user.models";
 import { TokenStorageService } from "../auth/token.storage";
 import { Observable, Subscription } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { environment } from "src/environments/environment";
 
 @Injectable()
 export class CurrentUserService {
     user! : Observable<UserI>;
     subscription!: Subscription;
-    private backUrl = 'http://localhost:3000/api/v1/';
+    private backUrl = 'http://' + environment.host + ':3000/api/v1/';
 
     constructor(private token : TokenStorageService, private http : HttpClient)
     {

@@ -4,37 +4,33 @@ import { ChatRoom, Message, User } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { SubscribeRoomDto } from 'src/chat/dto/subscribe-room.dto';
 import { ChatRoomI, MessageI, newChatRoomI } from 'src/chat/interfaces/chatRoom.interface';
-import { EjectRoomI } from 'src/eject-room-i.interface';
-import { DemoteUserI, PromoteUserI } from 'src/promote-user-i.interface';
+import { EjectRoomI } from 'src/chat/interfaces/eject-room-i.interface';
+import { DemoteUserI, PromoteUserI } from 'src/chat/interfaces/promote-user-i.interface';
+import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class WschatService {
 
-
-  onlineUsers: Map<String, BasicUserI> = new Map<String, BasicUserI>();
-
   @WebSocketServer() server;
 
   constructor(
     private chatService: ChatService,
     private userService: UserService,
+    private onlineUserService: OnlineUserService
   ) { }
 
-  async initUser(socketId: string, user: BasicUserI) {
+  async initUser(user: BasicUserI) {
 
     let rooms: ChatRoomI[];
-
-    this.onlineUsers.set(socketId, user);
     rooms = await this.chatService.getRoomsFromUser(user.id);
     this.sendToUser(user, 'rooms', rooms);
-
   }
 
   async subscribeToRoom(socketId: string, subRoom: SubscribeRoomDto) {
 
-    const user = this.onlineUsers.get(socketId);
+    const user = this.onlineUserService.getUser(socketId);
     let room = await this.chatService.getRoomById(subRoom.roomId);
 
     if (user) {
@@ -42,14 +38,14 @@ export class WschatService {
       if (!await this.chatService.canJoin(room.id, subRoom.password)) {
         return this.sendToUser(user, 'notification', "Le mot de passe est incorrect");
       }
-        await this.chatService.addUsersToRoom(room.id, user.id);
-        this.updateRoomForUsersInRoom(room.id);
-        this.sendToUsersInRoom(room.id, 'notification', user.intra_name + " a rejoint le salon " + room.name);
+      await this.chatService.addUsersToRoom(room.id, user.id);
+      this.updateRoomForUsersInRoom(room.id);
+      this.sendToUsersInRoom(room.id, 'notification', user.intra_name + " a rejoint le salon " + room.name);
     }
   }
 
   async ejectUserFromRoom(socketId: string, room: EjectRoomI) {
-    const user = this.onlineUsers.get(socketId);
+    const user = this.onlineUserService.getUser(socketId);
     const target = await this.userService.findOne(room.targetId);
     const roomToEject = await this.chatService.getRoomById(room.roomId);
     if (user) {
@@ -64,7 +60,7 @@ export class WschatService {
   }
 
   async promoteUser(socketId: string, event: PromoteUserI) {
-    const user = this.onlineUsers.get(socketId);
+    const user = this.onlineUserService.getUser(socketId);
     const target = await this.userService.findOne(event.targetId);
     const roomToPromote = await this.chatService.getRoomById(event.roomId);
 
@@ -79,7 +75,7 @@ export class WschatService {
   }
 
   async demoteUser(socketId: string, event: DemoteUserI) {
-    const user = this.onlineUsers.get(socketId);
+    const user = this.onlineUserService.getUser(socketId);
     const target = await this.userService.findOne(event.targetId);
     const roomToDemote = await this.chatService.getRoomById(event.roomId);
 
@@ -95,10 +91,9 @@ export class WschatService {
 
   // A faire: Verifier sur le mec est mute dans le chat
   async newMessage(socketId: string, message: MessageI) {
-
-    const user = this.onlineUsers.get(socketId);
-    const room = await this.chatService.getRoomById(message.room.id);
     let messages: Message[];
+    const user = this.onlineUserService.getUser(socketId);
+    const room = await this.chatService.getRoomById(message.room.id);
 
     if (user) {
       await this.chatService.newMessage(message);
@@ -108,7 +103,7 @@ export class WschatService {
   }
 
   async newRoom(socketId: string, room: newChatRoomI) {
-    const user = this.onlineUsers.get(socketId);
+    const user = this.onlineUserService.getUser(socketId);
     let newRoom: ChatRoom;
 
     if (user) {
@@ -118,9 +113,8 @@ export class WschatService {
     }
   }
 
-
   async leaveRoom(socketId: string, roomId: number) {
-    const user = this.onlineUsers.get(socketId);
+    const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(roomId);
 
     if (user) {
@@ -134,11 +128,11 @@ export class WschatService {
   }
 
   async updateUserRooms(user: BasicUserI) {
-    
+
     const rooms = await this.chatService.getRoomsFromUser(user.id);
     this.sendToUser(user, 'rooms', rooms);
   }
-  
+
   async updateRoomForUsersInRoom(roomId: number) {
     let room = await this.chatService.getRoomById(roomId);
 
@@ -149,12 +143,7 @@ export class WschatService {
   }
 
   sendToUser(user: BasicUserI, prefix: string, data: any) {
-
-    for (let [socketId, userOnline] of this.onlineUsers) {
-      if (userOnline.id == user.id) {
-        this.server.to(socketId).emit(prefix, data);
-      }
-    }
+    this.onlineUserService.sendToUser(user, prefix, data);
   }
 
   async sendToUsersInRoom(roomId: number, prefix: string, data: any) {
@@ -165,20 +154,5 @@ export class WschatService {
     });
   }
 
-  /**
-   * Online Users
-   */
-
-  getOnlineUsers() {
-    return this.onlineUsers;
-  }
-
-  addOnlineUser(socketId: string, user: User) {
-    this.onlineUsers.set(socketId, user);
-  }
-
-  removeOnlineUser(socketId: string) {
-    this.onlineUsers.delete(socketId);
-  }
 
 }

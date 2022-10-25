@@ -10,8 +10,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { env } from 'process';
 import { getSystemErrorMap } from 'util';
 
-@Controller('auth')
-export class AuthController {
+@Controller('app')
+export class AppController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
@@ -116,7 +116,7 @@ export class AuthController {
   async callback(@Req() req: any, @Res() res: any) {
     
     const token = await this.authService.login(req.user.id, true);
-    res.status('200').redirect(`http://" + process.env.HOST  + ":4200/login/${token.access_token}`);
+    res.status('200').redirect(`http://` + process.env.HOST  + `:4200/login/${token.access_token}`);
     return token;
   }
   
