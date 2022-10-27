@@ -8,36 +8,51 @@
 	</head>
 	<body>
 		<div class="center">
-			<div class="quart">
-				Et ça c'est le quart !
-				<mat-tab-group id="mat-tab-group" [selectedIndex]="selected.value">
-					<mat-tab label="Mes groupes">
-						<ul>
-							<li *ngFor="let room of (rooms$ | async)" [value]="room">
-								<p class="roomName" (click)="selectRoom(room)">{{room.name}}</p>
-							</li>
-						</ul>
-					</mat-tab>
-					<mat-tab label="Mes amis">
-						<ul>
-							<li>mon ami joe</li>
-							<li>mon ami joe</li>
-							<li>mon ami joe</li>
-							<li>mon ami joe</li>
-							<li>mon ami joe</li>
-							<li>mon ami joe</li>
-						</ul>
-					</mat-tab>
-				</mat-tab-group>
-				<a class="button" href= "http://localhost:3000/api/v1/auth/42">+ Nouveau groupe</a>
-			</div>
-			<div class="troisquart">
-				<p>c'est le trois quart</p>
-				<app-room [room]="selectedRoom" [user]="actualUser"></app-room>
+			<div class="main-container">
+				<aside class="sidebar">
+					<div class="user-info">
+						<img src="../../../assets/img/default_profile_picture.webp" alt="ma belle gueule">
+						<!-- <img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
+						<!-- <p class="intraName">Valentina salamberemborg</p> -->
+						<a class="intraName" routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Valentina Salamberemborg</a>
+					</div>
+					<!-- <div class="pute"> -->
+						<mat-tab-group class="pute" [selectedIndex]="selected.value">
+							<mat-tab label="Mes groupes">
+								<ul>
+									<li *ngFor="let room of (rooms$ | async)" [value]="room">
+										<p class="roomName" (click)="selectRoom(room)">{{room.name}}</p>
+									</li>
+								</ul>
+							</mat-tab>
+							<mat-tab label="Mes amis">
+								<ul>
+									<li>mon ami joe</li>
+									<li>mon ami joe</li>
+									<li>mon ami joe</li>
+									<li>mon ami joe</li>
+									<li>mon ami joe</li>
+									<li>mon ami joe</li>
+								</ul>
+							</mat-tab>
+						</mat-tab-group>
+						<a class="button" (click)="NewRoom()">+ Nouveau groupe</a>
+					<!-- </div> -->
+				</aside>
+				<main class="content">
+					<ng-container *ngIf="!newRoom">
+						<app-room [room]="selectedRoom" [user]="actualUser"></app-room>
+					</ng-container>
+					<ng-container *ngIf="newRoom">
+						<p>WOOOOOOOOOO HOOOOOOOOOO</p>
+					</ng-container>
+				</main>
 			</div>
 		</div>
 	</body>
 </html>
+
+<!-- Code de brice ----------------------------------------------------------------------------------- -->
 
 <div class="container">
   <div>
@@ -58,7 +73,7 @@
 			<input matInput type="password" formControlName="password">
 		  </mat-form-field>
 		  <app-userselect [users]="users.value" (addUser)="addUser(initUser($event))" (removeuser)="removeUser($event.id)"></app-userselect>
-		  <div class="button">
+		  <div class="button-creer">
 			<button mat-button type="submit" [disabled]="!form.valid">Créer</button>
 		  </div>
 		</form>

@@ -54,48 +54,6 @@ hr.clear{
 	display: block;
 }
 
-.top-decoration1{
-	background-color: #EE481E;
-	height: 22px;
-}
-.top-decoration2{
-	background-color: #EF7E00;
-	height: 18px;
-}
-.top-decoration3{
-	background-color: #EFC10A;
-	height: 14px;
-}
-.bottom-decoration1{
-	background-color: #FEEFCF;
-	height: 4px;
-	margin-top: 22px;
-}
-.bottom-decoration2{
-	background-color: #FEEFCF;
-	height: 6px;
-	margin-top: 15px;
-}
-.bottom-decoration3{
-	background-color: #FEEFCF;
-	height: 9px;
-	margin-top: 12px;
-}
-.bottom-decoration4{
-	background-color: #FEEFCF;
-	height: 12px;
-	margin-top: 9px;
-}
-.bottom-decoration5{
-	background-color: #FEEFCF;
-	height: 15px;
-	margin-top: 6px;
-}
-.bottom-decoration6{
-	background-color: #FEEFCF;
-	height: 22px;
-	margin-top: 4px;
-}
 .logo{
 	margin: auto;
 	padding-top: 100px;
@@ -111,26 +69,6 @@ hr.clear{
 	width: 410px;
 	margin: 0px auto 30px auto;
 }
-
-
-/* .button-log{
-	background-color: #FEEFCF;
-	border-radius: 6px;
-	border: 3px solid #EE481E;
-	box-shadow: -3px 3px #EE481E;
-	font-family: Titan One;
-	text-align: center;
-	font-size: 14px;
-	color: #EE481E;
-	display: block;
-	padding: 18px 25px 17px 25px;
-	text-decoration: none;
-}
-.button-log:hover{
-	background-color: #fff;
-	color: #1F1F1F;
-	box-shadow: 3px -3px #EE481E;
-} */
 
 .button-log{
 	font-family: Titan One;
@@ -149,6 +87,7 @@ hr.clear{
 }
 .button-log:hover{
 	background-color: #1F1F1F;
+	color: #EE481E;
 	/* box-shadow: 3px -3px #EE481E; */
 }
 
@@ -156,7 +95,7 @@ h1{
 	font-family: Titan One;
 	text-align: center;
 	font-size: 35px;
-	color: #fff;
+	color: #FEEFCF;
 	margin: 66px 0px 50px 0px;
 }
 

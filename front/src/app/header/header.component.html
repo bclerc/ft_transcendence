@@ -33,10 +33,10 @@
 				<div *ngIf="connect; then thenBlock else elseBlock"></div>
 				<ng-template #thenBlock>
 					<ul>
-						<li><a routerLink="/playpong" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Play Pong</a></li>
-						<li><a routerLink="/chat" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Chat</a></li>
-						<li><a routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">My profile</a></li>
-						<li><a href="javascript:void(0);" (click)="logOut()">Log Out</a></li>
+						<li><a routerLink="/playpong" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Le jeu</a></li>
+						<li><a routerLink="/chat" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Le chat</a></li>
+						<li><a routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Mon profil</a></li>
+						<li><a href="javascript:void(0);" (click)="logOut()">Déconnexion</a></li>
 					</ul>
 				</ng-template>
 				<ng-template #elseBlock>

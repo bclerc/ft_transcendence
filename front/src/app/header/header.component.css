@@ -67,12 +67,12 @@ header {
 	padding-bottom: 6px;
 	text-decoration: none;
 }
-#header nav ul li a:hover, #header nav ul li .current{
+#header nav ul li a:hover{
 	border-bottom: 7px solid #EE481E;
 	/* text-decoration-line: 30% solid #EE481E; */
 }
 
-#header nav ul li a:focus {
+.active {
 	border-bottom: 7px solid #EE481E;
 }
 
