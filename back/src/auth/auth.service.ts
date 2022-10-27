@@ -32,12 +32,13 @@ export class AuthService {
     };
  }
  // todo
-  async verify2FACode(user: User, code: string): Promise<Boolean> {
-    if (!user.twoFactorAuthenticationSecret)
+  async verify2FACode(userId: number, code: string): Promise<Boolean> {
+    const twoFactorAuthenticationSecret = await this.usersService.get2FASsecret(userId);
+    if (!twoFactorAuthenticationSecret)
       throw new UnauthorizedException("User have not secret set");
     return authenticator.verify({ 
       token:  code,
-      secret: user.twoFactorAuthenticationSecret
+      secret: twoFactorAuthenticationSecret
     });
   }
 

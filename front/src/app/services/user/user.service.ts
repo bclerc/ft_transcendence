@@ -81,7 +81,7 @@ export class UserService {
 
   ActivateFacode(code : string) : Observable<any>
   {
-    return this.http.post<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa/enable3",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.post<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa/enable",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   DesactivateFacode(code : string) : Observable<any>

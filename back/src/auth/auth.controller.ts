@@ -82,7 +82,7 @@ export class AuthController {
   @Get('42/callback')
   @UseGuards(FortyTwoGuard)
   async callback(@Req() req: any, @Res() res: any) {
-    const token = await this.authService.login(req.user.id, true);
+    const token = await this.authService.login(req.user.id, false);
     res.status('200').redirect(`http://${ process.env.HOST }:4200/login/${token.access_token}`);
     return token;
   }
@@ -227,13 +227,13 @@ export class AuthController {
    * @apiError {String} message Message d'erreur.
     */
   
-  @Post('2fa/enable3')
+  @Post('2fa/enable')
   @UseGuards(JwtAuthGuard)
   async enable2FA(@Request() req: any, @Body() data: any) {
 
-    const isCodeValid = await this.authService.verify2FACode(req.user, data.twoFactorAuthenticationCode);
+    const isCodeValid = await this.authService.verify2FACode(req.user.id, data.twoFactorAuthenticationCode);
     if (isCodeValid) {
-       return await this.userService.set2FAEnable(req.user.id, true);
+      return await this.userService.set2FAEnable(req.user.id, true);
     }
     throw new HttpException('Invalid 2FA code', 401);
   }

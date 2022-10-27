@@ -34,6 +34,7 @@ export class PenaltiesService {
 
     const penalties = await this.prisma.chatPenalty.findMany({
       where: {
+        roomId: roomId,
         userId: userId,
         OR: [
           {

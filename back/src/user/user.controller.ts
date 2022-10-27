@@ -1,29 +1,22 @@
-import { Body, Controller, Request, Get, Param, Post, ForbiddenException, Put, Patch, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Request, Get, Param, Post, Put, Patch, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { newUserDto } from './dto/newUser.dto';
 import { FriendRequest, User } from '@prisma/client';
 import { Jwt2faAuthGuard } from 'src/auth/guards/jwt2fa.guard';
 import { updateUserDto } from './dto/updateUser.dto';
-import { StaffGuard } from 'src/auth/guards/staff.guard';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { get, request } from 'http';
 import { FriendRequestAction, FriendRequestDto, newFriendRequestDto } from './dto/friendRequest.dto';
 import { BasicUserI } from './interface/basicUser.interface';
 import { FriendsService } from 'src/friends/friends.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import path from 'path';
-import { imageUpload } from './helper/image-upload';
-import { of } from 'rxjs';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService,
-              private readonly friendsService: FriendsService,
-              private readonly CloudinaryService: CloudinaryService) { }
+    private readonly friendsService: FriendsService,
+    private readonly CloudinaryService: CloudinaryService) { }
 
   /**
   * @api {get} /user/ Récupérer la liste des utilisateurs
@@ -140,7 +133,7 @@ export class UserController {
   }
 
   /**
-   * @api {put} /user/:id Modifier un utilisateur
+   * @api {put} /user/ Modifier un utilisateur
    * @apiName PutUser
    * @apiGroup User
    * @apiHeaderExample {json} Header:
@@ -185,6 +178,18 @@ export class UserController {
     return await this.userService.updateUser(req.user.id, data);
   }
 
+
+  /**
+   * @api {post} /user/avatar Modifier l'avatar
+   * @apiName postUser
+   * @apiGroup User
+   * @apiHeaderExample {json} Header:
+   * {
+   *       "Authorization": "Bearer ACCESS_TOKEN"
+   * }
+   * @apiBody {file} image l'avatar
+   */
+
   @Post('avatar')
   @UseInterceptors(FileInterceptor('image'))
   @UseGuards(Jwt2faAuthGuard)
@@ -192,13 +197,13 @@ export class UserController {
     try {
       let apiResponse = await this.CloudinaryService.uploadImage(file);
       console.log(apiResponse);
-      await this.userService.updateUser(req.user.id, {avatar_url: (await apiResponse).secure_url });
-      return {message: 'New avatar set', state: 'success'};
+      await this.userService.updateUser(req.user.id, { avatar_url: (await apiResponse).secure_url });
+      return { message: 'New avatar set', state: 'success' };
     } catch (error) {
       return error;
     }
   }
-  
+
 
   /**
    * @api {get} /user/friends Récupérer la liste des amis d'un utilisateur
@@ -288,7 +293,7 @@ export class UserController {
   }
 
   /**
-   * @api {post} /user/friends/request/:id Demander en amis
+   * @api {post} /user/friends/request/ Demander en amis
    * @apiName RequestFriend
    * @apiGroup Friends
    * 
@@ -296,15 +301,15 @@ export class UserController {
    * {
    *     "Authorization": "Bearer ACCESS_TOKEN"
    * }
-   * @apiParam {Number} id Id de l'utilisateur
+   * @apiParam {Number} toId Id de l'utilisateur
    * 
    */
 
   @Post('friends/request')
   @UseGuards(Jwt2faAuthGuard)
-  async newRequest(@Request() req: any, @Body() data:  newFriendRequestDto) {
+  async newRequest(@Request() req: any, @Body() data: newFriendRequestDto) {
     if (req.user.id == data.toId)
-      return { message: "You can't add yourself as a friend", state: 'error'};
+      return { message: "You can't add yourself as a friend", state: 'error' };
     if (await this.friendsService.haveFriend(req.user.id, data.toId))
       return { message: "You are already friends", state: 'error' };
     if (await this.friendsService.haveFriendRequest(req.user.id, data.toId))
@@ -330,9 +335,9 @@ export class UserController {
           return { message: "Friend request accepted", state: 'success' };
         }
         if (data.action == FriendRequestAction.DECLINE) {
-          this.friendsService.declineFriend(request.id);
+          await this.friendsService.declineFriend(request.id);
           return { message: "Friend request declined", state: 'success' };
-      }
+        }
       }
       else
         return { message: "You are not the receiver of this friend request" };

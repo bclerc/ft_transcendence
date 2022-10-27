@@ -3,6 +3,7 @@ import { FriendRequest, FriendStatus, Prisma, User, UserState } from '@prisma/cl
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { AuthController } from 'src/auth/auth.controller';
 import { ChatService } from 'src/chat/chat.service';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { runInThisContext } from 'vm';
@@ -18,10 +19,8 @@ export class UserService {
 
 
   constructor(private prisma: PrismaService,
-              @Inject(forwardRef(() => OnlineUserService)) private onlineUserService: OnlineUserService,
-              @Inject(forwardRef(() => ChatService)) private chatService: ChatService) 
-              
-              { }
+    @Inject(forwardRef(() => OnlineUserService)) private onlineUserService: OnlineUserService,
+    @Inject(forwardRef(() => ChatService)) private chatService: ChatService) { }
 
   async newUser(data: any): Promise<User> {
     try {
@@ -104,25 +103,25 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<UserInfoI> {
-      const user = await this.prisma.user.findUnique({
-        where: {
-          id: Number(id),
-        },
-        select: {
-          id: true,
-          state: true,
-          intra_name: true,
-          email: true,
-          avatar_url: true,
-          friends: true,
-          friendOf: true,
-          twoFactorEnabled: true,
-          createdAt: true,
-          updatedAt: true,
-        }
-      });
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+      select: {
+        id: true,
+        state: true,
+        intra_name: true,
+        email: true,
+        avatar_url: true,
+        friends: true,
+        friendOf: true,
+        twoFactorEnabled: true,
+        createdAt: true,
+        updatedAt: true,
+      }
+    });
 
-      return user;
+    return user;
 
   }
 
@@ -180,6 +179,18 @@ export class UserService {
         twoFactorAuthenticationSecret: secret,
       },
     });
+  }
+
+  async get2FASsecret(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number(userId),
+      },
+      select: {
+        twoFactorAuthenticationSecret: true,
+      },
+    });
+    return user.twoFactorAuthenticationSecret;
   }
 
   async set2FAEnable(userId: number, enable: boolean) {
