@@ -11,7 +11,8 @@ import { env } from 'process';
 import { getSystemErrorMap } from 'util';
 
 @Controller('app')
-export class AuthController {
+
+export class AppController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
@@ -116,7 +117,7 @@ export class AuthController {
   async callback(@Req() req: any, @Res() res: any) {
     
     const token = await this.authService.login(req.user.id, true);
-    res.status('200').redirect(`http://" + process.env.HOST  + ":4200/login/${token.access_token}`);
+    res.status('200').redirect(`http://` + process.env.HOST  + `:4200/login/${token.access_token}`);
     return token;
   }
   

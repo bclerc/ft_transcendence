@@ -14,7 +14,6 @@ model User {
   id                            Int           @id @default(autoincrement())
   email                         String        @unique
   state                         UserState      @default(OFFLINE)
-  password                      String
   intra_name                    String?       @unique
   intra_id                      Int?          @unique
   avatar_url                    String?       @default("https://static.cnews.fr/sites/default/files/styles/image_750_422/public/raw_62c3e2f1a9694_0.jpg")
@@ -51,6 +50,7 @@ model ChatRoom {
   id          Int           @id @default(autoincrement())
   name        String
   description String?
+  type        ChatRoomType  @default(DM)
   users       User[]
   admins      User[]        @relation("chatRoomAdminRelation")
   ownerId     Int
@@ -79,8 +79,9 @@ model ChatPenalty {
   userId    Int
   room      ChatRoom    @relation(fields: [roomId], references: [id])
   roomId    Int
-  type      PenaltyType @default(MUTE)
-  time      DateTime
+  type      PenaltyType     @default(MUTE)
+  timetype  PenaltyTimeType @default(PERM)
+  endTime   DateTime
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
@@ -98,8 +99,18 @@ enum PenaltyType {
   BAN
 }
 
+enum PenaltyTimeType {
+  PERM
+  TEMP
+}
+
 enum FriendStatus {
   PENDING
   ACCEPTED
   DECLINED
+}
+
+enum ChatRoomType {
+  GROUP
+  DM
 }
