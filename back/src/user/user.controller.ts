@@ -1,4 +1,4 @@
-import { Body, Controller, Request, Get, Param, Post, ForbiddenException, Put, Patch } from '@nestjs/common';
+import { Body, Controller, Request, Get, Param, Post, ForbiddenException, Put, Patch, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { newUserDto } from './dto/newUser.dto';
@@ -11,12 +11,19 @@ import { get, request } from 'http';
 import { FriendRequestAction, FriendRequestDto, newFriendRequestDto } from './dto/friendRequest.dto';
 import { BasicUserI } from './interface/basicUser.interface';
 import { FriendsService } from 'src/friends/friends.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import path from 'path';
+import { imageUpload } from './helper/image-upload';
+import { of } from 'rxjs';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService,
-              private readonly friendsService: FriendsService) { }
+              private readonly friendsService: FriendsService,
+              private readonly CloudinaryService: CloudinaryService) { }
 
   /**
   * @api {get} /user/ Récupérer la liste des utilisateurs
@@ -31,7 +38,7 @@ export class UserController {
   *  "id": 1,
   *  "email": "norminet@student.42.fr",
   *  "intra_name": "Norminet",
-  *  "avatar_url": "https://cdn.intra.42.fr/users/norminet.jpg",
+  *  "avatar_url": "https://cdn.intra.42.fr/users/ http://localhost:3000/api/v1/user/avataranorminet.jpg",
   *  "intra_id": 1,
   *  "displayname": "Norminet",
   *  "description": null,
@@ -177,6 +184,21 @@ export class UserController {
   async updateUser(@Request() req: any, @Body() data: updateUserDto) {
     return await this.userService.updateUser(req.user.id, data);
   }
+
+  @Post('avatar')
+  @UseInterceptors(FileInterceptor('image'))
+  @UseGuards(Jwt2faAuthGuard)
+  async uploadFile(@Request() req: any, @UploadedFile() file: Express.Multer.File) {
+    try {
+      let apiResponse = await this.CloudinaryService.uploadImage(file);
+      console.log(apiResponse);
+      await this.userService.updateUser(req.user.id, {avatar_url: (await apiResponse).secure_url });
+      return {message: 'New avatar set', state: 'success'};
+    } catch (error) {
+      return error;
+    }
+  }
+  
 
   /**
    * @api {get} /user/friends Récupérer la liste des amis d'un utilisateur

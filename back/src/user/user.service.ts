@@ -44,7 +44,6 @@ export class UserService {
       return await this.prisma.user.create({
         data: {
           email: '@student.42.fr',
-          password: '123456',
           intra_name: 'mmarcus',
           displayname: 'Marcus le singe',
           avatar_url: "https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2022/06/singe-1.jpg?resize=1024,577"
@@ -61,7 +60,6 @@ export class UserService {
       return await this.prisma.user.create({
         data: {
           email: 'paul@student.42.fr',
-          password: '123456',
           intra_name: 'Super paul',
           displayname: 'PaulMarttin',
           avatar_url: "https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2022/06/singe-1.jpg?resize=1024,577"
@@ -79,7 +77,6 @@ export class UserService {
       newUser = await this.prisma.user.create({
         data: {
           email: user.email,
-          password: '',
           intra_name: user.intra_name,
           intra_id: user.intra_id,
           avatar_url: user.avatar_url,

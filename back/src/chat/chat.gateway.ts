@@ -60,7 +60,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @SubscribeMessage('message')
   async handleMessage(@ConnectedSocket() client: Socket, payload: any, @MessageBody() message: MessageI) {
-    this.wschatService.newMessage(client.id, message);
+    try {
+      this.wschatService.newMessage(client.id, message);
+    } catch (error) {
+      console.log("coucou", error);
+    }
   }
 
   @SubscribeMessage('createRoom')

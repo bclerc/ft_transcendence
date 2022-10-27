@@ -1,19 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { targetModulesByContainer } from '@nestjs/core/router/router-module';
-import { ChatRoom, Message, prisma, User } from '@prisma/client';
+import { ChatRoom, Message, PenaltyTimeType, PenaltyType, prisma, User } from '@prisma/client';
+import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserInfoI } from 'src/user/interface/userInfo.interface';
+import { RoomPunishException } from './chat.exception';
 import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
+import { PenaltiesService } from './services/penalties/penalties.service';
 
 
 
 @Injectable()
 export class ChatService {
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,
+              private onlineUserService: OnlineUserService,
+              private penaltiesService: PenaltiesService) {}
 
   async newMessage(message: MessageI) { 
+    let penalty = await this.penaltiesService.getRoomPenaltiesForUser(message.user.id, message.room.id);
+
+    if (penalty)
+      throw new RoomPunishException(penalty, this.onlineUserService);
+
     const newMessage = await this.prisma.message.create({
       data: {
         content: message.content,
@@ -184,7 +194,15 @@ export class ChatService {
   }
 
   async addUsersToRoom(roomId: number, userId: number): Promise<ChatRoom> {
-    const newRoom = this.prisma.chatRoom.update({
+   const penalty = await this.penaltiesService.getRoomPenaltiesForUser(userId, roomId);
+  
+    if (penalty && penalty.type === PenaltyType.BAN) {
+      this.onlineUserService.sendToUser(userId, 'notification', 
+      'Vous avez été banni de ce salon' + (penalty.timetype === PenaltyTimeType.TEMP ? ' jusqu\'au ' + penalty.endTime : ' définitivement'));
+      return null;
+    }
+
+   const newRoom = this.prisma.chatRoom.update({
       where: {
         id: Number(roomId)
       },

@@ -37,7 +37,7 @@ export class ChatPageComponent implements OnInit {
   constructor(private chatService: ChatService,
               private userService: UserService) { }
 
-  async ngOnInit() {
+  async ngOnInit(){
     this.publicrooms
      = await this.chatService.getPublicRooms();
     this.rooms$ = await this.chatService.getRooms();
@@ -138,6 +138,11 @@ export class ChatPageComponent implements OnInit {
       }
     }
     this.isAdmin = false;
+  }
+
+  selectRoom (room: ChatRoom)
+  {
+    this.selectedRoom = room;
   }
 
 }

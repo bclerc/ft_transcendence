@@ -79,7 +79,8 @@ model ChatPenalty {
   userId    Int
   room      ChatRoom    @relation(fields: [roomId], references: [id])
   roomId    Int
-  type      PenaltyType @default(MUTE)
+  type      PenaltyType     @default(MUTE)
+  timetype  PenaltyTimeType @default(PERM)
   endTime   DateTime
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
@@ -96,6 +97,11 @@ enum UserState {
 enum PenaltyType {
   MUTE
   BAN
+}
+
+enum PenaltyTimeType {
+  PERM
+  TEMP
 }
 
 enum FriendStatus {

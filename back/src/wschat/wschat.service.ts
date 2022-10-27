@@ -40,7 +40,6 @@ export class WschatService {
       }
       await this.chatService.addUsersToRoom(room.id, user.id);
       this.updateRoomForUsersInRoom(room.id);
-      this.sendToUsersInRoom(room.id, 'notification', user.intra_name + " a rejoint le salon " + room.name);
     }
   }
 
