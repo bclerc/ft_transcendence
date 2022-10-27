@@ -74,11 +74,10 @@ export class UserController {
   * }
   * 
   */
-
   @Get(':id')
   @UseGuards(Jwt2faAuthGuard)
   async findOne(@Request() req, @Param('id') id: number): Promise<BasicUserI> {
-    return this.userService.getBasicUser(id);
+      return this.userService.getBasicUser(id);
   }
 
   /**
@@ -115,10 +114,7 @@ export class UserController {
    *  "createdAt": "2022-08-02T18:31:06.050Z"
    * }
    * @apiErrorExample {json} Example de réponse en cas d'erreur
-   * {
-   *    "statusCode": 400,
-   *    "message": "Email déjà utilisé"
-   * }
+   * c
    */
 
   @Get('search/:name')

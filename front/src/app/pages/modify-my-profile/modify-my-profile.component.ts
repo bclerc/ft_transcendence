@@ -110,7 +110,7 @@ export class ModifyMyProfileComponent implements OnInit {
     {
       this.user.displayname = this.ChangeDisplaynameForm.controls['displayname'].getRawValue();
       if (this.id)
-        this.userService.ChangeDbInformation(this.id, this.user).subscribe(
+        this.userService.ChangeDbInformation(this.user).subscribe(
           (data : any) => {
             console.log("changedb =",data);
             },
