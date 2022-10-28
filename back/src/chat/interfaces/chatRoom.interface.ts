@@ -12,6 +12,7 @@ export interface ChatRoom {
 }
 
 export interface newChatRoomI {
+  id?: number;
   name?: string;
   description?: string;
   users?: BasicUserI[];
@@ -27,7 +28,7 @@ export interface ChatRoomI {
   users: BasicUserI[];
   admins: BasicUserI[];
   public: Boolean;
-  messages: Message[];
+  messages?: Message[];
 }
 
 export interface ChatRoomUserI {

@@ -77,7 +77,6 @@ export class ChatService {
         ownerId: true,
         public: true,
         description: true,
-        messages: true,
       },
     });
 
@@ -97,11 +96,20 @@ export class ChatService {
   }
 
 
-  async getMessagesFromRoom(room: ChatRoom): Promise<Message[]> {
+  async getMessagesFromRoom(userId: number, room: ChatRoom): Promise<Message[]> {
     const messages = await this.prisma.message.findMany({
       where: {
         room: {
           id: room.id,
+        },
+        user: {
+          NOT: {
+            blockedBy: {
+              some: {
+                id: userId,
+              }
+            }
+          }
         },
       },
       include: {
@@ -112,12 +120,20 @@ export class ChatService {
     return messages;
   }
   
-  async getMessagesFromRoomId(roomId: number): Promise<Message[]> {
+  async getMessagesFromRoomId(userId: number, roomId: number): Promise<Message[]> {
     const messages = await this.prisma.message.findMany({
       where: {
         room: {
-
           id: roomId,
+        },
+        user: {
+          NOT: {
+            blockedBy: {
+              some: {
+                id: userId,
+              }
+            }
+          }
         },
       },
       include: {
@@ -182,14 +198,13 @@ export class ChatService {
       },
       select: {
         password: true,
-        public: true,
+        public: true
       },
     });
     if (!room)
       return false;
     if (!room.password && room.public)
       return true;
-    console.log(room.password, password);
     return room.password === password;
   }
 
@@ -260,16 +275,23 @@ export class ChatService {
           disconnect: {
             id: userId,
           }
-        }
-      }
+        },
+       admins: 
+       {
+          disconnect: {
+            id: userId,
+          },
+      },
+    }
     });
     return newRoom;
   }
 
-  async editRoom(roomId: number, newRoom: newChatRoomI): Promise<ChatRoom> {
+  async editRoom(newRoom: newChatRoomI): Promise<ChatRoom> {
+    
     const ret = this.prisma.chatRoom.update({
       where: {
-        id: roomId,
+        id: newRoom.id,
       },
       data: {
         name: newRoom.name,

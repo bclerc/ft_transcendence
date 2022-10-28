@@ -63,7 +63,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     try {
       this.wschatService.newMessage(client.id, message);
     } catch (error) {
-      console.log("coucou", error);
     }
   }
 
@@ -79,8 +78,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @SubscribeMessage('joinRoom')
   async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoom) {
-    const messages = await this.chatService.getMessagesFromRoom(room);
-
+    const user = await this.onlineUserService.getUser(client.id);
+    const messages = await this.chatService.getMessagesFromRoom(user.id, room);
     this.server.to(client.id).emit('messages', messages);
   }
 
@@ -104,4 +103,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.wschatService.demoteUser(client.id, event);
   }
 
+  @SubscribeMessage('editRoom')
+  async onEditRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: newChatRoomI) {
+    this.wschatService.editRoom(client.id, room);
+  }
 }
