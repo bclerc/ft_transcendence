@@ -17,8 +17,9 @@ import { TokenStorageService } from '../auth/token.storage';
 }*/)
 export class UserService {
   userList!: UserI[];
+
   private backUrl = 'http://'+ environment.host +':3000/api/v1/';
-      
+
   constructor(private route: ActivatedRoute ,private http : HttpClient, private token : TokenStorageService, private jwtService : JwtHelperService, private router : Router)
   {}
 
@@ -39,7 +40,7 @@ export class UserService {
 
   changeUserList(tab: UserI[]): void
   {
-    this.userList= tab;
+    this.userList = tab;
   }
 
   getUserList():  UserI[] 
@@ -64,9 +65,10 @@ export class UserService {
     throw new Error('User not found!');
   }
 
-  getUserIdFromBack(id: number): Observable<UserI>
+  
+  getUserIdFromBack(id: number): Observable<UserI | undefined>
   {
-    return this.http.get<UserI>("http://"+ environment.host +":3000/api/v1/user/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<UserI | undefined>("http://"+ environment.host +":3000/api/v1/user/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   getDataUserListFromBack(): Observable<UserI[]>
@@ -74,9 +76,9 @@ export class UserService {
     return this.http.get<User[]>("http://"+ environment.host +":3000/api/v1/user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
-  ChangeDbInformation(id: number, user : UserI): Observable<any>
+  ChangeDbInformation(user : UserI): Observable<any>
   {
-    return this.http.put<Observable<any>>("http://"+ environment.host +":3000/api/v1/user/" + id, user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.put<Observable<any>>("http://"+ environment.host +":3000/api/v1/user/", user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ActivateFacode(code : string) : Observable<any>
@@ -106,17 +108,17 @@ export class UserService {
 
   FindByName(name : string): Observable<UserI[]>
   {
-      return this.http.get<User[]>("http://"+ environment.host +":3000/api/v1/user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<UserI[]>("http://"+ environment.host +":3000/api/v1/user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   getFriends(): Observable<UserI[]>
   {
-      return this.http.get<User[]>("http://"+ environment.host +":3000/api/v1/user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<UserI[]>("http://"+ environment.host +":3000/api/v1/user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   getFriendRequests(): Observable<any[]>
   {
-      return this.http.get<User[]>("http://"+ environment.host +":3000/api/v1/user/friends/panding", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<any>("http://"+ environment.host +":3000/api/v1/user/friends/panding", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   acceptFriendRequest(id: number)

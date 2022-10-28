@@ -3,7 +3,9 @@ import { UserI } from "src/app/models/user.models";
 import { TokenStorageService } from "../auth/token.storage";
 import { Observable, Subscription } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+
 import { environment } from "src/environments/environment";
+
 
 @Injectable()
 export class CurrentUserService {
@@ -27,13 +29,18 @@ export class CurrentUserService {
         }
     }
 
-    getCurrentUser(): Observable<UserI> | undefined
+    getCurrentUser(): Observable<UserI>
     {
         return this.user;
     }
 
     getCurrentUserFromBack(): Observable<UserI>
     {
-      return this.http.get<UserI>(this.backUrl + "user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+      return this.http.get<UserI>("http://"+ environment.host + ":3000/api/v1/user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    }
+
+    getFriendFromBack(): Observable<any>
+    {
+      return this.http.get<any>("http://"+ environment.host + ":3000/api/v1/user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
 }

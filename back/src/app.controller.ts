@@ -11,6 +11,7 @@ import { env } from 'process';
 import { getSystemErrorMap } from 'util';
 
 @Controller('app')
+
 export class AppController {
   constructor(
     private readonly authService: AuthService,
