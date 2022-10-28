@@ -14,11 +14,9 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     private userService: UserService
   ){
     super({
-      clientID:
-        process.env.INTRA_CLIENT_ID,
-      clientSecret:
-		process.env.INTRA_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/api/v1/auth/42/callback',
+      clientID: process.env.INTRA_CLIENT_ID,
+      clientSecret: process.env.INTRA_CLIENT_SECRET,
+      callbackURL: ("http://192.168.43.94:3000/api/v1/auth/42/callback"),
 
     });
   }

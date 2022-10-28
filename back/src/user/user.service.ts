@@ -233,4 +233,41 @@ export class UserService {
       },
     });
   }
+
+  /**
+   * Blocked user
+   */
+
+  async blockUser(userId: number, blockedId) {
+    await this.prisma.user.update({
+      where: {
+        id: Number(userId),
+      },
+      data: {
+        blockedUsers: {
+          connect: {
+            id: Number(blockedId),
+          },
+        },
+      },
+    });
+  
+  }
+
+  async unblockUser(userId: number, blockedId) {
+    await this.prisma.user.update({
+      where: {
+        id: Number(userId),
+      },
+      data: {
+        blockedUsers: {
+          disconnect: {
+            id: Number(blockedId),
+          },
+        },
+      },
+    });
+  }
+
+
 }

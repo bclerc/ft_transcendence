@@ -23,7 +23,6 @@ export class Jwt2faStrategy extends PassportStrategy(Strategy, 'jwt-2fa') {
     if (!user.twoFactorEnabled) {
       return user;
     }
-    console.log(payload);
     if (payload.isTwoFactorAuthenticate) {
       return user;
     }

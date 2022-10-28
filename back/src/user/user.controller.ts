@@ -192,7 +192,6 @@ export class UserController {
   async uploadFile(@Request() req: any, @UploadedFile() file: Express.Multer.File) {
     try {
       let apiResponse = await this.CloudinaryService.uploadImage(file);
-      console.log(apiResponse);
       await this.userService.updateUser(req.user.id, { avatar_url: (await apiResponse).secure_url });
 
       return { message: 'New avatar set', state: 'success' };
@@ -240,7 +239,6 @@ export class UserController {
   @Get('friends/panding')
   @UseGuards(Jwt2faAuthGuard)
   async getFriendsPanding(@Request() req: any): Promise<FriendRequest[]> {
-    console.log(req.user.id);
     return await this.friendsService.getFriendRequests(req.user.id);
   }
 

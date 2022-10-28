@@ -96,26 +96,25 @@ export class WschatService {
 
     if (user) {
       await this.chatService.newMessage(message);
-      messages = await this.chatService.getMessagesFromRoomId(room.id);
-      this.sendToUsersInRoom(room.id, 'messages', messages);
+      this.updateUsersMessagesInRoom(room);
     }
   }
 
   async newRoom(socketId: string, room: newChatRoomI) {
     const user = this.onlineUserService.getUser(socketId);
     let newRoom: ChatRoom;
-
+    
     if (user) {
       newRoom = await this.chatService.createRoom(user, room);
       this.updateRoomForUsersInRoom(newRoom.id);
       this.sendToUsersInRoom(newRoom.id, 'notification', "Vous avez rejoint le salon " + newRoom.name);
     }
   }
-
+  
   async leaveRoom(socketId: string, roomId: number) {
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(roomId);
-
+    
     if (user) {
       await this.chatService.removeUsersFromRoom(room.id, user.id);
       this.updateRoomForUsersInRoom(room.id);
@@ -125,11 +124,29 @@ export class WschatService {
       this.sendToUser(user, 'notification', "Une erreur s'est produite");
     }
   }
+  async editRoom(socketId: string, newRoom: newChatRoomI){
+    const user = this.onlineUserService.getUser(socketId);
+    const room = await this.chatService.getRoomById(newRoom.id);
+    if (user) {
+      if (room.admins.find(admin => admin.id == user.id)) {
+        await this.chatService.editRoom(newRoom);
+        this.updateRoomForUsersInRoom(room.id);
+        this.sendToUsersInRoom(room.id, 'notification', "Le salon " + room.name + " a été modifié");
+      }
+    }
+  }
 
   async updateUserRooms(user: BasicUserI) {
 
     const rooms = await this.chatService.getRoomsFromUser(user.id);
     this.sendToUser(user, 'rooms', rooms);
+  }
+
+  async updateUsersMessagesInRoom (room: ChatRoomI) {
+      for (let user of room.users) {
+        const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
+        this.sendToUser(user, 'messages', messages);
+      }
   }
 
   async updateRoomForUsersInRoom(roomId: number) {
