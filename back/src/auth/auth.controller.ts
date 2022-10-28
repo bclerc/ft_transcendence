@@ -115,7 +115,7 @@ export class AuthController {
   @Post('2fa')
   @UseGuards(JwtAuthGuard)
   async authenticate(@Request() request, @Body() body: any) {
-    const isCodeValid = await this.authService.verify2FACode(request.user, body.twoFactorAuthenticationCode);
+    const isCodeValid = await this.authService.verify2FACode(request.user.id, body.twoFactorAuthenticationCode);
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }

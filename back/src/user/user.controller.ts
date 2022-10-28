@@ -194,8 +194,10 @@ export class UserController {
       let apiResponse = await this.CloudinaryService.uploadImage(file);
       console.log(apiResponse);
       await this.userService.updateUser(req.user.id, { avatar_url: (await apiResponse).secure_url });
+
       return { message: 'New avatar set', state: 'success' };
     } catch (error) {
+      console.log("error");
       return error;
     }
   }

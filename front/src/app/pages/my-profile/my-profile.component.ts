@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { map, Observable, Subscription } from 'rxjs';
+import { finalize, map, Observable, Subscription } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
@@ -53,10 +53,16 @@ export class MyProfileComponent implements OnInit {
       {
         this.subscription = this.userLi.subscribe(
         (data : any) => {
-          console.log("data =",data);
+          //console.log("data =",data);
           this.user = data;
         },
-        //error => this.router.navigate([''])
+          (error : any) => 
+          {
+            if (error.status === 401 && error.error.message === "2FA_REQUIRED")
+              this.router.navigate(['code'])
+            else
+              this.router.navigate([''])
+          }
         );
       }
       // console.log("done");
@@ -66,7 +72,9 @@ export class MyProfileComponent implements OnInit {
     {
       this.subscription.unsubscribe;
     }
-  }
+
+ 
+}
 
 
 

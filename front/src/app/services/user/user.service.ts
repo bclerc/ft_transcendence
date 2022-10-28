@@ -86,7 +86,7 @@ export class UserService {
     return this.http.post<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa/enable",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
-  DesactivateFacode(code : string) : Observable<any>
+  DesactivateFacode() : Observable<any>
   {
     return this.http.get<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa/disable", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
@@ -145,6 +145,11 @@ export class UserService {
   sendRequest(userId: number)
   {
     return this.http.post("http://"+ environment.host +":3000/api/v1/user/friends/request", {toId: userId}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+  uploadAvatar(avatar : any)
+  {
+    return this.http.post("http://"+ environment.host +":3000/api/v1/user/avatar",avatar ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   
