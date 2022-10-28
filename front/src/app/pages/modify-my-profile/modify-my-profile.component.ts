@@ -121,9 +121,10 @@ export class ModifyMyProfileComponent implements OnInit {
 
 
   DesactivateFa(): void {
-    this.userService.DesactivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe(
+    this.userService.DesactivateFacode().subscribe(
       (data : any) => {
          console.log("data =",data);
+         location.reload();
         //this.ob = data;
       },
       //error => this.router.navigate([''])
@@ -131,7 +132,5 @@ export class ModifyMyProfileComponent implements OnInit {
   }
   
 
-  ChangeAvatar_url(): void{
 
-  }
 }
