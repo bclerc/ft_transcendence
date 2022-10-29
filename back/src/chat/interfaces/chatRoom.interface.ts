@@ -11,6 +11,7 @@ export interface ChatRoom {
   updatedAt?: Date;
 }
 
+
 export interface newChatRoomI {
   id?: number;
   name?: string;
@@ -31,11 +32,12 @@ export interface ChatRoomI {
   messages?: Message[];
 }
 
-export interface ChatRoomUserI {
-  UserI: User;
-  room: ChatRoom;
-  isAdmin: boolean;
-  isMuted: boolean;
+export interface DmChatRoomI {
+  id: number;
+  name: string;
+  ownerId: number;
+  users: BasicUserI[];
+  messages?: Message[];
 }
 
 export interface MessageI {

@@ -30,7 +30,7 @@ model User {
   Message                       Message[]
   games                         Game[]          @relation("gameUserRelation")
   games_win                     Game[]          @relation("gameWinnerRelation")
-  games_lose                     Game[]         @relation("gameLoserRelation")          
+  games_lose                    Game[]          @relation("gameLoserRelation")          
 
   penalities                    ChatPenalty[]
   twoFactorEnabled              Boolean         @default(false)
@@ -67,7 +67,7 @@ model ChatRoom {
   id          Int           @id @default(autoincrement())
   name        String
   description String?
-  type        ChatRoomType  @default(DM)
+  type        ChatRoomType  @default(GROUP)
   users       User[]
   admins      User[]        @relation("chatRoomAdminRelation")
   ownerId     Int

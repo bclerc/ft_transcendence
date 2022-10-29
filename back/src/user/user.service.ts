@@ -1,13 +1,8 @@
-import { Catch, forwardRef, HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { FriendRequest, FriendStatus, Prisma, User, UserState } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { AuthController } from 'src/auth/auth.controller';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {  Prisma, User, UserState } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { runInThisContext } from 'vm';
-import { string } from 'yargs';
 import { newIntraUserDto } from './dto/newIntraUser.dto';
 import { updateUserDto } from './dto/updateUser.dto';
 import { BasicUserI } from './interface/basicUser.interface';

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { targetModulesByContainer } from '@nestjs/core/router/router-module';
-import { ChatRoom, Message, PenaltyTimeType, PenaltyType, prisma, User } from '@prisma/client';
+import { ChatRoom, ChatRoomType, Message, PenaltyTimeType, PenaltyType, prisma, User } from '@prisma/client';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserInfoI } from 'src/user/interface/userInfo.interface';
 import { RoomPunishException } from './chat.exception';
-import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
+import { ChatRoomI, DmChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 import { PenaltiesService } from './services/penalties/penalties.service';
 import { PasswordUtils } from './utils/chat-utils';
 
@@ -56,6 +56,7 @@ export class ChatService {
             id: userId,
           },
         },
+        type: ChatRoomType.GROUP,
       },
       select: {
         id: true,
@@ -83,6 +84,37 @@ export class ChatService {
         ownerId: true,
         public: true,
         description: true,
+      },
+    });
+
+    return rooms;
+  }
+
+  async getDmGroupForUser(userId: number): Promise<DmChatRoomI[]> {
+    const rooms = await this.prisma.chatRoom.findMany({
+      where: {
+        users: {
+          some: {
+            id: userId,
+          },
+        },
+        type: ChatRoomType.DM,
+      },
+      select: {
+        id: true,
+        name: true,
+        description: false,
+        users: {
+          select: {
+            id: true,
+            state: true,
+            intra_name: true,
+            displayname: true,
+            email: true,
+            avatar_url: true,
+          },
+        },
+        ownerId: true,
       },
     });
 
@@ -149,7 +181,7 @@ export class ChatService {
     return messages;
   }
 
-  async createRoom(owner: BasicUserI, newRoom: newChatRoomI ): Promise<ChatRoom>
+  async createRoom(owner: BasicUserI, newRoom: newChatRoomI): Promise<ChatRoom>
   {
     let hashedPassword = null;
 
@@ -161,6 +193,7 @@ export class ChatService {
         name: newRoom.name || owner.intra_name + '\'s room',
         description: newRoom.description || 'Another room created by ' + owner.intra_name,
         ownerId: owner.id,
+        type: ChatRoomType.GROUP,
         public: newRoom.public,
         password: hashedPassword,
         admins: {
@@ -181,6 +214,55 @@ export class ChatService {
       }
     });
     return ret;
+  }
+
+
+  async creatDm(friendId1: number, friendId2: number): Promise<void>
+  {
+     await this.prisma.chatRoom.create({
+      data: {
+        name: 'Message privé with ' + friendId1 + ' ' + friendId2,
+        ownerId: friendId1,
+        type: ChatRoomType.DM,
+        public: false,
+        users: {
+          connect: [
+            {
+              id: friendId1,
+            },
+            {
+              id: friendId2,
+            }
+          ],
+        },
+      }
+    });
+  }
+
+  async deleteDm(user1Id: number, user2Id: number)
+  {
+    await this.prisma.chatRoom.deleteMany({
+      where: {
+        type: ChatRoomType.DM,
+        AND: [
+          {
+            users: {
+              some: {
+                id: user1Id,
+              }
+            }
+          },
+          {
+            users: {
+              some: {
+                id: Number(user2Id),
+              }
+            }
+          }
+        ]
+      },
+    });
+
   }
 
   async getRoomById(roomId: number): Promise<ChatRoomI> {

@@ -123,11 +123,6 @@ export class UserController {
     return await this.userService.findByName(name);
   }
 
-  @Post()
-  async newUser(@Body() data: newUserDto): Promise<User> {
-    return await this.userService.newUser(data);
-  }
-
   /**
    * @api {put} /user/ Modifier un utilisateur
    * @apiName PutUser

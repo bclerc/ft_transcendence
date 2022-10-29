@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { FortyTwoGuard } from './guards/FortyTwo.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserService } from '../user/user.service';
+import { twoAuthLoginDto } from './dto/twoAuthLogin.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -122,7 +123,7 @@ export class AuthController {
 
   @Post('2fa')
   @UseGuards(JwtAuthGuard)
-  async authenticate(@Request() request, @Body() body: any) {
+  async authenticate(@Request() request, @Body() body: twoAuthLoginDto) {
     const isCodeValid = await this.authService.verify2FACode(request.user.id, body.twoFactorAuthenticationCode);
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
@@ -237,8 +238,7 @@ export class AuthController {
   
   @Post('2fa/enable')
   @UseGuards(JwtAuthGuard)
-  async enable2FA(@Request() req: any, @Body() data: any) {
-
+  async enable2FA(@Request() req: any, @Body() data: twoAuthLoginDto) {
     const isCodeValid = await this.authService.verify2FACode(req.user.id, data.twoFactorAuthenticationCode);
     if (isCodeValid) {
       return await this.userService.set2FAEnable(req.user.id, true);

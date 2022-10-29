@@ -24,10 +24,11 @@ import { OnlineUserService } from './onlineusers/onlineuser.service';
 import { OnlineuserModule } from './onlineusers/onlineuser.module';
 import { FriendsService } from './friends/friends.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { GameModule } from './game/game.module';
 
 
 @Module({
-  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), HttpModule, PongModule, ChatModule, JwtModule, OnlineuserModule, CloudinaryModule],
+  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), HttpModule, PongModule, ChatModule, JwtModule, OnlineuserModule, CloudinaryModule, GameModule],
   controllers: [AuthController, UserController],
   providers: [AppService, UserService, PrismaService, {
       provide: APP_FILTER,
