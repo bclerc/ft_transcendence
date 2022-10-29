@@ -58,7 +58,9 @@ export class OnlineUserService {
 
   deleteUser(socketId: string) {
     let user = this.onlineUsers.get(socketId);
-    this.userService.setState(user.id, UserState.OFFLINE);
+    if (user) {
+      this.userService.setState(user.id, UserState.OFFLINE);
+    }
     this.onlineUsers.delete(socketId);
   }
 }

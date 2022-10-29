@@ -110,6 +110,7 @@ export class UserService {
       select: {
         id: true,
         state: true,
+        displayname: true,
         intra_name: true,
         email: true,
         avatar_url: true,
@@ -161,6 +162,7 @@ export class UserService {
         id: true,
         state: true,
         intra_name: true,
+        displayname: true,
         email: true,
         avatar_url: true,
       },
@@ -238,7 +240,22 @@ export class UserService {
    * Blocked user
    */
 
-  async blockUser(userId: number, blockedId) {
+  async isBlocked(userId: number, targetId: number): Promise<boolean>
+  {
+    let blocked = await this.prisma.user.findFirst({
+      where: {
+        id: targetId,
+        blockedBy: {
+          some: {
+            id: userId,
+          }
+        }
+      }
+    })
+    return (blocked != null)
+  }
+
+  async blockUser(userId: number, blockedId: number) {
     await this.prisma.user.update({
       where: {
         id: Number(userId),
@@ -251,7 +268,7 @@ export class UserService {
         },
       },
     });
-  
+    return {message: 'User blocked', state: 'success'};
   }
 
   async unblockUser(userId: number, blockedId) {
@@ -267,6 +284,20 @@ export class UserService {
         },
       },
     });
+    return {message: 'User unblocked', state: 'success'};
+  }
+
+  async getBlocked (userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number(userId),
+      },
+      select: {
+        blockedUsers: true,
+        
+      },
+    });
+    return user.blockedUsers;
   }
 
 

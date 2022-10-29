@@ -49,7 +49,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       socket.data.user = user;
     } catch (error) {
       socket.disconnect(true);
-
     }
   }
 
@@ -106,5 +105,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @SubscribeMessage('editRoom')
   async onEditRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: newChatRoomI) {
     this.wschatService.editRoom(client.id, room);
+  }
+
+  @SubscribeMessage('logout')
+  async onLogout(@ConnectedSocket() client: Socket, payload: any) {
+    this.onlineUserService.deleteUser(client.id);
+    client.disconnect();
   }
 }

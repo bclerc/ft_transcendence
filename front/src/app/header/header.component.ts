@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
+import { Socket } from 'ngx-socket-io';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { environment } from 'src/environments/environment';
 import { HeaderService } from '../services/user/header.service';
@@ -13,7 +14,12 @@ import { HeaderService } from '../services/user/header.service';
 export class HeaderComponent implements OnInit {
 
 
-  constructor(private token : TokenStorageService, private router : Router,  public navbar: HeaderService) { }
+  constructor(private token : TokenStorageService,
+              private router : Router,
+              public navbar: HeaderService,
+              public socket: Socket)
+              
+              { }
 
 
   ngOnInit(): void {
@@ -24,6 +30,7 @@ export class HeaderComponent implements OnInit {
     this.token.removeToken();
     this.navbar.hide();
     this.router.navigate(['']);
+    this.socket.emit('logout');
   }
 
 

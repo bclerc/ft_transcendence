@@ -6,12 +6,15 @@ import { SubscribeRoomDto } from 'src/chat/dto/subscribe-room.dto';
 import { ChatRoomI, MessageI, newChatRoomI } from 'src/chat/interfaces/chatRoom.interface';
 import { EjectRoomI } from 'src/chat/interfaces/eject-room-i.interface';
 import { DemoteUserI, PromoteUserI } from 'src/chat/interfaces/promote-user-i.interface';
+import { PasswordUtils } from 'src/chat/utils/chat-utils';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class WschatService {
+
+  passUtils: PasswordUtils = new PasswordUtils();
 
   @WebSocketServer() server;
 

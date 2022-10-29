@@ -189,8 +189,8 @@ export class FriendsService {
   }
 
 
-  async haveFriendRequest(userId: number, friendId: number): Promise<boolean> {
-    const user = await this.prisma.friendRequest.findMany({
+  async haveFriendRequest(userId: number, friendId: number, decline?: boolean): Promise<boolean> {
+    const requests = await this.prisma.friendRequest.findMany({
       where: {
         status: FriendStatus.PENDING,
         OR: [
@@ -205,6 +205,8 @@ export class FriendsService {
         ],
       },
     });
-    return user.length > 0;
+    if (requests.length > 0 && decline)
+      this.declineFriend(requests[0].id);
+    return requests.length > 0;
   }
 }

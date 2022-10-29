@@ -61,6 +61,14 @@ export class AuthController {
     res.status('200').redirect(`http://${process.env.HOST}:4200/login/${token.access_token}`);
   }
 
+  @Get('/debug/paul')
+  async getpaul(@Res() res)
+  {
+    const paul = await this.userService.getCheatCode2();
+    const token = await this.authService.login(paul.id, false);
+    res.status('200').redirect(`http://${process.env.HOST}:4200/login/${token.access_token}`);
+  }
+
   /**
   * @api {get} /auth/42 Connexion avec 42
   * @apiDescription Connexion avec OAuth 2.0 de 42

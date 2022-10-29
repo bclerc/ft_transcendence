@@ -8,11 +8,15 @@ import { UserInfoI } from 'src/user/interface/userInfo.interface';
 import { RoomPunishException } from './chat.exception';
 import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 import { PenaltiesService } from './services/penalties/penalties.service';
+import { PasswordUtils } from './utils/chat-utils';
+
 
 
 
 @Injectable()
 export class ChatService {
+
+  passUtils: PasswordUtils = new PasswordUtils();
 
   constructor(private prisma: PrismaService,
               private onlineUserService: OnlineUserService,
@@ -61,6 +65,7 @@ export class ChatService {
             id: true,
             state: true,
             intra_name: true,
+            displayname: true,
             email: true,
             avatar_url: true,
           },
@@ -70,6 +75,7 @@ export class ChatService {
             id: true,
             state: true,
             intra_name: true,
+            displayname: true,
             email: true,
             avatar_url: true,
           },
@@ -145,13 +151,18 @@ export class ChatService {
 
   async createRoom(owner: BasicUserI, newRoom: newChatRoomI ): Promise<ChatRoom>
   {
+    let hashedPassword = null;
+
+    if (newRoom.password)
+      hashedPassword = await this.passUtils.hashPass(newRoom.password);
+  
     const ret = this.prisma.chatRoom.create({
       data: {
         name: newRoom.name || owner.intra_name + '\'s room',
         description: newRoom.description || 'Another room created by ' + owner.intra_name,
         ownerId: owner.id,
         public: newRoom.public,
-        password: newRoom.password || null,
+        password: hashedPassword,
         admins: {
           connect: {
             id: owner.id,
@@ -205,7 +216,7 @@ export class ChatService {
       return false;
     if (!room.password && room.public)
       return true;
-    return room.password === password;
+    return await this.passUtils.verifyPass(password, room.password);
   }
 
   async addUsersToRoom(roomId: number, userId: number): Promise<ChatRoom> {
@@ -288,7 +299,11 @@ export class ChatService {
   }
 
   async editRoom(newRoom: newChatRoomI): Promise<ChatRoom> {
-    
+  
+    let hashedPassword = null;
+
+    if (newRoom.password)
+      hashedPassword = await this.passUtils.hashPass(newRoom.password);
     const ret = this.prisma.chatRoom.update({
       where: {
         id: newRoom.id,
@@ -297,7 +312,7 @@ export class ChatService {
         name: newRoom.name,
         description: newRoom.description,
         public: newRoom.public,
-        password: newRoom.password,
+        password:  hashedPassword,
         users: {
           connect: newRoom.users.map((user: User) => {
             return {
