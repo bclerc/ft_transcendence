@@ -59,7 +59,8 @@ export class AuthController {
   {
     const marcus = await this.userService.getCheatCode();
     const token = await this.authService.login(marcus.id, false);
-    res.status('200').redirect(`http://${process.env.HOST}:4200/login/${token.access_token}`);
+    res.redirect(`${process.env.FRONT_HOST}/login/${token.access_token}`);
+
   }
 
   @Get('/debug/paul')
@@ -67,7 +68,7 @@ export class AuthController {
   {
     const paul = await this.userService.getCheatCode2();
     const token = await this.authService.login(paul.id, false);
-    res.status('200').redirect(`http://${process.env.HOST}:4200/login/${token.access_token}`);
+    res.redirect(`${process.env.FRONT_HOST}/login/${token.access_token}`);
   }
 
   /**
@@ -92,7 +93,7 @@ export class AuthController {
   @UseGuards(FortyTwoGuard)
   async callback(@Req() req: any, @Res() res: any) {
     const token = await this.authService.login(req.user.id, false);
-    res.status('200').redirect(`http://${ process.env.HOST }:4200/login/${token.access_token}`);
+    res.redirect(`${process.env.FRONT_HOST}/login/${token.access_token}`);
     return token;
   }
   

@@ -1,23 +1,9 @@
-FROM node:latest
-
-# install chrome for protractor tests
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-RUN apt-get update && apt-get install -yq google-chrome-stable
-
-# set working directory
+FROM node:latest as node
 WORKDIR /app
-
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-
-# install and cache app dependencies
-COPY package.json /app/package.json
+COPY . .
 RUN npm install
-RUN npm install -g @angular/cli@7.3.9
+RUN npm run build --prod
 
-# add app
-COPY . /app
-
-# start app
-CMD ng serve --host 0.0.0.0
+# stage 2
+FROM nginx:alpine
+COPY --from=node /app/dist/transcendance-v1 /usr/share/nginx/html
