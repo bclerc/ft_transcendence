@@ -31,7 +31,6 @@ model User {
   games                         Game[]          @relation("gameUserRelation")
   games_win                     Game[]          @relation("gameWinnerRelation")
   games_lose                    Game[]          @relation("gameLoserRelation")          
-
   penalities                    ChatPenalty[]
   twoFactorEnabled              Boolean         @default(false)
   twoFactorAuthenticationSecret String?         @unique
@@ -69,8 +68,8 @@ model ChatRoom {
   description String?
   type        ChatRoomType  @default(GROUP)
   users       User[]
-  admins      User[]        @relation("chatRoomAdminRelation")
   ownerId     Int
+  admins      User[]        @relation("chatRoomAdminRelation")
   public      Boolean       @default(false)
   password    String?
   penalities  ChatPenalty[]

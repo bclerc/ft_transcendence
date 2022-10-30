@@ -67,11 +67,13 @@ export class WschatService {
     const roomToPromote = await this.chatService.getRoomById(event.roomId);
 
     if (user) {
-      if (roomToPromote.admins.find(admin => admin.id == user.id)) {
+      if (user.id == roomToPromote.ownerId) {
         this.chatService.addAdminsToRoom(roomToPromote.id, target.id);
         this.updateRoomForUsersInRoom(roomToPromote.id);
         this.sendToUsersInRoom(roomToPromote.id, 'notification', target.intra_name + " a été promu admin du salon " + roomToPromote.name);
         this.sendToUser(target, 'notification', "Vous avez été promu admin du salon " + roomToPromote.name);
+      } else {
+        this.sendToUser(user, 'notification', "Vous ne pouvez pas promouvoir un utilisateur");
       }
     }
   }
@@ -82,11 +84,13 @@ export class WschatService {
     const roomToDemote = await this.chatService.getRoomById(event.roomId);
 
     if (user) {
-      if (roomToDemote.admins.find(admin => admin.id == user.id)) {
+      if (roomToDemote.ownerId == user.id) {
         this.chatService.removeAdminsFromRoom(roomToDemote.id, target.id);
         this.updateRoomForUsersInRoom(roomToDemote.id);
         this.sendToUsersInRoom(roomToDemote.id, 'notification', target.intra_name + " a été dégradé du salon " + roomToDemote.name);
         this.sendToUser(target, 'notification', "Vous avez été dégradé du salon " + roomToDemote.name);
+      } else {
+        this.sendToUser(user, 'notification', "Vous ne pouvez pas dégrader un utilisateur");
       }
     }
   }
@@ -127,14 +131,18 @@ export class WschatService {
       this.sendToUser(user, 'notification', "Une erreur s'est produite");
     }
   }
+
+
   async editRoom(socketId: string, newRoom: newChatRoomI){
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(newRoom.id);
     if (user) {
-      if (room.admins.find(admin => admin.id == user.id)) {
+      if (room.ownerId == user.id) {
         await this.chatService.editRoom(newRoom);
         this.updateRoomForUsersInRoom(room.id);
         this.sendToUsersInRoom(room.id, 'notification', "Le salon " + room.name + " a été modifié");
+      } else {
+        this.sendToUser(user, 'notification', "Vous n'avez pas les droits pour modifier ce salon");
       }
     }
   }
