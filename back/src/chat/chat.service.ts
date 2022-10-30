@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { targetModulesByContainer } from '@nestjs/core/router/router-module';
 import { ChatRoom, ChatRoomType, Message, PenaltyTimeType, PenaltyType, prisma, User } from '@prisma/client';
+import EventEmitter from 'events';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
@@ -9,6 +10,7 @@ import { RoomPunishException } from './chat.exception';
 import { ChatRoomI, DmChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 import { PenaltiesService } from './services/penalties/penalties.service';
 import { PasswordUtils } from './utils/chat-utils';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 
 
@@ -20,7 +22,9 @@ export class ChatService {
 
   constructor(private prisma: PrismaService,
               private onlineUserService: OnlineUserService,
-              private penaltiesService: PenaltiesService) {}
+              private penaltiesService: PenaltiesService,
+              private eventEmitter: EventEmitter2
+              ) {}
 
   async newMessage(message: MessageI) { 
     let penalty = await this.penaltiesService.getRoomPenaltiesForUser(message.user.id, message.room.id);
@@ -302,14 +306,6 @@ export class ChatService {
   }
 
   async addUsersToRoom(roomId: number, userId: number): Promise<ChatRoom> {
-   const penalty = await this.penaltiesService.getRoomPenaltiesForUser(userId, roomId);
-  
-    if (penalty && penalty.type === PenaltyType.BAN) {
-      this.onlineUserService.sendToUser(userId, 'notification', 
-      'Vous avez été banni de ce salon' + (penalty.timetype === PenaltyTimeType.TEMP ? ' jusqu\'au ' + penalty.endTime : ' définitivement'));
-      return null;
-    }
-
    const newRoom = this.prisma.chatRoom.update({
       where: {
         id: Number(roomId)

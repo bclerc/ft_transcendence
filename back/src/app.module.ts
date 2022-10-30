@@ -16,7 +16,7 @@ import { ChatModule } from './chat/chat.module';
 import { ChatService } from './chat/chat.service';
 import { MessageService } from './message/message.service';
 import { WschatService } from './wschat/wschat.service';
-
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { HttpModule } from '@nestjs/axios';
 import { PongModule } from './pong/pong.module';
@@ -28,11 +28,37 @@ import { GameModule } from './game/game.module';
 
 
 @Module({
-  imports: [AuthModule, UserModule, PrismaModule, ConfigModule.forRoot(), HttpModule, PongModule, ChatModule, JwtModule, OnlineuserModule, CloudinaryModule, GameModule],
-  controllers: [AuthController, UserController],
-  providers: [AppService, UserService, PrismaService, {
+  imports: [
+    AuthModule,
+     UserModule,
+     PrismaModule,
+     ConfigModule.forRoot(),
+     EventEmitterModule.forRoot(),
+     HttpModule,
+     PongModule,
+     ChatModule,
+     JwtModule,
+     OnlineuserModule,
+     CloudinaryModule,
+     GameModule
+    ],
+  controllers: [
+    AuthController,
+    UserController
+  ],
+  providers: [
+    AppService,
+    UserService,
+    PrismaService, 
+    {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
-  }, ChatGateway, ChatService, MessageService, WschatService, FriendsService],
+    },
+     ChatGateway,
+     ChatService,
+     MessageService,
+     WschatService,
+     FriendsService
+    ],
 })
-export class AppModule {}
+export class AppModule { }

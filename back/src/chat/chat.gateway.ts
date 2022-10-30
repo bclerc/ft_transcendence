@@ -13,8 +13,10 @@ import { ChatService } from './chat.service';
 import { SubscribeRoomDto } from './dto/subscribe-room.dto';
 import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 import { DemoteUserI, PromoteUserI } from './interfaces/promote-user-i.interface';
-
-
+import { OnEvent } from '@nestjs/event-emitter';
+import { AdminUpdateEvent, MessageUpdateEvent, NewRoomEvent, RoomUpdateEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent } from './interfaces/chatEvent.interface';
+import { BasicUserI } from 'src/user/interface/basicUser.interface';
+import { eventNames } from 'process';
 
 @WebSocketGateway(81, { cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
@@ -57,11 +59,83 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     socket.disconnect();
   }
 
+  /** 
+   *  Emitters
+   */
+
+  @OnEvent('room.new')
+  handleNewRoomEvent(event: NewRoomEvent)
+  {
+    this.updateRoomForUsersInRoom(event.room.id);
+    this.sendToUsersInRoom(event.room.id, 'notification', "Une nouvelle room a été créée : " + event.room.name);
+  }
+
+  @OnEvent('room.update')
+  handleRoomUpdateEvent(event: RoomUpdateEvent)
+  {
+    this.updateRoomForUsersInRoom(event.room.id);
+    this.sendToUsersInRoom(event.room.id, 'notification', "La room " + event.room.name + " a été mise à jour");
+  }
+
+  @OnEvent('room.admin.update')
+  handleAdminsChangeEvent(event: AdminUpdateEvent)
+  {
+    if (event.isPromote)
+    {
+      this.sendToUser(event.user, 'notification', "Vous avez été promu admin de la room " + event.room.name);
+      this.sendToUser(event.promoter, 'notification', "Vous avez promu " + event.user.intra_name + " admin de la room " + event.room.name);
+    } else {
+      this.sendToUser(event.user, 'notification', "Vous avez été dégradé de la room " + event.room.name);
+      this.sendToUser(event.promoter, 'notification', "Vous avez dégradé " + event.user.intra_name + " de la room " + event.room.name);
+    }
+    this.updateRoomForUsersInRoom(event.room.id);
+  }
+
+  @OnEvent('room.message.new')
+  handleNewMessageEvent(event: MessageUpdateEvent)
+  {
+    this.updateUsersMessagesInRoom(event.room);
+  }
+
+  @OnEvent('room.user.join')
+  handleUserJoinEvent(event: UserJoinEvent)
+  {
+    if (event.success) {
+      this.sendToUser(event.user, 'notification', "Vous avez rejoint la room " + event.room.name);
+      this.sendToUsersInRoom(event.room.id, 'notification', event.user.intra_name + " a rejoint la room");
+      this.updateRoomForUsersInRoom(event.room.id);
+    } else {
+      this.sendToUser(event.user, 'notification', "Vous n'avez pas pu rejoindre la room " + event.room.name + ". Raison : " + event.message);
+    }
+  }
+
+  @OnEvent('room.user.leave')
+  handleUserLeaveEvent(event: UserLeaveEvent)
+  {
+    this.updateRoomForUsersInRoom(event.room.id);
+    this.updateUserRooms(event.user);
+    this.sendToUser(event.user, 'notification', "Vous avez quitté la room " + event.room.name);
+  }
+
+  @OnEvent('room.user.kicked')
+  handleUserKickedEvent(event: UserKickEvent)
+  {
+    this.updateRoomForUsersInRoom(event.room.id);
+    this.updateUserRooms(event.user);
+    this.sendToUser(event.user, 'notification', "Vous avez été kické de la room " + event.room.name + " par " + event.kicker.intra_name);
+    this.sendToUser(event.kicker, 'notification', "Vous avez kické " + event.user.intra_name + " de la room " + event.room.name);
+  }
+
+  /**
+   *  Listeners
+   */
+
   @SubscribeMessage('message')
   async handleMessage(@ConnectedSocket() client: Socket, payload: any, @MessageBody() message: MessageI) {
     try {
       this.wschatService.newMessage(client.id, message);
     } catch (error) {
+      console.log(error);
     }
   }
 
@@ -111,5 +185,45 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async onLogout(@ConnectedSocket() client: Socket, payload: any) {
     this.onlineUserService.deleteUser(client.id);
     client.disconnect();
+  }
+
+
+  /** 
+   * Emitters utils
+   */
+
+
+   async updateUserRooms(user: BasicUserI) {
+
+    const rooms = await this.chatService.getRoomsFromUser(user.id);
+    this.sendToUser(user, 'rooms', rooms);
+  }
+
+  async updateUsersMessagesInRoom (room: ChatRoomI) {
+      for (let user of room.users) {
+        const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
+        this.sendToUser(user, 'messages', messages);
+      }
+  }
+
+  async updateRoomForUsersInRoom(roomId: number) {
+    let room = await this.chatService.getRoomById(roomId);
+
+    for (let user of room.users) {
+      let rooms = await this.chatService.getRoomsFromUser(user.id);
+      this.sendToUser(user, 'rooms', rooms);
+    }
+  }
+
+  sendToUser(user: BasicUserI, prefix: string, data: any) {
+    this.onlineUserService.sendToUser(user, prefix, data);
+  }
+
+  async sendToUsersInRoom(roomId: number, prefix: string, data: any) {
+    let room = await this.chatService.getRoomById(roomId);
+
+    room.users.forEach(user => {
+      this.sendToUser(user, prefix, data);
+    });
   }
 }
