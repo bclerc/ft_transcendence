@@ -314,6 +314,9 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			game.player2.socket.emit('drawText', "Start !");
       console.log("User " + game.player1.user.intra_name + " and " + game.player2.user.intra_name + " are playing");
 			await this.delay(200);
+      this.server.emit('user1', game.player1.user);
+      this.server.emit('user2', game.player2.user);
+
 			this.startGame(game, NORMALGAME);
 			// console.log(game);
 		}

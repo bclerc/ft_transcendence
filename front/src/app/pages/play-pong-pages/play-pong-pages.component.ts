@@ -1,7 +1,9 @@
+import { S } from '@angular/cdk/keycodes';
 import { Component, HostListener } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
+import { Observable } from 'rxjs';
 // import { Subscription } from 'rxjs';
 import { GameI } from '../../models/PongInterfaces/pong.interface';
 import { ScoreI } from '../../models/PongInterfaces/score.interface';
@@ -53,6 +55,21 @@ const MAP1_OBSTACLE2_RADIUS = 2;
 export class PlayPongPagesComponent {
   title = 'Best Pong Ever'; //titre page
   user: UserI = {};
+
+  player1: any = this.socket.fromEvent("user1").subscribe((data: any) => {
+    let l = document.getElementById("rightName");
+    if (l != null) {
+      l.innerHTML = data.intra_name + "<br />" + "<img src=" + data.avatar_url + " alt='profile picture' width='50' height='50'>";
+    }
+  });
+  player2: any = this.socket.fromEvent("user2").subscribe((data: any) => {
+    let l = document.getElementById("leftName");
+      if (l != null) {
+        l.innerHTML = data.intra_name + "<br />" + "<img src=" + data.avatar_url + " alt='profile picture' width='50' height='50'>";
+      }
+
+
+  });
   state: GameI = {};
 
   private var_interval: number;
@@ -65,7 +82,6 @@ export class PlayPongPagesComponent {
 
   
   constructor(private router: Router, private socket: Socket) {
-    // console.log("constructor");
     // socket.on('score', this.updateScore);
     // socket.on('draw', this.drawMessage);
     // socket.on('id', this.idMessage);
@@ -80,7 +96,6 @@ export class PlayPongPagesComponent {
     this.var_interval = 0;
     this.map_mode = -1;
     this.game_id = -1;
-    // console.log("constructor end");
 
     // this.audio1 = new Audio();
     // this.audio2 = new Audio();
@@ -95,13 +110,9 @@ export class PlayPongPagesComponent {
   }
 
   ngOnInit(): void {
-    // console.log("ngoninit");
     this.socket.on('score', this.updateScore);
+
     this.socket.on('drawNormalMap', this.drawNormalMap);
-
-    this.socket.on('drawTestMap', this.drawTestMap);
-    this.socket.on('getState', this.getState);
-
     this.socket.on('drawMap1', this.drawMap1);
     this.socket.on('id', this.idMessage);
     this.socket.on('enableButtonS', this.enableButtonS);
@@ -114,25 +125,20 @@ export class PlayPongPagesComponent {
     // this.socket.on('play', this.playAudio);
     this.socket.emit('init');
 
-    // console.log("ngoninit end");
   }
   
   ngOnDestroy(): void {
-    // console.log("ngondestroy");
     this.stopSearchLoop(this.var_interval);
     this.socket.emit('stopGame', {});
-    // console.log("ngondestroy end");
   }
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
   //   if (event.key === 'z') {
   //     // event.
   //     this.sock.emit('keypress', { key: event.key });
-  //     console.log(event.key);
   //   }
   //   else if (event.key === 's') {
   //     this.sock.emit('keypress', { key: event.key });
-  //     console.log(event.key);
   //   }
   //   //send keypress to server
 
@@ -143,42 +149,35 @@ export class PlayPongPagesComponent {
 
   @HostListener('document:keydown.z', ['$event'])  //$event is the event object
   handleKeyboardDownZ(event: KeyboardEvent) {
-      // console.log("key down", event.key);
       this.socket.emit('keydownZ');
   }
   
   @HostListener('document:keydown.w', ['$event'])  //$event is the event object
   handleKeyboardDownW(event: KeyboardEvent) {
-      // console.log("key down www", event.key);
       this.socket.emit('keydownW');
   }
 
   @HostListener('document:keydown.s', ['$event'])  //$event is the event object
   handleKeyboardDownS(event: KeyboardEvent) {
-      // console.log("key down", event.key);
       this.socket.emit('keydownS');
     }
 
   @HostListener('document:keyup.z', ['$event'])  //$event is the event object
   handleKeyboardUpZ() {
-    // console.log("key up", event.key);
     this.socket.emit('keyupZ');
   }
 
   @HostListener('document:keyup.w', ['$event'])  //$event is the event object
   handleKeyboardUpW() {
-    // console.log("key up", event.key);
     this.socket.emit('keyupW');
   }
 
   @HostListener('document:keyup.s', ['$event'])  //$event is the event object
   handleKeyboardUpS() {
-    // console.log("key up", event.key);
     this.socket.emit('keyupS');
   }
 
   updateScore(score: ScoreI){
-    // console.log(score);
     var htmlScore = document.getElementById('score');
     if (htmlScore)
     {
@@ -197,7 +196,6 @@ export class PlayPongPagesComponent {
 //     this.socket.emit('stopGame', {});
 //     // this.enableElement("buttonDemo");
 //     this.enableElement("buttonNewGame");
-//     // console.log(this.var_interval);
 //     if (this.var_interval != 0)
 //     {
 //       window.clearInterval(this.var_interval);
@@ -363,7 +361,6 @@ export class PlayPongPagesComponent {
     id: string
   })
   {
-    // console.log("idmessage:" + id);
     if (id)
       this.user.id = id.id;
   }
@@ -411,7 +408,6 @@ export class PlayPongPagesComponent {
         context.fillStyle = 'white';
         context.font = FONT + 'px streetartfont';
         context.fillText("YOU WIN", WIDTHCANVAS / 2 - FONT * 2, HEIGHTCANVAS / 2 - 10);
-        // console.log("win");
       }
     }
   }
@@ -428,7 +424,6 @@ export class PlayPongPagesComponent {
         context.font = FONT + 'px streetartfont';
         context.fillText("YOU LOSE", WIDTHCANVAS / 2 - FONT * 2, HEIGHTCANVAS / 2 - 10);
         // context.fillText("YOU LOSE", 300, 300, 500);
-        // console.log("LOSE");
       }
     }
   }
@@ -473,20 +468,7 @@ export class PlayPongPagesComponent {
   {
     const left = document.getElementById('leftName');
     const right = document.getElementById('rightName');
-    if (left && right)
-    {
-      // console.log("drawName");
-      if (side == 1)
-      {
-        left.innerHTML = "You";
-        right.innerHTML = "Opponent";
-      }
-      else
-      {
-        left.innerHTML = "Opponent";
-        right.innerHTML = "You";
-      }
-    }
+
   }
 
   drawNormalMap(state: GameI){
@@ -567,7 +549,7 @@ export class PlayPongPagesComponent {
         var context = canvas.getContext('2d');
         if (context)
         {
-          //load font car il ne se charge pas des le chargement (??????)
+
           // context.font = FONT + 'px streetartfont';
           // context.fillText('', 0, 0, 0);
 
@@ -802,10 +784,8 @@ export class PlayPongPagesComponent {
       }
 
       const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-      // console.log("canvas?");
       if (canvas)
       {
-          // console.log("canvas exist");
           var context = canvas.getContext('2d');
           if (context)
           {
