@@ -22,6 +22,11 @@
             <span>{{ user.email }} </span>
           </p>
           <p matLine>
+            <span *ngIf="user.id == room.ownerId" style="color: darkred">
+              Propriétaire du groupe
+            </span>
+          </p>
+          <p matLine>
             <span *ngIf="isAdministrator(user)" style="color: darkorange">
               Administrateur du groupe
             </span>

@@ -46,6 +46,7 @@ import { FriendsPageComponent } from './pages/friends-page/friends-page.componen
 import { environment } from 'src/environments/environment';
 import { HeaderService } from './services/user/header.service';
 import { CurrentUserService } from './services/user/current_user.service';
+import { FileUploaderComponent } from './file-uploader/file-uploader.component';
 
 
 
@@ -80,6 +81,7 @@ export function tokenGetter() {
     Activate2FaComponent,
     ChatPageComponent,
     FriendsPageComponent,
+    FileUploaderComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,8 @@
 // import { Logger } from "@nestjs/common";
+import { Inject } from "@nestjs/common";
 import { WebSocketServer, SubscribeMessage, WebSocketGateway, ConnectedSocket, OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
+import { OnlineUserService } from "src/onlineusers/onlineuser.service";
 import { GameI } from "./interfaces/game.interface";
 // import { PlayerI } from "./interfaces/player.interface";
 import { UserI } from "./interfaces/user.interface";
@@ -48,6 +50,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	constructor(
 		private pongService: PongService,
+    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
 	){
 		this.connectedUsers = [];
 		this.state = {};
@@ -71,7 +74,10 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	  
 	handleConnection(client: Socket, ...args: any[]) {
 		// this.init(client); //draw le pong une premiere fois
+
+    this.onlineUserService.newConnect(client);
 		this.addNewUser(client); //ajoute le nouveau socket utilisateur au tableau des utilisateurs
+
 	}
 
 
@@ -306,6 +312,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			game.player2.socket.emit('drawInit');
 			game.player1.socket.emit('drawText', "Start !");
 			game.player2.socket.emit('drawText', "Start !");
+      console.log("User " + game.player1.user.intra_name + " and " + game.player2.user.intra_name + " are playing");
 			await this.delay(200);
 			this.startGame(game, NORMALGAME);
 			// console.log(game);
@@ -361,6 +368,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			game.player2.socket.emit('drawInit');
 			game.player1.socket.emit('drawText', "Start !");
 			game.player2.socket.emit('drawText', "Start !");
+      console.log("User " + game.player1.user.intra_name + " and " + game.player2.user.intra_name + " are playing");
+
 			await this.delay(200);
 			// console.log("x = ", x);
 			this.startGame(game, x);
@@ -485,6 +494,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		game = {
 			id: client.id,
 			player1: {
+        user: this.onlineUserService.getUser(client.id),
 				socket: client,
 				paddle: game.player1.paddle,
 				points: game.player1.points,
@@ -504,6 +514,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		game = {
 			id: client.id,
 			player1: {
+        user: this.onlineUserService.getUser(client.id),
 				socket: client,
 				paddle: game.player1.paddle,
 				points: game.player1.points,
@@ -522,6 +533,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	joinGame(client: Socket, game: GameI){
 		game.player2 = {
+      user: this.onlineUserService.getUser(client.id),
 			socket: client,
 			paddle: {
 				x: WIDTHCANVAS - PLAYER_WIDTH,

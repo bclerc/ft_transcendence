@@ -17,8 +17,9 @@ import { TokenStorageService } from '../auth/token.storage';
 }*/)
 export class UserService {
   userList!: UserI[];
-  private backUrl = 'http://localhost:3000/api/v1/';
-      
+
+  private backUrl = 'http://'+ environment.host +':3000/api/v1/';
+
   constructor(private route: ActivatedRoute ,private http : HttpClient, private token : TokenStorageService, private jwtService : JwtHelperService, private router : Router)
   {}
 
@@ -75,17 +76,17 @@ export class UserService {
     return this.http.get<User[]>("http://"+ environment.host +":3000/api/v1/user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
-  ChangeDbInformation(id: number, user : UserI): Observable<any>
+  ChangeDbInformation(user : UserI): Observable<any>
   {
-    return this.http.put<Observable<any>>("http://"+ environment.host +":3000/api/v1/user/" + id, user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.put<Observable<any>>("http://"+ environment.host +":3000/api/v1/user/", user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ActivateFacode(code : string) : Observable<any>
   {
-    return this.http.post<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa/enable3",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.post<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa/enable",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
-  DesactivateFacode(code : string) : Observable<any>
+  DesactivateFacode() : Observable<any>
   {
     return this.http.get<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa/disable", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
@@ -144,6 +145,11 @@ export class UserService {
   sendRequest(userId: number)
   {
     return this.http.post("http://"+ environment.host +":3000/api/v1/user/friends/request", {toId: userId}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+  uploadAvatar(avatar : any)
+  {
+    return this.http.post("http://"+ environment.host +":3000/api/v1/user/avatar",avatar ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   

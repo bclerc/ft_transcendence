@@ -4,23 +4,13 @@
     <button [disabled]="!ChangeDisplaynameForm.valid" type="submit" id="change-button">Change Display Name</button>
   </form>
   <p></p>
-  <form class="form" [formGroup]="ChangeAvatar_UrlForm" (ngSubmit)="ChangeAvatar_url()">
-    <input matInput placeholder="Avatar_Url" formControlName="avatar_url">
-    <p></p>
-    <button [disabled]="!ChangeAvatar_UrlForm.valid" type="submit" id="change-button">Change Avatar</button>
-  </form>
-  <p></p>
-  <!-- A Mettre dans un if 2fa activated !-->
-
+<app-file-uploader></app-file-uploader>
   <div *ngIf="user?.twoFactorEnabled; then thenBlock else elseBlock"></div>
   <ng-template #thenBlock>
-    <form class="form" [formGroup]="FaForm" (ngSubmit)="DesactivateFa()">
-      <input matInput placeholder="Code2Fa" formControlName="codeFa">
       <p></p>
-      <button [disabled]="!FaForm.valid" type="submit" id="change-button">Desactivate 2 Fa</button>
-    </form>
+    <a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
     </ng-template>
   <ng-template #elseBlock>
   <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a>
  </ng-template>
-
+ <p></p>

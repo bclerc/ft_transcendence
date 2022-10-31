@@ -1,20 +1,22 @@
-import { Body, Controller, Request, Get, Param, Post, ForbiddenException, Put, Patch } from '@nestjs/common';
+import { Body, Controller, Request, Get, Param, Post, Put, Patch, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { newUserDto } from './dto/newUser.dto';
-import { FriendRequest, User } from '@prisma/client';
+import { FriendRequest, User, UserState } from '@prisma/client';
 import { Jwt2faAuthGuard } from 'src/auth/guards/jwt2fa.guard';
 import { updateUserDto } from './dto/updateUser.dto';
-import { StaffGuard } from 'src/auth/guards/staff.guard';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { get, request } from 'http';
 import { FriendRequestAction, FriendRequestDto, newFriendRequestDto } from './dto/friendRequest.dto';
 import { BasicUserI } from './interface/basicUser.interface';
+import { FriendsService } from 'src/friends/friends.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService,
+    private readonly friendsService: FriendsService,
+    private readonly CloudinaryService: CloudinaryService) { }
 
   /**
   * @api {get} /user/ Récupérer la liste des utilisateurs
@@ -29,7 +31,7 @@ export class UserController {
   *  "id": 1,
   *  "email": "norminet@student.42.fr",
   *  "intra_name": "Norminet",
-  *  "avatar_url": "https://cdn.intra.42.fr/users/norminet.jpg",
+  *  "avatar_url": "https://cdn.intra.42.fr/users/ http://localhost:3000/api/v1/user/avataranorminet.jpg",
   *  "intra_id": 1,
   *  "displayname": "Norminet",
   *  "description": null,
@@ -121,13 +123,8 @@ export class UserController {
     return await this.userService.findByName(name);
   }
 
-  @Post()
-  async newUser(@Body() data: newUserDto): Promise<User> {
-    return await this.userService.newUser(data);
-  }
-
   /**
-   * @api {put} /user/:id Modifier un utilisateur
+   * @api {put} /user/ Modifier un utilisateur
    * @apiName PutUser
    * @apiGroup User
    * @apiHeaderExample {json} Header:
@@ -172,6 +169,34 @@ export class UserController {
     return await this.userService.updateUser(req.user.id, data);
   }
 
+
+  /**
+   * @api {post} /user/avatar Modifier l'avatar
+   * @apiName postUser
+   * @apiGroup User
+   * @apiHeaderExample {json} Header:
+   * {
+   *       "Authorization": "Bearer ACCESS_TOKEN"
+   * }
+   * @apiBody {file} image l'avatar
+   */
+
+  @Post('avatar')
+  @UseInterceptors(FileInterceptor('image'))
+  @UseGuards(Jwt2faAuthGuard)
+  async uploadFile(@Request() req: any, @UploadedFile() file: Express.Multer.File) {
+    try {
+      let apiResponse = await this.CloudinaryService.uploadImage(file);
+      await this.userService.updateUser(req.user.id, { avatar_url: (await apiResponse).secure_url });
+
+      return { message: 'New avatar set', state: 'success' };
+    } catch (error) {
+      console.log(error);
+      return { message: 'Error while uploading image, please verify you image', state: 'error' };
+    }
+  }
+
+
   /**
    * @api {get} /user/friends Récupérer la liste des amis d'un utilisateur
    * @apiName GetFriends
@@ -189,7 +214,7 @@ export class UserController {
   @Get('friends/get')
   @UseGuards(Jwt2faAuthGuard)
   async getFriends(@Request() req: any): Promise<User[]> {
-    return await this.userService.getFriends(req.user.id);
+    return await this.friendsService.getFriends(req.user.id);
   }
 
   /**
@@ -206,11 +231,11 @@ export class UserController {
    */
 
 
+
   @Get('friends/panding')
   @UseGuards(Jwt2faAuthGuard)
   async getFriendsPanding(@Request() req: any): Promise<FriendRequest[]> {
-    // console.log(req.user.id);
-    return await this.userService.getFriendRequests(req.user.id);
+    return await this.friendsService.getFriendRequests(req.user.id);
   }
 
   /**
@@ -228,11 +253,11 @@ export class UserController {
   @Get('friends/accept/:id')
   @UseGuards(Jwt2faAuthGuard)
   async acceptFriend(@Request() req: any, @Param('id') id: any) {
-    const request = await this.userService.getFriendsRequestsById(id);
+    const request = await this.friendsService.getFriendsRequestsById(id);
 
     if (request) {
       if (request.toId == req.user.id) {
-        await this.userService.acceptFriend(id);
+        await this.friendsService.acceptFriend(id);
         return { message: "Friend request accepted", state: 'success' };
       }
       else
@@ -256,11 +281,11 @@ export class UserController {
   @Post('friends/decline/:id')
   @UseGuards(Jwt2faAuthGuard)
   async declineFriend(@Request() req: any, @Param('id') id: number) {
-    this.userService.declineFriend(id);
+    this.friendsService.declineFriend(id);
   }
 
   /**
-   * @api {post} /user/friends/request/:id Demander en amis
+   * @api {post} /user/friends/request/ Demander en amis
    * @apiName RequestFriend
    * @apiGroup Friends
    * 
@@ -268,56 +293,113 @@ export class UserController {
    * {
    *     "Authorization": "Bearer ACCESS_TOKEN"
    * }
-   * @apiParam {Number} id Id de l'utilisateur
+   * @apiParam {Number} toId Id de l'utilisateur
    * 
    */
 
-  @Post('friends/request/:id')
-  @UseGuards(Jwt2faAuthGuard)
-  async requestFriend(@Request() req: any, @Param('id') id: number) {
-    if (req.user.id == id)
-      throw new ForbiddenException();
-    return await this.userService.addFriend(req.user.id, id);
-  }
-
   @Post('friends/request')
   @UseGuards(Jwt2faAuthGuard)
-  async newRequest(@Request() req: any, @Body() data:  newFriendRequestDto) {
-    // console.log(data);
-    
+  async newRequest(@Request() req: any, @Body() data: newFriendRequestDto) {
     if (req.user.id == data.toId)
-      throw new ForbiddenException();
-    if (await this.userService.haveFriend(req.user.id, data.toId))
+      return { message: "You can't add yourself as a friend", state: 'error' };
+    if (await this.friendsService.haveFriend(req.user.id, data.toId))
       return { message: "You are already friends", state: 'error' };
-    // Here is BLOCKED
-    return await this.userService.addFriend(req.user.id, data.toId);
+    if (await this.friendsService.haveFriendRequest(req.user.id, data.toId))
+      return { message: "You already have a friend request", state: 'error' };
+    if (await this.userService.isBlocked(req.user.id, data.toId))
+      return { message: "Request failed", state: 'error'}
+    return await this.friendsService.addFriend(req.user.id, data.toId);
   }
 
   @Get('friends/remove/:id')
   @UseGuards(Jwt2faAuthGuard)
   async removeFriend(@Request() req: any, @Param('id') id: number) {
-    return await this.userService.removeFriend(req.user.id, id);
+    return await this.friendsService.removeFriend(req.user.id, id);
   }
 
   @Post('friends')
   @UseGuards(Jwt2faAuthGuard)
   async getFriendsByIds(@Request() req: any, @Body() data: FriendRequestDto) {
-    const request = await this.userService.getFriendsRequestsById(data.requestId);
+    const request = await this.friendsService.getFriendsRequestsById(data.requestId);
 
     if (request) {
       if (request.toId == req.user.id) {
         if (data.action == FriendRequestAction.ACCEPT) {
-          await this.userService.acceptFriend(request.id);
+          await this.friendsService.acceptFriend(request.id);
           return { message: "Friend request accepted", state: 'success' };
         }
         if (data.action == FriendRequestAction.DECLINE) {
-          this.userService.declineFriend(request.id);
+          await this.friendsService.declineFriend(request.id);
           return { message: "Friend request declined", state: 'success' };
-      }
+        }
       }
       else
         return { message: "You are not the receiver of this friend request" };
     }
   }
+
+
+  /**
+   * @api {post} /user/block/:id Bloquer un utilisateur
+   * @apiName blockuser
+   * @apiGroup Blocker
+   * 
+   * @apiHeaderExample {json} Header:
+   * {
+   *     "Authorization": "Bearer ACCESS_TOKEN"
+   * }
+   * @apiParam {Number} id Id de l'utilisateur à bloquer
+   * 
+   */
+
+
+  @Post('block/:id')
+  @UseGuards(Jwt2faAuthGuard)
+  async block(@Request() req: any, @Param('id') target: number) {
+    if (req.user.id == target)
+      return { message: "You can't block yourself", state: 'error' };
+    if (await this.friendsService.haveFriend(req.user.id, target))
+      this.friendsService.removeFriend(req.user.id, target);
+    await this.friendsService.haveFriendRequest(req.user.id, target, true);
+    return await this.userService.blockUser(req.user.id, target);
+  }
+
+  /**
+   * @api {post} /user/unblock/:id Débloquer un utilisateur
+   * @apiName blockuser
+   * @apiGroup Blocker
+   * 
+   * @apiHeaderExample {json} Header:
+   * {
+   *     "Authorization": "Bearer ACCESS_TOKEN"
+   * }
+   * @apiParam {Number} id Id de l'utilisateur à débloquer
+   */
+
+  @Post('unblock/:id')
+  @UseGuards(Jwt2faAuthGuard)
+  async unblock(@Request() req: any, @Param('id') target: number) {
+    return await this.userService.unblockUser(req.user.id, target);
+  }
+
+  
+  /**
+   * @api {post} /user/blocked Liste des utilisateurs bloqués
+   * @apiName blockuser
+   * @apiGroup Blocker
+   * 
+   * @apiHeaderExample {json} Header:
+   * {
+   *     "Authorization": "Bearer ACCESS_TOKEN"
+   * }
+   */
+
+  @Get('blocked')
+  @UseGuards(Jwt2faAuthGuard)
+  async getBlocked(@Request() req: any) {
+    return await this.userService.getBlocked(req.user.id);
+  }       
+
 }
+  
 

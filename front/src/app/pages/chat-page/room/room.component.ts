@@ -18,8 +18,6 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   @Input() room: ChatRoom = {};
   @Input() user: UserI = {};
 
-
-
   messages$: Observable<Message[]> = this.chatService.getMessages(this.room);
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
   form: FormGroup = new FormGroup({

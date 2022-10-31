@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { ChatRoomI } from "./chat/interfaces/chatRoom.interface";
+import { ChatRoomI } from "./chatRoom.interface";
 
 export interface EjectRoomI {
   roomId: number;

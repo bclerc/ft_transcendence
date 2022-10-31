@@ -110,7 +110,7 @@ export class ModifyMyProfileComponent implements OnInit {
     {
       this.user.displayname = this.ChangeDisplaynameForm.controls['displayname'].getRawValue();
       if (this.id)
-        this.userService.ChangeDbInformation(this.id, this.user).subscribe(
+        this.userService.ChangeDbInformation(this.user).subscribe(
           (data : any) => {
             // console.log("changedb =",data);
             },
@@ -121,7 +121,7 @@ export class ModifyMyProfileComponent implements OnInit {
 
 
   DesactivateFa(): void {
-    this.userService.DesactivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe(
+    this.userService.DesactivateFacode().subscribe(
       (data : any) => {
         //  console.log("data =",data);
         //this.ob = data;
@@ -132,6 +132,5 @@ export class ModifyMyProfileComponent implements OnInit {
   
 
   ChangeAvatar_url(): void{
-
   }
 }

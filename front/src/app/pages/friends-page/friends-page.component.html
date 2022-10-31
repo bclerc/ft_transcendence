@@ -12,6 +12,9 @@
           <p matLine>
             <span>{{ friend.email }} </span>
           </p>
+          <h4 matLine *ngIf="friend.state == 'INGAME'" style="color:rgb(243, 37, 239); font-size: 13px;" >En jeu</h4>
+          <h4 matLine *ngIf="friend.state == 'ONLINE'" style="color:yellowgreen; font-size: 13px;" >En ligne</h4>
+
           <button mat-button matTooltip="Supprimer {{ friend.intra_name }} de la liste d'amis" matTooltipPosition="above" style="color: red" (click)="removeFriend(friend.id)">
             <mat-icon>delete</mat-icon>
           </button>

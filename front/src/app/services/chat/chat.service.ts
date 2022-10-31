@@ -21,11 +21,7 @@ export class ChatService {
     }
 
     getMessages(room: ChatRoom): Observable<Message[]> {  
-      return Observable.create((observer: any) => {
-        this.socket.on('messages', (msgs: Message[]) => {
-            observer.next(msgs);
-        });
-    });
+       return  this.socket.fromEvent<Message[]>('messages');
     }
     
 
@@ -68,5 +64,4 @@ export class ChatService {
     }
 
   }
-
 
