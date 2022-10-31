@@ -35,6 +35,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.onlineUserService.server = server;
   }
 
+
+
   async handleConnection(socket: Socket) {
     try {
       const token = socket.handshake.query['token'] as string;
@@ -44,7 +46,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       });
       const user = await this.userService.findOne(res.sub);
       if (!user)
-        return socket.disconnect();
+      return socket.disconnect();
       this.onlineUserService.initUser(socket.id, user);
       this.wschatService.initUser(user);
       socket.data.user = user;

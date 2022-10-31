@@ -1,24 +1,52 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { WebSocketServer } from '@nestjs/websockets';
 import { UserState } from '@prisma/client';
 import { UserInfo } from 'os';
+import { Socket } from 'socket.io';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+import { jwtConstants } from 'src/auth/constants';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class OnlineUserService {
+  handleConnection(client: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) {
+    throw new Error("Method not implemented.");
+  }
 
   onlineUsers: Map<String, BasicUserI> = new Map<String, BasicUserI>();
 
 
   @WebSocketServer() server;
 
-  constructor (@Inject(forwardRef(() => UserService)) public readonly userService: UserService)
+  constructor 
+  (@Inject(forwardRef(() => UserService)) public readonly userService: UserService, 
+  @Inject(JwtService) private readonly jwtService: JwtService,
+  )
   {}
   
   async initUser(socketId: string, user: BasicUserI) {
     this.onlineUsers.set(socketId, user);
     this.userService.setState(user.id, UserState.ONLINE);
+  }
+
+  async newConnect(socket: Socket)
+  {
+    try {
+      const token = socket.handshake.query['token'] as string;
+      const res = this.jwtService.verify(token, {
+        ignoreExpiration: false,
+        secret: jwtConstants.secret,
+      });
+      const user = await this.userService.findOne(res.sub);
+      if (!user)
+      return socket.disconnect();
+      this.initUser(socket.id, user);
+      socket.data.user = user;
+    } catch (error) {
+      socket.disconnect(true);
+    }
   }
 
   getUser(socketId?: string, userId?: number, basicUser?: BasicUserI): BasicUserI {
