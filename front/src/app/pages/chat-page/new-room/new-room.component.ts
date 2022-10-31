@@ -10,13 +10,12 @@ import { Message } from 'src/app/services/chat/message.interface';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
-  selector: 'app-chat-page',
-  templateUrl: './chat-page.component.html',
-  styleUrls: ['./chat-page.component.css'],
-  encapsulation: ViewEncapsulation.None
+selector: 'app-new-room',
+templateUrl: './new-room.component.html',
+styleUrls: ['./new-room.component.css']
 })
 
-export class ChatPageComponent implements OnInit {
+export class NewRoomComponent implements OnInit {
 
 	selectedRoom: ChatRoom = {};
 	isAdmin: boolean = false;
@@ -39,26 +38,26 @@ export class ChatPageComponent implements OnInit {
 	private userService: UserService) { }
 	
 	async ngOnInit() {
-		this.publicrooms
-		= await this.chatService.getPublicRooms();
-		this.rooms$ = await this.chatService.getRooms();
+		// this.publicrooms
+		// = await this.chatService.getPublicRooms();
+		// this.rooms$ = await this.chatService.getRooms();
 		this.userService.getLoggedUser().subscribe((user: UserI) => {
 			this.actualUser = user;
 		});
 
-		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
-			if (this.selectedRoom.id) {
-				for (const room of rooms) {
-					if (room.id === this.selectedRoom.id) {
-						this.haveSelectedRoom = true;
-						this.selectedRoom = room;
-						return ;
-					}
-				}
-			}
-		this.selectedRoom = {};
-		this.haveSelectedRoom = false;
-		});
+		// await this.rooms$.subscribe((rooms: ChatRoom[]) => {
+		// 	if (this.selectedRoom.id) {
+		// 		for (const room of rooms) {
+		// 			if (room.id === this.selectedRoom.id) {
+		// 				this.haveSelectedRoom = true;
+		// 				this.selectedRoom = room;
+		// 				return ;
+		// 			}
+		// 		}
+		// 	}
+		// this.selectedRoom = {};
+		// this.haveSelectedRoom = false;
+		// });
 	}
 
 	create() {
@@ -81,14 +80,6 @@ export class ChatPageComponent implements OnInit {
 		this.users.push(userFormControl);
 	}
 
-	async leaveRoom(room: ChatRoom)
-	{
-		this.chatService.leaveRoom(room);
-		this.rooms$ = await this.chatService.getRooms();
-		this.haveSelectedRoom = false;
-		this.selectedRoom = {};
-	}
-
 	async joinRoom(room: ChatRoom, pass?: boolean)
 	{
 		let password = null;
@@ -100,6 +91,7 @@ export class ChatPageComponent implements OnInit {
 		this.rooms$ = await this.chatService.getRooms();
 
 	}
+
 
 	removeUser(userId: any) {
 		this.users.removeAt(this.users.value.findIndex((user: UserI) => user.id === userId));
@@ -125,25 +117,6 @@ export class ChatPageComponent implements OnInit {
 		return this.form.get('password') as FormControl;
 	}
 
-	onSelectedRoom(event: MatSelectionListChange) {
-		this.selectedRoom = event.source.selectedOptions.selected[0].value;
-		this.haveSelectedRoom = true;
-		if (this.selectedRoom && this.selectedRoom.admins) {
-			for (const user of this.selectedRoom.admins) {
-				if (user.id === this.actualUser.id) {
-				this.isAdmin = true;
-				return ;
-				}
-			}
-		}
-		this.isAdmin = false;
-	}
+	
 
-	selectRoom(room: ChatRoom) {
-		this.selectedRoom=room;
-		this.newRoom = false;
-	}
-
-	newRoom: boolean = true;
-	async NewRoom() { this.newRoom = this.newRoom ? false :true }
 }

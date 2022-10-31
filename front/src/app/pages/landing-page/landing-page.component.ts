@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { HeaderComponent } from '../../header/header.component';
 
 @Component({
   selector: 'app-landing-page',

@@ -1,19 +1,100 @@
-header {
-    text-align: center;
-    background-color: rgb(201, 204, 201, 0.919);
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 10px solid rgb(201, 204, 201, 0.919);
-    border-radius: 9px;
-  }
-  a {
-    margin: 0 10px;
-    color: rgb(67, 19, 244);
-    text-decoration: none;
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
 
-  }
-  
-  .active {
-    color: rgb(40, 5, 5);
-    text-decoration: underline;
-  }
+body{
+	background-color: #1F1F1F;
+	height: 100%
+}
+a{
+	color: inherit; /*pk ?*/
+}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+.center{
+	margin: auto;
+	max-width: 1290px;
+	/* color: #1F1F1F; */
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+header {
+	background-color: #1F1F1F;
+	padding: 20px;
+}
+#logo{
+	float: left;
+	margin: 20px 0px 0px 0px;
+	/* height: 86px; */
+	width: 196px;
+}
+.right{
+	float: right;
+	text-align: right;
+	padding: 22px 0px 14px 0px;
+}
+#header nav ul li{
+	display: inline-block;
+	font-family: Titan One;
+	font-size: 20px;
+	margin-right: 60px;
+}
+#header nav ul li:last-child{
+	margin-right: 0px;
+}
+#header nav ul li a{
+	color: #feefcf;
+	padding-bottom: 6px;
+	text-decoration: none;
+}
+#header nav ul li a:hover{
+	border-bottom: 7px solid #ee481e;
+	/* text-decoration-line: 30% solid #ee481e; */
+}
+
+.active {
+	border-bottom: 7px solid #ee481e;
+}
+
+
+/* All mobile sizes (devices and browsers) */
+@media only screen and (max-width: 850px) {
+	#header nav ul li{
+		font-size: 16px;
+	}
+	#logo{
+		width: 25%;
+		/* min-width: 130px; */
+	}
+}
+
+/* Moblie Protrait size to Mobile Landscape size (devices and browsers) */
+@media only screen and (max-width: 675px) {
+	#header nav ul li{
+		display: none;
+	}
+	/* #logo{
+		width: 130px;
+		min-width: 130px;
+	} */
+}

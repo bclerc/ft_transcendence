@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ViewEncapsulation, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { FormControl } from '@angular/forms';
 import { ConnectableObservable } from 'rxjs';
@@ -10,7 +10,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 @Component({
   selector: 'app-userselect',
   templateUrl: './userselect.component.html',
-  styleUrls: ['./userselect.component.css']
+  styleUrls: ['./userselect.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class UserselectComponent implements OnInit {

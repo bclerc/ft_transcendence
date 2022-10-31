@@ -1,25 +1,23 @@
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlayPongPagesComponent } from './play-pong-pages.component';
+import { NewRoomComponent } from './new-room.component';
 
-describe('PlayPongPagesComponent', () => {
-  let component: PlayPongPagesComponent;
-  let fixture: ComponentFixture<PlayPongPagesComponent>;
+describe('NewRoomComponent', () => {
+  let component: NewRoomComponent;
+  let fixture: ComponentFixture<NewRoomComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlayPongPagesComponent ]
+      declarations: [ NewRoomComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PlayPongPagesComponent);
+    fixture = TestBed.createComponent(NewRoomComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-
   });
 });
