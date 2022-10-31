@@ -1,25 +1,49 @@
-<mat-form-field>
+<div id="input-box">
+	<p id="input-title">Ajouter des fils de pute</p>
+	<!-- <div id="input-text-n-button"> -->
+		<textarea id="input-text" placeholder="Chercher par un pseudo" [matAutocomplete]="auto" [formControl]="searchUsername"></textarea>
+		<!-- <p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe fdp</p> -->
+		<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setSelectedUser($event.option.value)">
+			<ng-container>
+				<!-- <mat-select> -->
+					<mat-option *ngFor="let user of filteredUsers" [value]="user">
+						<div id="img-n-name">
+							<img src="{{user.avatar_url}}" alt="avatar">
+							<p id="user-name">{{user.intra_name}}</p>
+						</div>
+					</mat-option>
+				<!-- </mat-select> -->
+			</ng-container>
+		</mat-autocomplete>
+		<div class="but">
+			<button mat-button type="button" [disabled]="!selectedUser.intra_name" (click)="addUserToForm()">
+				<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+			</button>
+		</div>
+	 <!-- </div> -->
+</div>
+
+<!-- <mat-form-field>
   <input matInput placeholder="Chercher par un pseudo" [matAutocomplete]="auto" [formControl]="searchUsername">
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
    (optionSelected)="setSelectedUser($event.option.value)">
-    <ng-container>
-      <mat-option *ngFor="let user of filteredUsers" [value]="user">
-        <img src="{{user.avatar_url}}" alt="avatar" width="26" height="26" style="border-radius: 50%; margin-top: 15%; margin-right: 10%;">
-        <span>{{user.intra_name}}</span>
-        <mat-divider></mat-divider>
-      </mat-option>
-    </ng-container>
+	<ng-container>
+	  <mat-option *ngFor="let user of filteredUsers" [value]="user">
+		<img src="{{user.avatar_url}}" alt="avatar" width="26" height="26" style="border-radius: 50%; margin-top: 15%; margin-right: 10%;">
+		<span>{{user.intra_name}}</span>
+		<mat-divider></mat-divider>
+	  </mat-option>
+	</ng-container>
   </mat-autocomplete>
-</mat-form-field>
-<button mat-button type="button" [disabled]="!selectedUser.intra_name" (click)="addUserToForm()">
-<mat-icon>add</mat-icon>
-</button>
+</mat-form-field> -->
+
+
 
 <mat-chip-list *ngIf="users[0]; else no_users">
   <mat-chip *ngFor="let user of users " (removed)="removeUserFromForm(user)">
-    <img matChipAvatar [src]="user.avatar_url" [alt]="user.intra_name">
-    {{user.intra_name}} ({{user.id}})
-    <mat-icon matChipRemove>cancel</mat-icon>
+	<img matChipAvatar [src]="user.avatar_url" [alt]="user.intra_name">
+	{{user.intra_name}} ({{user.id}})
+	<mat-icon matChipRemove>cancel</mat-icon>
   </mat-chip>
 </mat-chip-list>
 
@@ -28,4 +52,5 @@
 
 
 <ng-template #no_users>
+  <p id="input-error">Il faut que tu ajoutes des membres pour creer le groupe</p>
 </ng-template>

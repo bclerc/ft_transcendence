@@ -3,6 +3,7 @@ import { EmailValidator, FormBuilder, FormControl, FormGroup, Validators } from 
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map, Observable, Subscription } from 'rxjs';
+import { Secret } from 'src/app/models/secret.models';
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
@@ -20,8 +21,6 @@ export class ModifyMyProfileComponent implements OnInit {
   user! : UserI;
   id? : number | null;
   userLi!: Observable <UserI> | undefined;
-
-
 
   ChangeDisplaynameForm!: FormGroup;
 
