@@ -10,6 +10,8 @@ export class PasswordUtils {
   }
   
   async  verifyPass(pass: string, hash: string): Promise<boolean> {
+    if (pass === undefined || hash === undefined)
+      return false;
     const isCorrect = await argon2.verify(hash, pass);
     return isCorrect;
   }
