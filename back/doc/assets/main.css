@@ -1,98 +1,84 @@
+/**
+ * apidoc main css file
+ */
+
+/**
+ * Define colors
+ */
+:root {
+  --primary: #0088cc;
+  --white: #fff;
+  --light-gray: #ccc;
+  --main-gray: #777;
+  --dark-gray: #2d2d2d;
+  --hover-gray: #666;
+  --meth-get: green;
+  --meth-put: #e5c500;
+  --meth-post: #4070ec;
+  --meth-delete: #ed0039;
+  --red: #dc3545;
+}
+
+.color-primary {
+  color: var(--primary);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-red {
+  color: var(--white);
+  background-color: var(--red);
+}
+
+.border-danger {
+  border: 1px solid var(--red);
+}
+
+/** for some reason the iOS safari style is applied on date inputs */
+input[type="date"] {
+  line-height: 1.4 !important;
+}
+
 /* ------------------------------------------------------------------------------------------
  * Content
  * ------------------------------------------------------------------------------------------ */
-body, p, a, div, th, td {
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('./glyphicons-halflings-regular.eot');
+  src: url('./glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+    url('./glyphicons-halflings-regular.woff') format('woff'),
+    url('./glyphicons-halflings-regular.ttf') format('truetype'),
+    url('./glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
+
+body {
   font-family: "Source Sans Pro", sans-serif;
-  font-weight: 400;
-  font-size: 14px;
 }
 
-pre.prettyprint {
-  background: #373D43;
-  border-radius: 3px;
-}
-
-#header, #footer {
-  padding: 5px 20px;
-}
-
-@media (min-width: 1200px) {
-  body.container-fluid {
-    padding-right: 0px;
-    padding-left: 0px;
-    margin-right: 0px;
-    margin-left: 0px;
-  }
-}
-
-td.code {
-  font-size: 14px;
-  font-family: 'Inconsolata', monospace;
-  font-style: normal;
-  font-weight: 400;
+a:focus {
+  background-color: var(--primary);
 }
 
 #content {
-  padding-top: 16px;
-  z-Index: -1;
-  margin-left: 235px;
+  margin-top: 10px;
+  margin-left: 20%;
+  padding-left: 10px;
 }
 
 p {
-  color: #808080;
+  font-size: 130%;
+  color: var(--main-gray);
 }
 
-h1 {
-  font-weight: normal;
-  font-size: 24px;
-  line-height: 34px;
-  margin: 0 0 10px 0;
-  padding: 0;
+section {
+  padding: 30px 0;
 }
 
-h2 {
-  background: #f1f1f1;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 28px;
-  margin: 0 0 10px 0;
-  padding: 3px 10px;
-}
-
-section h1 {
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 40px;
-  padding-bottom: 14px;
-  margin: 0 0 20px 0;
-  padding: 0;
-}
-
-article h1 {
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 26px;
-}
-
-article h2 {
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
-  margin: 0 0 10px 0;
-}
-
-article h3 {
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 18px;
-  margin: 0 0 10px 0;
-}
-
-article h4 {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 16px;
-  margin: 0 0 8px 0;
+article {
+  border-top: 1px solid var(--light-gray);
+  padding: 14px 0 30px 0;
 }
 
 table {
@@ -102,38 +88,41 @@ table {
 }
 
 th {
+  background-color: var(--main-gray);
+  color: var(--white);
   text-align: left;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-bottom: #e0e0e0 1px solid;
-  text-transform: uppercase;
-  color: #777;
-  font-size: 11px;
-}
-
-tr:nth-child(even) {
-  background: #f9f9f9;
+  padding: 5px 8px;
+  border: 1px solid var(--main-gray);
 }
 
 td {
   padding: 5px;
+  border: 1px solid var(--main-gray);
 }
 
-td > p {
-  padding: 0;
-  margin: 0;
+td.code {
+  font-family: "Source Code Pro", monospace;
+  font-weight: 600;
 }
 
-#generator .content {
-  color: #b0b0b0;
-  border-top: 1px solid #ebebeb;
-  padding: 10px 20px;
-}
-
-.label-optional {
+.label {
   float: right;
-  background-color: grey;
   margin-top: 4px;
+  user-select: none;
+}
+
+.label.optional {
+  background-color: grey;
+}
+
+.label.required {
+  background-color: var(--red);
+}
+
+.default-value,
+.type-size {
+  font-style: italic;
+  font-size: 95%;
 }
 
 .open-left {
@@ -141,262 +130,90 @@ td > p {
   left: auto;
 }
 
-/* ------------------------------------------------------------------------------------------
- * apidoc - intro
- * ------------------------------------------------------------------------------------------ */
-
-#apidoc .apidoc {
-  border-top: 1px solid #ebebeb;
-  padding: 30px 0;
+.invisible {
+  visibility: hidden;
 }
 
-#apidoc h1 {
-  font-weight: 700;
-  font-size: 32px;
-  line-height: 40px;
-  padding-bottom: 14px;
-  margin: 0 0 20px 0;
-  padding: 0;
+.input-group-addon.sample-request-select {
+  padding: 0 6px;
 }
 
-#apidoc h2 {
-  font-weight: 600;
-  font-size: 22px;
-  line-height: 26px;
-  padding-top: 14px;
+.input-group-addon.sample-request-select select {
+  width: auto;
+  height: 32px;
 }
 
-.try-buttom {
-  background-color: #2196f3;
-  font-weight: bold;
-  font-size: 13px;
-  border: 0;
-  color: #fff;
-  border-radius: 4px;
-  margin-top: 15px;
-  float: right;
-  padding: 2px 10px;
+.sample-request-input-Boolean-container {
+  width: 40px;
+  height: 34px;
+  background: var(--white);
+  border: 1px solid var(--light-gray);
 }
 
-.try-box {
-  color: #fff;
+.sample-request-input-Boolean-container > div {
+  margin-top: 7px;
+  text-align: center;
 }
 
-.try-box > h2 {
-  color: #fff;
-  font-weight: 300;
-  font-size: 17px;
-  background-color: rgba(0,0,0,.2);
-  padding: 3px 20px;
-  margin: 0 -20px 10px -20px;
-}
-
-/* ------------------------------------------------------------------------------------------
- * pre / code
- * ------------------------------------------------------------------------------------------ */
-pre {
-  background-color: #292b36;
-  color: #ffffff;
-  padding: 10px;
-  border-radius: 2px;
-  position: relative;
-  margin: 10px 0 20px 0;
-  overflow-x: auto;
-}
-
-pre.prettyprint {
-  width: 100%;
-}
-
-code.language-text {
-  word-wrap: break-word;
-}
-
-pre.language-json {
-  overflow: auto;
-}
-
-pre.language-html {
-  margin: 0 0 20px 0;
-}
-
-.type {
-  border-radius: 2px;
-  color: #ffffff;
-  display: inline-block;
-  float: left;
-  font-size: 12px;
-  font-weight: 600;
-  margin-right: 5px;
-  margin: 0 10px 0 0;
-  padding: 3px 5px;
-  text-transform: uppercase;
-}
-
-.type__get {
-  background: #8dbf42;
-}
-
-.type__put {
-  background: #e2a03f;
-}
-
-.type__post {
-  background: #2196f3;
-}
-
-.type__delete {
-  background: #e7515a;
-}
-
-.type__options,
-.type__head {
-  background: #615088;
-}
-
-.type__patch {
-  background: #AB9834;
-}
-
-pre.language-api .str {
-  color: #ffffff;
-}
-
-pre.language-api .pln,
-pre.language-api .pun {
-  color: #65B042;
-}
-
-pre code {
-  display: block;
-  font-size: 14px;
-  font-family: 'Inconsolata', monospace;
-  font-style: normal;
-  font-weight: 400;
-  word-wrap: normal;
-  white-space: pre;
-}
-
-pre code.sample-request-response-json {
-  white-space: pre-wrap;
-  max-height: 500px;
-  overflow: auto;
-}
-
-#project {
-  padding: 10px 20px;
-  border-bottom: 1px solid #ebebeb;
-}
-
-.form-group {
-  margin: 0 !important;
-}
-
-/* ------------------------------------------------------------------------------------------
- * Code Section
- * ------------------------------------------------------------------------------------------ */
-.article-content {
-  border-top: 2px solid #373D43;
-  position: relative;
-  clear: both;
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-}
-
-.article-resource {
-  color: #999;
-  text-transform: uppercase;
-  font-size: 12px;
-}
-
-.article-text {
-  padding: 20px;
-  display: table-cell;
-}
-
-.article-code {
-  padding: 0px 20px;
-  display: table-cell;
-  width: 450px;
-  background: #3E4349;
-  vertical-align: top;
-}
-
-.article-code pre.prettyprint {
+.sample-request-input-Boolean-container > div input {
   margin: 0;
-  border: 0;
-  background: transparent;
+}
+
+/* ------------------------------------------------------------------------------------------
+ * Request method (HTTP verb)
+ * ------------------------------------------------------------------------------------------ */
+.method {
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-block;
+  margin: 0 0 5px 0;
+  padding: 4px 5px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  background-color: var(--main-gray);
+  color: var(--white);
+}
+
+.meth-get {
+  background-color: var(--meth-get);
+}
+
+.meth-put {
+  background-color: var(--meth-put);
+}
+
+.meth-post {
+  background-color: var(--meth-post);
+}
+
+.meth-delete {
+  background-color: var(--meth-delete);
 }
 
 /* ------------------------------------------------------------------------------------------
  * Sidenav
  * ------------------------------------------------------------------------------------------ */
 .sidenav {
-  width: 235px;
-  margin: 0;
-  padding: 0 10px 20px 10px;
+  color: var(--white);
+  width: 20%;
   position: fixed;
   top: 50px;
   left: 0;
   bottom: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: #F4F6F9;
-  z-index: 10;
-}
-
-.navtype {
-  font-size: 10px;
-  min-width: 30px;
-  font-weight: bold;
-  display: inline-block;
-  text-transform: uppercase;
-  text-align: right;
-  padding-right: 2px;
-}
-
-.navtype__get {
-  color: #8dbf42;
-}
-
-.navtype__put {
-  color: #e2a03f;
-}
-
-.navtype__post {
-  color: #2196f3;
-}
-
-.navtype__del {
-  color: #e7515a;
-}
-
-.navtype__opt,
-.navtype__head {
-  color: #615088;
-}
-
-.navtype__ptch {
-  color: #AB9834;
+  background-color: var(--dark-gray);
 }
 
 .sidenav > li > a {
+  color: var(--white);
   display: block;
-  width: 212px;
-  margin: 0;
-  padding: 4px 10px;
-  border: 0;
-  font-weight: 400;
-  font-size: 14px;
-  border-left: 3px solid transparent;
-  color: #666;
+  padding: 8px 13px;
 }
 
-.sidenav > li > a:hover {
-  background-color: transparent;
-  border-left: 3px solid #0088cc;
-  color: #000;
+/* non active sidenav link are highlighted on hover */
+.sidenav > li:not(.active) > a:hover {
+  background-color: var(--hover-gray);
 }
 
 .sidenav > li.nav-header {
@@ -405,49 +222,43 @@ pre code.sample-request-response-json {
 }
 
 .sidenav > li.nav-header > a {
-  padding: 4px 10px;
-  width: 190px;
+  padding: 5px 15px;
   font-weight: 700;
-  font-size: 14px;
-  color: #555;
+  font-size: 16px;
+  background-color: var(--main-gray);
 }
+
 
 .sidenav > li.active > a {
   position: relative;
-  z-index: 2;
-  border-left: 3px solid #0088cc;
-  color: #000;
+  background-color: var(--primary);
+  color: var(--white);
 }
 
+/**
+ * TODO: commented out for the moment
 .sidenav > li.has-modifications a {
-  border-right: #60d060 4px solid;
+  border-right: 4px solid var(--main-gray);
 }
 
-.sidenav > li.is-new a:after {
-  content: "new";
-  background: #8dbf42;
-  color: #fff;
-  border-radius: 2px;
-  padding: 1px 5px;
-  font-size: 11px;
-  padding-bottom: 2px;
-  text-align: right;
-  display: inline-block;
-  position: absolute;
-  right: 0px;
-  margin-top: 2px;
+.nav-list-item :not(.is-new) {
+  border-left: 4px solid var(--main-gray);
 }
+
+.sidenav > li.is-new a {
+  border-left: 4px solid var(--primary);
+}
+*/
 
 /* ------------------------------------------------------------------------------------------
  * Side nav search
  * ------------------------------------------------------------------------------------------ */
 .sidenav-search {
-  width: 235px;
+  width: 20%;
   left: 0px;
   position: fixed;
   padding: 16px 20px 10px 20px;
-  background-color: #F5F5F5;
-  z-index: 11;
+  background-color: var(--dark-gray);
 }
 
 .sidenav-search .search {
@@ -649,66 +460,20 @@ tr.del td {
  * Tabs
  * ------------------------------------------------------------------------------------------ */
 ul.nav-tabs {
-  margin: 0 -20px;
-  padding: 0 20px;
-  border: 0;
-  background-color: rgba(0,0,0,.2);
-}
-
-ul.nav-tabs > li {
   margin: 0;
 }
 
-ul.nav-tabs > li.active > a {
-  color: #f1f1f1;
-  border: 0;
-  background-color: rgba(0,0,0,.4);
-}
-
-ul.nav-tabs > li > a {
-  background: transparent;
-  color: #f1f1f1;
-  border-radius: 0;
-  padding: 2px 10px;
-  margin-right: 5px;
-  border: 0;
-}
-
-.tab-content {
-  background: #373D43;
-  padding: 0 20px;
-  margin: 0 -20px;
-}
-
-ul.nav-tabs > li > a:hover,
-ul.nav-tabs > li.active > a:hover {
-  color: #f1f1f1;
-  border: 0;
-  background-color: rgba(0,0,0,.4);
-}
-
-p.deprecated {
-  border-left: 3px solid #c7254e;
-  padding: 10px;
-  font-size: 14px;
-  color: #c7254e;
-  background: #F7F1F3;
-}
-
-p.deprecated span {
+p.deprecated span{
+  color: var(--red);
   font-weight: bold;
-  padding-right: 5px;
+  text-decoration: underline;
 }
 
-p.deprecated a {
-  font-size: 14px;
-  color: #c7254e;
-  font-weight: bold;
-}
-
-p.deprecated a:hover {
-  color: #444;
-  text-decoration: none;
+/**
+ * Footer
+ */
+#generator {
+  padding: 10px 0;
 }
 
 /* ------------------------------------------------------------------------------------------
@@ -747,7 +512,7 @@ p.deprecated a:hover {
     color: #000000;
     padding: 10px;
     border: #808080 1px solid;
-    border-radius: 2px;
+    border-radius: 6px;
     position: relative;
     margin: 10px 0 20px 0;
   }

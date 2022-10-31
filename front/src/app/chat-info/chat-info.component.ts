@@ -15,9 +15,12 @@ import { UserService } from '../services/user/user.service';
 export class ChatInfoComponent implements OnInit {
 
   @Input() room: ChatRoom = {};
+
+
   form: FormGroup = new FormGroup({
     users: new FormArray([], [Validators.required])
   });
+  
   actualUser: UserI = {};
   constructor(private socket: Socket,
     private userService: UserService,
@@ -56,6 +59,7 @@ export class ChatInfoComponent implements OnInit {
 
   demoteUser(user: UserI) {
     this.socket.emit('demoteUser', { roomId: this.room.id, targetId: user.id });
+
   }
 
   removeUser(userId: any)

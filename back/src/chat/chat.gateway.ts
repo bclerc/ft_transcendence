@@ -15,7 +15,7 @@ import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interfa
 
 
 
-@WebSocketGateway(81, { cors: { origin: '*' } })
+@WebSocketGateway(8181, { cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
 
   @WebSocketServer() server;

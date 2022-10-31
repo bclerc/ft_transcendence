@@ -149,7 +149,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChatGateway.prototype, "onDemoteUser", null);
 ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(81, { cors: { origin: '*' } }),
+    (0, websockets_1.WebSocketGateway)(8181, { cors: { origin: '*' } }),
     __param(0, (0, common_1.Inject)(user_service_1.UserService)),
     __param(1, (0, common_1.Inject)(jwt_1.JwtService)),
     __param(2, (0, common_1.Inject)(chat_service_1.ChatService)),

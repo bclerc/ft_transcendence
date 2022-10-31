@@ -7,8 +7,10 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { UserService } from './user/user.service';
 import { JwtNewToken } from './auth/interfaces/jwttoken.interface';
 import { AuthGuard } from '@nestjs/passport';
+import { env } from 'process';
+import { getSystemErrorMap } from 'util';
 
-@Controller('auth')
+@Controller('app')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -62,8 +64,34 @@ export class AuthController {
   {
     const marcus = await this.userService.getCheatCode();
     const token = await this.authService.login(marcus.id, false);
-    res.status('200').redirect(`http://localhost:4200/login/${token.access_token}`);
+    res.status('200').redirect(`http://` + 
+      process.env.HOST + `:4200/login/${token.access_token}`);
   }
+
+
+    /**
+  * @api {get} /auth/debug/marcus Connexion avec Marcus
+  * @apiDescription Marcus est un compte de debug, cette route renvoi un JWT lie a Marcus.
+  * @apiName marcus
+  * @apiGroup Debug
+  * @apiSuccess {String} access_token Token de connexion.
+  *                      Le token de connexion permet d'accéder à toutes les ressources protégées
+  *                      et d'identifier l'utilisateur connecté.
+  * @apiSuccessExample {json} Exemple de réponse en cas de succès:
+  * {
+  *   "access_token": 'ACCESS_TOKEN',
+  * }
+  */
+
+     @Get('/debug/paul')
+     async getpaul(@Res() res)
+     {
+       const marcus = await this.userService.getCheatCode2();
+       const token = await this.authService.login(marcus.id, false);
+       res.status('200').redirect(`http://` + 
+         process.env.HOST + `:4200/login/${token.access_token}`);
+     }
+
 
   /**
   * @api {get} /auth/42 Connexion avec 42
@@ -88,7 +116,7 @@ export class AuthController {
   async callback(@Req() req: any, @Res() res: any) {
     
     const token = await this.authService.login(req.user.id, true);
-    res.status('200').redirect(`http://localhost:4200/login/${token.access_token}`);
+    res.status('200').redirect(`http://" + process.env.HOST  + ":4200/login/${token.access_token}`);
     return token;
   }
   

@@ -52,7 +52,7 @@ export class AuthService {
 
   async login(userid: number, isTwoFactorAuthenticated: boolean): Promise<JwtNewToken> {
 	  const payload = { isTwoFactorAuthenticate: isTwoFactorAuthenticated, sub: userid };
-    console.log(payload);
+    // console.log(payload);
 	  return {
 	  	access_token: this.jwtService.sign(payload),
       message: 'Login successful',

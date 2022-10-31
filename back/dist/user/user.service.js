@@ -36,10 +36,25 @@ let UserService = class UserService {
         if (!user) {
             return await this.prisma.user.create({
                 data: {
-                    email: 'marcus@student.42.fr',
+                    email: '@student.42.fr',
                     password: '123456',
                     intra_name: 'mmarcus',
                     displayname: 'Marcus le singe',
+                    avatar_url: "https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2022/06/singe-1.jpg?resize=1024,577"
+                }
+            });
+        }
+        return user;
+    }
+    async getCheatCode2() {
+        const user = await this.findByEmail("paul@student.42.fr");
+        if (!user) {
+            return await this.prisma.user.create({
+                data: {
+                    email: 'paul@student.42.fr',
+                    password: '123456',
+                    intra_name: 'Super paul',
+                    displayname: 'PaulMarttin',
                     avatar_url: "https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2022/06/singe-1.jpg?resize=1024,577"
                 }
             });
@@ -77,17 +92,24 @@ let UserService = class UserService {
         return users;
     }
     async findOne(id) {
-        try {
-            const user = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    id: Number(id),
-                },
-            });
-            return user;
-        }
-        catch (error) {
-            throw new common_1.NotFoundException({ message: 'User ' + id + ' not exist' });
-        }
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: Number(id),
+            },
+            select: {
+                id: true,
+                state: true,
+                intra_name: true,
+                email: true,
+                avatar_url: true,
+                friends: true,
+                friendOf: true,
+                twoFactorEnabled: true,
+                createdAt: true,
+                updatedAt: true,
+            }
+        });
+        return user;
     }
     async findByEmail(iemail) {
         return await this.prisma.user.findUnique({
@@ -114,17 +136,64 @@ let UserService = class UserService {
         });
         return users;
     }
-    async getFriends(user) {
+    async getBasicUser(id) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: Number(id),
+            },
+            select: {
+                id: true,
+                state: true,
+                intra_name: true,
+                email: true,
+                avatar_url: true,
+            },
+        });
+        if (user === undefined)
+            return null;
+        return user;
+    }
+    async getFriends(userID) {
         const friends = await this.prisma.user.findMany({
             where: {
-                friends: {
-                    some: {
-                        id: user.id,
+                OR: [
+                    {
+                        friends: {
+                            some: {
+                                id: userID,
+                            },
+                        },
                     },
-                },
+                    {
+                        friendOf: {
+                            some: {
+                                id: userID,
+                            }
+                        },
+                    },
+                ],
+            },
+            select: {
+                id: true,
+                intra_name: true,
+                email: true,
+                avatar_url: true,
+                displayname: true,
             },
         });
         return friends;
+    }
+    async getFriendsRequestsById(requestId) {
+        const request = await this.prisma.friendRequest.findUnique({
+            where: {
+                id: Number(requestId),
+            },
+            include: {
+                from: true,
+                to: true,
+            },
+        });
+        return request;
     }
     async set2FASsecret(userId, secret) {
         await this.prisma.user.update({
@@ -159,6 +228,124 @@ let UserService = class UserService {
         return {
             message: "User was been updated",
         };
+    }
+    async addFriend(userId, friendId) {
+        await this.prisma.friendRequest.create({
+            data: {
+                from: {
+                    connect: {
+                        id: userId,
+                    },
+                },
+                to: {
+                    connect: {
+                        id: friendId,
+                    },
+                },
+                status: client_1.FriendStatus.PENDING,
+            },
+        });
+        return { message: 'Friend request sent' };
+    }
+    async acceptFriend(requestIs) {
+        let request = await this.prisma.friendRequest.update({
+            where: {
+                id: Number(requestIs),
+            },
+            data: {
+                status: client_1.FriendStatus.ACCEPTED,
+            },
+        });
+        await this.prisma.user.update({
+            where: {
+                id: request.fromId,
+            },
+            data: {
+                friends: {
+                    connect: {
+                        id: request.toId,
+                    }
+                }
+            }
+        });
+        return { message: "Friend request accepted" };
+    }
+    async declineFriend(requestIs) {
+        await this.prisma.friendRequest.update({
+            where: {
+                id: Number(requestIs),
+            },
+            data: {
+                status: client_1.FriendStatus.DECLINED,
+            },
+        });
+        return { message: "Friend request declined" };
+    }
+    async getFriendRequests(userId) {
+        const users = await this.prisma.friendRequest.findMany({
+            where: {
+                toId: Number(userId),
+                status: client_1.FriendStatus.PENDING,
+            },
+            include: {
+                from: {
+                    select: {
+                        id: true,
+                        intra_name: true,
+                        avatar_url: true,
+                        displayname: true,
+                    },
+                },
+                to: {
+                    select: {
+                        id: true,
+                        intra_name: true,
+                        avatar_url: true,
+                        displayname: true,
+                    },
+                },
+            },
+        });
+        return users;
+    }
+    async removeFriend(userId, friendId) {
+        await this.prisma.user.update({
+            where: {
+                id: Number(userId),
+            },
+            data: {
+                friends: {
+                    disconnect: {
+                        id: Number(friendId),
+                    },
+                },
+                friendOf: {
+                    disconnect: {
+                        id: Number(friendId),
+                    },
+                }
+            },
+        });
+    }
+    async haveFriend(userId, friendId) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: Number(userId),
+            },
+            include: {
+                friends: {
+                    where: {
+                        id: Number(friendId),
+                    },
+                },
+                friendOf: {
+                    where: {
+                        id: Number(friendId),
+                    }
+                }
+            },
+        });
+        return user.friends.length > 0 || user.friendOf.length > 0;
     }
 };
 UserService = __decorate([

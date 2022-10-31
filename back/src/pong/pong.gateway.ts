@@ -11,7 +11,15 @@ const PLAYER_HEIGHT = 65;
 const PLAYER_WIDTH = 8;
 
 const HEIGHTCANVAS = 400;
-const WIDTHCANVAS = 500;
+const WIDTHCANVAS = 600;
+
+const NORMALGAME = 0;
+const MAX_MAPID = 1;
+
+const SPEED_PLAYER = 10
+
+const RIGHTSIDE = 0;
+const LEFTSIDE = 1;
 
 // const MAX_SPEED = 12;
 
@@ -22,7 +30,7 @@ const WIDTHCANVAS = 500;
 
 // var idInterval :NodeJS.Timer;
 
-@WebSocketGateway(81, {
+@WebSocketGateway(8181, {
 	cors: {
 		origin: "*"
 	}
@@ -35,6 +43,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	// private logger: Logger = new Logger('PongGateway');
 	state: GameI;
 	allGames: GameI[];
+	allRandomGames: GameI[];
 	connectedUsers: UserI[];
 
 	constructor(
@@ -43,6 +52,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.connectedUsers = [];
 		this.state = {};
 		this.allGames = [];
+		this.allRandomGames = [];
 	};
 
 	//////
@@ -81,19 +91,36 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	@SubscribeMessage('keydownZ')
-	keydownZ(client: Socket){
+	keydownZ(client: Socket ){
 		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
 		if (game)
 		{
 			if (game.player1.socket === client)
 			{
-				if (game.player1.paddle.dy != -3)
-					game.player1.paddle.dy = game.player1.paddle.dy -3;
+				if (game.player1.paddle.dy != - SPEED_PLAYER)
+					game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
 			}
 			else
 			{
-				if (game.player2.paddle.dy != -3)
-					game.player2.paddle.dy = game.player2.paddle.dy -3;
+				if (game.player2.paddle.dy != - SPEED_PLAYER)
+					game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+			}
+		}
+		else
+		{
+			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+			if (game)
+			{
+				if (game.player1.socket === client)
+				{
+					if (game.player1.paddle.dy != - SPEED_PLAYER)
+						game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+				}
+				else
+				{
+					if (game.player2.paddle.dy != - SPEED_PLAYER)
+						game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+				}
 			}
 		}
 	}
@@ -101,20 +128,39 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@SubscribeMessage('keydownW')
 	keydownW(client: Socket){
 		// console.log("keydownZ");
+		// this.allGames.
 		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
 		if (game)
 		{
 			if (game.player1.socket === client)
 			{
-				if (game.player1.paddle.dy != -3)
-					game.player1.paddle.dy = game.player1.paddle.dy -3;
+				if (game.player1.paddle.dy != -SPEED_PLAYER)
+					game.player1.paddle.dy = game.player1.paddle.dy -SPEED_PLAYER;
 			}
 			else
 			{
-				if (game.player2.paddle.dy != -3)
-					game.player2.paddle.dy = game.player2.paddle.dy -3;
+				if (game.player2.paddle.dy != -SPEED_PLAYER)
+					game.player2.paddle.dy = game.player2.paddle.dy -SPEED_PLAYER;
 			}
 		}
+		else
+		{
+			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+			if (game)
+			{
+				if (game.player1.socket === client)
+				{
+					if (game.player1.paddle.dy != - SPEED_PLAYER)
+						game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+				}
+				else
+				{
+					if (game.player2.paddle.dy != - SPEED_PLAYER)
+						game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+				}
+			}
+		}
+
 	}
 
 	@SubscribeMessage('keydownS')
@@ -125,13 +171,30 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		{
 			if (game.player1.socket === client)
 			{
-				if (game.player1.paddle.dy != 3)
-					game.player1.paddle.dy = game.player1.paddle.dy + 3;
+				if (game.player1.paddle.dy != SPEED_PLAYER)
+					game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
 			}
 			else
 			{
-				if (game.player2.paddle.dy != 3)
-					game.player2.paddle.dy = game.player2.paddle.dy + 3;
+				if (game.player2.paddle.dy != SPEED_PLAYER)
+					game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+			}
+		}
+		else
+		{
+			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+			if (game)
+			{
+				if (game.player1.socket === client)
+				{
+					if (game.player1.paddle.dy != SPEED_PLAYER)
+						game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+				}
+				else
+				{
+					if (game.player2.paddle.dy != SPEED_PLAYER)
+						game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+				}
 			}
 		}
 	}
@@ -143,9 +206,20 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		if (game)
 		{
 			if (game.player1.socket === client)
-				game.player1.paddle.dy = game.player1.paddle.dy + 3;
+				game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
 			else
-				game.player2.paddle.dy = game.player2.paddle.dy + 3;
+				game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+		}
+		else 
+		{
+			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+			if (game)
+			{
+				if (game.player1.socket === client)
+					game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+				else
+					game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+			}
 		}
 	}
 
@@ -156,9 +230,20 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		if (game)
 		{
 			if (game.player1.socket === client)
-				game.player1.paddle.dy = game.player1.paddle.dy + 3;
+				game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
 			else
-				game.player2.paddle.dy = game.player2.paddle.dy + 3;
+				game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+		}
+		else
+		{
+			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+			if (game)
+			{
+				if (game.player1.socket === client)
+					game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+				else
+					game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+			}	
 		}
 	}
 
@@ -169,9 +254,20 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		if (game)
 		{
 			if (game.player1.socket === client)
-				game.player1.paddle.dy = game.player1.paddle.dy - 3;
+				game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
 			else
-				game.player2.paddle.dy = game.player2.paddle.dy - 3;
+				game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+		}
+		else
+		{
+			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+			if (game)
+			{
+				if (game.player1.socket === client)
+					game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+				else
+					game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+			}
 		}
 	}
 
@@ -211,7 +307,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			game.player1.socket.emit('drawText', "Start !");
 			game.player2.socket.emit('drawText', "Start !");
 			await this.delay(200);
-			this.startGame(game);
+			this.startGame(game, NORMALGAME);
 			// console.log(game);
 		}
 		else
@@ -221,6 +317,60 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 	}
 
+
+
+	@SubscribeMessage('newGameRandom')
+	async newGameRandom(client: Socket) {
+		var game: GameI = this.searchGameAwaitingRandom();
+		// console.log(game);
+		if (game)
+		{
+			//add user to game
+			this.joinGame(client, game);
+			client.emit('drawName', RIGHTSIDE);
+
+			/////
+			// choose random map id
+			/////
+			var x = Math.floor(Math.random() * (MAX_MAPID - 1 + 1) + 1);
+			// console.log("x = ", x);
+
+			await this.delay(1500);
+			if (game.player1.socket)
+				game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
+			if (game.player2.socket)
+				game.player2.socket.emit('stopSearchLoop', game.id_searchinterval2);
+			game.id_searchinterval1 = 0;
+			game.id_searchinterval2 = 0;
+			game.player1.socket.emit('drawInit');
+			game.player2.socket.emit('drawInit');
+			game.player1.socket.emit('drawText', "3");
+			game.player2.socket.emit('drawText', "3");
+			await this.delay(1000);
+			game.player1.socket.emit('drawInit');
+			game.player2.socket.emit('drawInit');
+			game.player1.socket.emit('drawText', "2");
+			game.player2.socket.emit('drawText', "2");
+			await this.delay(1000);
+			game.player1.socket.emit('drawInit');
+			game.player2.socket.emit('drawInit');
+			game.player1.socket.emit('drawText', "1");
+			game.player2.socket.emit('drawText', "1");
+			await this.delay(1000);
+			game.player1.socket.emit('drawInit');
+			game.player2.socket.emit('drawInit');
+			game.player1.socket.emit('drawText', "Start !");
+			game.player2.socket.emit('drawText', "Start !");
+			await this.delay(200);
+			// console.log("x = ", x);
+			this.startGame(game, x);
+		}
+		else
+		{
+			game = this.creatNewGameRandom(client);
+			client.emit('drawName', LEFTSIDE);
+		}
+	}
 	
 	@SubscribeMessage('id_interval')
 	varSearchLoop(client: Socket, id: number){
@@ -235,40 +385,21 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		// console.log(game.id_searchinterval1);
 		// console.log(game.id_searchinterval2);
 	}
-	
-	private addNewUser(client: Socket)
-	{
-		var user: UserI = {
-			id: client.id
+
+	@SubscribeMessage('id_intervalRandom')
+	varSearchLoopRandom(client: Socket, id: number){
+		var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+		if (game)
+		{
+			if (game.player1.socket === client)
+				game.id_searchinterval1 = id;
+			else
+				game.id_searchinterval2 = id;
 		}
-		this.connectedUsers.push(user);
+		// console.log(game.id_searchinterval1);
+		// console.log(game.id_searchinterval2);
 	}
-
-
-	async startGame(game: GameI){
-		game.id_interval = setInterval(() => {
-			// console.log(game);
-			this.pongService.loopGameNormal(game);
-			// if (game.id_searchinterval1 && game.id_searchinterval1 != 0)
-			// {
-			// 	game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
-			// 	game.id_searchinterval1 = 0;
-			// }
-			// if (game.id_searchinterval2 && game.id_searchinterval2 != 0)
-			// {
-			// 	game.player2.socket.emit('stopSearchLoop', game.id_searchinterval2);
-			// 	game.id_searchinterval2 = 0;
-			// }
-			// console.log(game);
-			// game.player1.socket.emit('draw', game);
-			// game.player2.socket.emit('draw', game);
-		}, 1000/60);
-	}
-
-	// startGameAnimationFrame(game: GameI){
-	// 	this.pongService.loopGame(game);
-	// }
-
+	
 	@SubscribeMessage("stopGame")
 	stopgame(client: Socket)
 	{
@@ -279,15 +410,76 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			if (game.player1)
 				this.init(game.player1.socket);
 			if (game.player2)
-				this.init(game.player2.socket);
+			this.init(game.player2.socket);
 			this.deleteGame(game);
 		}
 	}
+
+	// @SubscribeMessage("getStateNormal")
+	// getState(client: Socket)
+	// {
+	// 	var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+	// 	if (game)
+	// 		client.emit('gameState', game);
+	// }
+
+	// @SubscribeMessage("getStateRandom")
+	// getStateRandom(client: Socket)
+	// {
+	// 	var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+	// 	if (game)
+	// 		client.emit('gameState', game);
+	// }
+
+	
+	
+	
+///////
+//A TRIER
+//////
+
+	private addNewUser(client: Socket)
+	{
+		var user: UserI = {
+			id: client.id
+		}
+		this.connectedUsers.push(user);
+	}
+	
+
+	async startGame(game: GameI, mapid: number){
+		if (mapid === 0)
+		{
+			game.id_interval = setInterval(() => {
+				this.pongService.loopGameNormal(game);
+			}, 1000/60);
+		}
+		else if (mapid === 1)
+		{
+			game.id_interval = setInterval(() => {
+				this.pongService.loopGameMap1(game);
+			}, 1000/60);
+		}
+	}
+
+	// async startGameTest(game: GameI){
+	// 		this.pongService.loopGameNormal(game);
+	// }
+
+	// startGameAnimationFrame(game: GameI){
+	// async startGame(game: GameI, mapid: number){
+	// 	this.pongService.loopGameNormal(game);
+	// }
+
 
 	searchGameAwaiting(): GameI {
 		return this.allGames.find(game => (game.player1 != undefined && game.player2 != undefined) ? false : true);
 	}
 
+	searchGameAwaitingRandom(): GameI {
+		return this.allRandomGames.find(game => (game == undefined || (game.player1 != undefined && game.player2 != undefined)) ? false : true);
+	}
+	
 	creatNewGame(client: Socket): GameI {
 		var game: GameI = this.pongService.initState();
 		game = {
@@ -306,6 +498,27 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		// console.log(this.allGames);
 		return game;
 	}
+
+	creatNewGameRandom(client: Socket): GameI {
+		var game: GameI = this.pongService.initState();
+		game = {
+			id: client.id,
+			player1: {
+				socket: client,
+				paddle: game.player1.paddle,
+				points: game.player1.points,
+			},
+			player2: undefined,
+			// acceleration: game.acceleration,
+			// direction: game.direction,
+			ball: game.ball
+		}
+		// console.log("ici !!!!!!!!!!!!!!!!!!!!");
+		this.allRandomGames.push(game);
+		// console.log(this.allGames);
+		return game;
+	}
+
 
 	joinGame(client: Socket, game: GameI){
 		game.player2 = {

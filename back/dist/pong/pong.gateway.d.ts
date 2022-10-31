@@ -8,6 +8,7 @@ export declare class PongGateway implements OnGatewayInit, OnGatewayConnection, 
     server: Server;
     state: GameI;
     allGames: GameI[];
+    allRandomGames: GameI[];
     connectedUsers: UserI[];
     constructor(pongService: PongService);
     afterInit(server: Server): void;
@@ -21,12 +22,16 @@ export declare class PongGateway implements OnGatewayInit, OnGatewayConnection, 
     keyupW(client: Socket): void;
     keyupS(client: Socket): void;
     newGame(client: Socket): Promise<void>;
+    newGameRandom(client: Socket): Promise<void>;
     varSearchLoop(client: Socket, id: number): void;
-    private addNewUser;
-    startGame(game: GameI): Promise<void>;
+    varSearchLoopRandom(client: Socket, id: number): void;
     stopgame(client: Socket): void;
+    private addNewUser;
+    startGame(game: GameI, mapid: number): Promise<void>;
     searchGameAwaiting(): GameI;
+    searchGameAwaitingRandom(): GameI;
     creatNewGame(client: Socket): GameI;
+    creatNewGameRandom(client: Socket): GameI;
     joinGame(client: Socket, game: GameI): void;
     deleteGame(g: GameI): void;
     delay(ms: number): Promise<unknown>;

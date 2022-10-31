@@ -3,7 +3,7 @@ import { ChatService } from './chat.service';
 export declare class ChatController {
     private readonly chatService;
     constructor(chatService: ChatService);
-    getRooms(req: any): Promise<ChatRoom[]>;
+    getRooms(req: any): Promise<import("./interfaces/chatRoom.interface").ChatRoomI[]>;
     joinRoom(req: any, id: number): Promise<ChatRoom>;
     leaveRoom(req: any, id: number): Promise<ChatRoom>;
     getPublicRooms(): Promise<ChatRoom[]>;

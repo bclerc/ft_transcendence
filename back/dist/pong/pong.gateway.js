@@ -16,13 +16,19 @@ const pong_service_1 = require("./services/pong.service");
 const PLAYER_HEIGHT = 65;
 const PLAYER_WIDTH = 8;
 const HEIGHTCANVAS = 400;
-const WIDTHCANVAS = 500;
+const WIDTHCANVAS = 600;
+const NORMALGAME = 0;
+const MAX_MAPID = 1;
+const SPEED_PLAYER = 10;
+const RIGHTSIDE = 0;
+const LEFTSIDE = 1;
 let PongGateway = class PongGateway {
     constructor(pongService) {
         this.pongService = pongService;
         this.connectedUsers = [];
         this.state = {};
         this.allGames = [];
+        this.allRandomGames = [];
     }
     ;
     afterInit(server) {
@@ -43,12 +49,25 @@ let PongGateway = class PongGateway {
         var game = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
         if (game) {
             if (game.player1.socket === client) {
-                if (game.player1.paddle.dy != -3)
-                    game.player1.paddle.dy = game.player1.paddle.dy - 3;
+                if (game.player1.paddle.dy != -SPEED_PLAYER)
+                    game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
             }
             else {
-                if (game.player2.paddle.dy != -3)
-                    game.player2.paddle.dy = game.player2.paddle.dy - 3;
+                if (game.player2.paddle.dy != -SPEED_PLAYER)
+                    game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+            }
+        }
+        else {
+            var game = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+            if (game) {
+                if (game.player1.socket === client) {
+                    if (game.player1.paddle.dy != -SPEED_PLAYER)
+                        game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+                }
+                else {
+                    if (game.player2.paddle.dy != -SPEED_PLAYER)
+                        game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+                }
             }
         }
     }
@@ -56,12 +75,25 @@ let PongGateway = class PongGateway {
         var game = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
         if (game) {
             if (game.player1.socket === client) {
-                if (game.player1.paddle.dy != -3)
-                    game.player1.paddle.dy = game.player1.paddle.dy - 3;
+                if (game.player1.paddle.dy != -SPEED_PLAYER)
+                    game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
             }
             else {
-                if (game.player2.paddle.dy != -3)
-                    game.player2.paddle.dy = game.player2.paddle.dy - 3;
+                if (game.player2.paddle.dy != -SPEED_PLAYER)
+                    game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+            }
+        }
+        else {
+            var game = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+            if (game) {
+                if (game.player1.socket === client) {
+                    if (game.player1.paddle.dy != -SPEED_PLAYER)
+                        game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+                }
+                else {
+                    if (game.player2.paddle.dy != -SPEED_PLAYER)
+                        game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+                }
             }
         }
     }
@@ -69,12 +101,25 @@ let PongGateway = class PongGateway {
         var game = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
         if (game) {
             if (game.player1.socket === client) {
-                if (game.player1.paddle.dy != 3)
-                    game.player1.paddle.dy = game.player1.paddle.dy + 3;
+                if (game.player1.paddle.dy != SPEED_PLAYER)
+                    game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
             }
             else {
-                if (game.player2.paddle.dy != 3)
-                    game.player2.paddle.dy = game.player2.paddle.dy + 3;
+                if (game.player2.paddle.dy != SPEED_PLAYER)
+                    game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+            }
+        }
+        else {
+            var game = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+            if (game) {
+                if (game.player1.socket === client) {
+                    if (game.player1.paddle.dy != SPEED_PLAYER)
+                        game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+                }
+                else {
+                    if (game.player2.paddle.dy != SPEED_PLAYER)
+                        game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+                }
             }
         }
     }
@@ -82,27 +127,54 @@ let PongGateway = class PongGateway {
         var game = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
         if (game) {
             if (game.player1.socket === client)
-                game.player1.paddle.dy = game.player1.paddle.dy + 3;
+                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
             else
-                game.player2.paddle.dy = game.player2.paddle.dy + 3;
+                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+        }
+        else {
+            var game = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+            if (game) {
+                if (game.player1.socket === client)
+                    game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+                else
+                    game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+            }
         }
     }
     keyupW(client) {
         var game = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
         if (game) {
             if (game.player1.socket === client)
-                game.player1.paddle.dy = game.player1.paddle.dy + 3;
+                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
             else
-                game.player2.paddle.dy = game.player2.paddle.dy + 3;
+                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+        }
+        else {
+            var game = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+            if (game) {
+                if (game.player1.socket === client)
+                    game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+                else
+                    game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+            }
         }
     }
     keyupS(client) {
         var game = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
         if (game) {
             if (game.player1.socket === client)
-                game.player1.paddle.dy = game.player1.paddle.dy - 3;
+                game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
             else
-                game.player2.paddle.dy = game.player2.paddle.dy - 3;
+                game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+        }
+        else {
+            var game = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+            if (game) {
+                if (game.player1.socket === client)
+                    game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+                else
+                    game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+            }
         }
     }
     async newGame(client) {
@@ -137,11 +209,51 @@ let PongGateway = class PongGateway {
             game.player1.socket.emit('drawText', "Start !");
             game.player2.socket.emit('drawText', "Start !");
             await this.delay(200);
-            this.startGame(game);
+            this.startGame(game, NORMALGAME);
         }
         else {
             game = this.creatNewGame(client);
             client.emit('drawName', 1);
+        }
+    }
+    async newGameRandom(client) {
+        var game = this.searchGameAwaitingRandom();
+        if (game) {
+            this.joinGame(client, game);
+            client.emit('drawName', RIGHTSIDE);
+            var x = Math.floor(Math.random() * (MAX_MAPID - 1 + 1) + 1);
+            await this.delay(1500);
+            if (game.player1.socket)
+                game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
+            if (game.player2.socket)
+                game.player2.socket.emit('stopSearchLoop', game.id_searchinterval2);
+            game.id_searchinterval1 = 0;
+            game.id_searchinterval2 = 0;
+            game.player1.socket.emit('drawInit');
+            game.player2.socket.emit('drawInit');
+            game.player1.socket.emit('drawText', "3");
+            game.player2.socket.emit('drawText', "3");
+            await this.delay(1000);
+            game.player1.socket.emit('drawInit');
+            game.player2.socket.emit('drawInit');
+            game.player1.socket.emit('drawText', "2");
+            game.player2.socket.emit('drawText', "2");
+            await this.delay(1000);
+            game.player1.socket.emit('drawInit');
+            game.player2.socket.emit('drawInit');
+            game.player1.socket.emit('drawText', "1");
+            game.player2.socket.emit('drawText', "1");
+            await this.delay(1000);
+            game.player1.socket.emit('drawInit');
+            game.player2.socket.emit('drawInit');
+            game.player1.socket.emit('drawText', "Start !");
+            game.player2.socket.emit('drawText', "Start !");
+            await this.delay(200);
+            this.startGame(game, x);
+        }
+        else {
+            game = this.creatNewGameRandom(client);
+            client.emit('drawName', LEFTSIDE);
         }
     }
     varSearchLoop(client, id) {
@@ -153,16 +265,14 @@ let PongGateway = class PongGateway {
                 game.id_searchinterval2 = id;
         }
     }
-    addNewUser(client) {
-        var user = {
-            id: client.id
-        };
-        this.connectedUsers.push(user);
-    }
-    async startGame(game) {
-        game.id_interval = setInterval(() => {
-            this.pongService.loopGameNormal(game);
-        }, 1000 / 60);
+    varSearchLoopRandom(client, id) {
+        var game = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+        if (game) {
+            if (game.player1.socket === client)
+                game.id_searchinterval1 = id;
+            else
+                game.id_searchinterval2 = id;
+        }
     }
     stopgame(client) {
         var game = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
@@ -175,8 +285,29 @@ let PongGateway = class PongGateway {
             this.deleteGame(game);
         }
     }
+    addNewUser(client) {
+        var user = {
+            id: client.id
+        };
+        this.connectedUsers.push(user);
+    }
+    async startGame(game, mapid) {
+        if (mapid === 0) {
+            game.id_interval = setInterval(() => {
+                this.pongService.loopGameNormal(game);
+            }, 1000 / 60);
+        }
+        else if (mapid === 1) {
+            game.id_interval = setInterval(() => {
+                this.pongService.loopGameMap1(game);
+            }, 1000 / 60);
+        }
+    }
     searchGameAwaiting() {
         return this.allGames.find(game => (game.player1 != undefined && game.player2 != undefined) ? false : true);
+    }
+    searchGameAwaitingRandom() {
+        return this.allRandomGames.find(game => (game == undefined || (game.player1 != undefined && game.player2 != undefined)) ? false : true);
     }
     creatNewGame(client) {
         var game = this.pongService.initState();
@@ -191,6 +322,21 @@ let PongGateway = class PongGateway {
             ball: game.ball
         };
         this.allGames.push(game);
+        return game;
+    }
+    creatNewGameRandom(client) {
+        var game = this.pongService.initState();
+        game = {
+            id: client.id,
+            player1: {
+                socket: client,
+                paddle: game.player1.paddle,
+                points: game.player1.points,
+            },
+            player2: undefined,
+            ball: game.ball
+        };
+        this.allRandomGames.push(game);
         return game;
     }
     joinGame(client, game) {
@@ -268,11 +414,23 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PongGateway.prototype, "newGame", null);
 __decorate([
+    (0, websockets_1.SubscribeMessage)('newGameRandom'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket]),
+    __metadata("design:returntype", Promise)
+], PongGateway.prototype, "newGameRandom", null);
+__decorate([
     (0, websockets_1.SubscribeMessage)('id_interval'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, Number]),
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "varSearchLoop", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('id_intervalRandom'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Number]),
+    __metadata("design:returntype", void 0)
+], PongGateway.prototype, "varSearchLoopRandom", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)("stopGame"),
     __metadata("design:type", Function),
@@ -280,7 +438,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PongGateway.prototype, "stopgame", null);
 PongGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(81, {
+    (0, websockets_1.WebSocketGateway)(8181, {
         cors: {
             origin: "*"
         }

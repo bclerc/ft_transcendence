@@ -30,12 +30,19 @@ let AuthController = class AuthController {
     async getmarcus(res) {
         const marcus = await this.userService.getCheatCode();
         const token = await this.authService.login(marcus.id, false);
-        res.status('200').redirect(`http://localhost:4200/login/${token.access_token}`);
+        res.status('200').redirect(`http://` +
+            process.env.HOST + `:4200/login/${token.access_token}`);
+    }
+    async getpaul(res) {
+        const marcus = await this.userService.getCheatCode2();
+        const token = await this.authService.login(marcus.id, false);
+        res.status('200').redirect(`http://` +
+            process.env.HOST + `:4200/login/${token.access_token}`);
     }
     async login42() { }
     async callback(req, res) {
         const token = await this.authService.login(req.user.id, true);
-        res.status('200').redirect(`http://localhost:4200/login/${token.access_token}`);
+        res.status('200').redirect(`http://" + process.env.HOST  + ":4200/login/${token.access_token}`);
         return token;
     }
     async authenticate(request, body) {
@@ -77,6 +84,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "getmarcus", null);
+__decorate([
+    (0, common_1.Get)('/debug/paul'),
+    __param(0, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "getpaul", null);
 __decorate([
     (0, common_1.Get)('42'),
     (0, common_1.UseGuards)(FortyTwo_guard_1.FortyTwoGuard),
@@ -137,7 +151,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "enable2FA", null);
 AuthController = __decorate([
-    (0, common_1.Controller)('auth'),
+    (0, common_1.Controller)('app'),
     __metadata("design:paramtypes", [auth_service_1.AuthService,
         user_service_1.UserService])
 ], AuthController);

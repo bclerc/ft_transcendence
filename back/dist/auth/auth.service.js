@@ -64,7 +64,6 @@ let AuthService = class AuthService {
     }
     async login(userid, isTwoFactorAuthenticated) {
         const payload = { isTwoFactorAuthenticate: isTwoFactorAuthenticated, sub: userid };
-        console.log(payload);
         return {
             access_token: this.jwtService.sign(payload),
             message: 'Login successful',

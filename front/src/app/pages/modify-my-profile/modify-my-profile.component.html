@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-<app-header></app-header>
-
-<form class="form" [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
-    <input matInput placeholder="Email" formControlName="email">
-    <button [disabled]="!changeEmailForm.valid" type="submit" id="login-button">Submit change</button>
-</form>
-<form class="form" [formGroup]="changeDisplaynameForm" (ngSubmit)="changeDisplayname()">
-    <input matInput placeholder="Displayname" formControlName="displayname">
-    <button [disabled]="!changeDisplaynameForm.valid" type="submit" id="login-button">Submit change</button>
-</form>
-<form class="form" [formGroup]="changeAvatar_urlForm" (ngSubmit)="changeAvatar_url()">
-    <input matInput placeholder="Avatar_url" formControlName="avatar_url">
-    <button [disabled]="!changeAvatar_urlForm.valid" type="submit" id="login-button">Submit change</button>
-</form>
-
-<p></p>
-<form class="form" [formGroup]="ChangeForm" (ngSubmit)="onSubmit()">
-    <input matInput placeholder="Email" formControlName="email">
-    <p></p>
-    <input matInput placeholder="Displayname" formControlName="displayname">
-    <p></p>
-    <input matInput placeholder="Password" formControlName="password">
-    <p></p>
-    <input matInput placeholder="Description" formControlName="description">
-    <p></p>
-    <input matInput placeholder="Avatar_url" formControlName="avatar_url">
-    <p></p>
-    <button [disabled]="!ChangeForm.valid" type="submit" id="change-button">Submit change</button>
-  </form>
-=======
 <form class="form" [formGroup]="ChangeDisplaynameForm" (ngSubmit)="ChangeDisplayName()">
     <input matInput placeholder="Displayname" formControlName="displayname">
     <p></p>
@@ -54,5 +23,4 @@
   <ng-template #elseBlock>
   <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a>
  </ng-template>
->>>>>>> merge
 

@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { targetModulesByContainer } from '@nestjs/core/router/router-module';
 import { ChatRoom, Message, prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { BasicUserI } from 'src/user/interface/basicUser.interface';
+import { UserInfoI } from 'src/user/interface/userInfo.interface';
 import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 
 
@@ -31,7 +34,7 @@ export class ChatService {
     });
   }
 
-  async getRoomsFromUser(userId: number): Promise<ChatRoom[]> {
+  async getRoomsFromUser(userId: number): Promise<ChatRoomI[]> {
     const rooms = await this.prisma.chatRoom.findMany({
       where: {
         users: {
@@ -40,9 +43,30 @@ export class ChatService {
           },
         },
       },
-      include: {
-        users: true,
-        admins: true,
+      select: {
+        id: true,
+        name: true,
+        users: {
+          select: {
+            id: true,
+            state: true,
+            intra_name: true,
+            email: true,
+            avatar_url: true,
+          },
+        },
+        admins: {
+          select: {
+            id: true,
+            state: true,
+            intra_name: true,
+            email: true,
+            avatar_url: true,
+          },
+        },
+        ownerId: true,
+        public: true,
+        description: true,
         messages: true,
       },
     });
@@ -93,7 +117,7 @@ export class ChatService {
     return messages;
   }
 
-  async createRoom(owner: User, newRoom: newChatRoomI ): Promise<ChatRoom>
+  async createRoom(owner: BasicUserI, newRoom: newChatRoomI ): Promise<ChatRoom>
   {
     const ret = this.prisma.chatRoom.create({
       data: {
@@ -108,9 +132,8 @@ export class ChatService {
           },
         },
         users: {
-          connect: newRoom.users.map((user: User) => {
+          connect: newRoom.users.map((user: UserInfoI) => {
             return {
-              
               id: user.id
             };
           })
@@ -128,13 +151,14 @@ export class ChatService {
       where: {
         id: roomId,
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
         admins: true,
-        users: {
-          include: {
-            friends: true,
-          },
-        },
+        ownerId: true,
+        public: true,
+        description: true,
+        users: true,
         messages: true,
       },
     });
@@ -155,7 +179,7 @@ export class ChatService {
       return false;
     if (!room.password && room.public)
       return true;
-    console.log(room.password, password);
+    // console.log(room.password, password);
     return room.password === password;
   }
 
