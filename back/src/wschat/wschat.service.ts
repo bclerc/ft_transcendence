@@ -77,7 +77,7 @@ export class WschatService {
     const target = await this.userService.findOne(room.targetId);
     const roomToEject = await this.chatService.getRoomById(room.roomId);
 
-    if (user) {
+    if (user && target.id != roomToEject.ownerId) {
       if (roomToEject.admins.find(admin => admin.id == user.id)) {
         await this.chatService.removeUsersFromRoom(roomToEject.id, target.id);
         this.eventEmitter.emit('room.user.kicked', { room: roomToEject, user: target, kicker: user });
@@ -110,7 +110,7 @@ export class WschatService {
     const roomToDemote = await this.chatService.getRoomById(event.roomId);
 
     if (user) {
-      if (roomToDemote.ownerId == user.id) {
+      if (roomToDemote.ownerId == user.id && roomToDemote.ownerId != target.id) {
         this.chatService.removeAdminsFromRoom(roomToDemote.id, target.id);
         this.updateRoomForUsersInRoom(roomToDemote.id);
         this.eventEmitter.emit('room.admin.update', {
@@ -149,11 +149,19 @@ export class WschatService {
     const room = await this.chatService.getRoomById(roomId);
     
     if (user) {
-      await this.chatService.removeUsersFromRoom(room.id, user.id);
+      const newRoom = await this.chatService.removeUsersFromRoom(room.id, user.id);
+      if (room.ownerId == user.id) {
+        if (newRoom.users.length > 0) {
+          this.chatService.updateRoomOwner(room.id, newRoom.users[0].id);
+          this.updateRoomForUsersInRoom(room.id);
+        } else {
+          // delete
+          this.eventEmitter.emit('room.delete', { room: room });
+        }
+      }
       this.eventEmitter.emit('room.user.leave', { room: room, user: user });
     }
   }
-
 
   async editRoom(socketId: string, newRoom: newChatRoomI){
     const user = this.onlineUserService.getUser(socketId);
@@ -199,6 +207,4 @@ export class WschatService {
       this.sendToUser(user, prefix, data);
     });
   }
-
-
 }

@@ -19,12 +19,12 @@ export class ChatService {
   passUtils: PasswordUtils = new PasswordUtils();
 
   constructor(private prisma: PrismaService,
-              private onlineUserService: OnlineUserService,
-              private penaltiesService: PenaltiesService,
-              private eventEmitter: EventEmitter2
-              ) {}
+    private onlineUserService: OnlineUserService,
+    private penaltiesService: PenaltiesService,
+    private eventEmitter: EventEmitter2
+  ) { }
 
-  async newMessage(message: MessageI) { 
+  async newMessage(message: MessageI) {
     let penalty = await this.penaltiesService.getRoomPenaltiesForUser(message.user.id, message.room.id);
 
     if (penalty)
@@ -155,11 +155,11 @@ export class ChatService {
       include: {
         user: true,
       },
-    
+
     });
     return messages;
   }
-  
+
   async getMessagesFromRoomId(userId: number, roomId: number): Promise<Message[]> {
     const messages = await this.prisma.message.findMany({
       where: {
@@ -183,13 +183,12 @@ export class ChatService {
     return messages;
   }
 
-  async createRoom(owner: BasicUserI, newRoom: newChatRoomI): Promise<ChatRoom>
-  {
+  async createRoom(owner: BasicUserI, newRoom: newChatRoomI): Promise<ChatRoom> {
     let hashedPassword = null;
 
     if (newRoom.password)
       hashedPassword = await this.passUtils.hashPass(newRoom.password);
-  
+
     const ret = this.prisma.chatRoom.create({
       data: {
         name: newRoom.name || owner.intra_name + '\'s room',
@@ -209,9 +208,9 @@ export class ChatService {
               id: user.id
             };
           })
-          .concat({
-            id: owner.id
-          })
+            .concat({
+              id: owner.id
+            })
         }
       }
     });
@@ -219,9 +218,8 @@ export class ChatService {
   }
 
 
-  async creatDm(friendId1: number, friendId2: number): Promise<void>
-  {
-     await this.prisma.chatRoom.create({
+  async creatDm(friendId1: number, friendId2: number): Promise<void> {
+    await this.prisma.chatRoom.create({
       data: {
         name: 'Message privé with ' + friendId1 + ' ' + friendId2,
         ownerId: friendId1,
@@ -241,8 +239,7 @@ export class ChatService {
     });
   }
 
-  async deleteDm(user1Id: number, user2Id: number)
-  {
+  async deleteDm(user1Id: number, user2Id: number) {
     await this.prisma.chatRoom.deleteMany({
       where: {
         type: ChatRoomType.DM,
@@ -304,7 +301,7 @@ export class ChatService {
   }
 
   async addUsersToRoom(roomId: number, userId: number): Promise<ChatRoom> {
-   const newRoom = this.prisma.chatRoom.update({
+    const newRoom = this.prisma.chatRoom.update({
       where: {
         id: Number(roomId)
       },
@@ -318,7 +315,7 @@ export class ChatService {
     });
     return newRoom;
   }
- 
+
 
   async addAdminsToRoom(roomId: number, userId: number): Promise<ChatRoom> {
     const newRoom = this.prisma.chatRoom.update({
@@ -363,19 +360,31 @@ export class ChatService {
             id: userId,
           }
         },
-       admins: 
-       {
+        admins:
+        {
           disconnect: {
             id: userId,
           },
+        },
+      }
+    });
+    return newRoom;
+  }
+
+  async updateRoomOwner(roomId: number, userId: number): Promise<ChatRoom> {
+    const newRoom = this.prisma.chatRoom.update({
+      where: {
+        id: Number(roomId)
       },
-    }
+      data: {
+        ownerId: userId,
+      }
     });
     return newRoom;
   }
 
   async editRoom(newRoom: newChatRoomI): Promise<ChatRoom> {
-  
+
     let hashedPassword = null;
 
     if (newRoom.password)
@@ -388,7 +397,7 @@ export class ChatService {
         name: newRoom.name,
         description: newRoom.description,
         public: newRoom.public,
-        password:  hashedPassword,
+        password: hashedPassword,
         users: {
           connect: newRoom.users.map((user: User) => {
             return {
@@ -400,5 +409,16 @@ export class ChatService {
     });
     return ret;
   }
-  
+
+
+  async deleteRoom(roomId: number): Promise<void> {
+
+    
+    await this.prisma.chatRoom.delete({
+      where: {
+        id: roomId,
+      },
+    });
+  }
+
 }
