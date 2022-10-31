@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Socket } from 'ngx-socket-io';
 import { UserI } from '../models/user.models';
 import { ChatService } from '../services/chat/chat.service';
 import { ChatRoom } from '../services/chat/chatRoom.interface';
@@ -23,7 +24,8 @@ export class EditRoomChatComponent implements OnInit {
     users: new FormArray([], [Validators.required])
   });
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService,
+              private socket: Socket) { }
 
 
   edit(){
@@ -49,17 +51,14 @@ export class EditRoomChatComponent implements OnInit {
   }
 
   addUser(userFormControl: FormControl) {
-    this.form.setValue({
-      name: this.room.name,
-      description: this.room.description,
-      public: this.room.public,
-      password: this.room.password,
-      users: this.room.users  
-    });
+    this.users.push(userFormControl);
   }
 
 
-  removeUser(user: any) {
+  removeUser(userId: any) {
+    this.users.removeAt(this.users.value.findIndex((user: UserI) => user.id === user.id));
+    this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: userId });
+
   }
 
   ngOnInit(): void {

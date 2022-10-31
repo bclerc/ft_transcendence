@@ -1,21 +1,19 @@
-<<<<<<< HEAD
-<app-header></app-header>
-<p>{{user?.displayname| json}}</p>
-<p>{{user?.email| json}}</p>
-<p>{{user?.createdAt | json }}</p>
-<img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/>
-=======
 <div>
 <p>{{user?.displayname}}</p>
 <p>{{user?.email}}</p>
 <p>{{user?.createdAt | date}}</p>
 <img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/>
+<p>statistique :</p>
 <p>historique des matchs :</p>
-<div *ngIf="currentProfile; then thenBlock else elseBlock"></div>
-<ng-template #thenBlock></ng-template>
-<ng-template #elseBlock>
-    <p>Ajouter en amis</p>
+    <div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+        <a href="javascript:void(0);" (click)="removeFriend()">Enlever des amis</a>
+    </ng-template>
+    <ng-template #elseBlock>
+        <a href="javascript:void(0);" (click)="addFriend()">Ajouter en amis</a>
+    </ng-template>
+<!-- <div *ngIf="alreadyBlocked; then thenBlock else elseBlock"></div> -->
+<!-- <ng-template #thenBlock> </ng-template> -->
+<!-- <ng-template #elseBlock> </ng-template> -->
     <p>Blocker l'utilisateur</p>
-</ng-template>
 </div>
->>>>>>> merge

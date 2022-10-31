@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-<app-header></app-header>
-<p>chat-page works!</p>
-=======
 <div class="container">
   <div>
     <mat-card>
@@ -39,7 +35,7 @@
             <mat-selection-list #rooms [multiple]="false" (selectionChange)="onSelectedRoom($event)">
               <mat-list-option *ngFor="let room of (rooms$ | async)" [value]="room">
                 <div>
-                  <h3>{{room.name}}</h3>
+                  <h3>{{room.name}} </h3>
                   <mat-divider></mat-divider>
                 </div>
               </mat-list-option>
@@ -89,4 +85,3 @@
 <ng-template #no_rooms>
   <p style="margin: 25px">Vous n'avez pas encore de groupe</p>
 </ng-template>
->>>>>>> merge

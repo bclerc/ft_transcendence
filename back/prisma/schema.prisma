@@ -11,40 +11,70 @@ datasource db {
 }
 
 model User {
-  id                            Int        @id @default(autoincrement())
-  email                         String     @unique
-  password                      String
-  intra_name                    String?    @unique
-  intra_id                      Int?       @unique
-  avatar_url                    String?    @default("https://static.cnews.fr/sites/default/files/styles/image_750_422/public/raw_62c3e2f1a9694_0.jpg")
-  displayname                   String?    @unique
+  id                            Int           @id @default(autoincrement())
+  email                         String        @unique
+  state                         UserState     @default(OFFLINE)
+  intra_name                    String?       @unique
+  intra_id                      Int?          @unique
+  avatar_url                    String?       @default("https://static.cnews.fr/sites/default/files/styles/image_750_422/public/raw_62c3e2f1a9694_0.jpg")
+  displayname                   String?       @unique
   description                   String?
-  friends                       User[]     @relation("friends")
-  friendsOf                     User[]     @relation("friends")
-  blockedUsers                  User[]     @relation("blockedUsers")
-  blockedBy                     User[]     @relation("blockedUsers")
-  elo                           Int?
+  friends                       User[]          @relation("friends")
+  friendOf                      User[]          @relation("friends")
+  friendsRequests               FriendRequest[] @relation("friendRequestFrom")
+  friendsRequestsTo             FriendRequest[] @relation("friendRequestTo")
+  blockedUsers                  User[]          @relation("blockedUsers")
+  blockedBy                     User[]          @relation("blockedUsers")
   chat_rooms                    ChatRoom[]
-  adminOf                       ChatRoom[] @relation("chatRoomAdminRelation")
-  staff                         Boolean    @default(false)
-  twoFactorEnabled              Boolean    @default(false)
-  twoFactorAuthenticationSecret String?    @unique
-  createdAt                     DateTime   @default(now())
-  updatedAt                     DateTime   @updatedAt
+  adminOf                       ChatRoom[]      @relation("chatRoomAdminRelation")
   Message                       Message[]
+  games                         Game[]          @relation("gameUserRelation")
+  games_win                     Game[]          @relation("gameWinnerRelation")
+  games_lose                    Game[]          @relation("gameLoserRelation")          
+  penalities                    ChatPenalty[]
+  twoFactorEnabled              Boolean         @default(false)
+  twoFactorAuthenticationSecret String?         @unique
+  createdAt                     DateTime        @default(now())
+  updatedAt                     DateTime        @updatedAt
+}
+
+model Game {
+  id          Int      @id @default(autoincrement())
+  users       User[]  @relation("gameUserRelation")
+  state       GameState @default(WAITING)
+  winner      User?    @relation(fields: [winnerId], references: [id], "gameWinnerRelation")
+  winnerId    Int?  
+  loser      User?    @relation(fields: [loserId], references: [id], "gameLoserRelation")
+  loserId    Int? 
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+}
+
+model FriendRequest {
+  id        Int      @id @default(autoincrement())
+  from      User     @relation("friendRequestFrom", fields: [fromId], references: [id])
+  fromId    Int
+  to        User     @relation("friendRequestTo", fields: [toId], references: [id])
+  toId      Int
+  status    FriendStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ChatRoom {
-  id          Int       @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
   description String?
+  type        ChatRoomType  @default(GROUP)
   users       User[]
-  admins      User[]    @relation("chatRoomAdminRelation")
   ownerId     Int
-  public      Boolean   @default(false)
+  admins      User[]        @relation("chatRoomAdminRelation")
+  public      Boolean       @default(false)
   password    String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  penalities  ChatPenalty[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   messages    Message[]
 }
 
@@ -57,4 +87,52 @@ model Message {
   userId    Int
   room      ChatRoom @relation(fields: [roomId], references: [id])
   roomId    Int
+}
+
+model ChatPenalty {
+  id        Int         @id @default(autoincrement())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    Int
+  room      ChatRoom    @relation(fields: [roomId], references: [id])
+  roomId    Int
+  type      PenaltyType     @default(MUTE)
+  timetype  PenaltyTimeType @default(PERM)
+  endTime   DateTime
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+enum UserState {
+  ONLINE
+  OFFLINE
+  UNAVAILABLE
+  QUEUED
+  INGAME
+}
+
+enum GameState {
+  WAITING
+  STARTED
+  ENDED
+}
+
+enum PenaltyType {
+  MUTE
+  BAN
+}
+
+enum PenaltyTimeType {
+  PERM
+  TEMP
+}
+
+enum FriendStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum ChatRoomType {
+  GROUP
+  DM
 }

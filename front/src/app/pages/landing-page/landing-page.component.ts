@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD
-=======
-import { HeaderComponent } from '../../header/header.component';
->>>>>>> merge
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-landing-page',
@@ -11,6 +8,8 @@ import { HeaderComponent } from '../../header/header.component';
 })
 export class LandingPageComponent implements OnInit {
 
+  loginPath = environment.host + '/v1/api/auth/login/42';
+  
   constructor() { }
 
   ngOnInit(): void {

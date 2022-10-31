@@ -3,6 +3,7 @@ import { ElementRef, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { ChatRoom } from './chatRoom.interface';
 import { Message } from './message.interface';
 @Injectable({
@@ -20,11 +21,7 @@ export class ChatService {
     }
 
     getMessages(room: ChatRoom): Observable<Message[]> {  
-      return Observable.create((observer: any) => {
-        this.socket.on('messages', (msgs: Message[]) => {
-            observer.next(msgs);
-        });
-    });
+       return  this.socket.fromEvent<Message[]>('messages');
     }
     
 
@@ -39,7 +36,7 @@ export class ChatService {
     }
     
     getPublicRooms(): Observable<ChatRoom[]> {
-     return  this.http.get<ChatRoom[]>('http://localhost:3000/api/v1/chat/rooms/public');
+     return  this.http.get<ChatRoom[]>('http://'+ environment.host +':3000/api/v1/chat/rooms/public');
     }
     
     createRoom(room: ChatRoom) {
@@ -67,5 +64,4 @@ export class ChatService {
     }
 
   }
-
 

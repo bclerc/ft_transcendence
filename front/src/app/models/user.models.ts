@@ -2,18 +2,11 @@ import { Component, Input } from "@angular/core";
 
 export interface UserI {
     id? :               number;
+    state?:             string;
     email? :            string;
     intra_name? :       string;
     avatar_url? :        string;
     intra_id? :         number;
-<<<<<<< HEAD
-    displayname? :      string; 
-    //password? :         string;
-    username? :         string;
-    elo? :              number;
-    staff? :            boolean;
-    createdAt? :        Date;
-=======
     displayname? :      string;
     description? :      string;
     //password? :         string;
@@ -21,7 +14,8 @@ export interface UserI {
     staff? :            boolean;
     createdAt? :        Date;
     twoFactorEnabled? : boolean;
->>>>>>> merge
+    friendOf? : UserI[];
+
 }
 
 export class User {
@@ -41,8 +35,8 @@ export class User {
     "createdAt": "2022-08-02T18:31:06.050Z"
 }*/
 
-
     id! :               number;
+    state?:            string; 
     email? :            string;
     intra_name? :       string;
     avatarURL! :        string;

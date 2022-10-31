@@ -8,16 +8,17 @@ services:
       - .env
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_DB: ${DB_DATABASE_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - ${DB_PORT}:${DB_PORT}
     networks:
       trans_network:
         aliases: 
           - postgres
+
   backend:
       image: back-end
       container_name: trans_back-end
@@ -25,8 +26,18 @@ services:
         context: back/
         dockerfile: Dockerfile
       restart: always
+      env_file:
+        - .env
+      environment:
+        DATABASE_URL: ${DATABASE_URL}
+      volumes:
+        - ./back/src:/app/src
+        - ./back/dist:/app/dist
+        - .env:/.env
+
       ports:
         - 3000:3000
+        - 81:81
       networks:
         - trans_network
       depends_on:
@@ -38,9 +49,17 @@ services:
       build:
         context: front/
         dockerfile: Dockerfile
+      env_file:
+        - .env
+      environment:
+        HOST: ${HOST}
       restart: always
+      volumes:
+        - ./front/src:/app/src/
+        - ./front/dist:/app/dist/
       ports:
-        - 80:4200
+        - 4200:4200
+        - 80:80
       networks:
         - trans_network
 
