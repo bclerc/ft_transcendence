@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Socket } from 'ngx-socket-io';
 import { Router } from '@angular/router';
+import { Socket } from 'ngx-socket-io';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
-import { tokenGetter } from '../app.module';
+import { environment } from 'src/environments/environment';
+import { HeaderService } from '../services/user/header.service';
 
 @Component({
   selector: 'app-header',
@@ -13,20 +13,30 @@ import { tokenGetter } from '../app.module';
 })
 export class HeaderComponent implements OnInit {
 
-  connect : boolean = false;
 
-  constructor(private token : TokenStorageService, private router : Router) { }
+  constructor(private token : TokenStorageService,
+              private router : Router,
+              public navbar: HeaderService,
+              public socket: Socket)
+              
+              { }
+
 
   ngOnInit(): void {
-    if (this.token.getToken())
-      this.connect= true;
-
+    //this.navbar.show();
   }
 
   logOut() : void {
     this.token.removeToken();
-    this.connect= false;
+    this.navbar.hide();
     this.router.navigate(['']);
+    this.socket.emit('logout');
   }
+
+
+  getEnvHost(){
+    return environment.host;
+  }
+
 
 }

@@ -12,7 +12,9 @@ export interface GameI {
 	// direction?: PointI;		//option de partie
 	key_handler1?: number;
 	key_handler2?: number;
+	
 	spectators?: UserI[]; //tableau des utilisateurs qui regardent le match
+
 	id_interval?: NodeJS.Timer; //id pour arreter la loop du game
 	id_searchinterval1?: number; //id pour arreter la loop du game pour le player 1
 	id_searchinterval2?: number; //id pour arreter la loop du game pour le player 2

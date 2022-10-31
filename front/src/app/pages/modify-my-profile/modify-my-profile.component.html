@@ -1,0 +1,17 @@
+<form class="form" [formGroup]="ChangeDisplaynameForm" (ngSubmit)="ChangeDisplayName()">
+    <input matInput placeholder="Displayname" formControlName="displayname">
+    <p></p>
+    <button [disabled]="!ChangeDisplaynameForm.valid" type="submit" id="change-button">Change Display Name</button>
+  </form>
+  <p></p>
+<app-file-uploader></app-file-uploader>
+  <div *ngIf="user?.twoFactorEnabled; then thenBlock else elseBlock"></div>
+  <ng-template #thenBlock>
+      <p></p>
+    <a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
+    </ng-template>
+  <ng-template #elseBlock>
+  <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a>
+ </ng-template>
+ <p></p>
+

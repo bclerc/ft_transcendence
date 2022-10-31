@@ -1,0 +1,57 @@
+
+<div class="container" style="display:flexbox">
+  <mat-card>
+   <mat-card-title>
+      Amis
+   </mat-card-title>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let friend of (friends | async)">
+          <img matListAvatar [src]="friend.avatar_url" [alt]="friend.intra_name">
+          <h4 matLine>{{friend.intra_name}}</h4>
+          <p matLine>
+            <span>{{ friend.email }} </span>
+          </p>
+          <h4 matLine *ngIf="friend.state == 'INGAME'" style="color:rgb(243, 37, 239); font-size: 13px;" >En jeu</h4>
+          <h4 matLine *ngIf="friend.state == 'ONLINE'" style="color:yellowgreen; font-size: 13px;" >En ligne</h4>
+
+          <button mat-button matTooltip="Supprimer {{ friend.intra_name }} de la liste d'amis" matTooltipPosition="above" style="color: red" (click)="removeFriend(friend.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>
+      Demande(s) d'amis
+    </mat-card-title>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let request of (pandingFriends | async)">
+          <img matListAvatar [src]="request.from.avatar_url" [alt]="request.from.intra_name">
+          <h4 matLine>{{request.from.intra_name}}</h4>
+          <p matLine>
+            <span>{{ request.from.email }} </span>
+          </p>
+          <button matTooltip="Accepter la demande d'amis de {{ request.from.intra_name }}" matTooltipPosition="above" mat-button
+            style="color:greenyellow" (click)="respond(request.id, true)">
+            Accepter
+          </button>
+          <button mat-button matTooltip="Refuser l'invitation de {{ request.from.intra_name }}" matTooltipPosition="above"
+              style="color:red" (click)="respond(request.id, false)">
+            Refuser
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>
+      Inviter un utilisateur
+    </mat-card-title>
+    <mat-card-content>
+      <app-userselect (addUser)="addFriend($event)"></app-userselect>
+    </mat-card-content>
+  </mat-card>
+</div>

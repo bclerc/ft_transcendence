@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Documentation interne au projet transcendence",
   "title": "42",
-  "url" : "http://localhost:3000/api/v1",
+  "url" : "http://192.168.1.52:3000/api/v1",
   "order": [
     "User",
     "Auth",

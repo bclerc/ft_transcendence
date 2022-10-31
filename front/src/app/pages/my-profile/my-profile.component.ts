@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { finalize, map, Observable, Subscription } from 'rxjs';
 import { map, Observable, Subscription } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
+import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -14,7 +16,8 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class MyProfileComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private token : TokenStorageService, private jwtHelper: JwtHelperService, public userService : UserService, private router : Router) 
+  constructor(private route: ActivatedRoute, private token : TokenStorageService, private jwtHelper: JwtHelperService, public userService : UserService, private router : Router
+    , public currentUser : CurrentUserService) 
   {
  
   }
@@ -26,10 +29,12 @@ export class MyProfileComponent implements OnInit {
   userList!: UserI[];
   userList2$!: Observable <UserI[]>;
   subscription!: Subscription;
-  ngOnInit(): void {
+
+  userLi!: Observable <UserI> | undefined;
+  async ngOnInit(){
     // console.log("start");
 
-    this.userList2$ =  this.route.data.pipe(
+    /*this.userList2$ =  this.route.data.pipe(
       map(data => data['userList']));
        this.subscription = this.userList2$.subscribe(
         (data : any) => {
@@ -43,6 +48,24 @@ export class MyProfileComponent implements OnInit {
       if (this.id)
       {
         this.user = this.userService.getUserById(this.id);
+      }*/
+      //this.currentUser.initOrActualizeConnection();
+      this.userLi = this.currentUser.getCurrentUser();
+      if (this.userLi)
+      {
+        this.subscription = this.userLi.subscribe(
+        (data : any) => {
+          //console.log("data =",data);
+          this.user = data;
+        },
+          (error : any) => 
+          {
+            if (error.status === 401 && error.error.message === "2FA_REQUIRED")
+              this.router.navigate(['code'])
+            else
+              this.router.navigate([''])
+          }
+        );
       }
       // console.log("done");
     }
@@ -51,7 +74,9 @@ export class MyProfileComponent implements OnInit {
     {
       this.subscription.unsubscribe;
     }
-  }
+
+ 
+}
 
 
 

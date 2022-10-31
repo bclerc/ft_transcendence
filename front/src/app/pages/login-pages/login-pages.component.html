@@ -1,3 +1,4 @@
+
 <div class="wrapper">
 	<div class="container-login" >
     <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -12,7 +13,7 @@
     </form>
       <p>or</p>
       <p>
-        <a class="log-reg-dir"  href= "http://localhost:3000/api/v1/auth/42">
+        <a class="log-reg-dir"  href= "http://{{getHost()}}:3000/api/v1/auth/42">
           <span style="color: #8F0000">Log in with</span>
           <img style="width: 50px"src="/assets/img/42.svg.png" >
         </a>
@@ -22,7 +23,7 @@
 
     </div>
   </div>
-      <pre>
+     <pre>
       Value: {{ loginForm.value | json }}
       </pre>
 

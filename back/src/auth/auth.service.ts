@@ -16,11 +16,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, pass: string): Promise<User> {
-    const user = await this.usersService.findByEmail(email);
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-        return user;
-    }
+
     throw new UnauthorizedException("Invalid credentials");
   }
 
@@ -36,12 +32,13 @@ export class AuthService {
     };
  }
  // todo
-  async verify2FACode(user: User, code: string): Promise<Boolean> {
-    if (!user.twoFactorAuthenticationSecret)
+  async verify2FACode(userId: number, code: string): Promise<Boolean> {
+    const twoFactorAuthenticationSecret = await this.usersService.get2FASsecret(userId);
+    if (!twoFactorAuthenticationSecret)
       throw new UnauthorizedException("User have not secret set");
     return authenticator.verify({ 
       token:  code,
-      secret: user.twoFactorAuthenticationSecret
+      secret: twoFactorAuthenticationSecret
     });
   }
 
@@ -52,7 +49,6 @@ export class AuthService {
 
   async login(userid: number, isTwoFactorAuthenticated: boolean): Promise<JwtNewToken> {
 	  const payload = { isTwoFactorAuthenticate: isTwoFactorAuthenticated, sub: userid };
-    console.log(payload);
 	  return {
 	  	access_token: this.jwtService.sign(payload),
       message: 'Login successful',

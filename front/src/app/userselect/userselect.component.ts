@@ -46,9 +46,7 @@ export class UserselectComponent implements OnInit {
 
 
   addUserToForm() {
-    if (!this.users.find((u) => u.id === this.selectedUser.id)) {
       this.addUser.emit(this.selectedUser);
-    }
       this.filteredUsers = [];
       this.selectedUser = {};
       this.searchUsername.setValue("");

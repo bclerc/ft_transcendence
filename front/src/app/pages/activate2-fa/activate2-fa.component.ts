@@ -39,7 +39,7 @@ export class Activate2FaComponent implements OnInit {
       this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe
       (
         (data : any) => {
-           console.log("data =",data);
+          //  console.log("data =",data);
         },
         );
     }
@@ -48,7 +48,7 @@ export class Activate2FaComponent implements OnInit {
   RegenerateSecret(): void {
     this.userService.RegenerateSecretFa().subscribe(
       (data : any) => {
-         console.log("data =",data);
+        //  console.log("data =",data);
         //this.ob = data;
       },
       //error => this.router.navigate([''])

@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormsModule, Validators, ReactiveFormsModule, EmailValidator, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { RegisterReply } from 'src/app/models/register.reply';
 import { UserService } from '../../services/user/user.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login-pages',
@@ -76,9 +78,10 @@ constructor(private userService: UserService, private fb: FormBuilder, private h
     
     loginvia42(): Observable<any>{
       console.log('loginvia42');
-      return this.http.get<any>("http://localhost:3000/api/v1/auth/42");
+      return this.http.get<any>("http:/" + environment.host  + 
+      " :3000/api/v1/auth/42");
       console.log('finished');
-      //http://localhost:3000/api/v1/auth/42
+      //http://" + process.env.HOST  + ":3000/api/v1/auth/42
     }
     /*get aliases() {
       return this.loginForm.get('aliases') as FormArray;
@@ -89,8 +92,9 @@ constructor(private userService: UserService, private fb: FormBuilder, private h
     }*/
 
 
-
-
+    getHost(): string {
+        return environment.host;
+    }
 }
 
 /*loginForm: FormGroup = new FormGroup({

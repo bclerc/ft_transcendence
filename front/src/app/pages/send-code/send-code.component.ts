@@ -21,18 +21,22 @@ export class SendCodeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit(): void{
+  async onSubmit(){
     if (this.FaForm.valid)
     {
-      this.user.ValidateFaCode(this.FaForm.controls['Code'].getRawValue()).subscribe(
+      await this.user.ValidateFaCode(this.FaForm.controls['Code'].getRawValue()).subscribe(
         (data : any) => {
           console.log("data =",data);
+          this.token.saveToken(data.access_token);
+          location.reload();
           //this.tokenString = data;
         },
         error => this.router.navigate(['error'])
         );
+        
+
         //this.token.saveToken(this.tokenString);
-        this.router.navigate([''])
+        //location.reload()
 
     }
 

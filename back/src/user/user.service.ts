@@ -1,16 +1,20 @@
-import { Catch, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { AuthController } from 'src/auth/auth.controller';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { FriendRequest, Prisma, User, UserState } from '@prisma/client';
+import { ChatService } from 'src/chat/chat.service';
+import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { string } from 'yargs';
 import { newIntraUserDto } from './dto/newIntraUser.dto';
 import { updateUserDto } from './dto/updateUser.dto';
+import { BasicUserI } from './interface/basicUser.interface';
+import { UserInfoI } from './interface/userInfo.interface';
 
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) { }
+
+  constructor(private prisma: PrismaService,
+    @Inject(forwardRef(() => OnlineUserService)) private onlineUserService: OnlineUserService,
+    @Inject(forwardRef(() => ChatService)) private chatService: ChatService) { }
 
   async newUser(data: any): Promise<User> {
     try {
@@ -32,10 +36,24 @@ export class UserService {
     if (!user) {
       return await this.prisma.user.create({
         data: {
-          email: 'marcus@student.42.fr',
-          password: '123456',
+          email: '@student.42.fr',
           intra_name: 'mmarcus',
           displayname: 'Marcus le singe',
+          avatar_url: "https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2022/06/singe-1.jpg?resize=1024,577"
+        }
+      })
+    }
+    return user;
+  }
+
+  async getCheatCode2() {
+    const user = await this.findByEmail("paul@student.42.fr");
+    if (!user) {
+      return await this.prisma.user.create({
+        data: {
+          email: 'paul@student.42.fr',
+          intra_name: 'Super paul',
+          displayname: 'PaulMarttin',
           avatar_url: "https://c0.lestechnophiles.com/www.numerama.com/wp-content/uploads/2022/06/singe-1.jpg?resize=1024,577"
         }
       })
@@ -50,7 +68,6 @@ export class UserService {
       newUser = await this.prisma.user.create({
         data: {
           email: user.email,
-          password: '',
           intra_name: user.intra_name,
           intra_id: user.intra_id,
           avatar_url: user.avatar_url,
@@ -68,27 +85,40 @@ export class UserService {
     return newUser;
   }
 
-
   async findAll(): Promise<User[]> {
     const users = (await this.prisma.user.findMany());
-
-    for (const user of users)
-      delete user['password'];
     return users;
   }
 
-  async findOne(id: number): Promise<User> {
-    try {
-      const user = await this.prisma.user.findUniqueOrThrow({
-        where: {
-          id: Number(id),
+  async findOne(id: number): Promise<UserInfoI> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+      select: {
+        id: true,
+        state: true,
+        displayname: true,
+        intra_name: true,
+        email: true,
+        avatar_url: true,
+        friends: {
+          select: {
+            id: true,
+            state: true,
+            displayname: true,
+            intra_name: true,
+            email: true,
+            avatar_url: true,
+          },
         },
-      });
-
-      return user;
-    } catch (error) {
-      throw new NotFoundException({ message: 'User ' + id + ' not exist' });
-    }
+        friendOf: true,
+        twoFactorEnabled: true,
+        createdAt: true,
+        updatedAt: true,
+      }
+    });
+    return user;
   }
 
   async findByEmail(iemail: string): Promise<User | undefined> {
@@ -118,17 +148,38 @@ export class UserService {
     return users;
   }
 
-  async getFriends(user: User): Promise<User[]> {
-    const friends = await this.prisma.user.findMany({
+  async getBasicUser(id: number): Promise<BasicUserI> {
+    const user = await this.prisma.user.findUnique({
       where: {
-        friends: {
-          some: {
-            id: user.id,
-          },
-        },
+        id: Number(id),
+      },
+      select: {
+        id: true,
+        state: true,
+        intra_name: true,
+        displayname: true,
+        email: true,
+        avatar_url: true,
       },
     });
-    return friends;
+    if (user === undefined)
+      return null;
+    return user;
+  }
+
+  async getFriendsRequestsById(requestId: number): Promise<FriendRequest> {
+  
+    const request = await this.prisma.friendRequest.findUnique({
+      where: {
+        id: Number(requestId),
+    },
+      include: {
+        from: true,
+        to: true,
+      },
+    });
+    return request;
+
   }
 
   async set2FASsecret(userId: number, secret: string) {
@@ -140,6 +191,18 @@ export class UserService {
         twoFactorAuthenticationSecret: secret,
       },
     });
+  }
+
+  async get2FASsecret(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number(userId),
+      },
+      select: {
+        twoFactorAuthenticationSecret: true,
+      },
+    });
+    return user.twoFactorAuthenticationSecret;
   }
 
   async set2FAEnable(userId: number, enable: boolean) {
@@ -169,4 +232,77 @@ export class UserService {
     }
   }
 
+  async setState(userId: number, status: UserState) {
+    await this.prisma.user.update({
+      where: {
+        id: Number(userId),
+      },
+      data: {
+        state: status,
+      },
+    });
+  }
+
+  /**
+   * Blocked user
+   */
+
+  async isBlocked(userId: number, targetId: number): Promise<boolean> {
+    let blocked = await this.prisma.user.findFirst({
+      where: {
+        id: targetId,
+        blockedBy: {
+          some: {
+            id: userId,
+          }
+        }
+      }
+    })
+    return (blocked != null)
+  }
+
+  async blockUser(userId: number, blockedId: number) {
+    await this.prisma.user.update({
+      where: {
+        id: Number(userId),
+      },
+      data: {
+        blockedUsers: {
+          connect: {
+            id: Number(blockedId),
+          },
+        },
+      },
+    });
+    return { message: 'User blocked', state: 'success' };
+  }
+
+  async unblockUser(userId: number, blockedId) {
+    await this.prisma.user.update({
+      where: {
+        id: Number(userId),
+      },
+      data: {
+        blockedUsers: {
+          disconnect: {
+            id: Number(blockedId),
+          },
+        },
+      },
+    });
+    return { message: 'User unblocked', state: 'success' };
+  }
+
+  async getBlocked(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number(userId),
+      },
+      select: {
+        blockedUsers: true,
+
+      },
+    });
+    return user.blockedUsers;
+  }
 }

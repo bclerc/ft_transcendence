@@ -5,6 +5,7 @@ import { jwtConstants } from '../constants';
 import { UserService } from 'src/user/user.service';
 import { JwtPayload } from '../interfaces/jwtpayload.interface';
 import { User } from '@prisma/client';
+import { UserInfoI } from 'src/user/interface/userInfo.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -16,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<User> {
+  async validate(payload: JwtPayload): Promise<UserInfoI> {
     return await this.userService.findOne(Number.parseInt(payload.sub));
   }
 }
