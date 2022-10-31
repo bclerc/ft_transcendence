@@ -38,4 +38,5 @@ export class HeaderComponent implements OnInit {
     return environment.host;
   }
 
+
 }

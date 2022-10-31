@@ -51,7 +51,7 @@ import { FileUploaderComponent } from './file-uploader/file-uploader.component';
 
 
 const config: SocketIoConfig = {
-  url: 'http://'+ environment.host +':81', options: {
+  url: 'http://'+ environment.host +':8181', options: {
     query: {
       token: sessionStorage.getItem('auth-token')
     }

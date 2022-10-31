@@ -1,5 +1,5 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { Prisma, User, UserState } from '@prisma/client';
+import { FriendRequest, Prisma, User, UserState } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -165,6 +165,21 @@ export class UserService {
     if (user === undefined)
       return null;
     return user;
+  }
+
+  async getFriendsRequestsById(requestId: number): Promise<FriendRequest> {
+  
+    const request = await this.prisma.friendRequest.findUnique({
+      where: {
+        id: Number(requestId),
+    },
+      include: {
+        from: true,
+        to: true,
+      },
+    });
+    return request;
+
   }
 
   async set2FASsecret(userId: number, secret: string) {

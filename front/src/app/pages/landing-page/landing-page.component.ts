@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class LandingPageComponent implements OnInit {
 
-  loginPath = environment.host + '/v1/api/auth/login/42';
+  loginPath = 'http://' + environment.host + ':3000/api/v1/auth/42';
   
   constructor() { }
 

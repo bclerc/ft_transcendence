@@ -112,7 +112,7 @@ export class ModifyMyProfileComponent implements OnInit {
       if (this.id)
         this.userService.ChangeDbInformation(this.user).subscribe(
           (data : any) => {
-            console.log("changedb =",data);
+            // console.log("changedb =",data);
             },
             //error => this.router.navigate([''])
           );
@@ -123,8 +123,7 @@ export class ModifyMyProfileComponent implements OnInit {
   DesactivateFa(): void {
     this.userService.DesactivateFacode().subscribe(
       (data : any) => {
-         console.log("data =",data);
-         location.reload();
+        //  console.log("data =",data);
         //this.ob = data;
       },
       //error => this.router.navigate([''])
@@ -132,5 +131,6 @@ export class ModifyMyProfileComponent implements OnInit {
   }
   
 
-
+  ChangeAvatar_url(): void{
+  }
 }

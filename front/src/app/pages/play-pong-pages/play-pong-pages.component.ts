@@ -8,16 +8,39 @@ import { ScoreI } from '../../models/PongInterfaces/score.interface';
 import { UserI } from '../../models/PongInterfaces/user.interface';
 
 const PLAYER_RADIUS = 3.5;
-const FONT = 33;
 const CANVAS_RADIUS = 20;
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 65;
 const PLAYER_WIDTH = 8;
 const HEIGHTCANVAS = 400;
-const WIDTHCANVAS = 500;
+const WIDTHCANVAS = 600;
 const WALL = 0;
 const PADDLE = 1;
 const MISS = 2;
+
+const FONT = 33;
+
+/////
+//obstacls configs
+/////
+////
+//// MAP1
+///////// obstacle1
+const MAP1_OBSTACLE1_W = 40; // width
+const MAP1_OBSTACLE1_H = 125; // height
+const MAP1_OBSTACLE1_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
+const MAP1_OBSTACLE1_POSY = 0; // position y
+const MAP1_OBSTACLE1_RADIUS = 2;
+///////// obstacle2
+const MAP1_OBSTACLE2_W = 40; // width
+const MAP1_OBSTACLE2_H = 125; // height
+const MAP1_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE2_W / 2); // position x
+const MAP1_OBSTACLE2_POSY = (HEIGHTCANVAS - MAP1_OBSTACLE2_H); // position x
+const MAP1_OBSTACLE2_RADIUS = 2;
+////
+////
+
+
 
 @Component({
   selector: 'app-root',
@@ -30,7 +53,11 @@ const MISS = 2;
 export class PlayPongPagesComponent {
   title = 'Best Pong Ever'; //titre page
   user: UserI = {};
+  state: GameI = {};
+
   private var_interval: number;
+  private map_mode: number;
+  private game_id: number;
 
   // private audio1;
   // private audio2;
@@ -38,7 +65,7 @@ export class PlayPongPagesComponent {
 
   
   constructor(private router: Router, private socket: Socket) {
-    console.log("constructor");
+    // console.log("constructor");
     // socket.on('score', this.updateScore);
     // socket.on('draw', this.drawMessage);
     // socket.on('id', this.idMessage);
@@ -51,7 +78,9 @@ export class PlayPongPagesComponent {
     // socket.on('lose', this.lose);
     // socket.on('play', this.playAudio);
     this.var_interval = 0;
-    console.log("constructor end");
+    this.map_mode = -1;
+    this.game_id = -1;
+    // console.log("constructor end");
 
     // this.audio1 = new Audio();
     // this.audio2 = new Audio();
@@ -66,9 +95,14 @@ export class PlayPongPagesComponent {
   }
 
   ngOnInit(): void {
-    console.log("ngoninit");
+    // console.log("ngoninit");
     this.socket.on('score', this.updateScore);
-    this.socket.on('draw', this.drawMessage);
+    this.socket.on('drawNormalMap', this.drawNormalMap);
+
+    this.socket.on('drawTestMap', this.drawTestMap);
+    this.socket.on('getState', this.getState);
+
+    this.socket.on('drawMap1', this.drawMap1);
     this.socket.on('id', this.idMessage);
     this.socket.on('enableButtonS', this.enableButtonS);
     this.socket.on('drawInit', this.drawInit);
@@ -80,15 +114,14 @@ export class PlayPongPagesComponent {
     // this.socket.on('play', this.playAudio);
     this.socket.emit('init');
 
-    // this.var_interval = 0;
-    console.log("ngoninit end");
+    // console.log("ngoninit end");
   }
   
   ngOnDestroy(): void {
-    console.log("ngondestroy");
+    // console.log("ngondestroy");
     this.stopSearchLoop(this.var_interval);
     this.socket.emit('stopGame', {});
-    console.log("ngondestroy end");
+    // console.log("ngondestroy end");
   }
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
@@ -154,26 +187,31 @@ export class PlayPongPagesComponent {
     }
   }
 
-  stop()
-  {
-    this.socket.emit('stopGame', {});
-    // this.enableElement("buttonDemo");
-    this.enableElement("buttonNewGame");
-    // console.log(this.var_interval);
-    if (this.var_interval != 0)
-    {
-      window.clearInterval(this.var_interval);
-      this.var_interval = 0;
-    }
+  getState(state: GameI){
+    this.state = state;
+  }
 
-    const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    if (canvas)
-    {
-      var context = canvas.getContext('2d');
-      if (context)
-        this.drawInit();
-    }
-}
+
+//   stop()
+//   {
+//     this.socket.emit('stopGame', {});
+//     // this.enableElement("buttonDemo");
+//     this.enableElement("buttonNewGame");
+//     // console.log(this.var_interval);
+//     if (this.var_interval != 0)
+//     {
+//       window.clearInterval(this.var_interval);
+//       this.var_interval = 0;
+//     }
+
+//     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+//     if (canvas)
+//     {
+//       var context = canvas.getContext('2d');
+//       if (context)
+//         this.drawInit();
+//     }
+// }
 
   newGame()
   {
@@ -182,6 +220,7 @@ export class PlayPongPagesComponent {
     var   i = 1;
     
     this.disableElement('buttonStart');
+    this.disableElement('buttonStartRandom');
     if (canvas)
     {
       var context = canvas.getContext('2d');
@@ -192,12 +231,17 @@ export class PlayPongPagesComponent {
         context.fillText(arr[0], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10);
       }
     }
+
     this.socket.emit('newGame');
+    
     this.var_interval = window.setInterval(() => {
       if (canvas && context)
       {
+    
         this.socket.emit('id_interval', this.var_interval);
+  
         this.drawInit();
+    
         context.fillText(arr[i], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10 );
         i++;
         if (i == 3)
@@ -207,29 +251,35 @@ export class PlayPongPagesComponent {
   }
 
 
-  newGameAnimationFrame()
+  newRandomGame()
   {
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     var   arr = ["Searching opponent.", " opponent..", "Searching opponent..."];
     var   i = 1;
     
     this.disableElement('buttonStart');
+    this.disableElement('buttonStartRandom');
     if (canvas)
     {
       var context = canvas.getContext('2d');
       if (context)
       {
         context.fillStyle = 'white';
-        context.font = FONT + 'px streetartfont';
+        // context.font = FONT + 'px streetartfont';
         context.fillText(arr[0], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10);
       }
     }
-    this.socket.emit('newGame');
+
+    this.socket.emit('newGameRandom');
+    
     this.var_interval = window.setInterval(() => {
       if (canvas && context)
       {
-        this.socket.emit('id_interval', this.var_interval);
+    
+        this.socket.emit('id_intervalRandom', this.var_interval);
+    
         this.drawInit();
+    
         context.fillText(arr[i], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10 );
         i++;
         if (i == 3)
@@ -239,11 +289,81 @@ export class PlayPongPagesComponent {
   }
 
 
+  // newTestGame()
+  // {
+  //   const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+  //   var   arr = ["Searching opponent.", "Searching opponent..", "Searching opponent..."];
+  //   var   i = 1;
+    
+  //   this.disableElement('buttonStart');
+  //   this.disableElement('buttonStartRandom');
+  //   this.disableElement('buttonStartTest');
+  //   if (canvas)
+  //   {
+  //     var context = canvas.getContext('2d');
+  //     if (context)
+  //     {
+  //       context.fillStyle = 'white';
+  //       // context.font = FONT + 'px streetartfont';
+  //       context.fillText(arr[0], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10);
+  //     }
+  //   }
+
+  //   this.socket.emit('newGameTest');
+    
+  //   this.var_interval = window.setInterval(() => {
+  //     if (canvas && context)
+  //     {
+    
+  //       this.socket.emit('id_intervalRandom', this.var_interval);
+    
+  //       this.drawInit();
+    
+  //       context.fillText(arr[i], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10 );
+  //       i++;
+  //       if (i == 3)
+  //         i = 0;
+  //     }
+  //   }, 1000);
+  // }
+
+  // newGameAnimationFrame()
+  // {
+  //   const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+  //   var   arr = ["Searching opponent.", " opponent..", "Searching opponent..."];
+  //   var   i = 1;
+    
+  //   this.disableElement('buttonStart');
+  //   if (canvas)
+  //   {
+  //     var context = canvas.getContext('2d');
+  //     if (context)
+  //     {
+  //       context.fillStyle = 'white';
+  //       context.font = FONT + 'px streetartfont';
+  //       context.fillText(arr[0], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10);
+  //     }
+  //   }
+  //   this.socket.emit('newGame');
+  //   this.var_interval = window.setInterval(() => {
+  //     if (canvas && context)
+  //     {
+  //       this.socket.emit('id_interval', this.var_interval);
+  //       this.drawInit();
+  //       context.fillText(arr[i], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10 );
+  //       i++;
+  //       if (i == 3)
+  //         i = 0;
+  //     }
+  //   }, 1000);
+  // }
+
+
   idMessage(socket: Socket, id: {
     id: string
   })
   {
-    console.log("idmessage:" + id);
+    // console.log("idmessage:" + id);
     if (id)
       this.user.id = id.id;
   }
@@ -291,7 +411,7 @@ export class PlayPongPagesComponent {
         context.fillStyle = 'white';
         context.font = FONT + 'px streetartfont';
         context.fillText("YOU WIN", WIDTHCANVAS / 2 - FONT * 2, HEIGHTCANVAS / 2 - 10);
-        console.log("win");
+        // console.log("win");
       }
     }
   }
@@ -308,28 +428,28 @@ export class PlayPongPagesComponent {
         context.font = FONT + 'px streetartfont';
         context.fillText("YOU LOSE", WIDTHCANVAS / 2 - FONT * 2, HEIGHTCANVAS / 2 - 10);
         // context.fillText("YOU LOSE", 300, 300, 500);
-        console.log("LOSE");
+        // console.log("LOSE");
       }
     }
   }
 
-  playAudio(type: number){
-    let audio = new Audio();
-    if (type == WALL)
-      audio.src = "../../../assets/audio/ping_pong_8bit_plop.wav";
-    else if (type == PADDLE)
-      audio.src = "../../../assets/audio/ping_pong_8bit_beeep.wav";
-    else if (type == MISS)
-      audio.src = "../../../assets/audio/ping_pong_8bit_peeeeeep.wav";
-    audio.load();
-    audio.play();
-    // if (type == WALL)
-    //   this.audio1.play();
-    // else if (type == PADDLE)
-    //   this.audio2.play();
-    // else if (type == MISS)
-    //   this.audio3.play();
-  }
+  // playAudio(type: number){
+  //   let audio = new Audio();
+  //   if (type == WALL)
+  //     audio.src = "../../../assets/audio/ping_pong_8bit_plop.wav";
+  //   else if (type == PADDLE)
+  //     audio.src = "../../../assets/audio/ping_pong_8bit_beeep.wav";
+  //   else if (type == MISS)
+  //     audio.src = "../../../assets/audio/ping_pong_8bit_peeeeeep.wav";
+  //   audio.load();
+  //   audio.play();
+  //   // if (type == WALL)
+  //   //   this.audio1.play();
+  //   // else if (type == PADDLE)
+  //   //   this.audio2.play();
+  //   // else if (type == MISS)
+  //   //   this.audio3.play();
+  // }
 
   drawText(text: string)
   {
@@ -355,7 +475,7 @@ export class PlayPongPagesComponent {
     const right = document.getElementById('rightName');
     if (left && right)
     {
-      console.log("drawName");
+      // console.log("drawName");
       if (side == 1)
       {
         left.innerHTML = "You";
@@ -369,7 +489,7 @@ export class PlayPongPagesComponent {
     }
   }
 
-  drawMessage(state: GameI){
+  drawNormalMap(state: GameI){
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     if (canvas)
     {
@@ -393,7 +513,13 @@ export class PlayPongPagesComponent {
           context.arc(CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
-        
+          // Draw ball
+          context.beginPath();
+          context.fillStyle = 'white';
+          if (state.ball && state.ball.radius)
+            context.arc(state.ball.x, state.ball.y, state.ball.radius, 0, Math.PI * 2, false);
+          context.fill();
+
           // Draw middle line
           context.strokeStyle = 'white';
           context.beginPath();
@@ -430,6 +556,98 @@ export class PlayPongPagesComponent {
             context.fill();
           }
             
+        }
+      }
+  }
+
+  drawMap1(state: GameI){
+    const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+    if (canvas)
+    {
+        var context = canvas.getContext('2d');
+        if (context)
+        {
+          //load font car il ne se charge pas des le chargement (??????)
+          // context.font = FONT + 'px streetartfont';
+          // context.fillText('', 0, 0, 0);
+
+
+          // Draw rectangle noir
+          context.fillStyle = 'black';
+          context.beginPath();
+          context.arc(0 + CANVAS_RADIUS, 0 + CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
+          context.lineTo(canvas.width - CANVAS_RADIUS + 0, 0);   
+          context.arc(canvas.width - CANVAS_RADIUS + 0, CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(canvas.width + 0, canvas.height + 0 - CANVAS_RADIUS);   
+          context.arc(canvas.width - CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, 0, Math.PI * 1 / 2);   
+          context.lineTo(CANVAS_RADIUS + 0, canvas.height + 0);
+          context.arc(CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.fill();
+
+        
+          // Draw middle line
+          context.strokeStyle = 'white';
+          context.beginPath();
+          context.moveTo(canvas.width / 2, 0);
+          context.lineTo(canvas.width / 2, canvas.height);
+          context.stroke();
+        
+          // Draw obstacle1
+          context.fillStyle = 'white';
+          // context.strokeStyle = 'white';
+          context.beginPath();
+          context.arc(MAP1_OBSTACLE1_POSX + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_POSY + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(MAP1_OBSTACLE1_W - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_POSY);   
+          context.arc(MAP1_OBSTACLE1_W - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSY, MAP1_OBSTACLE1_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(MAP1_OBSTACLE1_W + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_H + MAP1_OBSTACLE1_POSY - MAP1_OBSTACLE1_RADIUS);   
+          context.arc(MAP1_OBSTACLE1_W - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_H - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSY, MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_POSX, Math.PI * 1 / 2);   
+          context.lineTo(MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_H +MAP1_OBSTACLE1_POSY);   
+          context.arc(MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_H - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSY, MAP1_OBSTACLE1_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.fill();
+
+          // Draw obstacle2
+          context.fillStyle = 'white';
+          // context.strokeStyle = 'white';
+          context.beginPath();
+          context.arc(MAP1_OBSTACLE2_POSX + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_POSY + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(MAP1_OBSTACLE2_W - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_POSY);   
+          context.arc(MAP1_OBSTACLE2_W - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSY, MAP1_OBSTACLE2_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(MAP1_OBSTACLE2_W + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_H + MAP1_OBSTACLE2_POSY - MAP1_OBSTACLE2_RADIUS);   
+          context.arc(MAP1_OBSTACLE2_W - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_H - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSY, MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_POSX, Math.PI * 1 / 2);   
+          context.lineTo(MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_H +MAP1_OBSTACLE2_POSY);   
+          context.arc(MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_H - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSY, MAP1_OBSTACLE2_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.fill();
+
+
+          // Draw paddle1
+          context.fillStyle = 'white';
+          if (state.player1 && state.player1.paddle)
+          {
+            context.beginPath();
+            context.arc(state.player1.paddle.x + PLAYER_RADIUS, state.player1.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
+            context.lineTo(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.y);   
+            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player1.paddle.width + state.player1.paddle.x, state.player1.paddle.height + state.player1.paddle.y - PLAYER_RADIUS);   
+            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, state.player1.paddle.x, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height +state.player1.paddle.y);   
+            context.arc(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.fill();
+          }
+
+          // Draw paddle2          
+          if (state.player2 && state.player2.paddle)
+          {
+            context.beginPath();
+            context.arc(state.player2.paddle.x + PLAYER_RADIUS, state.player2.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
+            context.lineTo(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.y);   
+            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player2.paddle.width + state.player2.paddle.x, state.player2.paddle.height + state.player2.paddle.y - PLAYER_RADIUS);   
+            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, state.player2.paddle.x, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height +state.player2.paddle.y);   
+            context.arc(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.fill();
+          }
+
           // Draw ball
           context.beginPath();
           context.fillStyle = 'white';
@@ -439,6 +657,92 @@ export class PlayPongPagesComponent {
         }
       }
   }
+
+
+
+
+
+
+  drawTestMap(timestamp:number){
+    const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+
+    
+    if (canvas)
+    {
+        var context = canvas.getContext('2d');
+        if (context)
+        {
+          //load font car il ne se charge pas des le chargement (??????)
+          // context.font = FONT + 'px streetartfont';
+          // context.fillText('', 0, 0, 0);
+
+
+          // Draw rectangle noir
+          context.fillStyle = 'black';
+          context.beginPath();
+          context.arc(0 + CANVAS_RADIUS, 0 + CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
+          context.lineTo(canvas.width - CANVAS_RADIUS + 0, 0);   
+          context.arc(canvas.width - CANVAS_RADIUS + 0, CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(canvas.width + 0, canvas.height + 0 - CANVAS_RADIUS);   
+          context.arc(canvas.width - CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, 0, Math.PI * 1 / 2);   
+          context.lineTo(CANVAS_RADIUS + 0, canvas.height + 0);
+          context.arc(CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.fill();
+
+          // Draw ball
+          context.beginPath();
+          context.fillStyle = 'white';
+          if (this.state.ball && this.state.ball.radius)
+            context.arc(this.state.ball.x, this.state.ball.y, this.state.ball.radius, 0, Math.PI * 2, false);
+          context.fill();
+
+          // Draw middle line
+          context.strokeStyle = 'white';
+          context.beginPath();
+          context.moveTo(canvas.width / 2, 0);
+          context.lineTo(canvas.width / 2, canvas.height);
+          context.stroke();
+        
+          // Draw paddle1
+          context.fillStyle = 'white';
+          if (this.state.player1 && this.state.player1.paddle)
+          {
+            context.beginPath();
+            context.arc(this.state.player1.paddle.x + PLAYER_RADIUS, this.state.player1.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
+            context.lineTo(this.state.player1.paddle.width - PLAYER_RADIUS + this.state.player1.paddle.x, this.state.player1.paddle.y);   
+            context.arc(this.state.player1.paddle.width - PLAYER_RADIUS + this.state.player1.paddle.x, PLAYER_RADIUS + this.state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(this.state.player1.paddle.width + this.state.player1.paddle.x, this.state.player1.paddle.height + this.state.player1.paddle.y - PLAYER_RADIUS);   
+            context.arc(this.state.player1.paddle.width - PLAYER_RADIUS + this.state.player1.paddle.x, this.state.player1.paddle.height - PLAYER_RADIUS + this.state.player1.paddle.y, PLAYER_RADIUS, this.state.player1.paddle.x, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + this.state.player1.paddle.x, this.state.player1.paddle.height +this.state.player1.paddle.y);   
+            context.arc(PLAYER_RADIUS + this.state.player1.paddle.x, this.state.player1.paddle.height - PLAYER_RADIUS + this.state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.fill();
+          }
+
+          // Draw paddle2          
+          if (this.state.player2 && this.state.player2.paddle)
+          {
+            context.beginPath();
+            context.arc(this.state.player2.paddle.x + PLAYER_RADIUS, this.state.player2.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
+            context.lineTo(this.state.player2.paddle.width - PLAYER_RADIUS + this.state.player2.paddle.x, this.state.player2.paddle.y);   
+            context.arc(this.state.player2.paddle.width - PLAYER_RADIUS + this.state.player2.paddle.x, PLAYER_RADIUS + this.state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(this.state.player2.paddle.width + this.state.player2.paddle.x, this.state.player2.paddle.height + this.state.player2.paddle.y - PLAYER_RADIUS);   
+            context.arc(this.state.player2.paddle.width - PLAYER_RADIUS + this.state.player2.paddle.x, this.state.player2.paddle.height - PLAYER_RADIUS + this.state.player2.paddle.y, PLAYER_RADIUS, this.state.player2.paddle.x, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + this.state.player2.paddle.x, this.state.player2.paddle.height +this.state.player2.paddle.y);   
+            context.arc(PLAYER_RADIUS + this.state.player2.paddle.x, this.state.player2.paddle.height - PLAYER_RADIUS + this.state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.fill();
+          }
+          this.socket.emit('getStateNormal');
+          window.requestAnimationFrame(this.drawTestMap);
+        }
+      }
+  }
+
+
+
+
+
+
+
 
   drawInit() {
       var p1 = {
