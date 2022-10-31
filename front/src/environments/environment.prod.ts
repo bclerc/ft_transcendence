@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  host: "REPLACE_ME",
+  host: "25.31.224.81",
 };

@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { targetModulesByContainer } from '@nestjs/core/router/router-module';
-import { ChatRoom, ChatRoomType, Message, PenaltyTimeType, PenaltyType, prisma, User } from '@prisma/client';
-import EventEmitter from 'events';
+import { ChatRoom, ChatRoomType, Message, User } from '@prisma/client';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';

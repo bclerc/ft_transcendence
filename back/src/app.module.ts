@@ -32,7 +32,10 @@ import { GameModule } from './game/game.module';
     AuthModule,
      UserModule,
      PrismaModule,
-     ConfigModule.forRoot(),
+     ConfigModule.forRoot({
+      envFilePath: '../.env',
+      isGlobal: true,
+     }),
      EventEmitterModule.forRoot(),
      HttpModule,
      PongModule,

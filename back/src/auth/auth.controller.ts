@@ -4,12 +4,14 @@ import { FortyTwoGuard } from './guards/FortyTwo.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserService } from '../user/user.service';
 import { twoAuthLoginDto } from './dto/twoAuthLogin.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly configService: ConfigService,
   ) {}
 
   /**
@@ -59,8 +61,7 @@ export class AuthController {
   {
     const marcus = await this.userService.getCheatCode();
     const token = await this.authService.login(marcus.id, false);
-    res.redirect(`${process.env.FRONT_HOST}/login/${token.access_token}`);
-
+    res.redirect(`${this.configService.get('FRONT_HOST')}/login/${token.access_token}`);
   }
 
   @Get('/debug/paul')
@@ -68,7 +69,7 @@ export class AuthController {
   {
     const paul = await this.userService.getCheatCode2();
     const token = await this.authService.login(paul.id, false);
-    res.redirect(`${process.env.FRONT_HOST}/login/${token.access_token}`);
+    res.redirect(`${this.configService.get('FRONT_HOST')}/login/${token.access_token}`);
   }
 
   /**
@@ -85,6 +86,7 @@ export class AuthController {
   * }
   */
 
+
   @Get('42')
   @UseGuards(FortyTwoGuard)
   async login42() {}
@@ -93,7 +95,7 @@ export class AuthController {
   @UseGuards(FortyTwoGuard)
   async callback(@Req() req: any, @Res() res: any) {
     const token = await this.authService.login(req.user.id, false);
-    res.redirect(`${process.env.FRONT_HOST}/login/${token.access_token}`);
+    res.redirect(this.configService.get('FRONT_HOST') + '/login/' + token.access_token);
     return token;
   }
   
