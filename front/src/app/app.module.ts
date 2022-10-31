@@ -49,6 +49,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { EditRoomChatComponent } from './edit-room-chat/edit-room-chat.component';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { Activate2FaComponent } from './pages/activate2-fa/activate2-fa.component';
+import { NewRoomComponent } from './pages/chat-page/new-room/new-room.component';
 
 const config: SocketIoConfig = {
   url: 'http://localhost:81', options: {
@@ -93,6 +94,7 @@ export function tokenGetter() {
     SendCodeComponent,
     Activate2FaComponent,
     ChatPageComponent,
+    NewRoomComponent,
   ],
   imports: [
     BrowserModule,

@@ -9,6 +9,8 @@
 	<body>
 		<div class="center">
 			<div class="main-container">
+
+				<!-- SIDEBAR -->
 				<aside class="sidebar">
 					<div class="user-info">
 						<img src="../../../assets/img/default_profile_picture.webp" alt="ma belle gueule">
@@ -44,7 +46,8 @@
 						<app-room [room]="selectedRoom" [user]="actualUser"></app-room>
 					</ng-container>
 					<ng-container *ngIf="newRoom">
-						<p>WOOOOOOOOOO HOOOOOOOOOO</p>
+						<app-new-room>
+						</app-new-room>
 					</ng-container>
 				</main>
 			</div>
@@ -139,5 +142,5 @@
 </div>
 
 <ng-template #no_rooms>
-  <p style="margin: 25px">Vous n'avez pas encore de groupe</p>
+  <p class="no-room" >Vous n'avez pas encore de groupe</p>
 </ng-template>

@@ -1,0 +1,70 @@
+<!-- <p>new-room works!</p> -->
+<!-- <main class="container">
+</main> -->
+
+<main class="container">
+	<section class="demi-public">
+		<H2>Groupes publics</H2>
+		<ul>
+			<li *ngFor="let room of (publicrooms | async)">
+				<div class="info-list">
+					<div id="title-list">
+						<h3> {{room.name}}</h3>
+						<ng-container *ngIf="room.password">
+							<img *ngIf="room.password" matTooltip="Mot de passe nécéssaire" src="../../../../assets/svg/lock.svg" alt="mot de passe">
+						</ng-container>
+					</div>
+					<p id="description">{{room.description}}</p>
+					<div id="membres">Avec
+						<span *ngFor="let user of room.users">{{user.intra_name}} </span>
+					</div>
+				</div>
+				<div class="but">
+					<button mat-Button matTooltip="Rejoindre le groupe" (click)="joinRoom(room, room.password !== null)">
+						<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+					</button>
+				</div>
+			</li>
+		</ul>
+	</section>
+	<section class="demi-create">
+			<H2>Créer un groupe</H2>
+			<!-- <input type="text" matInput placeholder="Nom du groupe" default="caca">
+			<input type="text" matInput placeholder="Description">
+			<input type="text" matInput placeholder="Chercher par pseudo"> -->
+			<form [formGroup]="form" (ngSubmit)="create()">
+
+				<!-- Nom du groupe -->
+				<div id="input-box">
+					<p id="input-title">Nom du groupe</p>
+					<textarea id="input-text" placeholder="Super groupe de la mort" default="caca" formControlName="name"></textarea>
+					<p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe fdp</p>
+				</div>
+
+				<!-- Description -->
+				<div id="input-box">
+					<p id="input-title">Description</p>
+					<textarea id="input-text" placeholder="Super description de la mort qui tue" formControlName="description"></textarea>
+				</div>
+
+				<!-- User select -->
+				<app-userselect [users]="users.value" (addUser)="addUser(initUser($event))" (removeuser)="removeUser($event.id)"></app-userselect>
+
+				<!-- Public -->
+				<mat-checkbox matCheckBox formControlName="public">Public</mat-checkbox>
+				<div id="input-box" *ngIf="public.value">
+					<p id="input-title">Mot de passe</p>
+					<textarea id="input-text" formControlName="password"></textarea>
+				</div>
+				<!-- <mat-form-field *ngIf="public.value"> -->
+					<!-- <mat-label>Mot de passe</mat-label> -->
+					<!-- <input *ngIf="public.value" class="my-input" matInput type="password" formControlName="password"> -->
+
+				<!-- Bouton -->
+				<div class="button-creer">
+					<button mat-button type="submit" [disabled]="!form.valid">Créer le groupe</button>
+				</div>
+			</form>
+	</section>
+
+</main>

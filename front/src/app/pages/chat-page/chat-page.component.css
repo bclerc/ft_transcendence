@@ -19,18 +19,26 @@ a{
 @font-face {
 	font-family: 'Titan One';
 	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('ttf');
+	font-style: normal;
+	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Regular';
 	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('ttf');
+	font-style: normal;
+	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Medium';
 	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('ttf');
+	font-style: normal;
+	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Bold';
 	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('ttf');
+	font-style: normal;
+	font-weight: 300;
 }
 
 .center{
@@ -56,7 +64,7 @@ hr.clear{
 .intraName{
 	font-family: Titan One;
 	font-size: 16px;
-	color: #FEEFCF;
+	color: #feefcf;
 	padding: 15px 0px 15px 20px;
 	width : 162px;
 	text-decoration: none;
@@ -66,8 +74,8 @@ body .user-info img{
 	height: 64px;
 	object-fit: cover;
 	border-radius: 6px;
-	border: 3px solid #EE481E;
-	box-shadow: -3px 3px #EE481E;
+	border: 3px solid #ee481e;
+	box-shadow: -3px 3px #ee481e;
 }
 
 .pute {
@@ -81,7 +89,7 @@ body .user-info img{
 	min-width:25px !important;
 	padding: 5px;
 	border-radius: 40px;
-	color: #FEEFCF;
+	color: #feefcf;
 	font-family: ReadexPro-Medium;
 	text-align: center;
 	font-size: 11px;
@@ -93,15 +101,27 @@ body .user-info img{
 .mat-tab-label.mat-tab-label-active {
 	min-width: 55px !important;
 	padding: 15px;
-	background-color: #EE481E;
+	background-color: #ee481e;
 	border-radius: 40px;
-	border: 2px solid #FEEFCF;
-	color: #FEEFCF;
+	border: 2px solid #feefcf;
+	color: #feefcf;
 	font-family: ReadexPro-Medium;
 	text-align: center;
 	font-size: 14px;
 	text-decoration: none;
 }
+/* .mat-tab-label.mat-tab-label-active:disabled {
+	min-width: 55px !important;
+	padding: 15px;
+	background-color: #ee481e !important;
+	border-radius: 40px;
+	border: 2px solid #feefcf !important;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+} */
 
 /* Styles for the ink bar */
 .mat-ink-bar {
@@ -113,7 +133,6 @@ body .user-info img{
 	margin-top: 30px;
 	list-style-type: none;
 	max-height: 320px;
-	/* overflow-y: scroll; */
 	padding-left: 10px;
 	/* overflow-y: scroll;
 	scrollbar-color: #1f1f1f #121212;
@@ -123,7 +142,7 @@ body .user-info img{
 /* Styles for group list / friend list */
 .mat-tab-group ul li{
 	font-family: ReadexPro-Bold;
-	color: #FEEFCF;
+	color: #feefcf;
 	font-size: 14px;
 	margin-top: 20px;
 }
@@ -143,13 +162,13 @@ body .user-info img{
 .button{
 	font-family: Titan One;
 	font-size: 14px;
-	color: #FEEFCF;
+	color: #feefcf;
 	/* text-align: center; */
 	text-decoration: none;
-	background-color: #EE481E;
+	background-color: #ee481e;
 	border-radius: 6px;
-	border: 3px solid #FEEFCF;
-	box-shadow: -3px 3px #FEEFCF;
+	border: 3px solid #feefcf;
+	box-shadow: -3px 3px #feefcf;
 	width: 200px;
 	display: block;
 	padding: 18px 25px 17px 25px;
@@ -160,22 +179,33 @@ body .user-info img{
 }
 .button:hover{
 	background-color: #1F1F1F;
-	color: #EE481E;
+	color: #ee481e;
+}
+
+.no-room{
+	font-family: Titan One;
+	font-size:25px;
+	text-align: center;
+	color:#feefcf;
+	display: flex;
+	align-self: center;
+	margin-top: 37%;
+
 }
 
 /*------------------------------------------------------------ Grille */
 .main-container{
-	display:flex;
+	display: flex;
 }
 
 .sidebar,
 .content{
 	/* float: left; */
-	display:flex;
+	display: flex;
 	flex-direction: column;
-    border: 2px solid #FEEFCF;
+    border: 2px solid #feefcf;
     border-radius: 20px;
-    color: #FEEFCF;
+    color: #feefcf;
 	height: 720px;
 }
 

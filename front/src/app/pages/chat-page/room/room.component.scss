@@ -94,7 +94,7 @@ html, body, .flexbox {
 				// margin: 2px 0;
 				overflow: hidden;
 				transition: height 0.3s ease-in-out;
-				// box-sizing: niquetamerelapute;
+				word-break: break-all;
 				&.hide {
 					height: 0;
 				}
@@ -193,6 +193,9 @@ html, body, .flexbox {
 				// margin-right: 15px;
 				&:focus {
 					outline:none;
+				}
+				&::placeholder{
+					color: #9c9381;
 				}
 			}
 		}

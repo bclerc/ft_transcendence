@@ -9,6 +9,7 @@
 					<p id="description">{{room.description}}</p>
 					<p id="membres" *ngFor="let user of room.users">{{user.intra_name}}</p>
 				</div>
+				<!-- Settings -->
 				<div class="chat-box-settings">
 					<a href="index.html">
 						<img src="../../../../assets/svg/settings.svg" alt="settings">
@@ -61,5 +62,5 @@
 </div>
 
 	<ng-template #no_room>
-		<mat-error style="margin: 30%;">Aucun groupe sélectionné</mat-error>
+		<mat-error  class="no-room" >Aucun groupe sélectionné</mat-error>
 	</ng-template>

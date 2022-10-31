@@ -73,13 +73,13 @@ hr.clear{
 .button-log{
 	font-family: Titan One;
 	font-size: 14px;
-	color: #FEEFCF;
+	color: #feefcf;
 	text-align: center;
 	text-decoration: none;
-	background-color: #EE481E;
+	background-color: #ee481e;
 	border-radius: 6px;
-	border: 3px solid #FEEFCF;
-	box-shadow: -3px 3px #FEEFCF;
+	border: 3px solid #feefcf;
+	box-shadow: -3px 3px #feefcf;
 	max-width: 190px;
 	display: block;
 	padding: 18px 25px 17px 25px;
@@ -87,19 +87,19 @@ hr.clear{
 }
 .button-log:hover{
 	background-color: #1F1F1F;
-	color: #EE481E;
-	/* box-shadow: 3px -3px #EE481E; */
+	color: #ee481e;
+	/* box-shadow: 3px -3px #ee481e; */
 }
 
 h1{
 	font-family: Titan One;
 	text-align: center;
 	font-size: 35px;
-	color: #FEEFCF;
+	color: #feefcf;
 	margin: 66px 0px 50px 0px;
 }
 
 label{
-	color: #FEEFCF;
+	color: #feefcf;
 	margin: 200px;
 }

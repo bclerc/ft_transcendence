@@ -63,17 +63,17 @@ header {
 	margin-right: 0px;
 }
 #header nav ul li a{
-	color: #FEEFCF;
+	color: #feefcf;
 	padding-bottom: 6px;
 	text-decoration: none;
 }
 #header nav ul li a:hover{
-	border-bottom: 7px solid #EE481E;
-	/* text-decoration-line: 30% solid #EE481E; */
+	border-bottom: 7px solid #ee481e;
+	/* text-decoration-line: 30% solid #ee481e; */
 }
 
 .active {
-	border-bottom: 7px solid #EE481E;
+	border-bottom: 7px solid #ee481e;
 }
 
 
