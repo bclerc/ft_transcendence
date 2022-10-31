@@ -14,6 +14,8 @@ import { HeaderService } from '../services/user/header.service';
 export class HeaderComponent implements OnInit {
 
 
+  connect: boolean = false;
+
   constructor(private token : TokenStorageService,
               private router : Router,
               public navbar: HeaderService,
@@ -23,7 +25,8 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit(): void {
-    //this.navbar.show();
+    if (this.token.getToken())
+      this.connect = true;
   }
 
   logOut() : void {
