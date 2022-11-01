@@ -148,6 +148,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.server.to(client.id).emit('publicRooms', await this.chatService.getPublicRooms());
   }
 
+  @SubscribeMessage('needDmRooms')
+  async handleNeedDmRooms(@ConnectedSocket() client: Socket) {
+    let user = this.onlineUserService.getUser(client.id);
+    if (user) {
+      this.sendToUser(user, 'dmRooms', await this.chatService.getDmGroupForUser(user.id));
+    }
+  }
+
   @SubscribeMessage('createRoom')
   async onCreateRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() newRoom: newChatRoomI) {
     this.wschatService.newRoom(client.id, newRoom);

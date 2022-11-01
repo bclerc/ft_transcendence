@@ -84,6 +84,7 @@ export class ChatService {
           },
         },
         ownerId: true,
+        type: true,
         public: true,
         description: true,
       },
@@ -106,6 +107,7 @@ export class ChatService {
         id: true,
         name: true,
         description: false,
+        type: true,
         users: {
           select: {
             id: true,
@@ -273,6 +275,7 @@ export class ChatService {
         id: true,
         name: true,
         admins: true,
+        type: true,
         ownerId: true,
         public: true,
         description: true,

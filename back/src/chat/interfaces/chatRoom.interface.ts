@@ -1,4 +1,4 @@
-import { Message, User } from "@prisma/client";
+import { ChatRoomType, Message, User } from "@prisma/client";
 import { BasicUserI } from "src/user/interface/basicUser.interface";
 
 export interface ChatRoom {
@@ -25,6 +25,7 @@ export interface ChatRoomI {
   id: number;
   name: string;
   description: string;
+  type: ChatRoomType;
   ownerId: number;
   users: BasicUserI[];
   admins: BasicUserI[];
@@ -36,6 +37,7 @@ export interface DmChatRoomI {
   id: number;
   name: string;
   ownerId: number;
+  type: ChatRoomType;
   users: BasicUserI[];
   messages?: Message[];
 }
