@@ -2,7 +2,7 @@
 	<p id="input-title">Ajouter des fils de pute</p>
 	<!-- <div id="input-text-n-button"> -->
 		<textarea id="input-text" placeholder="Chercher par un pseudo" [matAutocomplete]="auto" [formControl]="searchUsername"></textarea>
-		<!-- <p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe fdp</p> -->
+		<!-- <p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe superbes</p> -->
 		<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setSelectedUser($event.option.value)">
 			<ng-container>
 				<!-- <mat-select> -->
@@ -15,11 +15,11 @@
 				<!-- </mat-select> -->
 			</ng-container>
 		</mat-autocomplete>
-		<div class="but">
+		<!-- <div class="but">
 			<button mat-button type="button" [disabled]="!selectedUser.intra_name" (click)="addUserToForm()">
 				<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
 			</button>
-		</div>
+		</div> -->
 	 <!-- </div> -->
 </div>
 
