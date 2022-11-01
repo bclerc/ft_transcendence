@@ -36,7 +36,7 @@ services:
         - .env:/.env
       ports:
         - 3000:3000
-        - 81:81
+        - 8181:8181
       networks:
         - trans_network
       depends_on:

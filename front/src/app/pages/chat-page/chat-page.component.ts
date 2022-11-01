@@ -24,8 +24,7 @@ export class ChatPageComponent implements OnInit {
 	haveSelectedRoom: boolean = false;
 
 	rooms$: Observable<ChatRoom[]> = this.chatService.getRooms();
-
-
+  dmRooms$: Observable<ChatRoom[]> = this.chatService.getDmRooms();
 	publicrooms: Observable<ChatRoom[]> = this.chatService.getPublicRooms();
 
 	selected = new FormControl(0);
@@ -47,6 +46,9 @@ export class ChatPageComponent implements OnInit {
 	async ngOnInit() {
     this.chatService.needRooms();
     this.chatService.needPublicRooms();
+    this.chatService.needDmRooms();
+
+
 		this.userService.getLoggedUser().subscribe((user: UserI) => {
 			this.actualUser = user;
 		});
@@ -158,4 +160,18 @@ export class ChatPageComponent implements OnInit {
         this.newRoom = true;
       }
     }
+
+  friend(chatRoom: ChatRoom): UserI {
+    let friend: UserI;
+    if (chatRoom.users && chatRoom.users.length > 0) {
+      for (const user of chatRoom.users) {
+        if (user.id !== this.actualUser.id) {
+          friend = user;
+          return friend;
+        }
+      }
+    }
+    return this.actualUser;
+  }
+
 }

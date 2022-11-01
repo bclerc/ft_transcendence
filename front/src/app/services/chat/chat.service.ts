@@ -38,6 +38,11 @@ export class ChatService {
       return  this.socket.fromEvent<ChatRoom[]>('publicRooms');
     }
     
+
+    getDmRooms(): Observable<ChatRoom[]> {
+      return  this.socket.fromEvent<ChatRoom[]>('dmRooms');
+    }
+
     createRoom(room: ChatRoom) {
       this.socket.emit('createRoom', room);
     }
@@ -60,6 +65,10 @@ export class ChatService {
 
     needPublicRooms() {
       this.socket.emit('needPublicRooms');
+    }
+
+    needDmRooms() {
+      this.socket.emit('needDmRooms');
     }
 
     joinRoom(room: ChatRoom) {

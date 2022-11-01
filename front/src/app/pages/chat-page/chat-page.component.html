@@ -29,12 +29,9 @@
 							</mat-tab>
 							<mat-tab label="Mes amis">
 								<ul>
-									<li>mon ami joe</li>
-									<li>mon ami joe</li>
-									<li>mon ami joe</li>
-									<li>mon ami joe</li>
-									<li>mon ami joe</li>
-									<li>mon ami joe</li>
+                  <li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
+                    <p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).intra_name }}</p>
+                  </li>
 								</ul>
 							</mat-tab>
 						</mat-tab-group>
@@ -43,7 +40,7 @@
 				</aside>
 				<main class="content">
 					<ng-container *ngIf="!newRoom">
-						<app-room [room]="selectedRoom" [user]="actualUser"></app-room>
+						<app-room [friend] = "friend(selectedRoom)" [room]="selectedRoom" [user]="actualUser"></app-room>
 					</ng-container>
 					<ng-container *ngIf="newRoom">
 						<app-new-room>

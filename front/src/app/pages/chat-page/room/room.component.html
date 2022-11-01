@@ -6,14 +6,20 @@
 			<!-- CLASS chat-box-header -->
 			<section class="chat-box-header">
 				<div class="chat-box-info">
-					<h2>{{ room.name }}</h2>
-					<p id="description">{{room.description}}</p>
-					<p id="membres" *ngFor="let user of room.users">{{user.intra_name}}</p>
-				</div>
+          <div *ngIf="room.type === 'DM'"  style="display: flex">
+            <img src="{{friend.avatar_url}}" alt="{{friend.intra_name}}" class="user-dm-avatar" >
+            <h2  style="display: flex; flex-direction: row;" >{{ friend.intra_name }}</h2>
+          </div>
+          <h2 *ngIf="room.type === 'GROUP'" >{{ room.name }}</h2>
+          <p id="description">{{room.description}}</p>
+          <ng-container *ngIf="room.type === 'GROUP'">
+            <p id="membres" *ngFor="let user of room.users">{{user.intra_name}}</p>
+          </ng-container>
+        </div>
 				<!-- Settings -->
 				<div class="chat-box-settings">
 					<a href="index.html">
-						<img src="../../../../assets/svg/settings.svg" alt="settings">
+						<img *ngIf="room.type === 'GROUP'" src="../../../../assets/svg/settings.svg" alt="settings">
 					</a>
 				</div>
 			</section>
@@ -39,6 +45,8 @@
 					</ng-container>
 				</div>
 			</div>
+
+      
 
 			<!-- CLASS chat-box-footer -->
 			<form [formGroup]="form" (ngSubmit)="sendMessage()" class="chat-box-footer">
