@@ -7,7 +7,7 @@ COPY . .
 RUN npm install
 
 
-CMD [ "npm", "run", "build", "--prod" ]
+CMD npm run build --prod
 
 
 # stage 2
