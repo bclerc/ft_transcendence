@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { BallI } from '../interfaces/ball.interface';
 import { PlayerI } from '../interfaces/player.interface';
 import { PointI } from '../interfaces/point.interface';
 import { GameI } from '../interfaces/game.interface';
+import { Socket } from 'socket.io';
+import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 
 
 const BALL_RADIUS = 4;
@@ -13,8 +15,10 @@ const WIDTHCANVAS = 600;
 
 const MAX_SCORE = 50;
 
-const MAX_SPEED = 13;
+const MAX_SPEED = 13; //ball
 const defaultSpeed = 5; //speed de la balle par default
+
+const SPEED_PLAYER = 10
 
 
 
@@ -42,16 +46,14 @@ const MAP1_OBSTACLE2_RADIUS = 2;
 
 @Injectable()
 export class PongService {
-    // loopId: number;
 
-    // private endGame(state: GameI){
-    //     clearInterval(state.id);
-    // }
+    constructor(
+	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
+    )
+    {};
 
     loopGameNormal(game: GameI){
-        // var player1: PlayerI = game.player1;
-        // var player2: PlayerI = game.player2;
-        // var ball: BallI = game.ball;
+
         ////
         //MOUVEMENTS DES JOUEURS
         ////
@@ -83,8 +85,6 @@ export class PongService {
             //inversement de la direction y
             game.ball.dy *= -1;
             game.ball.y = 0
-            // game.player1.socket.emit('play', 0);
-            // game.player2.socket.emit('play', 0);
         }
         //rebond vertical bas
         else if (game.ball.y > HEIGHTCANVAS - game.ball.height)
@@ -92,8 +92,6 @@ export class PongService {
             //inversement de la direction y
             game.ball.dy *= -1;
             game.ball.y = HEIGHTCANVAS - game.ball.height;
-            // game.player1.socket.emit('play', 0);
-            // game.player2.socket.emit('play', 0);
         }
 
         ////horizontalement
@@ -102,23 +100,15 @@ export class PongService {
         //sil y a rebond entre balle et paddle:
         if (((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) || ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle)))
         {
-            // game.player1.socket.emit('play', 1);
-            // game.player2.socket.emit('play', 1);
-            console.log("rebond !!")
-
             if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle))
             {
                 this.rebond(game.ball, game.player1.paddle);
-                // console.log("1bef ballx = ", game.ball.x);
                 game.ball.x = 0 + PLAYER_WIDTH;
-                // console.log("1aft ballx = ", game.ball.x);
             }
             else
             {
                 this.rebond(game.ball, game.player2.paddle);
-                // console.log("2bef ballx = ", game.ball.x);
                 game.ball.x = WIDTHCANVAS - PLAYER_WIDTH;
-                // console.log("2aft ballx = ", game.ball.x);
             }
         }
         //si le point est marqué:
@@ -127,8 +117,6 @@ export class PongService {
             //mise a jour des scores et emission au front
             game.ball.x <= (0 - game.ball.width) ? game.player2.points++ : 42;
             game.ball.x >= (WIDTHCANVAS + game.ball.width) ? game.player1.points++ : 42;
-            // game.player1.socket.emit('play', 2);
-            // game.player2.socket.emit('play', 2);
             game.player1.socket.emit('score', {
                 score1: game.player1.points,
                 score2: game.player2.points
@@ -138,7 +126,6 @@ export class PongService {
                 score2: game.player2.points
             });
             
-
             ///Si Max SCORE atteint
             if (game.player1.points === MAX_SCORE || game.player2.points === MAX_SCORE)
             {
@@ -155,16 +142,15 @@ export class PongService {
                 }
                 return ;
             }
+
             //TO DO 
             //emission aux spectateurs
 
-            //reinitialiser la balle et sa direction y vers celui qui vient de perdre
-            if (game.ball.x <= (0 - game.player1.paddle.width))
+            if (game.ball.x <= (0 - game.player1.paddle.width))     //reinitialiser la balle et sa direction y vers celui qui vient de perdre
                 this.reinitBall(game.ball, -1);
             else
                 this.reinitBall(game.ball, 1);
-            //reinit position joueur au centre
-            this.reinitPlayers(game.player1, game.player2);
+            this.reinitPlayers(game.player1, game.player2);     //reinit position joueur au centre
         }
 
 
@@ -290,9 +276,9 @@ loopGameMap1(game: GameI){
             //emission aux spectateurs
 
             //reinitialiser la balle et sa direction y vers celui qui vient de perdre
-            // if (game.ball.x - game.ball.radius <= 0)
-                // this.reinitBall(game.ball, 1);
-            // else
+            if (game.ball.x - game.ball.radius <= 0)
+                this.reinitBall(game.ball, 1);
+            else
                 this.reinitBall(game.ball, -1);
             //reinit position joueur au centre
             this.reinitPlayers(game.player1, game.player2);
@@ -352,12 +338,164 @@ loopGameMap1(game: GameI){
         game.player2.socket.emit('drawMap1', copy);
     }
 
+//////
+//LOOP3
+/////
+
+loopGameMap2(game: GameI){
+    ////
+    //MOUVEMENTS DES JOUEURS
+    ////
+    
+    game.player1.paddle.y += game.player1.paddle.dy;
+    game.player2.paddle.y += game.player2.paddle.dy;
+
+    //blocage des paddle pour au'il ne deborde pas en haut ou en bas
+    if (game.player1.paddle.y < 0)
+        game.player1.paddle.y = 0;
+    else if (game.player1.paddle.y > HEIGHTCANVAS - game.player1.paddle.height)
+        game.player1.paddle.y =  HEIGHTCANVAS - game.player1.paddle.height;
+    if (game.player2.paddle.y < 0)
+        game.player2.paddle.y = 0;
+    else if (game.player2.paddle.y > HEIGHTCANVAS - game.player2.paddle.height)
+        game.player2.paddle.y =  HEIGHTCANVAS - game.player2.paddle.height;
+
+
+    /////
+    //MOUVEMENT DE LA BALLE
+    ////        
+
+    
+    ////////
+    //////HORIZONT
+    ////////
+    
+    game.ball.x += game.ball.dx;
+    
+
+    //sil y a rebond entre balle et paddle:
+    if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle))
+    {
+        this.rebond(game.ball, game.player1.paddle);
+        game.ball.x = 0 + PLAYER_WIDTH + game.ball.radius;
+    }
+    else if ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle))
+    {
+        this.rebond(game.ball, game.player2.paddle);
+        game.ball.x = WIDTHCANVAS - PLAYER_WIDTH - game.ball.radius;
+    }
+    /////
+    //si le point est marqué:
+    /////
+    if ( game.ball.x <= (0 - game.ball.width) || game.ball.x >= (WIDTHCANVAS + game.ball.width))
+    {
+        //mise a jour des scores et emission au front
+        game.ball.x <= (0 - game.ball.width) ? game.player2.points++ : 42;
+        game.ball.x >= (WIDTHCANVAS + game.ball.width) ? game.player1.points++ : 42;
+        game.player1.socket.emit('score', {
+            score1: game.player1.points,
+            score2: game.player2.points
+        });
+        game.player2.socket.emit('score', {
+            score1: game.player1.points,
+            score2: game.player2.points
+        });
+        
+        ///Si Max SCORE atteint
+        if (game.player1.points === MAX_SCORE || game.player2.points === MAX_SCORE)
+        {
+            clearInterval(game.id_interval);
+            if (game.player1.points === MAX_SCORE)
+            {
+                game.player1.socket.emit('win');
+                game.player2.socket.emit('lose');
+            }
+            else
+            {
+                game.player1.socket.emit('lose');
+                game.player2.socket.emit('win');
+            }
+            return ;
+        }
+        //TO DO 
+        //emission aux spectateurs
+
+        //reinitialiser la balle et sa direction y vers celui qui vient de perdre
+        if (game.ball.x - game.ball.radius <= 0)
+            this.reinitBall(game.ball, 1);
+        else
+            this.reinitBall(game.ball, -1);
+        //reinit position joueur au centre
+        this.reinitPlayers(game.player1, game.player2);
+    }
+
+    ///////
+    ////////VERTICALEMENT
+    ///////
+    
+    game.ball.y += game.ball.dy;
+    
+    
+    //sil y a un rebond horiz haut
+    if ( game.ball.y - game.ball.radius <= 0)
+    {
+        //inversement de la direction y
+        game.ball.dy *= -1;
+        game.ball.y = 0 + game.ball.radius;
+    }
+    //rebond horiz bas
+    else if (game.ball.y + game.ball.radius >= HEIGHTCANVAS)
+    {
+        //inversement de la direction y
+        game.ball.dy *= -1;
+        game.ball.y = HEIGHTCANVAS - game.ball.radius;
+        // game.player1.socket.emit('play', 0);
+        // game.player2.socket.emit('play', 0);
+    }
+
+    ////Mouvement object
+    
+
+    //envoyer les datas aux sockets
+    //pour eviter les copy cyclique, il faut enlever les sockets 
+    var copy = JSON.parse(JSON.stringify(game, (key, value) => {
+        if (key === 'socket')
+            return undefined;
+        return value;
+    }));
+    game.player1.socket.emit('drawMap1', copy);
+    game.player2.socket.emit('drawMap1', copy);
+}
 
 
 
+    async drawInit(game: GameI)
+    {
+        game.player1.socket.emit('drawInit');
+        game.player2.socket.emit('drawInit');
+        game.player1.socket.emit('drawText', "3");
+        game.player2.socket.emit('drawText', "3");
+        await this.delay(1000);
+        game.player1.socket.emit('drawInit');
+        game.player2.socket.emit('drawInit');
+        game.player1.socket.emit('drawText', "2");
+        game.player2.socket.emit('drawText', "2");
+        await this.delay(1000);
+        game.player1.socket.emit('drawInit');
+        game.player2.socket.emit('drawInit');
+        game.player1.socket.emit('drawText', "1");
+        game.player2.socket.emit('drawText', "1");
+        await this.delay(1000);
+        game.player1.socket.emit('drawInit');
+        game.player2.socket.emit('drawInit');
+        game.player1.socket.emit('drawText', "Start !");
+        game.player2.socket.emit('drawText', "Start !");
+        await this.delay(200);
+    }
 
-
-
+	delay(ms: number) {
+		return new Promise( resolve => setTimeout(resolve, ms) );
+    }
 
     // playerAutoMove(game: GameI): GameI {
     //     game.player1.paddle.y = (game.ball.y - game.player1.paddle.height / 2) * 0.55;
@@ -414,8 +552,6 @@ loopGameMap1(game: GameI){
     
     initState(): GameI{
 		var p1: PlayerI = {
-    		// user: UserI;
-    		// socket: Socket,
 	    	paddle: {
 				x: 0,
 				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
@@ -428,8 +564,6 @@ loopGameMap1(game: GameI){
 		};
 
 		var p2: PlayerI = {
-    		// user: UserI;
-    		// socket: Socket;
 	    	paddle: {
 				x: WIDTHCANVAS - PLAYER_WIDTH,
 				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
@@ -445,18 +579,7 @@ loopGameMap1(game: GameI){
 			id: "1",
 			player1: p1,
 			player2: p2,
-			// acceleration: 3,
-            // direction: {
-            //     x: 0,
-            //     y: 0,
-            //     dx: 0,
-            //     dy: 0,
-            //     height: 0,
-            //     width: 0
-            // },
             type: 0,
-			// score1: 0,
-			// score2: 0,
 			ball: {
 				x: WIDTHCANVAS / 2,
 				y: HEIGHTCANVAS / 2,
@@ -469,5 +592,72 @@ loopGameMap1(game: GameI){
 			},
 		}
 		return state;
+	}
+
+
+    keydownZ(game: GameI, client: Socket)
+    {
+        if (game.player1.socket === client)
+        {
+            if (game.player1.paddle.dy != - SPEED_PLAYER)
+                game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+        }
+        else
+        {
+            if (game.player2.paddle.dy != - SPEED_PLAYER)
+                game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+        }
+    }
+
+    keydownS(game: GameI, client: Socket)
+    {
+        if (game.player1.socket === client)
+        {
+            if (game.player1.paddle.dy != SPEED_PLAYER)
+                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+        }
+        else
+        {
+            if (game.player2.paddle.dy != SPEED_PLAYER)
+                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+        }
+    }
+
+    keyupZ(game: GameI, client: Socket)
+    {
+        if (game.player1.socket === client)
+           game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+        else
+            game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+    }
+
+    keyupS(game: GameI, client: Socket)
+    {
+        if (game.player1.socket === client)
+            game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+        else
+            game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+    }
+
+
+    joinGame(client: Socket, game: GameI){
+		game.player2 = {
+        user: this.onlineUserService.getUser(client.id),
+			socket: client,
+			paddle: {
+				x: WIDTHCANVAS - PLAYER_WIDTH,
+				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
+				dx: 0,
+				dy: 0,
+				width: PLAYER_WIDTH,
+				height: PLAYER_HEIGHT
+			},
+    		points: 0,
+		}
+	}
+
+    deleteGame(g: GameI, allGames: GameI[]){
+		var newAllGames: GameI[] = allGames.filter(game => game != g);
+		allGames = newAllGames;
 	}
 }
