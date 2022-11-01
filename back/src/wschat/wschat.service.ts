@@ -174,19 +174,6 @@ export class WschatService {
     }
   }
 
-  async updateUserRooms(user: BasicUserI) {
-
-    const rooms = await this.chatService.getRoomsFromUser(user.id);
-    this.sendToUser(user, 'rooms', rooms);
-  }
-
-  async updateUsersMessagesInRoom (room: ChatRoomI) {
-      for (let user of room.users) {
-        const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
-        this.sendToUser(user, 'messages', messages);
-      }
-  }
-
   async updateRoomForUsersInRoom(roomId: number) {
     let room = await this.chatService.getRoomById(roomId);
 
@@ -200,11 +187,5 @@ export class WschatService {
     this.onlineUserService.sendToUser(user, prefix, data);
   }
 
-  async sendToUsersInRoom(roomId: number, prefix: string, data: any) {
-    let room = await this.chatService.getRoomById(roomId);
 
-    room.users.forEach(user => {
-      this.sendToUser(user, prefix, data);
-    });
-  }
 }

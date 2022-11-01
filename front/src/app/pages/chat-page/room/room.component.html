@@ -31,7 +31,6 @@
 						</ng-container>
 						<ng-container *ngIf="message.user.id !== user.id">
 							<div class="profile other-profile">
-								<!-- <img class="" src="{{ message.user.avatar_url }}"/> -->
 								<p> {{ message.user.intra_name }} </p>
 								<div id="{{message.id}}" class="message other-message">{{ message.content }}</div>
 								<span class="date">Envoyé le {{ message.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</span>
@@ -44,7 +43,7 @@
 			<!-- CLASS chat-box-footer -->
 			<form [formGroup]="form" (ngSubmit)="sendMessage()" class="chat-box-footer">
 				<div class="chat-input">
-					<textarea id="chat-input-text" placeholder="J’ecris le super message de la mort qui tue ici" formControlName="message" ></textarea>
+					<input matInput id="chat-input-text" placeholder="J’ecris le super message de la mort qui tue ici" formControlName="message" >
 					<!-- Bouton send + icon -->
 					<button mat-raised-button type="submit" (action)="sendMessage()" class="send">
 						<svg width="22px" height="22px" viewBox="0 0 22 22">

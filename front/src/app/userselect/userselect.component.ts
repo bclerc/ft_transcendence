@@ -60,6 +60,10 @@ export class UserselectComponent implements OnInit {
 
   setSelectedUser(user: UserI) {
     this.selectedUser = user;
+    this.addUser.emit(this.selectedUser);
+    this.filteredUsers = [];
+    this.selectedUser = {};
+    this.searchUsername.setValue("");
   }
 
   displayFn(user: any ): string {

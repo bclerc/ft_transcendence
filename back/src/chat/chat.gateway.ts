@@ -21,7 +21,6 @@ import { OnEvent } from '@nestjs/event-emitter';
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
 
   @WebSocketServer() server;
-  onlineUsers: Map<String, User> = new Map();
 
   constructor(
     @Inject(UserService) private readonly userService: UserService,
@@ -68,12 +67,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   handleNewRoomEvent(event: NewRoomEvent) {
     this.updateRoomForUsersInRoom(event.room.id);
     this.sendToUsersInRoom(event.room.id, 'notification', "Une nouvelle room a été créée : " + event.room.name);
+    if (event.room.public)
+      this.updatePublicRooms();
   }
 
   @OnEvent('room.update')
   handleRoomUpdateEvent(event: RoomUpdateEvent) {
     this.updateRoomForUsersInRoom(event.room.id);
     this.sendToUsersInRoom(event.room.id, 'notification', "La room " + event.room.name + " a été mise à jour");
+    if (event.room.public)
+      this.updatePublicRooms();
   }
 
   @OnEvent('room.admin.update')
@@ -132,6 +135,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
   }
 
+  @SubscribeMessage('needRooms')
+  async handleNeedRooms(@ConnectedSocket() client: Socket) {
+    let user = this.onlineUserService.getUser(client.id);
+    if (user) {
+      await this.updateUserRooms(user);
+    }
+  }
+
+  @SubscribeMessage('needPublicRooms')
+  async handleNeedPublicRooms(@ConnectedSocket() client: Socket) {
+    this.server.to(client.id).emit('publicRooms', await this.chatService.getPublicRooms());
+  }
+
   @SubscribeMessage('createRoom')
   async onCreateRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() newRoom: newChatRoomI) {
     this.wschatService.newRoom(client.id, newRoom);
@@ -146,6 +162,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoom) {
     const user = await this.onlineUserService.getUser(client.id);
     const messages = await this.chatService.getMessagesFromRoom(user.id, room);
+    user.inRoomId = room.id;
+    this.onlineUserService.onlineUsers.set(client.id, user);
     this.server.to(client.id).emit('messages', messages);
   }
 
@@ -180,9 +198,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     client.disconnect();
   }
 
+
   /** 
    * Emitters utils
    */
+
 
   async updateUserRooms(user: BasicUserI) {
 
@@ -190,13 +210,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.sendToUser(user, 'rooms', rooms);
   }
 
-  async updateUsersMessagesInRoom(room: ChatRoomI) {
-    for (let user of room.users) {
-      const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
-      this.sendToUser(user, 'messages', messages);
-    }
+  async updatePublicRooms() {
+    this.server.emit('publicRooms', await this.chatService.getPublicRooms());
   }
 
+  async updateUsersMessagesInRoom(room: ChatRoomI) {
+    for (let user of room.users) {
+      let onlineUser = this.onlineUserService.getUser(null, user.id);
+      if (onlineUser && onlineUser.inRoomId == room.id) {
+        const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
+        this.sendToUser(user, 'messages', messages);
+      }
+    }
+  }
   async updateRoomForUsersInRoom(roomId: number) {
     let room = await this.chatService.getRoomById(roomId);
 

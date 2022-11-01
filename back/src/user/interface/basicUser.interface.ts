@@ -7,4 +7,6 @@ export class BasicUserI {
     intra_name: string;
     email: string;
     avatar_url: string;
+    inRoomId?: number;
+    inGameId?: number; 
 } 

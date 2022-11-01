@@ -67,17 +67,14 @@ export class NewRoomComponent implements OnInit {
 		}
 	}
 
-	initUser(user: any) {
-		return new FormControl({
+	addUser(user: any) {
+    console.log("Action detected", user);
+		this.users.push(new FormControl({
 			id: user.id,
 			intra_name: user.intra_name,
 			avatar_url: user.avatar_url,
 			email: user.email
-		});
-	}
-
-	addUser(userFormControl: FormControl) {
-		this.users.push(userFormControl);
+		}));
 	}
 
 	async joinRoom(room: ChatRoom, pass?: boolean)

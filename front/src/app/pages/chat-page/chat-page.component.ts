@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
+import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatService } from 'src/app/services/chat/chat.service';
@@ -21,9 +22,12 @@ export class ChatPageComponent implements OnInit {
 	selectedRoom: ChatRoom = {};
 	isAdmin: boolean = false;
 	haveSelectedRoom: boolean = false;
+
 	rooms$: Observable<ChatRoom[]> = this.chatService.getRooms();
-	messages$: Observable<Message[]> = this.chatService.getMessages(this.selectedRoom);
+
+
 	publicrooms: Observable<ChatRoom[]> = this.chatService.getPublicRooms();
+
 	selected = new FormControl(0);
 	actualUser: UserI = {};
 
@@ -36,12 +40,13 @@ export class ChatPageComponent implements OnInit {
 	});
 
 	constructor(private chatService: ChatService,
-	private userService: UserService) { }
+	private userService: UserService,
+  private socket: Socket,
+  ) { }
 	
 	async ngOnInit() {
-		this.publicrooms
-		= await this.chatService.getPublicRooms();
-		this.rooms$ = await this.chatService.getRooms();
+    this.chatService.needRooms();
+    this.chatService.needPublicRooms();
 		this.userService.getLoggedUser().subscribe((user: UserI) => {
 			this.actualUser = user;
 		});
@@ -145,5 +150,12 @@ export class ChatPageComponent implements OnInit {
 	}
 
 	newRoom: boolean = true;
-	async NewRoom() { this.newRoom = this.newRoom ? false :true }
+	async NewRoom() {
+      if (this.newRoom) {
+        this.newRoom = false;
+      } else {
+        this.chatService.needPublicRooms();
+        this.newRoom = true;
+      }
+    }
 }

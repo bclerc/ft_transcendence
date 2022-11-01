@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Socket } from 'ngx-socket-io';
 import { ConnectableObservable, Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatService } from 'src/app/services/chat/chat.service';
@@ -18,7 +19,10 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   @Input() room: ChatRoom = {};
   @Input() user: UserI = {};
 
+
+  // get only the messages of the selected room
   messages$: Observable<Message[]> = this.chatService.getMessages(this.room);
+
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
   form: FormGroup = new FormGroup({
     message: new FormControl(null, [Validators.required])
@@ -26,7 +30,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   
   constructor(private chatService: ChatService,
     private userService: UserService,
-    ) {           }
+    private socket: Socket) { }
               
               
   async sendMessage() {
@@ -55,12 +59,17 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
 
     this.messages$.subscribe((messages: Message[]) => {
       const element = document.getElementById('chat_box_body');
+
       if (element) {
-        element.scrollTop = element.scrollHeight;
+        requestAnimationFrame(() => {
+          element.scrollTop = element.scrollHeight;
+        });
       }
     }
     );
   }
+
+  
 
   get message(): FormControl {
     return this.form.get('message') as FormControl;
