@@ -1,5 +1,5 @@
 export interface PointI {
-    x?: number,
+    x: number,
     y: number,
     dx: number,
     dy: number,

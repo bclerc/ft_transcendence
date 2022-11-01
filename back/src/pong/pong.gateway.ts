@@ -43,7 +43,16 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
 	){
 		this.connectedUsers = [];
-		this.state = {};
+		this.state = {
+			obstacle: {
+				x:0,
+				y:0,
+				dx:0,
+				dy:0,
+				height:0,
+				width:0
+			}
+		};
 		this.allGames = [];
 		this.allRandomGames = [];
 	};
@@ -182,7 +191,9 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			/////
 			// choose random map id
 			/////
-			var x = Math.floor(Math.random() * (MAX_MAPID - 1 + 1) + 1);
+			// var x = Math.floor(Math.random() * (MAX_MAPID - 1 + 1) + 1);
+			var x = 2;
+			
 			await this.pongService.delay(1500);
 			if (game.player1.socket)
 			game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
@@ -269,7 +280,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	
 
 	async startGame(game: GameI, mapid: number){
-		if (mapid === 0)
+			if (mapid === 0)
 		{
 			game.id_interval = setInterval(() => {
 				this.pongService.loopGameNormal(game);
@@ -277,12 +288,14 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 		else if (mapid === 1)
 		{
+			console.log("ici back 01")
 			game.id_interval = setInterval(() => {
 				this.pongService.loopGameMap1(game);
 			}, 1000/60);
 		}
 		else if (mapid === 2)
 		{
+			console.log("ici back 02")
 			game.id_interval = setInterval(() => {
 				this.pongService.loopGameMap2(game);
 			}, 1000/60);
@@ -308,7 +321,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				points: game.player1.points,
 			},
 			player2: undefined,
-			ball: game.ball
+			ball: game.ball,
+			obstacle: game.obstacle
 		}
 		this.allGames.push(game);
 		return game;
@@ -325,7 +339,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				points: game.player1.points,
 			},
 			player2: undefined,
-			ball: game.ball
+			ball: game.ball,
+			obstacle: game.obstacle
 		}
 		this.allRandomGames.push(game);
 		return game;

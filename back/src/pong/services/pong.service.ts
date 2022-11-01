@@ -5,6 +5,7 @@ import { PointI } from '../interfaces/point.interface';
 import { GameI } from '../interfaces/game.interface';
 import { Socket } from 'socket.io';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
+import { GameModule } from 'src/game/game.module';
 
 
 const BALL_RADIUS = 4;
@@ -39,9 +40,18 @@ const MAP1_OBSTACLE2_H = 125; // height
 const MAP1_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
 const MAP1_OBSTACLE2_POSY = (HEIGHTCANVAS - MAP1_OBSTACLE1_H); // position x
 const MAP1_OBSTACLE2_RADIUS = 2;
-////
-////
 
+////////
+//// MAP2
+///////// obstacle1
+const MAP2_OBSTACLE_W = 20; // width
+const MAP2_OBSTACLE_H = 200; // height
+const MAP2_OBSTACLE_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
+const MAP2_OBSTACLE_POSY = 0; // position y
+const MAP2_OBSTACLE_RADIUS = 2;
+const MAP2_OBSTACLE_SPEED = 2;
+////
+////
 
 
 @Injectable()
@@ -365,13 +375,60 @@ loopGameMap2(game: GameI){
     //MOUVEMENT DE LA BALLE
     ////        
 
+
+    /////
+    //REBOND OBSTACLE AVANT TOUT
+    /////
+
+    //si ball de droite a gauche
+    if (game.ball.dx < 0)
+    {
+        if (game.ball.y + game.ball.radius >= game.obstacle.y && game.ball.y - game.ball.radius <= game.obstacle.y + game.obstacle.height)
+        {
+            if (game.ball.x - game.ball.radius <= game.obstacle.x + game.obstacle.width && game.ball.x + game.ball.radius >= game.obstacle.x)
+            {
+                game.ball.x = game.obstacle.x + game.obstacle.width;
+                game.ball.dx *= -1;
+            }
+        }
+        else
+        {
+            if (game.ball.x >= game.obstacle.x && game.ball.x <= game.obstacle.x + game.obstacle.width)
+            {
+                // if ()
+                // {
+                    
+                // }
+            }
+        }
+        // else if (   (game.ball.y + game.ball.radius <= game.obstacle.y && game.ball.y - game.ball.radius > 0))
+        // {
+        //     if (game.ball.x )
+        // }
+        // else if (game.ball.y - game.ball.radius >= game.obstacle.y + game.obstacle.height && game.ball.y + game.ball.radius > HEIGHTCANVAS)
+        // {
+
+        // }
+    }
+    else
+    {
+        if (game.ball.y + game.ball.radius >= game.obstacle.y && game.ball.y - game.ball.radius <= game.obstacle.y + game.obstacle.height)
+        {
+            if (game.ball.x + game.ball.radius >= game.obstacle.x && game.ball.x - game.ball.radius <= game.obstacle.x)
+            {
+                game.ball.x = game.obstacle.x - game.ball.radius;
+                game.ball.dx *= -1;
+            }
+        }
+    }
     
     ////////
     //////HORIZONT
     ////////
+
+    //verifier avant et apres le deplacement de ball si ca a touché lobstacle en deplacvement
     
     game.ball.x += game.ball.dx;
-    
 
     //sil y a rebond entre balle et paddle:
     if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle))
@@ -425,8 +482,9 @@ loopGameMap2(game: GameI){
             this.reinitBall(game.ball, 1);
         else
             this.reinitBall(game.ball, -1);
-        //reinit position joueur au centre
+        //reinit position joueur au centre et obstacle
         this.reinitPlayers(game.player1, game.player2);
+        this.reinitObstacle(game.obstacle);
     }
 
     ///////
@@ -434,9 +492,10 @@ loopGameMap2(game: GameI){
     ///////
     
     game.ball.y += game.ball.dy;
-    
-    
-    //sil y a un rebond horiz haut
+
+
+
+    //sil y a un rebond bordures terrain
     if ( game.ball.y - game.ball.radius <= 0)
     {
         //inversement de la direction y
@@ -449,12 +508,23 @@ loopGameMap2(game: GameI){
         //inversement de la direction y
         game.ball.dy *= -1;
         game.ball.y = HEIGHTCANVAS - game.ball.radius;
-        // game.player1.socket.emit('play', 0);
-        // game.player2.socket.emit('play', 0);
     }
 
+    ///////
     ////Mouvement object
-    
+    ///////
+
+    game.obstacle.y += game.obstacle.dy;
+    if (game.obstacle.dy > 0 && game.obstacle.y + game.obstacle.height >= HEIGHTCANVAS)
+    {
+        game.obstacle.y = HEIGHTCANVAS - game.obstacle.height;
+        game.obstacle.dy *= -1;
+    }
+    else if (game.obstacle.dy < 0 && game.obstacle.y <= 0)
+    {
+        game.obstacle.y = 0;
+        game.obstacle.dy *= -1;
+    }
 
     //envoyer les datas aux sockets
     //pour eviter les copy cyclique, il faut enlever les sockets 
@@ -463,9 +533,10 @@ loopGameMap2(game: GameI){
             return undefined;
         return value;
     }));
-    game.player1.socket.emit('drawMap1', copy);
-    game.player2.socket.emit('drawMap1', copy);
+    game.player1.socket.emit('drawMap2', copy);
+    game.player2.socket.emit('drawMap2', copy);
 }
+
 
 
 
@@ -529,6 +600,16 @@ loopGameMap2(game: GameI){
         player2.paddle.y = HEIGHTCANVAS / 2 - player2.paddle.height / 2;
     }
 
+    reinitObstacle(obstacle: PointI): void
+    {
+        obstacle.x = WIDTHCANVAS / 2 - MAP2_OBSTACLE_W / 2;
+        obstacle.y = MAP2_OBSTACLE_POSY;
+        obstacle.dx = 0;
+        obstacle.dy = MAP2_OBSTACLE_SPEED;
+        obstacle.height = MAP2_OBSTACLE_H;
+        obstacle.width = MAP2_OBSTACLE_W;
+    }
+
     private rebond(ball: BallI, paddle: PointI): void {
         //a chaque rebond on ajpute de la vitesse
         
@@ -580,6 +661,14 @@ loopGameMap2(game: GameI){
 			player1: p1,
 			player2: p2,
             type: 0,
+            obstacle: {
+                x: WIDTHCANVAS / 2 - MAP2_OBSTACLE_W / 2,
+                y: MAP2_OBSTACLE_POSY,
+                dx: 0,
+                dy: MAP2_OBSTACLE_SPEED,
+                height: MAP2_OBSTACLE_H,
+                width: MAP2_OBSTACLE_W,
+            },
 			ball: {
 				x: WIDTHCANVAS / 2,
 				y: HEIGHTCANVAS / 2,

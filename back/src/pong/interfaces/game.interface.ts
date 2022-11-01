@@ -8,6 +8,9 @@ export interface GameI {
 	player1?: PlayerI; 		//info du playeur 1
 	player2?: PlayerI;		//info du playeur 2
 	ball?: BallI;			//info de la balle
+
+	obstacle:PointI;
+	
 	// acceleration?: number;	//option de partie
 	// direction?: PointI;		//option de partie
 	key_handler1?: number;
