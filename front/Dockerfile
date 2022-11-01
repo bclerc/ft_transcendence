@@ -4,10 +4,11 @@ WORKDIR /app
 
 COPY . .
 
+
 RUN npm install
 
 
-CMD npm run build --prod
+RUN npm run build --prod
 
 
 # stage 2

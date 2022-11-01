@@ -12,6 +12,7 @@ export interface ChatRoom {
   ownerId?: number;
   admins?: UserI[];
   public?: boolean;
+  seen?: boolean;
   password?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -25,6 +26,7 @@ export interface ChatRoomI {
   users: UserI[];
   admins: UserI[];
   public: boolean;
+  seen?: boolean;
   password?: string;
   createdAt: Date;
   updatedAt: Date;
