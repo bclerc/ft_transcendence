@@ -29,7 +29,8 @@ export class ChatService {
 
     if (penalty)
       throw new RoomPunishException(penalty, this.onlineUserService);
-
+    if (!message.id)
+     return ;
     const newMessage = await this.prisma.message.create({
       data: {
         content: message.content,
@@ -119,7 +120,7 @@ export class ChatService {
   }
 
   async getDmGroupForUser(userId: number): Promise<DmChatRoomI[]> {
-    const rooms = await this.prisma.chatRoom.findMany({
+    const rooms: any[] = await this.prisma.chatRoom.findMany({
       where: {
         users: {
           some: {
@@ -143,8 +144,32 @@ export class ChatService {
             avatar_url: true,
           },
         },
+        messages: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 1,
+          select: {
+            seenBy: {
+              where: {
+                id: userId,
+              }
+            }
+          }
+        },
         ownerId: true,
       },
+    });
+
+    rooms.forEach(room => {
+      if (room.messages[0]) {
+        if (room.messages[0].seenBy.length > 0)
+          room.seen = true;
+        else
+          room.seen = false;
+      } else {
+        room.seen = true;
+      }
     });
 
     return rooms;

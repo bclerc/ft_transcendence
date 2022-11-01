@@ -40,7 +40,8 @@ export interface DmChatRoomI {
   ownerId: number;
   type: ChatRoomType;
   users: BasicUserI[];
-  messages?: Message[];
+  seen?: boolean;
+  messages?: any[];
 }
 
 export interface MessageI {
