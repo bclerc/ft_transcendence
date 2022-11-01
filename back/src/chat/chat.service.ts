@@ -50,8 +50,9 @@ export class ChatService {
     });
   }
 
-  async getRoomsFromUser(userId: number): Promise<ChatRoomI[]> {
-    const rooms = await this.prisma.chatRoom.findMany({
+  async getRoomsFromUser(userId: number): Promise<any> {
+
+    let rooms: ChatRoomI[] = await this.prisma.chatRoom.findMany({
       where: {
         users: {
           some: {
@@ -83,11 +84,35 @@ export class ChatService {
             avatar_url: true,
           },
         },
+        messages: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 1,
+          select: {
+            seenBy: {
+              where: {
+                id: userId,
+              }
+            }
+          }
+        },
         ownerId: true,
         type: true,
         public: true,
         description: true,
       },
+    });
+
+    rooms.forEach(room => {
+      if (room.messages[0]) {
+        if (room.messages[0].seenBy.length > 0)
+          room.seen = true;
+        else
+          room.seen = false;
+      } else {
+        room.seen = true;
+      }
     });
 
     return rooms;
@@ -138,7 +163,9 @@ export class ChatService {
   }
 
 
-  async getMessagesFromRoom(userId: number, room: ChatRoom): Promise<Message[]> {
+  async getMessagesFromRoom(userId: number, room: ChatRoomI): Promise<Message[]> {
+
+
     const messages = await this.prisma.message.findMany({
       where: {
         room: {
@@ -157,10 +184,43 @@ export class ChatService {
       include: {
         user: true,
       },
+      orderBy: {
+        createdAt: 'asc',
+      },
 
     });
     return messages;
   }
+
+  async seenRoomMessages(userId: number, roomId: number) {
+    let lastMessage = await this.prisma.message.findFirst({
+      where: {
+        room: {
+          id: roomId,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    await this.prisma.message.update({
+      where: {
+        id: lastMessage.id,
+      },
+      data: {
+        seenBy: {
+          connect: {
+            id: userId,
+          }
+        }
+      }
+    });
+  }
+
 
   async getMessagesFromRoomId(userId: number, roomId: number): Promise<Message[]> {
     const messages = await this.prisma.message.findMany({
@@ -180,10 +240,33 @@ export class ChatService {
       },
       include: {
         user: true,
+        seenBy: true,
       },
     });
     return messages;
   }
+
+  async haveMessageNotSeen(userId: number): Promise<number> {
+    const messages = await this.prisma.message.findMany({
+      where: {
+        room: {
+          users: {
+            some: {
+              id: userId,
+            },
+          },
+        },
+        seenBy: {
+          none: {
+            id: userId,
+          },
+        },
+      },
+    });
+    return messages.length;
+  }
+
+
 
   async createRoom(owner: BasicUserI, newRoom: newChatRoomI): Promise<ChatRoom> {
     let hashedPassword = null;
@@ -283,6 +366,7 @@ export class ChatService {
         messages: true,
       },
     });
+
     return room;
   }
 
@@ -416,7 +500,7 @@ export class ChatService {
 
   async deleteRoom(roomId: number): Promise<void> {
 
-    
+
     await this.prisma.chatRoom.delete({
       where: {
         id: roomId,

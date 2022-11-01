@@ -30,7 +30,8 @@ export interface ChatRoomI {
   users: BasicUserI[];
   admins: BasicUserI[];
   public: Boolean;
-  messages?: Message[];
+  seen?: Boolean;
+  messages?: Message[] | any;
 }
 
 export interface DmChatRoomI {

@@ -167,12 +167,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @SubscribeMessage('joinRoom')
-  async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoom) {
+  async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoomI) {
     const user = await this.onlineUserService.getUser(client.id);
     const messages = await this.chatService.getMessagesFromRoom(user.id, room);
     user.inRoomId = room.id;
     this.onlineUserService.onlineUsers.set(client.id, user);
     this.server.to(client.id).emit('messages', messages);
+    if (!room.seen)
+    {
+      this.chatService.seenRoomMessages(user.id, room.id);
+      this.updateRoomForUsersInRoom(room.id);
+    }
   }
 
   @SubscribeMessage('leaveRoom')
