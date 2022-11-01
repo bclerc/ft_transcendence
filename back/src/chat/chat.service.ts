@@ -207,18 +207,20 @@ export class ChatService {
       },
     });
 
-    await this.prisma.message.update({
-      where: {
-        id: lastMessage.id,
-      },
-      data: {
-        seenBy: {
-          connect: {
-            id: userId,
+    if (lastMessage) {
+      await this.prisma.message.update({
+        where: {
+          id: lastMessage.id,
+        },
+        data: {
+          seenBy: {
+            connect: {
+              id: userId,
+            }
           }
         }
-      }
-    });
+      });
+    }
   }
 
 
