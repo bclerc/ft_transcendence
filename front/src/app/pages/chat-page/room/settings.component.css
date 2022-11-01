@@ -1,0 +1,180 @@
+@font-face{
+	font-family: 'Titan One';
+	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+}
+
+.param-header {
+    width: 100%;
+    padding: 20px 40px 20px 40px;
+    border-bottom: solid 2px #feefcf;
+    display: flex;
+    flex-direction: row;
+}
+
+.param-header h2 {
+    font-family: Titan One;
+	font-size: 24px;
+    padding-top: 5px;
+	margin-left: 20px;
+	color: #ee481e;
+}
+.param-header img{
+    background-color: none;
+    border-radius: 100%;
+}
+.param-header img:hover{
+    cursor: pointer;
+    background-color: #ee481e;
+}
+#edit, #gerer{
+    display:flex;
+    flex-direction: column;
+}
+#edit{
+    margin-bottom: 40px;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+#param-body{
+    padding: 40px
+}
+#param-body h3 {
+	font-family: Titan One;
+	font-size: 35px;
+    margin-bottom: 30px;
+	color: #feefcf;
+}
+#title-n-button{
+    display: flex;
+    flex-direction: row;
+}
+#title-n-button button{
+    width: 35px;
+    height: 35px;
+    margin-left: 25px;
+}
+
+/* champs de text ------------------------------------------------------------------------- */
+
+#input-box{
+	display: flex;
+	flex-direction: column;
+	font-family: ReadexPro-Medium;
+	margin-bottom: 20px;
+}
+#input-title{
+	font-size: 11px;
+	margin-left: 4px;
+	margin-bottom: 4px;
+	font-family: ReadexPro-Regular;
+	color: #9c9381;
+}
+#input-error{
+	margin-top: 4px;
+	font-size: 11px;
+	margin-left: 4px;
+	font-family: ReadexPro-Regular;
+	color: #ee481e;
+}
+textarea{
+	height: fit-content;
+    line-height: fit-content;
+}
+#input-text {
+	border-radius: 10px;
+	padding: 15px 15px 0px 15px;
+	width: 100%;
+	background: #343330;
+	border: none;
+	resize: none;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	font-size: 14px;
+	overflow: hidden;
+}
+#input-text::placeholder{
+	color: #9c9381;
+}
+#input-text:focus {
+	outline: none;
+}
+#public-check-box {
+	font-family: ReadexPro-Medium;
+	margin-bottom: 5px;
+}
+
+#membre{
+    display:flex;
+    flex-direction: column;
+    font-family: ReadexPro-Medium;
+    background-color: #343330;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+.info{
+    display:flex;
+    flex-direction: row;
+}
+.user-name{
+    /* float:left; */
+    display: flex;
+    align-items: flex-start;
+    width: 85%;
+}
+.buts{
+    /* float:right; */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    min-width: 112px;
+}
+#membre button{
+    margin-right: 20px;
+}
+#membre button:last-child{
+    margin-right: 0px;
+}
+
+
+/* #public-left{
+    padding: 20px 20px 0px 20px;
+    background-color: #161616;
+    border-radius: 10px;
+
+} */
+
+/*------------------------------------------------------------ Grille */
+.demi-left{
+	float: left;
+	margin-right: 20px;
+	/* background-color: blue; */
+    width: calc(50% - 10px);
+}
+.demi:last-child{
+    margin-right: 0px;
+}
+
+.demi-right{
+	float: left;
+    width: calc(50% - 10px);
+}

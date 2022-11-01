@@ -69,15 +69,7 @@
 	outline: none;
 }
 
-/* mat-autocomplete{
-
-	background-color: red;
-	margin-top: -5px;
-} */
-
 mat-autocomplete{
-
-	/* background-color: none; */
 	box-shadow: none !important;
 }
 mat-option{
@@ -92,7 +84,6 @@ mat-option{
 #img-n-name{
 	display: flex;
 	flex-direction: row;
-	/* background-color: none; */
 	margin-top:20px;
 }
 mat-option img{
@@ -101,6 +92,27 @@ mat-option img{
 	height: 30px;
 	object-fit: cover;
 	border-radius: 50%;
-	/* margin-top: 15%; */
 	margin-right: 10px;
+}
+
+/* mat-chip ------------------------------------------------------------------------- */
+
+#mat-chip{
+	background-color: #161616;
+	border: 2px solid #343330;
+	color: #feefcf;
+	font-family: ReadexPro-Regular;
+	padding: 15px 6px 14px 0px;
+	border-radius: 20px;
+	margin-bottom: 20px;
+	margin-top: -5px;
+}
+#mat-chip:hover{
+	background-color: #343330;
+	border: 2px solid #343330;
+}
+
+#cancel{
+	margin-left: 4px;
+	opacity: 100%;
 }

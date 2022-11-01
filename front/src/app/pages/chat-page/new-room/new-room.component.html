@@ -51,7 +51,7 @@
 				<app-userselect [users]="users.value" (addUser)="addUser($event)" (removeuser)="removeUser($event.id)"></app-userselect>
 
 				<!-- Public -->
-				<mat-checkbox matCheckBox formControlName="public">Public</mat-checkbox>
+				<mat-checkbox id="public-check-box" matCheckBox formControlName="public">Public</mat-checkbox>
 				<div id="input-box" *ngIf="public.value">
 					<p id="input-title">Mot de passe</p>
 					<textarea id="input-text" formControlName="password"></textarea>

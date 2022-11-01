@@ -60,7 +60,6 @@ hr.clear{
 	padding: 22px;
 }
 #create-module{
-	background-color: green;
 	height: calc(720px - 44px);
 }
 
@@ -208,7 +207,10 @@ textarea{
 	outline: none;
 }
 
-
+#public-check-box {
+	font-family: ReadexPro-Medium;
+	margin-bottom: 5px;
+}
 
 /*------------------------------------------------------------ Grille */
 .demi-public{

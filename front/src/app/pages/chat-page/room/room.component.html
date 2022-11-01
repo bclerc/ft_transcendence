@@ -1,5 +1,5 @@
 
-<div *ngIf="room.id else no_room">
+<div *ngIf="">
 	<div class="flexbox">
 		<div #scroll id="chat_box" class="chat-box" >
 
@@ -45,7 +45,7 @@
 				<div class="chat-input">
 					<input matInput id="chat-input-text" placeholder="J’ecris le super message de la mort qui tue ici" formControlName="message" >
 					<!-- Bouton send + icon -->
-					<button mat-raised-button type="submit" (action)="sendMessage()" class="send">
+					<button class="send" mat-raised-button type="submit" (action)="sendMessage()" class="send">
 						<svg width="22px" height="22px" viewBox="0 0 22 22">
 							<title>send icon</title>
 							<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -61,6 +61,99 @@
 	</div>
 </div>
 
-	<ng-template #no_room>
-		<mat-error  class="no-room" >Aucun groupe sélectionné</mat-error>
-	</ng-template>
+<div *ngIf="room.id else no_room">
+	<div class="param-header">
+		<img src="../../../../assets/svg/return.svg" alt="return">
+		<h2>Paramètres</h2>
+	</div>
+
+	<!-- CLASS chat-box-body -->
+	<div id="param-body">
+		<div id="edit">
+			<div id="title-n-button">
+				<h3>Éditer le groupe</h3>
+				<button mat-Button matTooltip="Enregister les mofifications">
+					<img src="../../../../assets/svg/plus-de-mort.svg" alt="save">
+				</button>
+			</div>
+			<div class="lol">
+				<div class="demi-left">
+					<!-- Nom du groupe -->
+					<div id="input-box">
+						<p id="input-title">Nom du groupe</p>
+						<textarea id="input-text" placeholder="Super groupe de la mort" default="caca" formControlName="name"></textarea>
+						<!-- <p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe superbes</p> -->
+					</div>
+
+					<div id="public-left">
+						<!-- Public -->
+						<mat-checkbox id="public-check-box" matCheckBox formControlName="public">Public</mat-checkbox>
+						<div id="input-box">
+							<p id="input-title">Mot de passe</p>
+							<textarea id="input-text" placeholder="•••••••••••" formControlName="password"></textarea>
+						</div>
+					</div>
+					<!-- Description
+					<div id="input-box">
+						<p id="input-title">Description</p>
+						<textarea id="input-text" placeholder="Super description de la mort qui tue" formControlName="description"></textarea>
+					</div> -->
+				</div>
+
+				<div class="demi-right">
+					<!-- Public
+					<mat-checkbox id="public-check-box" matCheckBox formControlName="public">Public</mat-checkbox>
+					<div id="input-box">
+						<p id="input-title">Mot de passe</p>
+						<textarea id="input-text" placeholder="•••••••••••" formControlName="password"></textarea>
+					</div> -->
+					<!-- Description -->
+					<div id="input-box">
+						<p id="input-title">Description</p>
+						<textarea id="input-text" placeholder="Super description de la mort qui tue" formControlName="description"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="gerer">
+			<div id="title-n-button">
+				<h3>Gérer les membres</h3>
+				<button mat-Button matTooltip="Ajouter un membre">
+					<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+				</button>
+			</div>
+			<div id="membre" *ngFor="let user of room.users">
+				<div class="info">
+					<div class="user-name">
+						<p>{{user.intra_name}}</p>
+					</div>
+					<div class="buts">
+						<button id="action" mat-Button matTooltip="Ajouter en ami">
+							<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+						</button>
+						<button id="action" mat-Button matTooltip="inviter a jouer">
+							<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+						</button>
+						<button id="action" mat-Button matTooltip="Rendre muet">
+							<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+						</button>
+						<button id="action" mat-Button matTooltip="Bloquer">
+							<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+						</button>
+						<button id="action" mat-Button matTooltip="Exclure">
+							<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+						</button>
+						<button id="action" mat-Button matTooltip="bannir">
+							<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-template #no_room>
+	<mat-error  class="no-room" >Aucun groupe sélectionné</mat-error>
+</ng-template>

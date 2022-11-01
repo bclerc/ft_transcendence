@@ -55,21 +55,33 @@ hr.clear{
 	display: block;
 }
 
-.user-info{
+.user-bloc{
 
 	margin: 0px 0px 30px 5px;
 	display: flex;
 	/* box-sizing: content-box; */
+	/* width : 162px; */
+}
+#user-info{
+	padding: 12px 0px 12px 20px;
+	color: #feefcf;
 }
 .intraName{
 	font-family: Titan One;
-	font-size: 16px;
-	color: #feefcf;
-	padding: 15px 0px 15px 20px;
-	width : 162px;
+	font-size: 20px;
 	text-decoration: none;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 3px;
 }
-body .user-info img{
+.intraEmail{
+	font-family: ReadexPro-Medium;
+	font-size: 13px;
+	text-decoration: none;
+	display: flex;
+	flex-direction: column;
+}
+body .user-bloc img{
 	width: 64px;
 	height: 64px;
 	object-fit: cover;
@@ -80,8 +92,6 @@ body .user-info img{
 
 .pute {
 	flex-direction: column;
-	/* display: flex; */
-	/* flex: left; */
 }
 
 /* Styles for tab labels */
@@ -155,9 +165,13 @@ body .user-info img{
 	cursor: pointer;
 	/* background-color: #343330; */
 }
-/* .active{
-	background-color: #121212;
-} */
+.active{
+	color: #ee481e;
+}
+.mat-tab-group ul li:target{
+	color: #ee481e;
+}
+
 
 .button{
 	font-family: Titan One;
