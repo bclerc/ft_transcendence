@@ -12,11 +12,14 @@
 
 				<!-- SIDEBAR -->
 				<aside class="sidebar">
-					<div class="user-info">
+					<div class="user-bloc">
 						<img src="{{ actualUser.avatar_url }}" alt="ma belle gueule">
 						<!-- <img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
 						<!-- <p class="intraName">Valentina salamberemborg</p> -->
-						<a class="intraName" routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ actualUser.intra_name }} {{ actualUser.email}}</a>
+						<div id="user-info">
+							<a class="intraName" routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ actualUser.intra_name }}</a>
+							<span class="intraEmail">{{actualUser.email}}</span>
+						</div>
 					</div>
 					<!-- <div class="pute"> -->
 						<mat-tab-group class="pute" [selectedIndex]="selected.value">

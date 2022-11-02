@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user/user.service';
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
-  styleUrls: ['./room.component.scss']
+  styleUrls: ['./room.component.scss', './settings.component.css']
 })
 
 export class RoomComponent implements OnInit, OnChanges, OnDestroy {
@@ -69,9 +69,16 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  
-
   get message(): FormControl {
     return this.form.get('message') as FormControl;
+  }
+
+  show: boolean = false;
+
+  showParam() {
+    this.show = true;
+  }
+  hideParam() {
+    this.show = false;
   }
 }

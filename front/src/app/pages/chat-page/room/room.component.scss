@@ -30,14 +30,7 @@ html, body, .flexbox {
 	height: 100%;
 }
 
-// body {
-// 	font-family: Titan One;
-// 	font-size: 14px;
-// }
-
 .flexbox {
-	// margin-top: 20px;
-	// display: flex;
 	justify-content: center;
 	align-items: center;
 }
@@ -53,7 +46,6 @@ html, body, .flexbox {
 	flex-direction: column;
 	justify-content: space-between;
 	border-radius: 20px;
-	box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
 
 	// CLASS chat-box-header
 	> .chat-box-header {
@@ -215,7 +207,7 @@ html, body, .flexbox {
 	//   padding: 0;
 	// }
 	
-	button {
+	button .send{
 	background-color: $color-red;
 	border-radius: 10px;;
 	outline: none;
@@ -225,7 +217,7 @@ html, body, .flexbox {
 	margin: 10px;
 }
 
-h2 {
+.chat-box-header h2 {
 	font-family: Titan One;
 	font-size: 54px;
 	margin-bottom: 25px;
