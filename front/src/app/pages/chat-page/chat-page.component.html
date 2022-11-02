@@ -80,6 +80,20 @@
 								<ul>
                   <li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
                     <p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).intra_name }}</p>
+                    <ng-container *ngIf="!room.seen">
+                      <svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <title>Oval</title>
+                        <g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
+                                <g id="Group-2" transform="translate(863.000000, 180.000000)">
+                                    <g id="Group-3" transform="translate(28.000000, 368.000000)">
+                                        <circle id="Oval" cx="80" cy="16" r="6"></circle>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>                        
+                    </ng-container>
                   </li>
 								</ul>
 							</mat-tab>
