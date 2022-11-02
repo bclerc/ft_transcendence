@@ -41,7 +41,11 @@ export class OnlineUserService {
       });
       const user = await this.userService.findOne(res.sub);
       if (!user)
-      return socket.disconnect();
+      {
+        console.log('user not found');
+        return socket.disconnect();
+      }
+      console.log("Conncted ", user);
       this.initUser(socket.id, user);
       socket.data.user = user;
     } catch (error) {

@@ -47,10 +47,10 @@ export class ChatPageComponent implements OnInit {
   ) { }
 	
 	async ngOnInit() {
+    setTimeout(() => {}, 500);
     this.chatService.needRooms();
     this.chatService.needPublicRooms();
     this.chatService.needDmRooms();
-
 
 		this.userService.getLoggedUser().subscribe((user: UserI) => {
 			this.actualUser = user;

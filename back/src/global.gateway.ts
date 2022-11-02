@@ -7,6 +7,7 @@ import { OnlineUserService } from './onlineusers/onlineuser.service';
 import { UserService } from './user/user.service';
 import { WschatService } from './wschat/wschat.service';
 import { OnEvent } from '@nestjs/event-emitter';
+import { ConnectableObservable } from 'rxjs';
 
 
 @WebSocketGateway(8181, { cors: { origin: '*' } })
@@ -29,7 +30,7 @@ export class GlobalGateway implements  OnGatewayConnection, OnGatewayDisconnect 
 	}
 
   handleDisconnect(client: any) {
-    // throw new Error('Method not implemented.');
+    this.onlineUserService.deleteUser(client.id);
   }
 
   
