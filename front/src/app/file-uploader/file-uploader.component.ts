@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { UserService } from '../services/user/user.service';
 
 @Component({
@@ -13,9 +14,13 @@ export class FileUploaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy(): void{
+    this.subscription?.unsubscribe();
+  }
+
   selectedFile! : File ;
   imagePreview?: string | ArrayBuffer | null;
-
+  subscription? : Subscription;
   onFileUpload(event: any) : void
   {
     this.selectedFile = event.target.files[0]
@@ -27,10 +32,10 @@ export class FileUploaderComponent implements OnInit {
 
   }
 
-  public async OnUploadFile() {
+  public OnUploadFile(): void {
     const formData = new FormData();
     formData.append("image", this.selectedFile);
-    await this.userService.uploadAvatar(formData).subscribe(
+    this.subscription = this.userService.uploadAvatar(formData).subscribe(
       (data : any) => {
         console.log("data =",data);
       }

@@ -36,11 +36,11 @@ export class CurrentUserService {
 
     getCurrentUserFromBack(): Observable<UserI>
     {
-      return this.http.get<UserI>("http://"+ environment.host + ":3000/api/v1/user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+      return this.http.get<UserI>(this.backUrl + "user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
 
     getFriendFromBack(): Observable<any>
     {
-      return this.http.get<any>("http://"+ environment.host + ":3000/api/v1/user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+      return this.http.get<any>(this.backUrl + "user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
 }

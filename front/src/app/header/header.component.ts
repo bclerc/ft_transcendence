@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   constructor(private token : TokenStorageService, private router : Router,  public navbar: HeaderService) { }
 
 
+
   ngOnInit(): void {
     //this.navbar.show();
   }
@@ -29,6 +30,7 @@ export class HeaderComponent implements OnInit {
 
   getEnvHost(){
     return environment.host;
+    
   }
 
 }
