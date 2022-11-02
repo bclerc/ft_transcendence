@@ -69,9 +69,16 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  
-
   get message(): FormControl {
     return this.form.get('message') as FormControl;
+  }
+
+  show: boolean = false;
+
+  showParam() {
+    this.show = true;
+  }
+  hideParam() {
+    this.show = false;
   }
 }
