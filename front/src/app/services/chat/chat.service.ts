@@ -26,7 +26,7 @@ export class ChatService {
     }
 
     getRooms(): Observable<ChatRoom[]> {
-      return this.socket.fromEvent<ChatRoom[]>('rooms');  
+      return this.socket.fromEvent<ChatRoom[]>('rooms');
     }
     
     getPublicRooms(): Observable<ChatRoom[]> {

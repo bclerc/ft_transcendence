@@ -29,6 +29,7 @@ export class ChatPageComponent implements OnInit {
 	publicrooms: Observable<ChatRoom[]> = this.chatService.getPublicRooms();
 
   haveNewMessage: boolean = false;
+  haveNewDm: boolean = false;
 	selected = new FormControl(0);
 	actualUser: UserI = {};
 
@@ -58,19 +59,21 @@ export class ChatPageComponent implements OnInit {
 		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
       let roomChanged, roomSeen: boolean = false;
 				for (const room of rooms) {
-					if (this.selectedRoom.id && room.id === this.selectedRoom.id) {
-						//this.haveSelectedRoom = true;
-						this.selectedRoom = room;
-            roomChanged = true;
-					}
           if (!room.seen && room.id !== this.selectedRoom.id) 
             roomSeen = true;
-            
-			}
-		this.selectedRoom =  roomChanged ? this.selectedRoom : {};
-    this.haveNewMessage = roomSeen;
-		this.haveSelectedRoom = false;
+        }
+       this.haveNewMessage = roomSeen;
 		});
+
+    await this.dmRooms$.subscribe((rooms: ChatRoom[]) => {
+      let roomChanged, roomSeen: boolean = false;
+        for (const room of rooms) {
+          if (!room.seen && room.id !== this.selectedRoom.id) 
+            roomSeen = true;
+        }
+       this.haveNewDm = roomSeen;
+    });
+
 	}
 
 	create() {
