@@ -185,7 +185,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async handleEvent(client: Socket) {
     let user = this.onlineUserService.getUser(client.id);
     if (user) {
-      this.onlineUserService.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
+      this.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
     }
   }
 
@@ -229,9 +229,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async updateUserRooms(user: BasicUserI) {
 
     const rooms = await this.chatService.getRoomsFromUser(user.id);
+    const dmrooms = await this.chatService.getDmGroupForUser(user.id);
     this.sendToUser(user, 'rooms', rooms);
+    this.sendToUser(user, 'dmRooms', dmrooms);
     this.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
-    this.sendToUser
   }
 
   async updatePublicRooms() {
@@ -247,13 +248,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       }
     }
   }
+
   async updateRoomForUsersInRoom(roomId: number) {
     let room = await this.chatService.getRoomById(roomId);
 
     for (let user of room.users) {
-      let rooms = await this.chatService.getRoomsFromUser(user.id);
-      this.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
-      this.sendToUser(user, 'rooms', rooms);
+        this.updateUserRooms(user);
     }
   }
 
