@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit {
               { }
 
 
+
   ngOnInit(): void {
     if (this.token.getToken())
       this.connect = true;
@@ -42,6 +43,7 @@ export class HeaderComponent implements OnInit {
 
   getEnvHost(){
     return environment.host;
+    
   }
 
 

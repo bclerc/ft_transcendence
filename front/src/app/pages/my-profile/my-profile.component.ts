@@ -32,30 +32,11 @@ export class MyProfileComponent implements OnInit {
 
   userLi!: Observable <UserI> | undefined;
   async ngOnInit(){
-    // console.log("start");
-
-    /*this.userList2$ =  this.route.data.pipe(
-      map(data => data['userList']));
-       this.subscription = this.userList2$.subscribe(
-        (data : any) => {
-          console.log("data =",data);
-          this.userList = data;
-        },
-        error => this.router.navigate([''])
-        );
-      this.userService.changeUserList(this.userList);
-      this.id = this.token.getId();
-      if (this.id)
-      {
-        this.user = this.userService.getUserById(this.id);
-      }*/
-      //this.currentUser.initOrActualizeConnection();
       this.userLi = this.currentUser.getCurrentUser();
       if (this.userLi)
       {
         this.subscription = this.userLi.subscribe(
         (data : any) => {
-          //console.log("data =",data);
           this.user = data;
         },
           (error : any) => 
@@ -67,15 +48,12 @@ export class MyProfileComponent implements OnInit {
           }
         );
       }
-      // console.log("done");
     }
 
     ngOnDestroy() : void
     {
       this.subscription.unsubscribe;
-    }
-
- 
+    } 
 }
 
 

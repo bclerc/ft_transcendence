@@ -33,7 +33,7 @@ export class UserService {
     {
       const decodedToken = this.jwtService.decodeToken(token);
       const userId = decodedToken.userId;
-      return this.http.get<UserI>("http://"+ environment.host +":3000/api/v1/user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+      return this.http.get<UserI>(this.backUrl + "user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
     throw new Error('No token');
   }
@@ -68,88 +68,88 @@ export class UserService {
   
   getUserIdFromBack(id: number): Observable<UserI | undefined>
   {
-    return this.http.get<UserI | undefined>("http://"+ environment.host +":3000/api/v1/user/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<UserI | undefined>(this.backUrl + "user/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   getDataUserListFromBack(): Observable<UserI[]>
   {
-    return this.http.get<User[]>("http://"+ environment.host +":3000/api/v1/user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<User[]>(this.backUrl + "user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ChangeDbInformation(user : UserI): Observable<any>
   {
-    return this.http.put<Observable<any>>("http://"+ environment.host +":3000/api/v1/user/", user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.put<Observable<any>>(this.backUrl + "user/", user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ActivateFacode(code : string) : Observable<any>
   {
-    return this.http.post<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa/enable",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.post<Observable<any>>(this.backUrl + "auth/2fa/enable",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   DesactivateFacode() : Observable<any>
   {
-    return this.http.get<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa/disable", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<Observable<any>>(this.backUrl + "auth/2fa/disable", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ValidateFaCode(code : number):Observable<any>
   {
-    return this.http.post<Observable<any>>("http://"+ environment.host +":3000/api/v1/auth/2fa",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.post<Observable<any>>(this.backUrl + "auth/2fa",{"twoFactorAuthenticationCode" : code}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   GetSecretFa(): Observable<Secret>
   {
-    return this.http.get<Secret>("http://"+ environment.host +":3000/api/v1/auth/2fa/secret", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<Secret>(this.backUrl + "auth/2fa/secret", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   RegenerateSecretFa(): Observable<Secret>
   {
-    return this.http.post<Secret>("http://"+ environment.host +":3000/api/v1/auth/2fa/reset", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.post<Secret>(this.backUrl + "auth/2fa/reset", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   FindByName(name : string): Observable<UserI[]>
   {
-      return this.http.get<UserI[]>("http://"+ environment.host +":3000/api/v1/user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<UserI[]>(this.backUrl + "user/search/" + name, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   getFriends(): Observable<UserI[]>
   {
-      return this.http.get<UserI[]>("http://"+ environment.host +":3000/api/v1/user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<UserI[]>(this.backUrl + "user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   getFriendRequests(): Observable<any[]>
   {
-      return this.http.get<any>("http://"+ environment.host +":3000/api/v1/user/friends/panding", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+      return this.http.get<any>(this.backUrl + "user/friends/panding", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   acceptFriendRequest(id: number)
   {
-    return this.http.get("http://"+ environment.host +":3000/api/v1/user/friends/accept/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    return this.http.get(this.backUrl + "user/friends/accept/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   declineFriendRequest(id: number)
   {
-    return this.http.get("http://"+ environment.host +":3000/api/v1/user/friends/decline/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    return this.http.get(this.backUrl + "user/friends/decline/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   removeFriend(userId: number)
   {
-    return this.http.get("http://"+ environment.host +":3000/api/v1/user/friends/remove/" + userId, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    return this.http.get(this.backUrl + "user/friends/remove/" + userId, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
 
   }
 
   respondFriendRequest(requestId: number, accept: FriendsRequestAction)
   {
-    return this.http.post("http://"+ environment.host +":3000/api/v1/user/friends", {requestId: requestId, action: accept}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    return this.http.post(this.backUrl + "user/friends", {requestId: requestId, action: accept}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   sendRequest(userId: number)
   {
-    return this.http.post("http://"+ environment.host +":3000/api/v1/user/friends/request", {toId: userId}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    return this.http.post(this.backUrl + "user/friends/request", {toId: userId}, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   uploadAvatar(avatar : any)
   {
-    return this.http.post("http://"+ environment.host +":3000/api/v1/user/avatar",avatar ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    return this.http.post(this.backUrl + "user/avatar",avatar ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   
