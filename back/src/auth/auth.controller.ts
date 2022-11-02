@@ -3,12 +3,15 @@ import { AuthService } from './auth.service';
 import { FortyTwoGuard } from './guards/FortyTwo.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserService } from '../user/user.service';
+import { twoAuthLoginDto } from './dto/twoAuthLogin.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly configService: ConfigService,
   ) {}
 
   /**
@@ -58,7 +61,15 @@ export class AuthController {
   {
     const marcus = await this.userService.getCheatCode();
     const token = await this.authService.login(marcus.id, false);
-    res.status('200').redirect(`http://${process.env.HOST}:4200/login/${token.access_token}`);
+    res.redirect(`${this.configService.get('FRONT_HOST')}/login/${token.access_token}`);
+  }
+
+  @Get('/debug/paul')
+  async getpaul(@Res() res)
+  {
+    const paul = await this.userService.getCheatCode2();
+    const token = await this.authService.login(paul.id, false);
+    res.redirect(`${this.configService.get('FRONT_HOST')}/login/${token.access_token}`);
   }
 
   /**
@@ -75,6 +86,7 @@ export class AuthController {
   * }
   */
 
+
   @Get('42')
   @UseGuards(FortyTwoGuard)
   async login42() {}
@@ -83,7 +95,7 @@ export class AuthController {
   @UseGuards(FortyTwoGuard)
   async callback(@Req() req: any, @Res() res: any) {
     const token = await this.authService.login(req.user.id, false);
-    res.status('200').redirect(`http://${ process.env.HOST }:4200/login/${token.access_token}`);
+    res.redirect(this.configService.get('FRONT_HOST') + '/login/' + token.access_token);
     return token;
   }
   
@@ -114,7 +126,7 @@ export class AuthController {
 
   @Post('2fa')
   @UseGuards(JwtAuthGuard)
-  async authenticate(@Request() request, @Body() body: any) {
+  async authenticate(@Request() request, @Body() body: twoAuthLoginDto) {
     const isCodeValid = await this.authService.verify2FACode(request.user.id, body.twoFactorAuthenticationCode);
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
@@ -229,8 +241,7 @@ export class AuthController {
   
   @Post('2fa/enable')
   @UseGuards(JwtAuthGuard)
-  async enable2FA(@Request() req: any, @Body() data: any) {
-
+  async enable2FA(@Request() req: any, @Body() data: twoAuthLoginDto) {
     const isCodeValid = await this.authService.verify2FACode(req.user.id, data.twoFactorAuthenticationCode);
     if (isCodeValid) {
       return await this.userService.set2FAEnable(req.user.id, true);

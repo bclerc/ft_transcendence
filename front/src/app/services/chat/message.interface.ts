@@ -8,4 +8,5 @@ export interface Message {
   room: ChatRoom;
   createdAt?: Date;
   updatedAt?: Date;
+  seenBy?: User[];
 }

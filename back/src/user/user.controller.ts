@@ -2,7 +2,7 @@ import { Body, Controller, Request, Get, Param, Post, Put, Patch, UseInterceptor
 import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { newUserDto } from './dto/newUser.dto';
-import { FriendRequest, User } from '@prisma/client';
+import { FriendRequest, User, UserState } from '@prisma/client';
 import { Jwt2faAuthGuard } from 'src/auth/guards/jwt2fa.guard';
 import { updateUserDto } from './dto/updateUser.dto';
 import { FriendRequestAction, FriendRequestDto, newFriendRequestDto } from './dto/friendRequest.dto';
@@ -123,11 +123,6 @@ export class UserController {
     return await this.userService.findByName(name);
   }
 
-  @Post()
-  async newUser(@Body() data: newUserDto): Promise<User> {
-    return await this.userService.newUser(data);
-  }
-
   /**
    * @api {put} /user/ Modifier un utilisateur
    * @apiName PutUser
@@ -196,8 +191,8 @@ export class UserController {
 
       return { message: 'New avatar set', state: 'success' };
     } catch (error) {
-      console.log("error");
-      return error;
+      console.log(error);
+      return { message: 'Error while uploading image, please verify you image', state: 'error' };
     }
   }
 
@@ -234,6 +229,7 @@ export class UserController {
    * @apiSuccessExample {json} Réponse en cas de succès:
    * Promise<User[]>
    */
+
 
 
   @Get('friends/panding')
@@ -310,6 +306,8 @@ export class UserController {
       return { message: "You are already friends", state: 'error' };
     if (await this.friendsService.haveFriendRequest(req.user.id, data.toId))
       return { message: "You already have a friend request", state: 'error' };
+    if (await this.userService.isBlocked(req.user.id, data.toId))
+      return { message: "Request failed", state: 'error'}
     return await this.friendsService.addFriend(req.user.id, data.toId);
   }
 
@@ -339,5 +337,69 @@ export class UserController {
         return { message: "You are not the receiver of this friend request" };
     }
   }
+
+
+  /**
+   * @api {post} /user/block/:id Bloquer un utilisateur
+   * @apiName blockuser
+   * @apiGroup Blocker
+   * 
+   * @apiHeaderExample {json} Header:
+   * {
+   *     "Authorization": "Bearer ACCESS_TOKEN"
+   * }
+   * @apiParam {Number} id Id de l'utilisateur à bloquer
+   * 
+   */
+
+
+  @Post('block/:id')
+  @UseGuards(Jwt2faAuthGuard)
+  async block(@Request() req: any, @Param('id') target: number) {
+    if (req.user.id == target)
+      return { message: "You can't block yourself", state: 'error' };
+    if (await this.friendsService.haveFriend(req.user.id, target))
+      this.friendsService.removeFriend(req.user.id, target);
+    await this.friendsService.haveFriendRequest(req.user.id, target, true);
+    return await this.userService.blockUser(req.user.id, target);
+  }
+
+  /**
+   * @api {post} /user/unblock/:id Débloquer un utilisateur
+   * @apiName blockuser
+   * @apiGroup Blocker
+   * 
+   * @apiHeaderExample {json} Header:
+   * {
+   *     "Authorization": "Bearer ACCESS_TOKEN"
+   * }
+   * @apiParam {Number} id Id de l'utilisateur à débloquer
+   */
+
+  @Post('unblock/:id')
+  @UseGuards(Jwt2faAuthGuard)
+  async unblock(@Request() req: any, @Param('id') target: number) {
+    return await this.userService.unblockUser(req.user.id, target);
+  }
+
+  
+  /**
+   * @api {post} /user/blocked Liste des utilisateurs bloqués
+   * @apiName blockuser
+   * @apiGroup Blocker
+   * 
+   * @apiHeaderExample {json} Header:
+   * {
+   *     "Authorization": "Bearer ACCESS_TOKEN"
+   * }
+   */
+
+  @Get('blocked')
+  @UseGuards(Jwt2faAuthGuard)
+  async getBlocked(@Request() req: any) {
+    return await this.userService.getBlocked(req.user.id);
+  }       
+
 }
+  
 

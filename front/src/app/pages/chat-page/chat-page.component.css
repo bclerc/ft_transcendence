@@ -1,0 +1,239 @@
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1F1F1F;
+	height: 100%;
+	/* display:flex; */
+}
+a{
+	color: inherit; /*pk ?*/
+}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
+.center{
+	margin: auto;
+	max-width: 1290px;
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+.user-info{
+
+	margin: 0px 0px 30px 5px;
+	display: flex;
+	/* box-sizing: content-box; */
+}
+.intraName{
+	font-family: Titan One;
+	font-size: 16px;
+	color: #feefcf;
+	padding: 15px 0px 15px 20px;
+	width : 162px;
+	text-decoration: none;
+}
+body .user-info img{
+	width: 64px;
+	height: 64px;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 3px solid #ee481e;
+	box-shadow: -3px 3px #ee481e;
+}
+
+.pute {
+	flex-direction: column;
+	/* display: flex; */
+	/* flex: left; */
+}
+
+/* Styles for tab labels */
+.mat-tab-label {
+	min-width:25px !important;
+	padding: 5px;
+	border-radius: 40px;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	text-align: center;
+	font-size: 11px;
+	text-decoration: none;
+	letter-spacing: -0,16;
+}
+
+/* Styles for the active tab label */
+.mat-tab-label.mat-tab-label-active {
+	min-width: 55px !important;
+	padding: 15px;
+	background-color: #ee481e;
+	border-radius: 40px;
+	border: 2px solid #feefcf;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+}
+/* .mat-tab-label.mat-tab-label-active:disabled {
+	min-width: 55px !important;
+	padding: 15px;
+	background-color: #ee481e !important;
+	border-radius: 40px;
+	border: 2px solid #feefcf !important;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+} */
+
+/* Styles for the ink bar */
+.mat-ink-bar {
+	display: none;
+}
+
+.mat-tab-group ul{
+	flex-direction: column;
+	margin-top: 30px;
+	list-style-type: none;
+	max-height: 320px;
+	padding-left: 10px;
+	/* overflow-y: scroll;
+	scrollbar-color: #1f1f1f #121212;
+    scrollbar-width: thin; */
+}
+
+/* Styles for group list / friend list */
+.mat-tab-group ul li{
+	font-family: ReadexPro-Bold;
+	color: #feefcf;
+	font-size: 14px;
+	margin-top: 20px;
+}
+.mat-tab-group ul li:hover{
+	/* margin-left: -8px; */
+	/* padding: 5px 5px 1px 8px; */
+	/* border-radius: 6px; */
+	transition: all ease 0.00001s;
+	font-size: 18px;
+	cursor: pointer;
+	/* background-color: #343330; */
+}
+/* .active{
+	background-color: #121212;
+} */
+
+.button{
+	font-family: Titan One;
+	font-size: 14px;
+	color: #feefcf;
+	/* text-align: center; */
+	text-decoration: none;
+	background-color: #ee481e;
+	border-radius: 6px;
+	border: 3px solid #feefcf;
+	box-shadow: -3px 3px #feefcf;
+	width: 200px;
+	display: block;
+	padding: 18px 25px 17px 25px;
+	margin: 20px 0px 60px 5px;
+	position: absolute;
+	bottom: 0;
+	cursor: pointer;
+}
+.button:hover{
+	background-color: #1F1F1F;
+	color: #ee481e;
+}
+
+.no-room{
+	font-family: Titan One;
+	font-size:25px;
+	text-align: center;
+	color:#feefcf;
+	display: flex;
+	align-self: center;
+	margin-top: 37%;
+
+}
+
+/*------------------------------------------------------------ Grille */
+.main-container{
+	display: flex;
+}
+
+.sidebar,
+.content{
+	/* float: left; */
+	display: flex;
+	flex-direction: column;
+    border: 2px solid #feefcf;
+    border-radius: 20px;
+    color: #feefcf;
+	height: 720px;
+}
+
+.sidebar{
+	margin-right: 30px;
+	padding: 60px 20px 60px 20px;
+    /* width: calc(25% - 22.5px); */
+	min-width: 300px;
+	position: relative;
+}
+.content{
+	flex-grow: 1;
+	display:flex;
+	/* max-width */
+	/* box-sizing:  */
+	/* max-width: 70%; */
+	/* display: block; */
+	/* max-width: 960px; */
+	/* flex-wrap:nowrap; */
+}
+.troisquart:last-child,
+.demi:nth-child(2n),
+.tiers:nth-child(3n),
+.quart:nth-child(4n){
+	margin-right: 0px;
+}
+
+/* Moblie Protrait size to Mobile Landscape size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+
+}

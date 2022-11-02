@@ -5,27 +5,33 @@ import { Observable, Subscription } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { environment } from "src/environments/environment";
+import { Socket } from "ngx-socket-io";
 
 
 @Injectable()
 export class CurrentUserService {
+    
     user! : Observable<UserI>;
+
+
     subscription!: Subscription;
+    
     private backUrl = 'http://' + environment.host + ':3000/api/v1/';
 
-    constructor(private token : TokenStorageService, private http : HttpClient)
+    constructor(private token : TokenStorageService,
+                private http : HttpClient,
+                private socket: Socket) 
     {
-        if (this.token.getToken())
-        {
-                this.user = this.getCurrentUserFromBack();
+
+        if (this.token.getToken()) {
+          this.user = this.getCurrentUserFromBack();
         }
     }
 
     initOrActualizeConnection(): void
     {
-        if (this.token.getToken())
-        {
-                this.user = this.getCurrentUserFromBack();
+        if (this.token.getToken()) {
+          this.user = this.getCurrentUserFromBack();
         }
     }
 
@@ -43,4 +49,5 @@ export class CurrentUserService {
     {
       return this.http.get<any>(this.backUrl + "user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
+
 }

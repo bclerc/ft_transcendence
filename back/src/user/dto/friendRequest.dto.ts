@@ -1,4 +1,4 @@
-import { isInt, IsInt } from 'class-validator';
+import { IsEnum, isInt, IsInt } from 'class-validator';
 
 export enum FriendRequestAction {
   ACCEPT,
@@ -9,6 +9,7 @@ export class FriendRequestDto {
   @IsInt()
   readonly requestId: number;
 
+  @IsEnum(FriendRequestAction)
   readonly action: FriendRequestAction;
 }
 

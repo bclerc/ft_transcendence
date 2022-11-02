@@ -5,19 +5,21 @@ import { AuthService } from '../auth.service';
 import { doesNotMatch } from 'assert';
 import { IntraUser } from 'src/user/interface/intraUser.interface';
 import { UserService } from 'src/user/user.service';
-import { getConfigToken } from '@nestjs/config';
+import { ConfigService, getConfigToken } from '@nestjs/config';
+
 
 @Injectable()
 export class FortyTwoStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private configService: ConfigService,
   ){
+    configService.get<string>('INTRA_CLIENT_ID')
     super({
-      clientID: process.env.INTRA_CLIENT_ID,
-      clientSecret: process.env.INTRA_CLIENT_SECRET,
-      callbackURL: ("http://localhost:3000/api/v1/auth/42/callback"),
-
+      clientID: configService.get<string>('INTRA_CLIENT_ID'),
+      clientSecret: configService.get<string>('INTRA_CLIENT_SECRET'),
+      callbackURL: String("http://"+ configService.get<string>('HOST') +":3000/api/v1/auth/42/callback"),
     });
   }
 
@@ -31,7 +33,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
       intra_name: profile.username,
       intra_id: Number.parseInt(profile.id),
       avatar_url: profile.photos[0].value,
-      displayname: profile.displayName, 
+      displayname: profile.username, 
     };
     const user = await this.userService.findByEmail(intraUser.email);
 	if (!user) {

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FriendRequest, FriendStatus } from '@prisma/client';
+import { ChatService } from 'src/chat/chat.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
@@ -9,7 +10,8 @@ export class FriendsService {
 
   constructor(private prisma: PrismaService,
     private userService: UserService,
-    private onlineUserService: OnlineUserService) { }
+    private onlineUserService: OnlineUserService,
+    private chatService: ChatService) { }
 
 
   async addFriend(userId: number, friendId: number) {
@@ -55,6 +57,7 @@ export class FriendsService {
       }
     });
     this.onlineUserService.sendToUser(request.fromId, 'notification', "Votre demande d'amis a été acceptée");
+    this.chatService.creatDm(request.fromId, request.toId);
     return { message: "Friend request accepted", state: 'error' };
   }
 
@@ -164,6 +167,7 @@ export class FriendsService {
         }
       },
     });
+    this.chatService.deleteDm(userId, friendId);
   }
 
 
@@ -189,8 +193,8 @@ export class FriendsService {
   }
 
 
-  async haveFriendRequest(userId: number, friendId: number): Promise<boolean> {
-    const user = await this.prisma.friendRequest.findMany({
+  async haveFriendRequest(userId: number, friendId: number, decline?: boolean): Promise<boolean> {
+    const requests = await this.prisma.friendRequest.findMany({
       where: {
         status: FriendStatus.PENDING,
         OR: [
@@ -205,6 +209,8 @@ export class FriendsService {
         ],
       },
     });
-    return user.length > 0;
+    if (requests.length > 0 && decline)
+      this.declineFriend(requests[0].id);
+    return requests.length > 0;
   }
 }
