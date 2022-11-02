@@ -41,13 +41,6 @@ export class GlobalGateway implements  OnGatewayConnection, OnGatewayDisconnect 
     }
   }
 
-  @SubscribeMessage('needMessagesNotSeen')
-  async handleEvent(client: Socket) {
-    let user = this.onlineUserService.getUser(client.id);
-    if (user) {
-      this.onlineUserService.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
-    }
-  }
 
   @SubscribeMessage('message')
   handleMessage(client: any, payload: any): string {

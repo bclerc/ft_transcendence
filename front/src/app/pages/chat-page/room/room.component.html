@@ -23,13 +23,12 @@
 					</a>
 				</div>
 			</section>
-
 			<!-- CLASS chat-box-body -->
 			<div id="chat_box_body" class="chat-box-body">
 				<div id="chat_messages">
 					<ng-container *ngFor="let message of (messages$ | async)">
 						<ng-container *ngIf="message.user.id === user.id">
-							<!-- <div class="profile my-profile">
+            <!-- <div class="profile my-profile">
 								<span> Moi </span>
 								<img src="{{ message.user.avatar_url }}"/>
 							</div> -->

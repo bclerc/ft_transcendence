@@ -26,12 +26,7 @@ export class ChatService {
     }
 
     getRooms(): Observable<ChatRoom[]> {
-      return Observable.create((observer: any) => {
-        this.socket.on('rooms', (rooms: ChatRoom[]) => {
-          console.log(rooms);
-          observer.next(rooms);
-        });
-      });
+      return this.socket.fromEvent<ChatRoom[]>('rooms');  
     }
     
     getPublicRooms(): Observable<ChatRoom[]> {

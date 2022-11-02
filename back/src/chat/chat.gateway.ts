@@ -94,6 +94,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @OnEvent('room.message.new')
   handleNewMessageEvent(event: MessageUpdateEvent) {
     this.updateUsersMessagesInRoom(event.room);
+    this.updateRoomForUsersInRoom(event.room.id);
   }
 
   @OnEvent('room.user.join')
@@ -175,8 +176,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.server.to(client.id).emit('messages', messages);
     if (!room.seen)
     {
-      this.chatService.seenRoomMessages(user.id, room.id);
-      this.updateRoomForUsersInRoom(room.id);
+      await this.chatService.seenRoomMessages(user.id, room.id);
+      await this.updateUserRooms(user);
+    }
+  }
+
+  @SubscribeMessage('needMessagesNotSeen')
+  async handleEvent(client: Socket) {
+    let user = this.onlineUserService.getUser(client.id);
+    if (user) {
+      this.onlineUserService.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
     }
   }
 
@@ -221,6 +230,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     const rooms = await this.chatService.getRoomsFromUser(user.id);
     this.sendToUser(user, 'rooms', rooms);
+    this.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
+    this.sendToUser
   }
 
   async updatePublicRooms() {
@@ -241,6 +252,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     for (let user of room.users) {
       let rooms = await this.chatService.getRoomsFromUser(user.id);
+      this.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
       this.sendToUser(user, 'rooms', rooms);
     }
   }

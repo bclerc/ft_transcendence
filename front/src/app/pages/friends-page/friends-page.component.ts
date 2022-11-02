@@ -27,14 +27,12 @@ export class FriendsPageComponent implements OnInit {
   ngOnInit(): void {
     this.friends.subscribe(
       (res: any) => {
-        console.log(res);
       }
     )
 
   }
 
  async addFriend(friendId: any) {
-  console.log(friendId);
     await this.userService.sendRequest(friendId.id).subscribe(
       (res: any) => {
         // console.log(res);

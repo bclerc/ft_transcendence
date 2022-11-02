@@ -1,3 +1,4 @@
+import { I } from '@angular/cdk/keycodes';
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -27,6 +28,7 @@ export class ChatPageComponent implements OnInit {
   dmRooms$: Observable<ChatRoom[]> = this.chatService.getDmRooms();
 	publicrooms: Observable<ChatRoom[]> = this.chatService.getPublicRooms();
 
+  haveNewMessage: boolean = false;
 	selected = new FormControl(0);
 	actualUser: UserI = {};
 
@@ -54,16 +56,19 @@ export class ChatPageComponent implements OnInit {
 		});
 
 		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
-			if (this.selectedRoom.id) {
+      let roomChanged, roomSeen: boolean = false;
 				for (const room of rooms) {
-					if (room.id === this.selectedRoom.id) {
-						this.haveSelectedRoom = true;
+					if (this.selectedRoom.id && room.id === this.selectedRoom.id) {
+						//this.haveSelectedRoom = true;
 						this.selectedRoom = room;
-						return ;
+            roomChanged = true;
 					}
-				}
+          if (!room.seen && room.id !== this.selectedRoom.id) 
+            roomSeen = true;
+            
 			}
-		this.selectedRoom = {};
+		this.selectedRoom =  roomChanged ? this.selectedRoom : {};
+    this.haveNewMessage = roomSeen;
 		this.haveSelectedRoom = false;
 		});
 	}
@@ -173,5 +178,7 @@ export class ChatPageComponent implements OnInit {
     }
     return this.actualUser;
   }
+
+
 
 }

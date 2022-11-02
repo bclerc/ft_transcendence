@@ -29,8 +29,7 @@ export class ChatService {
 
     if (penalty)
       throw new RoomPunishException(penalty, this.onlineUserService);
-    if (!message.id)
-     return ;
+
     const newMessage = await this.prisma.message.create({
       data: {
         content: message.content,
@@ -44,11 +43,21 @@ export class ChatService {
             id: message.room.id,
           },
         },
+        seenBy: { connect: { id: message.user.id } }
       },
       include: {
         user: true,
       },
     });
+    await this.prisma.chatRoom.update({
+      where: {
+        id: message.room.id,
+      },
+      data: {
+        updatedAt: new Date(),
+      },
+    });
+
   }
 
   async getRoomsFromUser(userId: number): Promise<any> {
@@ -102,6 +111,9 @@ export class ChatService {
         type: true,
         public: true,
         description: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
       },
     });
 
@@ -210,8 +222,8 @@ export class ChatService {
         user: true,
       },
       orderBy: {
-        createdAt: 'asc',
-      },
+      createdAt: 'asc',
+    },
 
     });
     return messages;
@@ -283,14 +295,24 @@ export class ChatService {
             },
           },
         },
-        seenBy: {
-          none: {
-            id: userId,
-          },
-        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 1,
+      select : {
+        room: true,
+        seenBy: true,
       },
     });
-    return messages.length;
+
+    let count = 0;
+    messages.forEach(message => {
+      if (message.seenBy.filter(user => user.id === userId).length === 0)
+        count++;
+      }
+    );
+    return count;
   }
 
 
