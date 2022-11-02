@@ -25,6 +25,7 @@ import { OnlineuserModule } from './onlineusers/onlineuser.module';
 import { FriendsService } from './friends/friends.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { GameModule } from './game/game.module';
+import { VariablePong } from './pong/variables.pong';
 
 
 @Module({

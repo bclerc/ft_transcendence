@@ -1,25 +1,14 @@
-// import { Logger } from "@nestjs/common";
 import { Inject } from "@nestjs/common";
 import { WebSocketServer, SubscribeMessage, WebSocketGateway, ConnectedSocket, OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 import { OnlineUserService } from "src/onlineusers/onlineuser.service";
 import { GameI } from "./interfaces/game.interface";
-// import { PlayerI } from "./interfaces/player.interface";
 import { UserI } from "./interfaces/user.interface";
 import { PongService } from "./services/pong.service";
-// import { PointI } from "./interfaces/point.interface";
-
-// const PLAYER_HEIGHT = 65;
-// const PLAYER_WIDTH = 8;
-
-// const HEIGHTCANVAS = 400;
-// const WIDTHCANVAS = 600;
+import { VariablePong } from "./variables.pong";
 
 const NORMALGAME = 0;
 const MAX_MAPID = 1;
-
-// const SPEED_PLAYER = 10
-
 const RIGHTSIDE = 0;
 const LEFTSIDE = 1;
 
@@ -37,11 +26,37 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	allGames: GameI[];
 	allRandomGames: GameI[];
 	connectedUsers: UserI[];
-
 	constructor(
 		private pongService: PongService,
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
 	){
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
+		console.log("constructor gate");
 		this.connectedUsers = [];
 		this.state = {
 			obstacle: {
@@ -112,7 +127,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage('keydownS')
 	keydownS(client: Socket){
-		// console.log("keydownS");
 		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
 		if (game)
 			this.pongService.keydownS(game, client);
@@ -188,11 +202,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		{
 			this.pongService.joinGame(client, game);
 			client.emit('drawName', RIGHTSIDE);
-			/////
-			// choose random map id
-			/////
-			// var x = Math.floor(Math.random() * (MAX_MAPID - 1 + 1) + 1);
-			var x = 2;
+			// var x = Math.floor(Math.random() * (MAX_MAPID - 1 + 1) + 1); 		// choose random map id
+			var x = 2; //pour les tests je prends celle que je souhaite tester
 			
 			await this.pongService.delay(1500);
 			if (game.player1.socket)
@@ -345,27 +356,5 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.allRandomGames.push(game);
 		return game;
 	}
-
-
-	// joinGame(client: Socket, game: GameI){
-	// 	game.player2 = {
-    //   user: this.onlineUserService.getUser(client.id),
-	// 		socket: client,
-	// 		paddle: {
-	// 			x: WIDTHCANVAS - PLAYER_WIDTH,
-	// 			y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-	// 			dx: 0,
-	// 			dy: 0,
-	// 			width: PLAYER_WIDTH,
-	// 			height: PLAYER_HEIGHT
-	// 		},
-    // 		points: 0,
-	// 	}
-	// }
-
-	// deleteGame(g: GameI){
-	// 	var newAllGames: GameI[] = this.allGames.filter(game => game != g);
-	// 	this.allGames = newAllGames;
-	// }
 
 }

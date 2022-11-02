@@ -5,8 +5,7 @@ import { PointI } from '../interfaces/point.interface';
 import { GameI } from '../interfaces/game.interface';
 import { Socket } from 'socket.io';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
-import { GameModule } from 'src/game/game.module';
-
+import { VariablePong } from '../variables.pong';
 
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 65;
@@ -14,53 +13,73 @@ const PLAYER_WIDTH = 8;
 const HEIGHTCANVAS = 400;
 const WIDTHCANVAS = 600;
 
-const MAX_SCORE = 50;
-
-const MAX_SPEED = 13; //ball
-const defaultSpeed = 5; //speed de la balle par default
-
-const SPEED_PLAYER = 10
-
-
-
 /////
 //obstacls configs
 /////
 ////
 //// MAP1
 ///////// obstacle1
-const MAP1_OBSTACLE1_W = 40; // width
-const MAP1_OBSTACLE1_H = 125; // height
-const MAP1_OBSTACLE1_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
-const MAP1_OBSTACLE1_POSY = 0; // position y
-const MAP1_OBSTACLE1_RADIUS = 2;
+export const MAP1_OBSTACLE1_W = 40; // width
+export const MAP1_OBSTACLE1_H = 125; // height
+export const MAP1_OBSTACLE1_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
+export const MAP1_OBSTACLE1_POSY = 0; // position y
+export const MAP1_OBSTACLE1_RADIUS = 2;
 ///////// obstacle2
-const MAP1_OBSTACLE2_W = 40; // width
-const MAP1_OBSTACLE2_H = 125; // height
-const MAP1_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
-const MAP1_OBSTACLE2_POSY = (HEIGHTCANVAS - MAP1_OBSTACLE1_H); // position x
-const MAP1_OBSTACLE2_RADIUS = 2;
-
-////////
+export const MAP1_OBSTACLE2_W = 40; // width
+export const MAP1_OBSTACLE2_H = 125; // height
+export const MAP1_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE2_W / 2); // position x
+export const MAP1_OBSTACLE2_POSY = (HEIGHTCANVAS - MAP1_OBSTACLE2_H); // position x
+export const MAP1_OBSTACLE2_RADIUS = 2;
+////
+////
 //// MAP2
 ///////// obstacle1
-const MAP2_OBSTACLE_W = 20; // width
-const MAP2_OBSTACLE_H = 200; // height
-const MAP2_OBSTACLE_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
-const MAP2_OBSTACLE_POSY = 0; // position y
-const MAP2_OBSTACLE_RADIUS = 2;
-const MAP2_OBSTACLE_SPEED = 2;
+export const MAP2_OBSTACLE_W = 150; // width
+export const MAP2_OBSTACLE_H = 20; // height
+export const MAP2_OBSTACLE_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
+export const MAP2_OBSTACLE_POSY = 0; // position y
+export const MAP2_OBSTACLE_SPEED = 1;
+export const MAP2_OBSTACLE_RADIUS = 2;
 ////
 ////
-
+export const MAX_SCORE = 50;
+export const MAX_SPEED = 10; //ball
+export const defaultSpeed = 4; //speed de la balle par default
+export const SPEED_PLAYER = 8
 
 @Injectable()
 export class PongService {
+	// variables: VariablePong;
 
     constructor(
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
+        // private variables: VariablePong
     )
-    {};
+    {
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        console.log("ici");
+        var a = WIDTHCANVAS / 2;
+        console.log(a);
+        // console.log(variables);
+    };
 
     loopGameNormal(game: GameI){
 
@@ -356,7 +375,7 @@ loopGameMap2(game: GameI){
     ////
     //MOUVEMENTS DES JOUEURS
     ////
-    
+    // console.log(this.variables);
     game.player1.paddle.y += game.player1.paddle.dy;
     game.player2.paddle.y += game.player2.paddle.dy;
 
@@ -379,49 +398,105 @@ loopGameMap2(game: GameI){
     /////
     //REBOND OBSTACLE AVANT TOUT
     /////
+    // de h en b && 
 
-    //si ball de droite a gauche
-    if (game.ball.dx < 0)
-    {
-        if (game.ball.y + game.ball.radius >= game.obstacle.y && game.ball.y - game.ball.radius <= game.obstacle.y + game.obstacle.height)
-        {
-            if (game.ball.x - game.ball.radius <= game.obstacle.x + game.obstacle.width && game.ball.x + game.ball.radius >= game.obstacle.x)
-            {
-                game.ball.x = game.obstacle.x + game.obstacle.width;
-                game.ball.dx *= -1;
-            }
-        }
-        else
-        {
-            if (game.ball.x >= game.obstacle.x && game.ball.x <= game.obstacle.x + game.obstacle.width)
-            {
-                // if ()
-                // {
-                    
-                
-                // }
-            }
-        }
-        // else if (   (game.ball.y + game.ball.radius <= game.obstacle.y && game.ball.y - game.ball.radius > 0))
-        // {
-        //     if (game.ball.x )
-        // }
-        // else if (game.ball.y - game.ball.radius >= game.obstacle.y + game.obstacle.height && game.ball.y + game.ball.radius > HEIGHTCANVAS)
-        // {
 
-        // }
-    }
-    else
+    if  (   game.ball.dy > 0 && 
+            game.ball.x >= game.obstacle.x &&
+            game.ball.x <= game.obstacle.x + game.obstacle.width &&
+            game.ball.y >= game.obstacle.y - game.ball.radius && 
+            game.ball.y <= game.obstacle.y + game.ball.radius
+    )
     {
-        if (game.ball.y + game.ball.radius >= game.obstacle.y && game.ball.y - game.ball.radius <= game.obstacle.y + game.obstacle.height)
-        {
-            if (game.ball.x + game.ball.radius >= game.obstacle.x && game.ball.x - game.ball.radius <= game.obstacle.x)
-            {
-                game.ball.x = game.obstacle.x - game.ball.radius;
-                game.ball.dx *= -1;
-            }
-        }
+        console.log("North");
+        game.ball.y = game.obstacle.y - game.ball.radius;
+        game.ball.dy *= -1;
     }
+    
+    else if (    game.ball.dy < 0 && 
+            game.ball.x >= game.obstacle.x &&
+            game.ball.x <= game.obstacle.x + game.obstacle.width &&
+            game.ball.y >= game.obstacle.y + game.obstacle.height - game.ball.radius && 
+            game.ball.y <= game.obstacle.y + game.obstacle.height + game.ball.radius
+    )
+    {
+        console.log("South");
+        game.ball.y = game.obstacle.y + game.obstacle.height + game.ball.radius;
+        game.ball.dy *= -1;
+    }
+    else if (    game.ball.dx < 0 && 
+        game.ball.x >= game.obstacle.x + game.obstacle.width - game.ball.radius &&
+        game.ball.x <= game.obstacle.x + game.obstacle.width + game.ball.radius &&
+        game.ball.y >= game.obstacle.y && 
+        game.ball.y <= game.obstacle.y + game.obstacle.height
+    )
+    {
+        console.log("Est");
+        game.ball.x = game.obstacle.x + game.obstacle.width + game.ball.radius;
+        game.ball.dx *= -1;
+    }
+    else if (    game.ball.dx > 0 && 
+        game.ball.x >= game.obstacle.x - game.ball.radius &&
+        game.ball.x <= game.obstacle.x + game.ball.radius &&
+        game.ball.y >= game.obstacle.y && 
+        game.ball.y <= game.obstacle.y + game.obstacle.height
+    )
+    {
+        console.log("West coast negzz ");
+        game.ball.y = game.obstacle.y - game.ball.radius;
+        game.ball.dx *= -1;
+    }
+
+
+    // if (game.ball.dy > 0 && game.ball.y > 0 + game.ball.radius && game.ball.y <= game.obstacle.y + game.obstacle.height)
+    //     {
+    //         if (game.ball.x + game.ball.radius >= game.obstacle.x && game.ball.x - game.ball.radius <= game.obstacle.x + game.obstacle.width && game.ball.y + game.ball.radius >= game.obstacle.y)
+    //         {
+    //             console.log("4");
+    //             game.ball.y = game.obstacle.y - game.ball.radius;
+    //             game.ball.dy *= -1;
+    //     }
+    // }
+    // else if (game.ball.dy < 0 && game.ball.y + game.ball.radius < HEIGHTCANVAS && game.ball.y - game.ball.radius >= game.obstacle.y)
+    // {
+    //     if (game.ball.x + game.ball.radius >= game.obstacle.x && game.ball.x - game.ball.radius <= game.obstacle.x + game.obstacle.width && game.ball.y - game.ball.radius <= game.obstacle.y + game.obstacle.height)
+    //     {
+    //     console.log("5");
+    //     game.ball.y = game.obstacle.y + game.obstacle.height + game.ball.radius;
+    //         game.ball.dy *= -1;
+    //     }
+    // }
+    // else if (game.ball.y + game.ball.radius >= game.obstacle.y && game.ball.y - game.ball.radius <= game.obstacle.y + game.obstacle.height)
+    // {
+    //     if (game.ball.dx < 0 && game.ball.x - game.ball.radius <= game.obstacle.x + game.obstacle.width && game.ball.x - game.ball.radius >= game.obstacle.x)
+    //     {
+    //         console.log("2", game.ball, game.obstacle);
+    //         game.ball.x = game.obstacle.x + game.obstacle.width;
+    //         game.ball.dx *= -1;
+    //     }
+    //     else if (game.ball.dx > 0 && game.ball.x + game.ball.radius >= game.obstacle.x && game.ball.x + game.ball.radius <= game.obstacle.x + game.obstacle.width)
+    //     {
+    //         console.log("3");
+    //         game.ball.x = game.obstacle.x - game.ball.radius;
+    //         game.ball.dx *= -1;
+    //     }
+    // }
+    // else if (game.ball.y + game.ball.radius < HEIGHTCANVAS && game.ball.y - game.ball.radius >= game.obstacle.y + game.obstacle.height)
+    // {
+
+    // }    
+    
+    
+
+
+    //  if (game.ball.y + game.ball.radius >= game.obstacle.y && game.ball.y - game.ball.radius <= game.obstacle.y + game.obstacle.height)
+        // {
+        //     if (game.ball.x + game.ball.radius >= game.obstacle.x && game.ball.x - game.ball.radius <= game.obstacle.x)
+        //     {
+        //         game.ball.x = game.obstacle.x - game.ball.radius;
+        //         game.ball.dx *= -1;
+        //     }
+        // }
     
     ////////
     //////HORIZONT
@@ -448,8 +523,8 @@ loopGameMap2(game: GameI){
     if ( game.ball.x <= (0 - game.ball.width) || game.ball.x >= (WIDTHCANVAS + game.ball.width))
     {
         //mise a jour des scores et emission au front
-        game.ball.x <= (0 - game.ball.width) ? game.player2.points++ : 42;
-        game.ball.x >= (WIDTHCANVAS + game.ball.width) ? game.player1.points++ : 42;
+        game.ball.x <= (0 - game.ball.width) ? (game.player2.points++ && this.reinitBall(game.ball, 1)) : (game.player1.points++ && this.reinitBall(game.ball, -1));
+        // game.ball.x >= (WIDTHCANVAS + game.ball.width) ? game.player1.points++ : 42;
         game.player1.socket.emit('score', {
             score1: game.player1.points,
             score2: game.player2.points
@@ -538,9 +613,6 @@ loopGameMap2(game: GameI){
     game.player2.socket.emit('drawMap2', copy);
 }
 
-
-
-
     async drawInit(game: GameI)
     {
         game.player1.socket.emit('drawInit');
@@ -587,7 +659,15 @@ loopGameMap2(game: GameI){
         ball.speed = defaultSpeed;
         ball.x = WIDTHCANVAS /2;
         ball.y = HEIGHTCANVAS /2;
-        ball.dx = ball.speed * dir;
+        // ball.dx = ball.speed * dir;
+        if (dir > 0)
+    		ball.dx = Math.floor(Math.random() * (-1 - -defaultSpeed + 1) + -defaultSpeed);
+        else
+    		ball.dx = Math.floor(Math.random() * (defaultSpeed - 1 + 1) + 1);
+        ball.dy = Math.floor(Math.random() * (defaultSpeed - -defaultSpeed + 1) + -defaultSpeed);
+
+        // ball.dx = Math.random() * 10 * dir;
+        // ball.dy = Math.random() * 10;
         // let nbr = Math.random();
         // console.log("nbr = ", nbr);
         // if (nbr > 0.5)

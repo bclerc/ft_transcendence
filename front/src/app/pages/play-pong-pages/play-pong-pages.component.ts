@@ -1,14 +1,11 @@
-
-import { S } from '@angular/cdk/keycodes';
 import { Component, HostListener } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
-import { Observable } from 'rxjs';
-// import { Subscription } from 'rxjs';
 import { GameI } from '../../models/PongInterfaces/pong.interface';
 import { ScoreI } from '../../models/PongInterfaces/score.interface';
 import { UserI } from '../../models/PongInterfaces/user.interface';
+// import { VariablePong } from 'src/app/variables/variables.pong';
 
 const PLAYER_RADIUS = 3.5;
 const CANVAS_RADIUS = 20;
@@ -17,42 +14,42 @@ const PLAYER_HEIGHT = 65;
 const PLAYER_WIDTH = 8;
 const HEIGHTCANVAS = 400;
 const WIDTHCANVAS = 600;
-const WALL = 0;
-const PADDLE = 1;
-const MISS = 2;
-
 const FONT = 33;
 
-/////
-//obstacls configs
-/////
-////
-//// MAP1
-///////// obstacle1
-const MAP1_OBSTACLE1_W = 40; // width
-const MAP1_OBSTACLE1_H = 125; // height
-const MAP1_OBSTACLE1_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
-const MAP1_OBSTACLE1_POSY = 0; // position y
-const MAP1_OBSTACLE1_RADIUS = 2;
+///
+// obstacls configs
+///
+//
+// MAP1
+/////// obstacle1
+export const MAP1_OBSTACLE1_W = 40; // width
+export const MAP1_OBSTACLE1_H = 125; // height
+export const MAP1_OBSTACLE1_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
+export const MAP1_OBSTACLE1_POSY = 0; // position y
+export const MAP1_OBSTACLE1_RADIUS = 2;
 ///////// obstacle2
-const MAP1_OBSTACLE2_W = 40; // width
-const MAP1_OBSTACLE2_H = 125; // height
-const MAP1_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE2_W / 2); // position x
-const MAP1_OBSTACLE2_POSY = (HEIGHTCANVAS - MAP1_OBSTACLE2_H); // position x
-const MAP1_OBSTACLE2_RADIUS = 2;
+export const MAP1_OBSTACLE2_W = 40; // width
+export const MAP1_OBSTACLE2_H = 125; // height
+export const MAP1_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE2_W / 2); // position x
+export const MAP1_OBSTACLE2_POSY = (HEIGHTCANVAS - MAP1_OBSTACLE2_H); // position x
+export const MAP1_OBSTACLE2_RADIUS = 2;
 ////
 ////
 //// MAP2
 ///////// obstacle1
-const MAP2_OBSTACLE_W = 20; // width
-const MAP2_OBSTACLE_H = 200; // height
-const MAP2_OBSTACLE_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
-const MAP2_OBSTACLE_POSY = 0; // position y
-const MAP2_OBSTACLE_SPEED = 5;
-const MAP2_OBSTACLE_RADIUS = 2;
-////
-////
+export const MAP2_OBSTACLE_W = 150; // width
+export const MAP2_OBSTACLE_H = 20; // height
+export const MAP2_OBSTACLE_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
+export const MAP2_OBSTACLE_POSY = 0; // position y
+export const MAP2_OBSTACLE_SPEED = 1;
+export const MAP2_OBSTACLE_RADIUS = 2;
+//
+//
 
+export const MAX_SCORE = 50;
+export const MAX_SPEED = 10; //ball
+export const defaultSpeed = 4; //speed de la balle par default
+export const SPEED_PLAYER = 8
 
 @Component({
   selector: 'app-root',
@@ -90,7 +87,8 @@ export class PlayPongPagesComponent {
   // private audio3;
 
   
-  constructor(private router: Router, private socket: Socket) {
+  constructor(private router: Router, private socket: Socket
+    ) {
     this.var_interval = 0;
     this.map_mode = -1;
     this.game_id = -1;
@@ -108,6 +106,7 @@ export class PlayPongPagesComponent {
   }
 
   ngOnInit(): void {
+    // console.log(this.variables);
     this.socket.on('score', this.updateScore);
     this.socket.on('drawNormalMap', this.drawNormalMap);
     this.socket.on('drawMap1', this.drawMap1);
