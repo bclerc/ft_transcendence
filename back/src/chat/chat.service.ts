@@ -84,7 +84,7 @@ export class ChatService {
             avatar_url: true,
           },
           orderBy: {
-            state: 'desc',
+            state: 'asc',
           }
         },
         admins: {
@@ -173,6 +173,9 @@ export class ChatService {
           }
         },
         ownerId: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
       },
     });
 
