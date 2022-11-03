@@ -83,6 +83,9 @@ export class ChatService {
             email: true,
             avatar_url: true,
           },
+          orderBy: {
+            state: 'desc',
+          }
         },
         admins: {
           select: {
