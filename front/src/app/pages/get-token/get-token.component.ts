@@ -14,6 +14,7 @@ export class GetTokenComponent implements OnInit {
   
   constructor(private router : Router, private token : TokenStorageService,
     private jwtHelper : JwtHelperService,
+    private navbar: HeaderService,
     @Inject(Socket) private socket: Socket) { }
   tokenString! : string;
   
@@ -24,6 +25,7 @@ export class GetTokenComponent implements OnInit {
     this.socket.disconnect();
     this.socket.ioSocket.io.opts.query = 'token=' + this.token.getToken();
     this.socket.connect();
+    this.navbar.show();
     this.router.navigate(['/chat']);
 
   }

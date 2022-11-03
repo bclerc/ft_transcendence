@@ -1,4 +1,5 @@
 
+import { C } from '@angular/cdk/keycodes';
 import { HttpClient } from '@angular/common/http';
 import { ElementRef, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,6 +19,7 @@ export class ChatService {
               ) { }
 
    sendMessage(message: Message) {
+      console.log("sendingMessage:", message);
       this.socket.emit('message', message);
     }
 

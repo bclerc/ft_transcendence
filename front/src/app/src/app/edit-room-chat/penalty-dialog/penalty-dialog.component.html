@@ -1,0 +1,71 @@
+<div class="penalty">
+
+  <div class="penalty-header">
+    <p class="penalty-title">
+      Sanctionnez {{data.target.intra_name}}
+    </p>
+  </div>
+  <div class="penalty-content">
+    <form [formGroup]="form">
+
+      <mat-checkbox class="penalty-check-box" matCheckBox formControlName="perm">Permanent</mat-checkbox>
+      <div class="penalty-entry">
+        <input class= "penalty-time-input" type="number" value="0" formControlName="days">
+        <p> Jours </p> 
+      </div>
+      <div class="penalty-entry">
+      <input class= "penalty-time-input" type="number" value="0" formControlName="hours">
+      <p>Heures</p>
+    </div>
+    <div class="penalty-entry">
+     <input class= "penalty-time-input" type="number" value="0" formControlName="minutes">
+     <p>Minutes</p>
+    </div> 
+  </form>
+  </div>
+  <div class="penalty-footer">
+    <button>Annuler</button>
+    <button (click)="action()">Sanctionner</button>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+<!--   
+  <mat-card>
+  <mat-card-title>
+    <h1>Bannir {{ data.target.displayname }} du canal {{ data.room.name }} </h1>
+  </mat-card-title>
+  <mat-card-subtitle>
+    <mat-checkbox [(ngModel)]="checked" >Ban permanent</mat-checkbox>
+  </mat-card-subtitle>
+  <mat-card-content>
+    <form [formGroup]="form">
+      <mat-form-field appearance="fill">
+        <mat-label>Temps</mat-label>
+        <input matInput type="number" [disabled]="checked" formControlName="time">
+      </mat-form-field>
+      <mat-form-field appearance="fill" >
+        <mat-label>Select</mat-label>
+        <mat-select [disabled]="checked" formControlName="type">
+          <mat-option value="minutes">Minutes</mat-option>
+          <mat-option value="hours">Heures</mat-option>
+          <mat-option value="days">Jours</mat-option>
+          <mat-option value="month">Mois</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Raison</mat-label>
+        <textarea matInput formControlName="reason"></textarea>
+      </mat-form-field>    
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="action()" >Bannir</button>
+  </mat-card-actions>
+</mat-card> -->
+
+</div>

@@ -6,6 +6,7 @@
   - public
   - password
 -->
+
 <div class="container">
   <mat-card>
     <mat-card-title>Édition du groupe {{room.name}} </mat-card-title>
@@ -24,7 +25,7 @@
         </mat-form-field>
         <app-userselect [users]="users.value" (addUser)="addUser(initUser($event))" (removeuser)="removeUser($event.id)"></app-userselect>
         <div class="button">
-          <button mat-button type="submit" [disabled]="!form.valid">Éditer</button>
+          <button mat-button type="submit"  [disabled]="!form.valid">Éditer</button>
         </div>
       </form>
     </mat-card-content>

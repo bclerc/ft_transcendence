@@ -29,7 +29,6 @@ export class EditRoomChatComponent implements OnInit {
 
 
   edit(){
-
     const room: ChatRoom = {
       id: this.room.id,
       name: this.form.value.name,

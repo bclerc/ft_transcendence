@@ -47,7 +47,6 @@ export class ChatPageComponent implements OnInit {
   ) { }
 	
 	async ngOnInit() {
-    setTimeout(() => {}, 500);
     this.chatService.needRooms();
     this.chatService.needPublicRooms();
     this.chatService.needDmRooms();
@@ -62,6 +61,20 @@ export class ChatPageComponent implements OnInit {
           if (!room.seen && room.id !== this.selectedRoom.id) 
             roomSeen = true;
         }
+        if (this.selectedRoom && this.selectedRoom.type != 'DM') {
+          rooms.forEach((room: ChatRoom) => {
+              if (room.id === this.selectedRoom.id) {
+                 this.selectedRoom = room;
+                 this.haveSelectedRoom = true; 
+                  roomChanged = true;
+              }
+          });
+          if (!roomChanged) {
+            this.haveSelectedRoom = false;
+            this.selectedRoom = {};
+          }
+      }
+
        this.haveNewMessage = roomSeen;
 		});
 
