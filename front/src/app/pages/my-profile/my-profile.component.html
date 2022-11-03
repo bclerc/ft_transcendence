@@ -1,12 +1,24 @@
 <!--<div *ngIf="filtersLoaded | async">!-->
-<div>
-<p>{{user?.displayname}}</p>
-<p>{{user?.email}}</p>
-<p>{{user?.createdAt | date}} </p>
-<img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/>
-<p><a routerLink="/modifymyprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Modifier mon profil</a>
-</p>
-<p>statistique : </p>
-<p>historique des matchs</p>
+<div class="center">
+	<main>
+		<div id="left">
+			<div id="user-info">
+				<p>{{user?.displayname}}</p>
+				<p>{{user?.email}}</p>
+				<p>{{user?.createdAt | date}} </p>
+				<img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/>
+				<a routerLink="/modifymyprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Modifier mon profil</a>
+			</div>
+		</div>
+		<div id="right">
+			<div id="stats">
+				statistique
+			</div>
+			<div id="historique-match">
+				historique des matchs
+			</div>
+		
+		</div>
+	</main>
 </div>
 <!--</div>!-->
