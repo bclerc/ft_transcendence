@@ -34,8 +34,8 @@ export const MAP1_OBSTACLE2_RADIUS = 2;
 ////
 //// MAP2
 ///////// obstacle1
-export const MAP2_OBSTACLE_W = 150; // width
-export const MAP2_OBSTACLE_H = 20; // height
+export const MAP2_OBSTACLE_W = 40; // width
+export const MAP2_OBSTACLE_H = 130; // height
 export const MAP2_OBSTACLE_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
 export const MAP2_OBSTACLE_POSY = 0; // position y
 export const MAP2_OBSTACLE_SPEED = 1;
@@ -44,7 +44,7 @@ export const MAP2_OBSTACLE_RADIUS = 2;
 ////
 export const MAX_SCORE = 50;
 export const MAX_SPEED = 10; //ball
-export const defaultSpeed = 4; //speed de la balle par default
+export const defaultSpeed = 5; //speed de la balle par default
 export const SPEED_PLAYER = 8
 
 @Injectable()
@@ -390,9 +390,21 @@ loopGameMap2(game: GameI){
         game.player2.paddle.y =  HEIGHTCANVAS - game.player2.paddle.height;
 
 
-    /////
-    //MOUVEMENT DE LA BALLE
-    ////        
+    ///////
+    ////Mouvement object
+    ///////
+
+    game.obstacle.y += game.obstacle.dy;
+    if (game.obstacle.dy > 0 && game.obstacle.y + game.obstacle.height >= HEIGHTCANVAS)
+    {
+        game.obstacle.y = HEIGHTCANVAS - game.obstacle.height;
+        game.obstacle.dy *= -1;
+    }
+    else if (game.obstacle.dy < 0 && game.obstacle.y <= 0)
+    {
+        game.obstacle.y = 0;
+        game.obstacle.dy *= -1;
+    }
 
 
     /////
@@ -402,8 +414,8 @@ loopGameMap2(game: GameI){
 
 
     if  (   game.ball.dy > 0 && 
-            game.ball.x >= game.obstacle.x &&
-            game.ball.x <= game.obstacle.x + game.obstacle.width &&
+            game.ball.x >= game.obstacle.x - game.ball.radius &&
+            game.ball.x <= game.obstacle.x + game.obstacle.width + game.ball.radius &&
             game.ball.y >= game.obstacle.y - game.ball.radius && 
             game.ball.y <= game.obstacle.y + game.ball.radius
     )
@@ -414,8 +426,8 @@ loopGameMap2(game: GameI){
     }
     
     else if (    game.ball.dy < 0 && 
-            game.ball.x >= game.obstacle.x &&
-            game.ball.x <= game.obstacle.x + game.obstacle.width &&
+            game.ball.x >= game.obstacle.x - game.ball.radius &&
+            game.ball.x <= game.obstacle.x + game.obstacle.width + game.ball.radius &&
             game.ball.y >= game.obstacle.y + game.obstacle.height - game.ball.radius && 
             game.ball.y <= game.obstacle.y + game.obstacle.height + game.ball.radius
     )
@@ -443,9 +455,10 @@ loopGameMap2(game: GameI){
     )
     {
         console.log("West coast negzz ");
-        game.ball.y = game.obstacle.y - game.ball.radius;
+        game.ball.x = game.obstacle.x - game.ball.radius;
         game.ball.dx *= -1;
     }
+
 
 
     // if (game.ball.dy > 0 && game.ball.y > 0 + game.ball.radius && game.ball.y <= game.obstacle.y + game.obstacle.height)
@@ -498,6 +511,11 @@ loopGameMap2(game: GameI){
         //     }
         // }
     
+
+    /////
+    //MOUVEMENT DE LA BALLE
+    ////        
+
     ////////
     //////HORIZONT
     ////////
@@ -523,7 +541,7 @@ loopGameMap2(game: GameI){
     if ( game.ball.x <= (0 - game.ball.width) || game.ball.x >= (WIDTHCANVAS + game.ball.width))
     {
         //mise a jour des scores et emission au front
-        game.ball.x <= (0 - game.ball.width) ? (game.player2.points++ && this.reinitBall(game.ball, 1)) : (game.player1.points++ && this.reinitBall(game.ball, -1));
+        game.ball.x <= (0 - game.ball.width) ? (game.player2.points++ && this.reinitBall(game.ball, 1)) : (game.player1.points++ && this.reinitBall(game.ball, 1));
         // game.ball.x >= (WIDTHCANVAS + game.ball.width) ? game.player1.points++ : 42;
         game.player1.socket.emit('score', {
             score1: game.player1.points,
@@ -554,10 +572,10 @@ loopGameMap2(game: GameI){
         //emission aux spectateurs
 
         //reinitialiser la balle et sa direction y vers celui qui vient de perdre
-        if (game.ball.x - game.ball.radius <= 0)
-            this.reinitBall(game.ball, 1);
-        else
-            this.reinitBall(game.ball, -1);
+        // if (game.ball.x - game.ball.radius <= 0)
+        //     this.reinitBall(game.ball, 1);
+        // else
+        //     this.reinitBall(game.ball, -1);
         //reinit position joueur au centre et obstacle
         this.reinitPlayers(game.player1, game.player2);
         this.reinitObstacle(game.obstacle);
@@ -584,22 +602,6 @@ loopGameMap2(game: GameI){
         //inversement de la direction y
         game.ball.dy *= -1;
         game.ball.y = HEIGHTCANVAS - game.ball.radius;
-    }
-
-    ///////
-    ////Mouvement object
-    ///////
-
-    game.obstacle.y += game.obstacle.dy;
-    if (game.obstacle.dy > 0 && game.obstacle.y + game.obstacle.height >= HEIGHTCANVAS)
-    {
-        game.obstacle.y = HEIGHTCANVAS - game.obstacle.height;
-        game.obstacle.dy *= -1;
-    }
-    else if (game.obstacle.dy < 0 && game.obstacle.y <= 0)
-    {
-        game.obstacle.y = 0;
-        game.obstacle.dy *= -1;
     }
 
     //envoyer les datas aux sockets

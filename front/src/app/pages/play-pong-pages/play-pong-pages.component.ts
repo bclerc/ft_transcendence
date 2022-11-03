@@ -37,8 +37,8 @@ export const MAP1_OBSTACLE2_RADIUS = 2;
 ////
 //// MAP2
 ///////// obstacle1
-export const MAP2_OBSTACLE_W = 150; // width
-export const MAP2_OBSTACLE_H = 20; // height
+export const MAP2_OBSTACLE_W = 40; // width
+export const MAP2_OBSTACLE_H = 130; // height
 export const MAP2_OBSTACLE_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
 export const MAP2_OBSTACLE_POSY = 0; // position y
 export const MAP2_OBSTACLE_SPEED = 1;
@@ -48,7 +48,7 @@ export const MAP2_OBSTACLE_RADIUS = 2;
 
 export const MAX_SCORE = 50;
 export const MAX_SPEED = 10; //ball
-export const defaultSpeed = 4; //speed de la balle par default
+export const defaultSpeed = 5; //speed de la balle par default
 export const SPEED_PLAYER = 8
 
 @Component({
