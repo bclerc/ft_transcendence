@@ -8,7 +8,7 @@ import { PongService } from "./services/pong.service";
 import { VariablePong } from "./variables.pong";
 
 const NORMALGAME = 0;
-const MAX_MAPID = 1;
+const MAX_MAP = 3;
 const RIGHTSIDE = 0;
 const LEFTSIDE = 1;
 
@@ -203,7 +203,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			this.pongService.joinGame(client, game);
 			client.emit('drawName', RIGHTSIDE);
 			// var x = Math.floor(Math.random() * (MAX_MAPID - 1 + 1) + 1); 		// choose random map id
-			var x = 2; //pour les tests je prends celle que je souhaite tester
+			var x = 3; //pour les tests je prends celle que je souhaite tester
 			
 			await this.pongService.delay(1500);
 			if (game.player1.socket)
@@ -309,6 +309,13 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			console.log("ici back 02")
 			game.id_interval = setInterval(() => {
 				this.pongService.loopGameMap2(game);
+			}, 1000/60);
+		}		
+		else if (mapid === 3)
+		{
+			console.log("ici back 03")
+			game.id_interval = setInterval(() => {
+				this.pongService.loopGameMap3(game);
 			}, 1000/60);
 		}
 	}
