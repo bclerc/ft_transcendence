@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { TokenStorageService } from './services/auth/token.storage';
 import { HeaderService } from './services/user/header.service';
@@ -18,10 +19,13 @@ export class AppComponent implements OnInit{
               private socket: Socket,
               private snackBar: MatSnackBar,
               public navbar : HeaderService,
-              private token : TokenStorageService) { 
-                if (token.getToken())
-                navbar.show();
-              }   
+              private token : TokenStorageService,
+              private router: Router)  { 
+              
+              if (token.getToken() && router.url !== '/login') {
+                 navbar.show();
+                }   
+            };
 
   ngOnInit(): void {
       this.socket.on('notification', (notif: string) => {

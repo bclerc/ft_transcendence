@@ -68,7 +68,6 @@ export class NewRoomComponent implements OnInit {
 	}
 
 	addUser(user: any) {
-    console.log("Action detected", user);
 		this.users.push(new FormControl({
 			id: user.id,
 			intra_name: user.intra_name,

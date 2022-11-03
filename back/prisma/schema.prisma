@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["orderByRelation"]
 }
 
 datasource db {
@@ -28,6 +29,7 @@ model User {
   chat_rooms                    ChatRoom[]
   adminOf                       ChatRoom[]      @relation("chatRoomAdminRelation")
   Message                       Message[]
+  seenMessages                  Message[]       @relation("messageSeenBy")
   games                         Game[]          @relation("gameUserRelation")
   games_win                     Game[]          @relation("gameWinnerRelation")
   games_lose                    Game[]          @relation("gameLoserRelation")          
@@ -88,6 +90,7 @@ model Message {
   userId    Int
   room      ChatRoom @relation(fields: [roomId], references: [id])
   roomId    Int
+  seenBy    User[]   @relation("messageSeenBy")
 }
 
 model ChatPenalty {
@@ -102,6 +105,8 @@ model ChatPenalty {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
+
+
 
 enum UserState {
   ONLINE

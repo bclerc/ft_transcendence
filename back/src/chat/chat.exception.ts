@@ -12,6 +12,6 @@ export class RoomPunishException extends HttpException {
     msg += (penalty.timetype == PenaltyTimeType.PERM ? " de façon permanente" : " Jusqu'au " + penalty.endTime);
 
     super('Forbidden', HttpStatus.FORBIDDEN,);
-    onlineUserService.sendToUser(penalty.userId, 'notification', msg);
+    //onlineUserService.sendToUser(penalty.userId, 'notification', msg);
   }
 }

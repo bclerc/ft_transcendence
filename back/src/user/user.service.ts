@@ -151,7 +151,7 @@ export class UserService {
   async getBasicUser(id: number): Promise<BasicUserI> {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: Number(id),
+        id: id,
       },
       select: {
         id: true,
@@ -296,7 +296,7 @@ export class UserService {
   async getBlocked(userId: number) {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: Number(userId),
+        id: userId,
       },
       select: {
         blockedUsers: true,

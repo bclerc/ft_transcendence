@@ -54,7 +54,7 @@ const config: SocketIoConfig = {
     query: {
       token: sessionStorage.getItem('auth-token')
     }
-  }
+  },
 };
 
 export function tokenGetter() {
@@ -97,7 +97,7 @@ export function tokenGetter() {
       }
     }),
 
-    SocketIoModule.forRoot(config),
+    SocketIoModule.forRoot(config ),
     BrowserAnimationsModule,
     MatTabsModule,
     MatCardModule,

@@ -18,12 +18,14 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() room: ChatRoom = {};
   @Input() user: UserI = {};
+  @Input() friend: UserI = {};
 
 
-  // get only the messages of the selected room
+
   messages$: Observable<Message[]> = this.chatService.getMessages(this.room);
 
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
+
   form: FormGroup = new FormGroup({
     message: new FormControl(null, [Validators.required])
   });
@@ -34,7 +36,6 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
               
               
   async sendMessage() {
-
     if (this.form.valid) {
       this.chatService.sendMessage({ 
         content: this.form.value.message,
@@ -56,7 +57,6 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   }
   
   ngOnInit(): void {
-
     this.messages$.subscribe((messages: Message[]) => {
       const element = document.getElementById('chat_box_body');
 

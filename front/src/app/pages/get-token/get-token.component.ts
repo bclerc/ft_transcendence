@@ -3,6 +3,7 @@ import { Router} from '@angular/router';
 import { TokenStorageService } from '../../services/auth/token.storage';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { HeaderService } from 'src/app/services/user/header.service';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-get-token',
@@ -11,19 +12,20 @@ import { HeaderService } from 'src/app/services/user/header.service';
 })
 export class GetTokenComponent implements OnInit {
   
-  constructor(private router : Router, private token : TokenStorageService, private jwtHelper : JwtHelperService, public navbar : HeaderService/*, private loggedin : IsLoggedIn*/) { }
+  constructor(private router : Router, private token : TokenStorageService,
+    private jwtHelper : JwtHelperService,
+    @Inject(Socket) private socket: Socket) { }
   tokenString! : string;
   
-  ngOnInit(): void {
+  ngOnInit(): void {  
     
     this.tokenString = this.router.url.split('/')[2];
     this.token.saveToken(this.tokenString);
-    this.navbar.show();
-    //console.log("this.tokenString")
-   // console.log("id = ", this.jwtHelper.decodeToken(this.tokenString).sub);
-    //console.log(this.tokenString);
-    //this.loggedin.isUserLoggedIn.next(true);
-    this.router.navigate(['']);
+    this.socket.disconnect();
+    this.socket.ioSocket.io.opts.query = 'token=' + this.token.getToken();
+    this.socket.connect();
+    this.router.navigate(['/chat']);
+
   }
 
   

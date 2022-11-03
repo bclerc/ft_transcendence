@@ -9,4 +9,4 @@ export class BasicUserI {
     avatar_url: string;
     inRoomId?: number;
     inGameId?: number; 
-} 
+}

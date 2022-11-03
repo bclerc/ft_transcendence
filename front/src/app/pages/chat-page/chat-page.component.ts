@@ -1,3 +1,4 @@
+import { I } from '@angular/cdk/keycodes';
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -24,10 +25,11 @@ export class ChatPageComponent implements OnInit {
 	haveSelectedRoom: boolean = false;
 
 	rooms$: Observable<ChatRoom[]> = this.chatService.getRooms();
-
-
+  dmRooms$: Observable<ChatRoom[]> = this.chatService.getDmRooms();
 	publicrooms: Observable<ChatRoom[]> = this.chatService.getPublicRooms();
 
+  haveNewMessage: boolean = false;
+  haveNewDm: boolean = false;
 	selected = new FormControl(0);
 	actualUser: UserI = {};
 
@@ -45,25 +47,33 @@ export class ChatPageComponent implements OnInit {
   ) { }
 	
 	async ngOnInit() {
+    setTimeout(() => {}, 500);
     this.chatService.needRooms();
     this.chatService.needPublicRooms();
+    this.chatService.needDmRooms();
+
 		this.userService.getLoggedUser().subscribe((user: UserI) => {
 			this.actualUser = user;
 		});
 
 		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
-			if (this.selectedRoom.id) {
+      let roomChanged, roomSeen: boolean = false;
 				for (const room of rooms) {
-					if (room.id === this.selectedRoom.id) {
-						this.haveSelectedRoom = true;
-						this.selectedRoom = room;
-						return ;
-					}
-				}
-			}
-		this.selectedRoom = {};
-		this.haveSelectedRoom = false;
+          if (!room.seen && room.id !== this.selectedRoom.id) 
+            roomSeen = true;
+        }
+       this.haveNewMessage = roomSeen;
 		});
+
+    await this.dmRooms$.subscribe((rooms: ChatRoom[]) => {
+      let roomChanged, roomSeen: boolean = false;
+        for (const room of rooms) {
+          if (!room.seen && room.id !== this.selectedRoom.id) 
+            roomSeen = true;
+        }
+       this.haveNewDm = roomSeen;
+    });
+
 	}
 
 	create() {
@@ -158,4 +168,20 @@ export class ChatPageComponent implements OnInit {
         this.newRoom = true;
       }
     }
+
+  friend(chatRoom: ChatRoom): UserI {
+    let friend: UserI;
+    if (chatRoom.users && chatRoom.users.length > 0) {
+      for (const user of chatRoom.users) {
+        if (user.id !== this.actualUser.id) {
+          friend = user;
+          return friend;
+        }
+      }
+    }
+    return this.actualUser;
+  }
+
+
+
 }

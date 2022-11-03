@@ -37,21 +37,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 
   async handleConnection(socket: Socket) {
-    try {
-      const token = socket.handshake.query['token'] as string;
-      const res = this.jwtService.verify(token, {
-        ignoreExpiration: false,
-        secret: jwtConstants.secret,
-      });
-      const user = await this.userService.findOne(res.sub);
-      if (!user)
-      return socket.disconnect();
-      this.onlineUserService.initUser(socket.id, user);
-      this.wschatService.initUser(user);
-      socket.data.user = user;
-    } catch (error) {
-      socket.disconnect(true);
-    }
+    this.onlineUserService.newConnect(socket);
   }
 
   async handleDisconnect(socket: Socket) {
@@ -94,6 +80,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @OnEvent('room.message.new')
   handleNewMessageEvent(event: MessageUpdateEvent) {
     this.updateUsersMessagesInRoom(event.room);
+    this.updateRoomForUsersInRoom(event.room.id);
   }
 
   @OnEvent('room.user.join')
@@ -148,6 +135,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.server.to(client.id).emit('publicRooms', await this.chatService.getPublicRooms());
   }
 
+  @SubscribeMessage('needDmRooms')
+  async handleNeedDmRooms(@ConnectedSocket() client: Socket) {
+    let user = this.onlineUserService.getUser(client.id);
+    if (user) {
+      this.sendToUser(user, 'dmRooms', await this.chatService.getDmGroupForUser(user.id));
+    }
+  }
+
   @SubscribeMessage('createRoom')
   async onCreateRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() newRoom: newChatRoomI) {
     this.wschatService.newRoom(client.id, newRoom);
@@ -159,12 +154,25 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @SubscribeMessage('joinRoom')
-  async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoom) {
+  async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoomI) {
     const user = await this.onlineUserService.getUser(client.id);
     const messages = await this.chatService.getMessagesFromRoom(user.id, room);
     user.inRoomId = room.id;
     this.onlineUserService.onlineUsers.set(client.id, user);
     this.server.to(client.id).emit('messages', messages);
+    if (!room.seen)
+    {
+      await this.chatService.seenRoomMessages(user.id, room.id);
+      await this.updateUserRooms(user);
+    }
+  }
+
+  @SubscribeMessage('needMessagesNotSeen')
+  async handleEvent(client: Socket) {
+    let user = this.onlineUserService.getUser(client.id);
+    if (user) {
+      this.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
+    }
   }
 
   @SubscribeMessage('leaveRoom')
@@ -207,7 +215,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async updateUserRooms(user: BasicUserI) {
 
     const rooms = await this.chatService.getRoomsFromUser(user.id);
+    const dmrooms = await this.chatService.getDmGroupForUser(user.id);
     this.sendToUser(user, 'rooms', rooms);
+    this.sendToUser(user, 'dmRooms', dmrooms);
+    this.sendToUser(user, 'newMessage', await this.chatService.haveMessageNotSeen(user.id));
   }
 
   async updatePublicRooms() {
@@ -216,24 +227,29 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   async updateUsersMessagesInRoom(room: ChatRoomI) {
     for (let user of room.users) {
-      let onlineUser = this.onlineUserService.getUser(null, user.id);
-      if (onlineUser && onlineUser.inRoomId == room.id) {
+      let onlineUser = this.onlineUserService.getUser(null, user.id);{
         const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
         this.sendToUser(user, 'messages', messages);
       }
     }
   }
+
   async updateRoomForUsersInRoom(roomId: number) {
     let room = await this.chatService.getRoomById(roomId);
-
     for (let user of room.users) {
-      let rooms = await this.chatService.getRoomsFromUser(user.id);
-      this.sendToUser(user, 'rooms', rooms);
+        this.updateUserRooms(user);
     }
   }
 
-  sendToUser(user: BasicUserI, prefix: string, data: any) {
-    this.onlineUserService.sendToUser(user, prefix, data);
+  sendToUser(user: BasicUserI, prefix: string, data: any) {  
+      if (user) {
+        for (let [key, value] of this.onlineUserService.onlineUsers) {
+          if (value.id == user.id) 
+          {
+            this.server.to(key).emit(prefix, data);
+          }
+        }
+      }
   }
 
   async sendToUsersInRoom(roomId: number, prefix: string, data: any) {
