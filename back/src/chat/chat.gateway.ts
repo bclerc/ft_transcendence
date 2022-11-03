@@ -37,21 +37,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
 
   async handleConnection(socket: Socket) {
-    try {
-      const token = socket.handshake.query['token'] as string;
-      const res = this.jwtService.verify(token, {
-        ignoreExpiration: false,
-        secret: jwtConstants.secret,
-      });
-      const user = await this.userService.findOne(res.sub);
-      if (!user)
-      return socket.disconnect();
-      this.onlineUserService.initUser(socket.id, user);
-      this.wschatService.initUser(user);
-      socket.data.user = user;
-    } catch (error) {
-      socket.disconnect(true);
-    }
+    this.onlineUserService.newConnect(socket);
   }
 
   async handleDisconnect(socket: Socket) {
@@ -93,6 +79,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @OnEvent('room.message.new')
   handleNewMessageEvent(event: MessageUpdateEvent) {
+    console.log("yo");
     this.updateUsersMessagesInRoom(event.room);
     this.updateRoomForUsersInRoom(event.room.id);
   }
@@ -251,14 +238,20 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   async updateRoomForUsersInRoom(roomId: number) {
     let room = await this.chatService.getRoomById(roomId);
-
     for (let user of room.users) {
         this.updateUserRooms(user);
     }
   }
 
-  sendToUser(user: BasicUserI, prefix: string, data: any) {
-    this.onlineUserService.sendToUser(user, prefix, data);
+  sendToUser(user: BasicUserI, prefix: string, data: any) {  
+      if (user) {
+        for (let [key, value] of this.onlineUserService.onlineUsers) {
+          if (value.id == user.id) 
+          {
+            this.server.to(key).emit(prefix, data);
+          }
+        }
+      }
   }
 
   async sendToUsersInRoom(roomId: number, prefix: string, data: any) {

@@ -184,7 +184,7 @@ export class WschatService {
   }
 
   sendToUser(user: BasicUserI, prefix: string, data: any) {
-    this.onlineUserService.sendToUser(user, prefix, data);
+    this.sendToUser(user, prefix, data);
   }
 
 

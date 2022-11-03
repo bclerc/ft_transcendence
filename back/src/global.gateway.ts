@@ -38,7 +38,7 @@ export class GlobalGateway implements  OnGatewayConnection, OnGatewayDisconnect 
   async whoami(client: Socket) {
     let user = this.onlineUserService.getUser(client.id);
     if (user) {
-      this.onlineUserService.sendToUser(user, 'whoami', await this.userService.findOne(user.id));
+      this.server.emit(client.id, 'whoami', await this.userService.findOne(user.id));
     }
   }
 

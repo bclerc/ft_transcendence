@@ -228,16 +228,25 @@ html, body, .flexbox {
 	margin-bottom: 10px;
 	font-size: 18px;
 }
+
 #membres{
-	display: inline-block;
+
 	font-family: ReadexPro-Regular;
-	font-size: 12px;
-	// background-color: #343330;
+  background-color: #343330;
+  color: $color-cream;
 	border: 2px solid $color-darkgrey;
-	border-radius: 20px;
-	padding: 1px 12px 2px 12px;
-	margin-right: 8px;
+
+  #chip_avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-left: -2px;
+    margin-bottom: 0px;
+  
+  }
 }
+
+
 
 .user-dm-avatar{
   width: 50px; //ici tu changes en fonction
