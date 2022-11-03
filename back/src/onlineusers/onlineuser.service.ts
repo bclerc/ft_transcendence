@@ -45,7 +45,6 @@ export class OnlineUserService {
       this.initUser(socket.id, user);
       socket.data.user = user;
     } catch (error) {
-      console.log(error);
       return socket.disconnect();
     }
   }
