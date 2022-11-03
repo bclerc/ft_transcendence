@@ -79,7 +79,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @OnEvent('room.message.new')
   handleNewMessageEvent(event: MessageUpdateEvent) {
-    console.log("yo");
     this.updateUsersMessagesInRoom(event.room);
     this.updateRoomForUsersInRoom(event.room.id);
   }
@@ -228,8 +227,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   async updateUsersMessagesInRoom(room: ChatRoomI) {
     for (let user of room.users) {
-      let onlineUser = this.onlineUserService.getUser(null, user.id);
-      if (onlineUser && onlineUser.inRoomId == room.id) {
+      let onlineUser = this.onlineUserService.getUser(null, user.id);{
         const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
         this.sendToUser(user, 'messages', messages);
       }
