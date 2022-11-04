@@ -40,19 +40,24 @@ hr.clear{
 
 header {
 	background-color: #1F1F1F;
-	padding: 20px;
+	padding: 30px;
 }
 #logo{
 	float: left;
 	margin: 20px 0px 0px 0px;
+	/* margin: auto; */
 	/* height: 86px; */
 	width: 196px;
+}
+#burger-menu{
+	display:none;
 }
 .right{
 	float: right;
 	text-align: right;
 	padding: 22px 0px 14px 0px;
 }
+
 #header nav ul li{
 	display: inline-block;
 	font-family: Titan One;
@@ -78,21 +83,43 @@ header {
 
 
 /* All mobile sizes (devices and browsers) */
-@media only screen and (max-width: 850px) {
+@media only screen and (max-width: 1080px) {
 	#header nav ul li{
-		font-size: 16px;
+		font-size: 18px;
 	}
 	#logo{
-		width: 25%;
-		/* min-width: 130px; */
+		width: 170px;
 	}
+}
+
+@media only screen and (max-width: 999px) {
+
+	*{
+		transition: none;
+	}
+	#header nav ul li{
+		font-size: 16px;
+		margin-right: 50px;
+	}
+}
+
+/* All mobile sizes (devices and browsers) */
+@media only screen and (max-width: 950px) {
+	
+	#header nav ul li{
+		display: none;
+	}
+	#logo{
+		margin: 15px 0px 0px 0px;
+	}
+	#burger-menu{
+		display: block;
+	}
+
 }
 
 /* Moblie Protrait size to Mobile Landscape size (devices and browsers) */
 @media only screen and (max-width: 675px) {
-	#header nav ul li{
-		display: none;
-	}
 	/* #logo{
 		width: 130px;
 		min-width: 130px;
