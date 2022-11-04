@@ -9,5 +9,6 @@ export class UserInfoI {
     email: string;
     avatar_url: string;
     friends: BasicUserI[];
+    blockedUsers: BasicUserI[];
     twoFactorEnabled: boolean;
 }
