@@ -26,7 +26,6 @@ a{
 .center{
 	margin: auto;
 	max-width: 1290px;
-	/* color: #1F1F1F; */
 	clear: both;
 }
 hr.clear{
@@ -45,8 +44,6 @@ header {
 #logo{
 	float: left;
 	margin: 20px 0px 0px 0px;
-	/* margin: auto; */
-	/* height: 86px; */
 	width: 196px;
 }
 #burger-menu{
@@ -76,7 +73,6 @@ header {
 	border-bottom: 7px solid #ee481e;
 	/* text-decoration-line: 30% solid #ee481e; */
 }
-
 .active {
 	border-bottom: 7px solid #ee481e;
 }

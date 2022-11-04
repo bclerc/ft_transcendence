@@ -40,7 +40,7 @@ export class GetTokenComponent implements OnInit {
     });
    }
    
-   this.router.navigate(['/chat']);
+   this.router.navigate(['/']);
 
     //console.log("this.tokenString")
    // console.log("id = ", this.jwtHelper.decodeToken(this.tokenString).sub);

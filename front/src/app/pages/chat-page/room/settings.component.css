@@ -1,4 +1,4 @@
-@font-face{
+/* @font-face{
 	font-family: 'Titan One';
 	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
 }
@@ -70,7 +70,6 @@ hr.clear{
     flex-direction: row;
 }
 #title-n-button button{
-    /* width: 35px; */
     height: 35px;
     margin-left: 25px;
 	font-family: ReadexPro-Medium;
@@ -107,18 +106,17 @@ hr.clear{
 	padding: 4px 10px 4px 10px;
 }
 .param-header button:hover{
-	/* background-color: #ee481e; */
 	color: #ee481e;
 	cursor: pointer;
 	border: 2px solid #ee481e;
 }
 .param-header button img{
 	margin-left: 4px;
-}
+} */
 
 /* champs de text ------------------------------------------------------------------------- */
 
-#input-box{
+/* #input-box{
 	display: flex;
 	flex-direction: column;
 	font-family: ReadexPro-Medium;
@@ -181,10 +179,8 @@ textarea{
 .user-name{
     display: flex;
 	flex-direction: column;
-    /* align-items: flex-start; */
     width: 80%;
 	align-self: center;
-	/* background-color: cadetblue; */
 }
 .user-name #user-name{
 	font-family: Titan One;
@@ -203,14 +199,12 @@ textarea{
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-	/* background-color: blueviolet; */
 }
 #membre button{
     margin-right: 20px;
 	height: 40px;
 	width: 40px;
 	border: none;
-	/* border-radius: 6px; */
 	background-color: transparent;
 }
 #membre button:last-child{
@@ -227,13 +221,6 @@ textarea{
 	fill: #ee481e;
 	opacity: 20%;
 }
-/* #icon-invite-game::-moz-focus-inner #icon{
-	fill: green;
-} */
-/* #icon-invite-game::after #BG{
-	fill: #343330;
-	stroke: #ee481e;
-} */
 
 #icon-ask-friend:hover #icon{
 	fill: #ef5f00;
@@ -273,14 +260,13 @@ textarea{
 #icon-bannir:hover #BG{
 	fill: #f9e131;
 	opacity: 20%;
-}
+} */
 
 
 /*------------------------------------------------------------ Grille */
-.demi-left{
+/* .demi-left{
 	float: left;
 	margin-right: 20px;
-	/* background-color: blue; */
     width: calc(50% - 10px);
 }
 .demi:last-child{
@@ -290,4 +276,4 @@ textarea{
 .demi-right{
 	float: left;
     width: calc(50% - 10px);
-}
+} */

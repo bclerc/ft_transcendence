@@ -58,23 +58,12 @@ a{
 	max-width: 1290px;
 	clear: both;
 }
-hr.clear{
-	margin: 0;
-	padding: 0;
-	clear: both;
-	border: none;
-	height: 0px;
-	display: block;
-}
 
 .user-bloc{
-
 	margin: 0px 0px 30px 5px;
 	display: flex;
-	/* box-sizing: content-box; */
-	/* width : 162px; */
 }
-#user-info{
+#user-info-chat-page{
 	padding: 12px 0px 12px 20px;
 	color: #feefcf;
 }
@@ -93,7 +82,7 @@ hr.clear{
 	display: flex;
 	flex-direction: column;
 }
-body .user-bloc img{
+.user-bloc img{
 	width: 64px;
 	height: 64px;
 	object-fit: cover;
@@ -132,18 +121,6 @@ body .user-bloc img{
 	font-size: 14px;
 	text-decoration: none;
 }
-/* .mat-tab-label.mat-tab-label-active:disabled {
-	min-width: 55px !important;
-	padding: 15px;
-	background-color: #ee481e !important;
-	border-radius: 40px;
-	border: 2px solid #feefcf !important;
-	color: #feefcf;
-	font-family: ReadexPro-Medium;
-	text-align: center;
-	font-size: 14px;
-	text-decoration: none;
-} */
 
 /* Styles for the ink bar */
 .mat-ink-bar {
@@ -154,11 +131,8 @@ body .user-bloc img{
 	flex-direction: column;
 	margin-top: 30px;
 	list-style-type: none;
-	max-height: 320px;
+	max-height: 330px;
 	padding-left: 10px;
-	/* overflow-y: scroll;
-	scrollbar-color: #1f1f1f #121212;
-    scrollbar-width: thin; */
 }
 
 /* Styles for group list / friend list */
@@ -169,23 +143,14 @@ body .user-bloc img{
 	margin-top: 20px;
 }
 .mat-tab-group ul li:hover{
-	/* margin-left: -8px; */
-	/* padding: 5px 5px 1px 8px; */
-	/* border-radius: 6px; */
+
 	transition: all ease 0.00001s;
 	font-size: 18px;
 	cursor: pointer;
-	/* background-color: #343330; */
-}
-.active{
-	color: #ee481e;
-}
-.mat-tab-group ul li:target{
-	color: #ee481e;
 }
 
 
-.button{
+.button-new-room{
 	font-family: Titan One;
 	font-size: 14px;
 	color: #feefcf;
@@ -203,7 +168,7 @@ body .user-bloc img{
 	bottom: 0;
 	cursor: pointer;
 }
-.button:hover{
+.button-new-room:hover{
 	background-color: #1F1F1F;
 	color: #ee481e;
 }
@@ -225,7 +190,7 @@ body .user-bloc img{
 }
 
 .sidebar,
-.content{
+.content-chat-page{
 	/* float: left; */
 	display: flex;
 	flex-direction: column;
@@ -242,7 +207,7 @@ body .user-bloc img{
 	min-width: 300px;
 	position: relative;
 }
-.content{
+.content-chat-page{
 	flex-grow: 1;
 	display:flex;
 	/* max-width */
