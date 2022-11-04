@@ -24,6 +24,7 @@ export interface ChatRoomI {
   description: string;
   type: ChatRoomType;
   users: UserI[];
+  ownerId: number;
   admins: UserI[];
   public: boolean;
   seen?: boolean;

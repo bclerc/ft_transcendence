@@ -15,7 +15,7 @@ export class OnlineUserService {
     throw new Error("Method not implemented.");
   }
 
-  onlineUsers: Map<String, BasicUserI> = new Map<String, BasicUserI>();
+  public onlineUsers: Map<String, BasicUserI> = new Map<String, BasicUserI>();
 
 
   @WebSocketServer() server;
@@ -41,11 +41,11 @@ export class OnlineUserService {
       });
       const user = await this.userService.findOne(res.sub);
       if (!user)
-      return socket.disconnect();
+        return socket.disconnect();
       this.initUser(socket.id, user);
       socket.data.user = user;
     } catch (error) {
-      socket.disconnect(true);
+      return socket.disconnect();
     }
   }
 

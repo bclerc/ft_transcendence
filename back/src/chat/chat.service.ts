@@ -64,6 +64,18 @@ export class ChatService {
 
     let rooms: ChatRoomI[] = await this.prisma.chatRoom.findMany({
       where: {
+        penalities: {
+          none:
+          {
+            user: {
+              id: userId,
+            },
+            endTime: {
+              gte: new Date(),
+            },
+          }
+
+        },
         users: {
           some: {
             id: userId,
@@ -83,6 +95,9 @@ export class ChatService {
             email: true,
             avatar_url: true,
           },
+          orderBy: {
+            state: 'asc',
+          }
         },
         admins: {
           select: {
@@ -170,6 +185,9 @@ export class ChatService {
           }
         },
         ownerId: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
       },
     });
 

@@ -30,7 +30,8 @@ export class FriendsService {
         status: FriendStatus.PENDING,
       },
     });
-    this.onlineUserService.sendToUser(friendId, 'notification', "Vous avez une nouvelle demande d'amis");
+    // TODO: send notification to friend
+   // sendToUser(friendId, 'notification', "Vous avez une nouvelle demande d'amis");
     return { message: 'Friend request sent', state: 'success' };
   }
 
@@ -56,7 +57,8 @@ export class FriendsService {
         }
       }
     });
-    this.onlineUserService.sendToUser(request.fromId, 'notification', "Votre demande d'amis a été acceptée");
+    //TODO send notification to friend
+    //this.onlineUserService.sendToUser(request.fromId, 'notification', "Votre demande d'amis a été acceptée");
     this.chatService.creatDm(request.fromId, request.toId);
     return { message: "Friend request accepted", state: 'error' };
   }

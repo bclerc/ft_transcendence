@@ -25,19 +25,13 @@ html, body, h1, h2, h3, h4, h5, h6, p, ul, li, button {
 	margin: 0;
 }
 
+
 html, body, .flexbox {
 	width: 100%;
 	height: 100%;
 }
 
-// body {
-// 	font-family: Titan One;
-// 	font-size: 14px;
-// }
-
 .flexbox {
-	// margin-top: 20px;
-	// display: flex;
 	justify-content: center;
 	align-items: center;
 }
@@ -53,7 +47,6 @@ html, body, .flexbox {
 	flex-direction: column;
 	justify-content: space-between;
 	border-radius: 20px;
-	box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
 
 	// CLASS chat-box-header
 	> .chat-box-header {
@@ -215,7 +208,7 @@ html, body, .flexbox {
 	//   padding: 0;
 	// }
 	
-	button {
+	button .send{
 	background-color: $color-red;
 	border-radius: 10px;;
 	outline: none;
@@ -225,7 +218,7 @@ html, body, .flexbox {
 	margin: 10px;
 }
 
-h2 {
+.chat-box-header h2 {
 	font-family: Titan One;
 	font-size: 54px;
 	margin-bottom: 25px;
@@ -236,16 +229,25 @@ h2 {
 	margin-bottom: 10px;
 	font-size: 18px;
 }
+
 #membres{
-	display: inline-block;
+
 	font-family: ReadexPro-Regular;
-	font-size: 12px;
-	// background-color: #343330;
+  background-color: #343330;
+  color: $color-cream;
 	border: 2px solid $color-darkgrey;
-	border-radius: 20px;
-	padding: 1px 12px 2px 12px;
-	margin-right: 8px;
+
+  #chip_avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-left: -2px;
+    margin-bottom: 0px;
+  
+  }
 }
+
+
 
 .user-dm-avatar{
   width: 50px; //ici tu changes en fonction

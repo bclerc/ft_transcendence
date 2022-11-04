@@ -1,0 +1,259 @@
+@font-face{
+	font-family: 'Titan One';
+	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+}
+
+.param-header {
+    width: 100%;
+    padding: 20px 40px 20px 40px;
+    border-bottom: solid 2px #feefcf;
+    display: flex;
+    flex-direction: row;
+}
+
+.param-header h2 {
+	font-family: Titan One;
+	font-size: 24px;
+    padding-top: 5px;
+	margin-left: 20px;
+	color: #ee481e;
+	width: 85%;
+}
+.param-header img{
+    background-color: none;
+    border-radius: 100%;
+}
+.param-header img:hover{
+    cursor: pointer;
+    background-color: #ee481e;
+}
+#edit, #gerer{
+    display:flex;
+    flex-direction: column;
+}
+#edit{
+    margin-bottom: 40px;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+#param-body{
+    padding: 40px
+}
+#param-body h3 {
+	font-family: Titan One;
+	font-size: 35px;
+    margin-bottom: 30px;
+	color: #feefcf;
+}
+#title-n-button{
+    display: flex;
+    flex-direction: row;
+}
+#title-n-button button{
+    /* width: 35px; */
+    height: 35px;
+    margin-left: 25px;
+	font-family: ReadexPro-Medium;
+	color: #feefcf;
+	background-color: transparent;
+	border-radius: 6px;
+	border: 2px solid #343330;
+	padding: 4px 10px 4px 10px;
+}
+#title-n-button button:hover{
+	color: #ee481e;
+	cursor: pointer;
+	border: 2px solid #ee481e;
+}
+#edit #title-n-button button:hover{
+	color: #43EE1E;
+	cursor: pointer;
+	border: 2px solid #43EE1E;
+}
+#title-n-button button img{
+	margin-left: 4px;
+}
+
+.param-header button{
+	min-width:fit-content;
+	height: 35px;
+    margin-left: 25px;
+	margin-top: 5px;
+	font-family: ReadexPro-Medium;
+	color: #feefcf;
+	background-color: transparent;
+	border-radius: 6px;
+	border: 2px solid #343330;
+	padding: 4px 10px 4px 10px;
+}
+.param-header button:hover{
+	/* background-color: #ee481e; */
+	color: #ee481e;
+	cursor: pointer;
+	border: 2px solid #ee481e;
+}
+.param-header button img{
+	margin-left: 4px;
+}
+
+/* champs de text ------------------------------------------------------------------------- */
+
+#input-box{
+	display: flex;
+	flex-direction: column;
+	font-family: ReadexPro-Medium;
+	margin-bottom: 20px;
+}
+#input-title{
+	font-size: 11px;
+	margin-left: 4px;
+	margin-bottom: 4px;
+	font-family: ReadexPro-Regular;
+	color: #9c9381;
+}
+#input-error{
+	margin-top: 4px;
+	font-size: 11px;
+	margin-left: 4px;
+	font-family: ReadexPro-Regular;
+	color: #ee481e;
+}
+textarea{
+	height: fit-content;
+    line-height: fit-content;
+}
+#input-text {
+	border-radius: 10px;
+	padding: 15px 15px 0px 15px;
+	width: 100%;
+	background: #343330;
+	border: none;
+	resize: none;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	font-size: 14px;
+	overflow: hidden;
+}
+#input-text::placeholder{
+	color: #9c9381;
+}
+#input-text:focus {
+	outline: none;
+}
+#public-check-box {
+	font-family: ReadexPro-Medium;
+	margin-bottom: 5px;
+}
+
+#membre{
+    display:flex;
+    flex-direction: column;
+    font-family: ReadexPro-Medium;
+    background-color: #343330;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+.info{
+    display: flex;
+    flex-direction: row;
+}
+.user-name{
+    display: flex;
+	flex-direction: column;
+    /* align-items: flex-start; */
+    width: 80%;
+	align-self: center;
+	/* background-color: cadetblue; */
+}
+.user-name #user-name{
+	font-family: Titan One;
+	color: #feefcf;
+	font-size: 16px;
+
+	margin-top: 3px;
+}
+.user-name #user-status{
+	font-family: ReadexPro-Regular;
+	color: #9c9381;
+	font-size: 12px;
+}
+
+.buts{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+	/* background-color: blueviolet; */
+}
+#membre button{
+    margin-right: 20px;
+	height: 40px;
+	width: 40px;
+	border: none;
+	border-radius: 6px;
+	background-color: #1f1f1f;
+}
+#membre button:last-child{
+    margin-right: 0px;
+}
+
+#icon-invite-game:hover{
+	fill: #ee481e;
+	transition: 0.0000000000000000000000000001ms;
+}
+#icon-ask-friend:hover{
+	fill: #ef5f00;
+	transition: 0.0000000000000000000000000001ms;
+}
+#icon-mute:hover{
+	fill: #ef7e00;
+	transition: 0.0000000000000000000000000001ms;
+}
+#icon-block:hover{
+	fill: #f1a726;
+	transition: 0.0000000000000000000000000001ms;
+}
+#icon-exclure:hover{
+	fill: #efc10a;
+	transition: 0.0000000000000000000000000001ms;
+}
+#membre button #icon-bannir:hover{
+	fill: #f9e131;
+	transition: 0.0000000000000000000000000001ms;
+}
+
+
+/*------------------------------------------------------------ Grille */
+.demi-left{
+	float: left;
+	margin-right: 20px;
+	/* background-color: blue; */
+    width: calc(50% - 10px);
+}
+.demi:last-child{
+    margin-right: 0px;
+}
+
+.demi-right{
+	float: left;
+    width: calc(50% - 10px);
+}
