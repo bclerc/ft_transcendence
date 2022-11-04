@@ -51,18 +51,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @OnEvent('room.new')
   handleNewRoomEvent(event: NewRoomEvent) {
-    this.updateRoomForUsersInRoom(event.room.id);
-    this.sendToUsersInRoom(event.room.id, 'notification', "Une nouvelle room a été créée : " + event.room.name);
-    if (event.room.public)
-      this.updatePublicRooms();
+      this.updateRoomForUsersInRoom(event.room.id);
+      this.sendToUsersInRoom(event.room.id, 'notification', "Une nouvelle room a été créée : " + event.room.name);
+      if (event.room.public)
+        this.updatePublicRooms();
+    
   }
 
   @OnEvent('room.update')
   handleRoomUpdateEvent(event: RoomUpdateEvent) {
-    this.updateRoomForUsersInRoom(event.room.id);
-    this.sendToUsersInRoom(event.room.id, 'notification', "La room " + event.room.name + " a été mise à jour");
-    if (event.room.public)
-      this.updatePublicRooms();
+    if (event.success) {
+      this.updateRoomForUsersInRoom(event.room.id);
+      this.sendToUsersInRoom(event.room.id, 'notification', "La room " + event.room.name + " a été mise à jour");
+      if (event.room.public)
+        this.updatePublicRooms();
+     } else {
+      this.sendToUser(event.user, 'notification', "Vous n'avez pas pu éditer la room " + event.room.name + ". Raison : " + event.message);
+    }
   }
 
   @OnEvent('room.admin.update')

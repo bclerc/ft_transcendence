@@ -27,7 +27,6 @@ export class GetTokenComponent implements OnInit {
     this.socket.connect();
     this.navbar.show();
     this.router.navigate(['/chat']);
-
   }
 
   

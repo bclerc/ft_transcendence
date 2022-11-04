@@ -9,7 +9,10 @@ export class AdminUpdateEvent {
 }
 
 export class RoomUpdateEvent {
+    user: BasicUserI;
     room: ChatRoomI;
+    success?: boolean;
+    message?: string;
 }
 
 export class MessageUpdateEvent {
@@ -18,6 +21,7 @@ export class MessageUpdateEvent {
 
 export class NewRoomEvent {
   room: ChatRoomI;
+
 }
 
 export class UserJoinEvent {

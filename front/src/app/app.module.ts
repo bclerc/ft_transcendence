@@ -50,7 +50,8 @@ import { FileUploaderComponent } from './file-uploader/file-uploader.component';
 import { NewRoomComponent } from './pages/chat-page/new-room/new-room.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { PenaltyDialogComponent } from './src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
-import {MatSelectModule} from '@angular/material/select'; 
+import {MatSelectModule} from '@angular/material/select';
+import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-dialog.component'; 
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
@@ -86,6 +87,7 @@ export function tokenGetter() {
     FileUploaderComponent,
     NewRoomComponent,
     PenaltyDialogComponent,
+    EditDialogComponent,
   ],
   imports: [
     BrowserModule,

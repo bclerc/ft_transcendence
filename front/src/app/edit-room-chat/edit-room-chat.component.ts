@@ -57,7 +57,6 @@ export class EditRoomChatComponent implements OnInit {
   removeUser(userId: any) {
     this.users.removeAt(this.users.value.findIndex((user: UserI) => user.id === user.id));
     this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: userId });
-
   }
 
   ngOnInit(): void {

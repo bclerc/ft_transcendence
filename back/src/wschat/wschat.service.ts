@@ -12,6 +12,7 @@ import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PenaltiesService } from 'src/chat/services/penalties/penalties.service';
+import e from 'express';
 
 @Injectable()
 export class WschatService {
@@ -39,9 +40,7 @@ export class WschatService {
   async subscribeToRoom(socketId: string, subRoom: SubscribeRoomDto) {
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(subRoom.roomId);
-    const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);
-    
-    
+    const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);    
     if (penalty && penalty.type === PenaltyType.BAN) {
       this.eventEmitter.emit('room.user.join', {
         room: room,
@@ -166,10 +165,22 @@ export class WschatService {
   async editRoom(socketId: string, newRoom: newChatRoomI){
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(newRoom.id);
+    if (!newRoom.name
+        || newRoom.name.length < 3
+        || newRoom.name.length > 20
+        || !newRoom.description
+        || newRoom.description.length < 3
+        || newRoom.description.length > 100)
+      {
+        this.eventEmitter.emit('room.update', {user: user, room: room, success: false, message: 'Les champs ne sont pas valides' });
+        return ;
+      }
     if (user) {
       if (room.ownerId == user.id) {
         await this.chatService.editRoom(newRoom);
-        this.eventEmitter.emit('room.update', { room: newRoom });
+        this.eventEmitter.emit('room.update', {user: user, room: newRoom, success: true });
+      } else {
+        this.eventEmitter.emit('room.update', {user: user, room: room, success: false, message: 'Seul le propriétaire du salon peut le modifier' });
       }
     }
   }

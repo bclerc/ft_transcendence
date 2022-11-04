@@ -8,6 +8,7 @@ import { ChatService } from 'src/app/services/chat/chat.service';
 import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
 import { UserService } from 'src/app/services/user/user.service';
+import { EditDialogComponent } from 'src/app/src/app/edit-room-chat/edit-dialog/edit-dialog.component';
 import { PenaltyDialogComponent } from 'src/app/src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
 import { PenaltyType } from 'src/app/src/app/edit-room-chat/penalty-dialog/penalty.interface';
 
@@ -31,16 +32,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   form: FormGroup = new FormGroup({
     message: new FormControl(null, [Validators.required])
   });
-  
-  editform: FormGroup = new FormGroup({
-    name: new FormControl(null, [Validators.required]),
-    description: new FormControl(null, [Validators.required]),
-    public: new FormControl(false),
-    password: new FormControl(null),
-    users: new FormArray([], [Validators.required])
-  });
-  
-  
+    
   constructor(private chatService: ChatService,
     private userService: UserService,
     private socket: Socket,
@@ -48,12 +40,13 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
               
              
   openDialog(target: UserI, penalty: string): void {
-    this.dialog.open(PenaltyDialogComponent, {
-      data: {target: target, room: this.room, penalty: penalty}
+    this.dialog.open(EditDialogComponent, {
+      data: this.room,
+      width: '90%',
+      height: '90%',
+      panelClass: './settings.component.css'
     });
   }
-
-
 
   async sendMessage() {
     if (this.form.valid) {
@@ -73,14 +66,6 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.room.id) {
       this.chatService.joinRoom(this.room);
-      this.editform.patchValue({
-        name: this.room.name,
-        description: this.room.description,
-        public: this.room.public,
-        password: this.room.password,
-        users: this.room.users,
-
-      });
     }
   }
   
@@ -97,60 +82,21 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
   
-  get mame(): FormControl {
-    return this.form.get('name') as FormControl;
-  }
-  
-  get description(): FormControl {
-    return this.form.get('description') as FormControl;
-  }
-  
-  get public(): FormControl {
-    return this.form.get('public') as FormControl;
-  }
-  
-  get password(): FormControl {
-    return this.form.get('password') as FormControl;
-  }
-  
-  get users(): FormArray {
-    return this.form.get('users') as FormArray;
-  }
-  
+
   get message(): FormControl {
     return this.form.get('message') as FormControl;
   }
-  
-  edit(){
-    const room: ChatRoom = {
-       id: this.room.id,
-       name: this.editform.value.name,
-       description: this.editform.value.description,
-       public: this.editform.value.public,
-       password: this.editform.value.password? this.editform.value.password : null,
-       users: this.editform.value.users
-     }
-     this.chatService.editRoom(room);
-  }
-  
-  show: boolean = false;
-  
-  isAdministrator(user: UserI) {
-    if (this.room.admins) {
-      return this.room.admins.find(admin => admin.id === user.id);
-    }
-    return this.room.ownerId == user.id;
-  }
 
   showParam() {
-    this.show = true;
-  }
-  hideParam() {
-    this.show = false;
+    this.dialog.open(EditDialogComponent, {
+      data: this.room,
+      width: '90%',
+      height: '90%',
+    });
   }
 
-  ejectUser(user: UserI) {
-    this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
-  }
+  // ejectUser(user: UserI) {
+  //   this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
+  // }
 }
 
