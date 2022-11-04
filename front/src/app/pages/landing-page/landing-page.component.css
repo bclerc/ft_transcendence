@@ -6,14 +6,14 @@ img{
 	max-width: 100%;
 	height: auto;
 }
-
+ 
 body{
 	background-color: #1F1F1F;
 }
 a{
 	color: inherit; /*pk ?*/
 }
-
+ 
 @font-face {
 	font-family: 'Titan One';
 	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
@@ -38,7 +38,7 @@ a{
     font-weight: normal;
     font-style: normal;
 }
-
+ 
 .center{
 	margin: auto;
 	max-width: 1290px;
@@ -52,7 +52,7 @@ hr.clear{
 	height: 0px;
 	display: block;
 }
-
+ 
 .logo{
 	margin: auto;
 	padding-top: 100px;
@@ -68,7 +68,7 @@ hr.clear{
 	width: 410px;
 	margin: 0px auto 30px auto;
 }
-
+ 
 .button-log{
 	font-family: Titan One;
 	font-size: 14px;
@@ -89,7 +89,7 @@ hr.clear{
 	color: #ee481e;
 	/* box-shadow: 3px -3px #ee481e; */
 }
-
+ 
 h1{
 	font-family: Titan One;
 	text-align: center;
@@ -97,7 +97,7 @@ h1{
 	color: #feefcf;
 	margin: 66px 0px 50px 0px;
 }
-
+ 
 label{
 	color: #feefcf;
 	margin: 200px;

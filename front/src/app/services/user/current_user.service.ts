@@ -16,7 +16,7 @@ export class CurrentUserService {
 
     subscription!: Subscription;
     
-    private backUrl = 'http://' + environment.host + ':3000/api/v1/';
+    private backUrl = 'http://' + environment.host + '/api/v1/';
 
     constructor(private token : TokenStorageService,
                 private http : HttpClient,
@@ -48,6 +48,11 @@ export class CurrentUserService {
     getFriendFromBack(): Observable<any>
     {
       return this.http.get<any>(this.backUrl + "user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    }
+
+    getBlockedUserFromBack(): Observable<any>
+    {
+      return this.http.get<any>(this.backUrl + "user/blocked", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
 
 }

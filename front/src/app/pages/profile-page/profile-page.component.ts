@@ -18,6 +18,7 @@ export class ProfilePageComponent implements OnInit {
   id! : number;
   subscription! : Subscription;
   subscription2! : Subscription;
+  subscription3! : Subscription;
   alreadyFriend : boolean = false;
   alreadyBlocked : boolean = false;
   
@@ -27,6 +28,7 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
     this.id= Number( this.router.url.split('/')[2]);
       this.searchFriend();
+      this.searchBlockedUser();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
           console.log("data =",data);
@@ -54,10 +56,25 @@ export class ProfilePageComponent implements OnInit {
       });      
   }
 
+  searchBlockedUser(): void {
+    this.subscription3 = this.currentUserService.getBlockedUserFromBack().subscribe(
+      (data : any) => {
+        for (var i = 0; data[i];i++)
+        {
+          if (this.id === data[i].id)
+          {
+            this.alreadyBlocked = true;
+            break;
+          }
+        }
+      });      
+  }
+
   ngOnDestroy() : void
   {
     this.subscription.unsubscribe;
     this.subscription2.unsubscribe;
+    this.subscription3.unsubscribe;
   }
 
   addFriend() : void
@@ -72,6 +89,20 @@ export class ProfilePageComponent implements OnInit {
     this.userService.removeFriend(this.id).subscribe(
       (data : any) =>{ console.log("friend request" , data)}
     );
+  }
+
+  blockUser() : void
+  {
+    this.userService.blockUser(this.id).subscribe(
+      (data : any) =>{ console.log("block = " , data)}
+    )
+  }
+
+  unblockUser() : void
+  {
+    this.userService.unBlockUser(this.id).subscribe(
+      (data : any) =>{ console.log("unblock = " , data)}
+    )
   }
 
 }

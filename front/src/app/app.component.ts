@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
@@ -20,12 +20,10 @@ export class AppComponent implements OnInit{
               private snackBar: MatSnackBar,
               public navbar : HeaderService,
               private token : TokenStorageService,
-              private router: Router)  { 
-              
-              if (token.getToken() && router.url !== '/login') {
-                 navbar.show();
-                }   
-            };
+              private changeDetector: ChangeDetectorRef,) { 
+                if (token.getToken())
+                navbar.show();
+              }   
 
   ngOnInit(): void {
       this.socket.on('notification', (notif: string) => {
@@ -36,6 +34,12 @@ export class AppComponent implements OnInit{
           verticalPosition: 'top',
         });
       });
+
+    
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 
 }

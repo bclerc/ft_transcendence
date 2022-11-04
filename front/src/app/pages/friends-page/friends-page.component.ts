@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
-import { subscribeOn } from 'rxjs';
 import { FriendsRequestAction } from 'src/app/models/friends/friendsrequest.enum';
-import { UserI } from 'src/app/models/user.models';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({

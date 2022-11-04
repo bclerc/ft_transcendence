@@ -1,7 +1,7 @@
-// import { type } from "os";
+import { type } from "os";
+
 import { UserI } from "src/app/models/user.models";
 import { Message } from "./message.interface";
-
 export interface ChatRoom {
   id?: number;
   name?: string;
@@ -24,6 +24,7 @@ export interface ChatRoomI {
   description: string;
   type: ChatRoomType;
   users: UserI[];
+  ownerId: number;
   admins: UserI[];
   public: boolean;
   seen?: boolean;
