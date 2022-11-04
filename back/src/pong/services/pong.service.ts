@@ -767,7 +767,7 @@ loopGameMap3(game: GameI){
         game.ball.dy *= -1;
         game.ball.y = HEIGHTCANVAS - game.ball.radius;
     }
-
+ 
     var copy = JSON.parse(JSON.stringify(game, (key, value) => {
         if (key === 'socket')
             return undefined;

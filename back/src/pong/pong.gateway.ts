@@ -204,7 +204,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			client.emit('drawName', RIGHTSIDE);
 			// var x = Math.floor(Math.random() * (MAX_MAPID - 1 + 1) + 1); 		// choose random map id
 			var x = 3; //pour les tests je prends celle que je souhaite tester
-			
+		
 			await this.pongService.delay(1500);
 			if (game.player1.socket)
 			game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
