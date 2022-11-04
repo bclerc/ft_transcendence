@@ -77,7 +77,7 @@ export class UserController {
   @Get(':id')
   @UseGuards(Jwt2faAuthGuard)
   async findOne(@Request() req, @Param('id') id: number): Promise<BasicUserI> {
-      return this.userService.getBasicUser(id);
+      return this.userService.getBasicUser(Number(id));
   }
 
   /**
@@ -381,24 +381,7 @@ export class UserController {
   async unblock(@Request() req: any, @Param('id') target: number) {
     return await this.userService.unblockUser(req.user.id, target);
   }
-
-  
-  /**
-   * @api {post} /user/blocked Liste des utilisateurs bloqués
-   * @apiName blockuser
-   * @apiGroup Blocker
-   * 
-   * @apiHeaderExample {json} Header:
-   * {
-   *     "Authorization": "Bearer ACCESS_TOKEN"
-   * }
-   */
-
-  @Get('blocked')
-  @UseGuards(Jwt2faAuthGuard)
-  async getBlocked(@Request() req: any) {
-    return await this.userService.getBlocked(req.user.id);
-  }       
+   
 
 }
   
