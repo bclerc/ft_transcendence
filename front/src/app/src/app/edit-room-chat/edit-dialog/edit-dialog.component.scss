@@ -3,6 +3,10 @@
 	src: url('../../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
 }
 @font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+}
+@font-face {
 	font-family: 'ReadexPro-Regular';
 	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
 }
@@ -17,17 +21,18 @@
 
 .param-header {
     width: 100%;
-    padding: 20px 40px 20px 40px;
-    border-bottom: solid 2px #feefcf;
+    padding-bottom: 20px;
+    border-bottom: solid 2px #56554F;
     display: flex;
     flex-direction: row;
+	margin-bottom: 40px;
 }
 
 .param-header h2 {
+	// font-family: ReadexPro-Light;
 	font-family: Titan One;
 	font-size: 24px;
-    padding-top: 5px;
-	margin-left: 20px;
+	padding-top: 5px;
 	color: #ee481e;
 	width: 85%;
 }
@@ -84,6 +89,9 @@ hr.clear{
 	cursor: pointer;
 	border: 2px solid #ee481e;
 }
+#title-n-button button:focus{
+	outline: none;
+}
 #edit #title-n-button button:hover{
 	color: #43EE1E;
 	cursor: pointer;
@@ -110,6 +118,9 @@ hr.clear{
 	color: #ee481e;
 	cursor: pointer;
 	border: 2px solid #ee481e;
+}
+.param-header button:focus{
+	outline: none;
 }
 .param-header button img{
 	margin-left: 4px;
@@ -209,36 +220,61 @@ textarea{
 	height: 40px;
 	width: 40px;
 	border: none;
-	border-radius: 6px;
-	background-color: #1f1f1f;
+	background-color: transparent;
 }
 #membre button:last-child{
     margin-right: 0px;
 }
+#membre button:hover{
+	cursor: pointer;
+}
 
-#icon-invite-game:hover{
+#icon-invite-game:hover #icon{
 	fill: #ee481e;
-	transition: 0.0000000000000000000000000001ms;
 }
-#icon-ask-friend:hover{
+#icon-invite-game:hover #BG{
+	fill: #ee481e;
+	opacity: 20%;
+}
+
+#icon-ask-friend:hover #icon{
 	fill: #ef5f00;
-	transition: 0.0000000000000000000000000001ms;
 }
-#icon-mute:hover{
+#icon-ask-friend:hover #BG{
+	fill: #ef5f00;
+	opacity: 20%;
+}
+
+#icon-mute:hover #icon{
 	fill: #ef7e00;
-	transition: 0.0000000000000000000000000001ms;
 }
-#icon-block:hover{
+#icon-mute:hover #BG{
+	fill: #ef7e00;
+	opacity: 20%;
+}
+
+#icon-block:hover #icon{
 	fill: #f1a726;
-	transition: 0.0000000000000000000000000001ms;
 }
-#icon-exclure:hover{
+#icon-block:hover #BG{
+	fill: #f1a726;
+	opacity: 20%;
+}
+
+#icon-exclure:hover #icon{
 	fill: #efc10a;
-	transition: 0.0000000000000000000000000001ms;
 }
-#membre button #icon-bannir:hover{
+#icon-exclure:hover #BG{
+	fill: #efc10a;
+	opacity: 20%;
+}
+
+#icon-bannir:hover #icon{
 	fill: #f9e131;
-	transition: 0.0000000000000000000000000001ms;
+}
+#icon-bannir:hover #BG{
+	fill: #f9e131;
+	opacity: 20%;
 }
 
 

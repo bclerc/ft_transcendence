@@ -203,19 +203,16 @@ html, body, .flexbox {
 	}
 }
 
-// button::-moz-focus-inner {
-	//   border-style: none;
-	//   padding: 0;
-	// }
-	
-	button .send{
-	background-color: $color-red;
+#but-send{
+	background-color: #ee481e;
 	border-radius: 10px;;
 	outline: none;
 	width: 40px;
-	// height: 40px;
-	// flex: right;
+	box-shadow: none;
 	margin: 10px;
+}
+#but-send:hover{
+	background-color: tomato;
 }
 
 .chat-box-header h2 {
@@ -231,7 +228,6 @@ html, body, .flexbox {
 }
 
 #membres{
-
 	font-family: ReadexPro-Regular;
   background-color: #343330;
   color: $color-cream;
