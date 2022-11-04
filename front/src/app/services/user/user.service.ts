@@ -3,10 +3,8 @@ import {Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
-import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 import { FriendsRequestAction } from 'src/app/models/friends/friendsrequest.enum';
 import { Secret } from 'src/app/models/secret.models';
-import { UserListComponent } from 'src/app/user-list/user-list.component';
 import { environment } from 'src/environments/environment';
 import { __values } from 'tslib';
 import { User, UserI } from '../../models/user.models';
@@ -18,7 +16,7 @@ import { TokenStorageService } from '../auth/token.storage';
 export class UserService {
   userList!: UserI[];
 
-  private backUrl = 'http://'+ environment.host +':3000/api/v1/';
+  private backUrl = 'http://'+ environment.host +'/api/v1/';
 
   constructor(private route: ActivatedRoute ,private http : HttpClient, private token : TokenStorageService, private jwtService : JwtHelperService, private router : Router)
   {}
@@ -151,6 +149,18 @@ export class UserService {
   {
     return this.http.post(this.backUrl + "user/avatar",avatar ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
+
+  blockUser(Id: number)
+  {
+    return this.http.post(this.backUrl + "/user/block/" + Id ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+  unBlockUser(Id: number)
+  {
+    return this.http.post(this.backUrl + "/user/unblock/" + Id ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+
 
   
 }

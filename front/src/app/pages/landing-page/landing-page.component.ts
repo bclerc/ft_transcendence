@@ -10,7 +10,6 @@ export class LandingPageComponent implements OnInit {
 
   loginPath = 'http://' + environment.host + ':3000/api/v1/auth/42';
   paulPath = 'http://' + environment.host + ':3000/api/v1/auth/debug/paul';
-
   
   constructor() { }
 

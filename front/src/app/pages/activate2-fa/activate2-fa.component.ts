@@ -35,9 +35,9 @@ export class Activate2FaComponent implements OnInit {
   {
     this.subscription.unsubscribe;
     if (this.subscription2 != undefined)
-    this.subscription2.unsubscribe;
+      this.subscription2.unsubscribe;
     if (this.subscription3 != undefined)
-    this.subscription2.unsubscribe;
+      this.subscription2.unsubscribe;
   }
 
   ActivateFa(): void {
@@ -47,7 +47,7 @@ export class Activate2FaComponent implements OnInit {
       this.subscription2 =this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe
       (
         (data : any) => {
-          //  console.log("data =",data);
+           console.log("data =",data);
         },
         );
     }
@@ -56,7 +56,7 @@ export class Activate2FaComponent implements OnInit {
   RegenerateSecret(): void {
     this.subscription3 =this.userService.RegenerateSecretFa().subscribe(
       (data : any) => {
-        //  console.log("data =",data);
+         console.log("data =",data);
         //this.ob = data;
       },
       //error => this.router.navigate([''])
