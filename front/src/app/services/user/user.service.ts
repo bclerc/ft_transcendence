@@ -16,7 +16,7 @@ import { TokenStorageService } from '../auth/token.storage';
 export class UserService {
   userList!: UserI[];
 
-  private backUrl = 'http://'+ environment.host +'/api/v1/';
+  private backUrl = 'http://'+ environment.host +':3000/api/v1/';
 
   constructor(private route: ActivatedRoute ,private http : HttpClient, private token : TokenStorageService, private jwtService : JwtHelperService, private router : Router)
   {}
@@ -76,7 +76,7 @@ export class UserService {
 
   ChangeDbInformation(user : UserI): Observable<any>
   {
-    return this.http.put<Observable<any>>(this.backUrl + "user/", user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.put<Observable<any>>(this.backUrl + "user", user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ActivateFacode(code : string) : Observable<any>

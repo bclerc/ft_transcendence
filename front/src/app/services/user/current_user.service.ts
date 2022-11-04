@@ -16,7 +16,7 @@ export class CurrentUserService {
 
     subscription!: Subscription;
     
-    private backUrl = 'http://' + environment.host + '/api/v1/';
+    private backUrl = 'http://' + environment.host + ':3000/api/v1/';
 
     constructor(private token : TokenStorageService,
                 private http : HttpClient,
