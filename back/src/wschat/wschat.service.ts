@@ -13,6 +13,7 @@ import { UserService } from 'src/user/user.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PenaltiesService } from 'src/chat/services/penalties/penalties.service';
 import e from 'express';
+import { PusnishI } from 'src/chat/interfaces/punish.interface';
 
 @Injectable()
 export class WschatService {
@@ -41,12 +42,13 @@ export class WschatService {
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(subRoom.roomId);
     const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);    
+    console.log(penalty);
     if (penalty && penalty.type === PenaltyType.BAN) {
       this.eventEmitter.emit('room.user.join', {
         room: room,
         user: user,
         success: false,
-        message: 'Vous avez été banni de ce salon' + (penalty.timetype === 'PERM' ? '.' : ' jusqu\'au ' + penalty.endTime)
+        message: 'Vous avez été banni de ce salon' + (penalty.timetype === 'PERM' ? '.' : ' jusqu\'au ' + penalty.endTime.toLocaleString('fr-FR'))
       });
       return ;
     }
@@ -68,6 +70,31 @@ export class WschatService {
         user: user,
         success: true,
       });
+    }
+  }
+
+  async punishUser(socketId: string, event: PusnishI) {
+    const user = this.onlineUserService.getUser(socketId);
+    const target = await this.userService.findOne(event.targetId);
+    const room = await this.chatService.getRoomById(event.roomId);
+    const now = new Date().getTime();
+    let endTime: Date;
+
+    if (user && target && room) {
+      if (room.admins.find(admin => admin.id == user.id)) {
+        if (room.ownerId != target.id) {
+          endTime = new Date(now + event.time);
+          this.penaltiesService.punishUser(target.id, room.id, event.type, event.perm ? null : endTime);
+          this.eventEmitter.emit('room.user.punished', 
+          { room: room, user: target, punisher: user, type: event.type, success: true});
+        } else {
+          this.eventEmitter.emit('room.user.punished',
+            { room: room, user: target, punisher: user, type: event.type, success: false, message: 'Vous ne pouvez pas punir le propriétaire du salon'});
+        }
+      } else {
+        this.eventEmitter.emit('room.user.punished', 
+          { room: room, user: target, punisher: user, type: event.type, success: false, message: 'Vous n\'êtes pas administrateur de ce salon'});
+      }
     }
   }
 

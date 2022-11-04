@@ -41,3 +41,12 @@ export class UserKickEvent {
   user: BasicUserI;
   kicker: BasicUserI;
 }
+
+export class UserPunishEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  punisher: BasicUserI;
+  type: string;
+  success: boolean;
+  message?: string;
+}

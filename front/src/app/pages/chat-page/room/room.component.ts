@@ -15,7 +15,7 @@ import { PenaltyType } from 'src/app/src/app/edit-room-chat/penalty-dialog/penal
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
-  styleUrls: ['./room.component.scss', './settings.component.css']
+  styleUrls: ['./room.component.scss']
 })
 
 export class RoomComponent implements OnInit, OnChanges, OnDestroy {
@@ -44,7 +44,6 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
       data: this.room,
       width: '90%',
       height: '90%',
-      panelClass: './settings.component.css'
     });
   }
 

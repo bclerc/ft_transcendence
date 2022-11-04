@@ -45,7 +45,6 @@ export class EditDialogComponent implements OnInit {
       data: {target: target, room: this.room, penalty: penalty}
     });
   }
-
         
   
   ngOnInit(): void {

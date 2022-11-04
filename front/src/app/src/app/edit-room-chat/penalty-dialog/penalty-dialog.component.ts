@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Socket } from 'ngx-socket-io';
 import { newPenalty } from './penalty.interface';
 
 
@@ -36,7 +37,8 @@ export class PenaltyDialogComponent implements OnInit {
   }); 
   
   
-  constructor(@Inject(MAT_DIALOG_DATA) public data: newPenalty) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: newPenalty,
+              private socket: Socket ) {}
 
 
 
@@ -49,12 +51,12 @@ export class PenaltyDialogComponent implements OnInit {
       let totalTime =  getTimeToMilliseconds(this.minutes!.value, 'minutes') + getTimeToMilliseconds(this.hours!.value, 'hours') + getTimeToMilliseconds(this.days!.value, 'days'); 
       const data = {
         type: this.data.penalty,
-        perm: this.perm!.value,
+        perm: this.form.value.perm,
         time: totalTime,
-        user: this.data.target,
-        room: this.data.room
+        targetId: this.data.target.id,
+        roomId: this.data.room.id,
       }
-      console.log(data);
+      this.socket.emit('punishUser', data);
     }
   }
 
