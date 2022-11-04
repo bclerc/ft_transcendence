@@ -52,7 +52,7 @@ export class MyProfileComponent implements OnInit {
             else
             {
               this.snackBar.open("vous devez vous connectée", 'Undo', {
-                duration: 30000
+                duration: 3000
               })
               this.router.navigate([''])
             }
