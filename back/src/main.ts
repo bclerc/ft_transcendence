@@ -26,7 +26,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: '*',
-    methods: 'GET, POST'
+    methods: 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
   })
 
   app.useGlobalFilters(new HttpExceptionFilter())

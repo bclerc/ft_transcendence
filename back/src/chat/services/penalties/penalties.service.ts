@@ -11,7 +11,7 @@ export class PenaltiesService {
   }
 
   async punishUser(userId: number, roomId: number, type: PenaltyType, end_at?: Date) {
-    this.prisma.chatPenalty.create({
+    let ret = await this.prisma.chatPenalty.create({
       data: {
         user: {
           connect: {
@@ -24,18 +24,19 @@ export class PenaltiesService {
           }
         },
         type: type,
-        timetype: end_at ? PenaltyTimeType.PERM : PenaltyTimeType.TEMP,
-        endTime: end_at,
+        timetype: end_at ? PenaltyTimeType.TEMP :  PenaltyTimeType.PERM ,
+        endTime: end_at ? end_at : new Date(),
       }
     });
+    console.log(ret);
   }
 
   async getRoomPenaltiesForUser(userId: number, roomId: number): Promise<ChatPenalty> {
-
-    const penalties = await this.prisma.chatPenalty.findMany({
+    console.log(userId, roomId);
+    const penalties = await this.prisma.chatPenalty.findFirst({
       where: {
-        roomId: roomId,
         userId: userId,
+        roomId: roomId,
         OR: [
           {
             timetype: PenaltyTimeType.PERM
@@ -47,8 +48,8 @@ export class PenaltiesService {
           }
         ]
       }
-    })
-    return penalties[0];
+    });
+    return penalties;
   }
 
   async getActivePenalties(userId: number): Promise<ChatPenalty[]> {

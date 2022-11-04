@@ -7,10 +7,11 @@ import { PenaltiesService } from './services/penalties/penalties.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [ChatController],
-  imports: [PrismaModule, UserModule, ChatModule],
+  imports: [PrismaModule, UserModule, ChatModule, JwtModule],
   exports: [PenaltiesService],
   providers: [ChatService, PrismaService, OnlineUserService, UserService, PenaltiesService]
 })

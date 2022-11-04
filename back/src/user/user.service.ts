@@ -1,5 +1,5 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import {  Prisma, User, UserState } from '@prisma/client';
+import { FriendRequest, Prisma, User, UserState } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -11,7 +11,6 @@ import { UserInfoI } from './interface/userInfo.interface';
 
 @Injectable()
 export class UserService {
-
 
   constructor(private prisma: PrismaService,
     @Inject(forwardRef(() => OnlineUserService)) private onlineUserService: OnlineUserService,
@@ -47,7 +46,6 @@ export class UserService {
     return user;
   }
 
-
   async getCheatCode2() {
     const user = await this.findByEmail("paul@student.42.fr");
     if (!user) {
@@ -62,7 +60,6 @@ export class UserService {
     }
     return user;
   }
-
 
   async createIntraUser(user: newIntraUserDto): Promise<User> {
     let newUser: User;
@@ -88,12 +85,8 @@ export class UserService {
     return newUser;
   }
 
-
   async findAll(): Promise<User[]> {
     const users = (await this.prisma.user.findMany());
-
-    for (const user of users)
-      delete user['password'];
     return users;
   }
 
@@ -109,16 +102,23 @@ export class UserService {
         intra_name: true,
         email: true,
         avatar_url: true,
-        friends: true,
+        friends: {
+          select: {
+            id: true,
+            state: true,
+            displayname: true,
+            intra_name: true,
+            email: true,
+            avatar_url: true,
+          },
+        },
         friendOf: true,
         twoFactorEnabled: true,
         createdAt: true,
         updatedAt: true,
       }
     });
-
     return user;
-
   }
 
   async findByEmail(iemail: string): Promise<User | undefined> {
@@ -151,7 +151,7 @@ export class UserService {
   async getBasicUser(id: number): Promise<BasicUserI> {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: Number(id),
+        id: id,
       },
       select: {
         id: true,
@@ -167,7 +167,20 @@ export class UserService {
     return user;
   }
 
+  async getFriendsRequestsById(requestId: number): Promise<FriendRequest> {
+  
+    const request = await this.prisma.friendRequest.findUnique({
+      where: {
+        id: Number(requestId),
+    },
+      include: {
+        from: true,
+        to: true,
+      },
+    });
+    return request;
 
+  }
 
   async set2FASsecret(userId: number, secret: string) {
     await this.prisma.user.update({
@@ -219,7 +232,6 @@ export class UserService {
     }
   }
 
-
   async setState(userId: number, status: UserState) {
     await this.prisma.user.update({
       where: {
@@ -235,8 +247,7 @@ export class UserService {
    * Blocked user
    */
 
-  async isBlocked(userId: number, targetId: number): Promise<boolean>
-  {
+  async isBlocked(userId: number, targetId: number): Promise<boolean> {
     let blocked = await this.prisma.user.findFirst({
       where: {
         id: targetId,
@@ -263,7 +274,7 @@ export class UserService {
         },
       },
     });
-    return {message: 'User blocked', state: 'success'};
+    return { message: 'User blocked', state: 'success' };
   }
 
   async unblockUser(userId: number, blockedId) {
@@ -279,21 +290,19 @@ export class UserService {
         },
       },
     });
-    return {message: 'User unblocked', state: 'success'};
+    return { message: 'User unblocked', state: 'success' };
   }
 
-  async getBlocked (userId: number) {
+  async getBlocked(userId: number) {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: Number(userId),
+        id: userId,
       },
       select: {
         blockedUsers: true,
-        
+
       },
     });
     return user.blockedUsers;
   }
-
-
 }

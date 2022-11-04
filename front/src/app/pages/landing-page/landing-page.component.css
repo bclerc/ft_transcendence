@@ -1,3 +1,104 @@
-div {
-    text-align: center;
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+ 
+body{
+	background-color: #1F1F1F;
+}
+a{
+	color: inherit; /*pk ?*/
+}
+ 
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+    font-family: 'ReadexPro-Regular';
+    src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ReadexPro-Medium';
+    src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ReadexPro-Bold';
+    src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+ 
+.center{
+	margin: auto;
+	max-width: 1290px;
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+ 
+.logo{
+	margin: auto;
+	padding-top: 100px;
+	/* height: 192px; */
+	width: 15%;
+}
+.pong{
+	background-color: #121212;
+	/* border: 14px solid #ED4217; */
+	border: 7px solid #EFC10A;
+	border-radius: 6px;
+	height: 260px;
+	width: 410px;
+	margin: 0px auto 30px auto;
+}
+ 
+.button-log{
+	font-family: Titan One;
+	font-size: 14px;
+	color: #feefcf;
+	text-align: center;
+	text-decoration: none;
+	background-color: #ee481e;
+	border-radius: 6px;
+	border: 3px solid #feefcf;
+	box-shadow: -3px 3px #feefcf;
+	max-width: 190px;
+	display: block;
+	padding: 18px 25px 17px 25px;
+	margin: 40px auto 70px auto;
+}
+.button-log:hover{
+	background-color: #1F1F1F;
+	color: #ee481e;
+	/* box-shadow: 3px -3px #ee481e; */
+}
+ 
+h1{
+	font-family: Titan One;
+	text-align: center;
+	font-size: 35px;
+	color: #feefcf;
+	margin: 66px 0px 50px 0px;
+}
+ 
+label{
+	color: #feefcf;
+	margin: 200px;
 }

@@ -26,8 +26,8 @@ const routes: Routes = [
   { path: 'friends', component: FriendsPageComponent, canActivate: [AuthGuard]  },
   { path: 'myprofile', component: MyProfileComponent, canActivate: [AuthGuard]/*, resolve: { userList: UserResolver } */},
   { path: 'modifymyprofile', component: ModifyMyProfileComponent, canActivate: [AuthGuard], resolve: { userList : UserResolver } },
-  { path: 'modifymyprofile/activate2fa', component: Activate2FaComponent, canActivate: [AuthGuard], resolve: { userList : UserResolver } },
-  { path: 'profile/:id', component: ProfilePageComponent, canActivate: [AuthGuard], resolve: { userList : UserResolver } },
+  { path: 'modifymyprofile/activate2fa', component: Activate2FaComponent, canActivate: [AuthGuard]/*, resolve: { userList : UserResolver } */},
+  { path: 'profile/:id', component: ProfilePageComponent, canActivate: [AuthGuard]/*, resolve: { userList : UserResolver } */},
   { path: '**', component: UnfoundPagesComponent },
 
 ];

@@ -8,10 +8,11 @@ export class PasswordUtils {
     const hash = await argon2.hash(pass);
     return hash;
   }
-  
+
   async  verifyPass(pass: string, hash: string): Promise<boolean> {
+    if (pass === undefined || hash === undefined)
+      return false;
     const isCorrect = await argon2.verify(hash, pass);
     return isCorrect;
   }
-
 }

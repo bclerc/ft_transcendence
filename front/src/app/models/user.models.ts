@@ -15,7 +15,6 @@ export interface UserI {
     createdAt? :        Date;
     twoFactorEnabled? : boolean;
     friendOf? : UserI[];
-
 }
 
 export class User {

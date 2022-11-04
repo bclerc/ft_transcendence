@@ -47,15 +47,18 @@ import { environment } from 'src/environments/environment';
 import { HeaderService } from './services/user/header.service';
 import { CurrentUserService } from './services/user/current_user.service';
 import { FileUploaderComponent } from './file-uploader/file-uploader.component';
-
-
+import { NewRoomComponent } from './pages/chat-page/new-room/new-room.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { PenaltyDialogComponent } from './src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
+import {MatSelectModule} from '@angular/material/select';
+import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-dialog.component'; 
 
 const config: SocketIoConfig = {
-  url: 'http://'+ environment.host +':81', options: {
+  url: 'http://'+ environment.host +':8181', options: {
     query: {
       token: sessionStorage.getItem('auth-token')
     }
-  }
+  },
 };
 
 export function tokenGetter() {
@@ -82,6 +85,9 @@ export function tokenGetter() {
     ChatPageComponent,
     FriendsPageComponent,
     FileUploaderComponent,
+    NewRoomComponent,
+    PenaltyDialogComponent,
+    EditDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -114,6 +120,8 @@ export function tokenGetter() {
     MatTooltipModule,
     MatCheckboxModule,
     MatBadgeModule,
+    MatSelectModule,
+    MatDialogModule,
     CommonModule,
     SocketIoModule,
   ],

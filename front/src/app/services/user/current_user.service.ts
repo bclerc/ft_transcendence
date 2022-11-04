@@ -5,27 +5,33 @@ import { Observable, Subscription } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { environment } from "src/environments/environment";
+import { Socket } from "ngx-socket-io";
 
 
 @Injectable()
 export class CurrentUserService {
+    
     user! : Observable<UserI>;
-    subscription!: Subscription;
-    private backUrl = 'http://' + environment.host + ':3000/api/v1/';
 
-    constructor(private token : TokenStorageService, private http : HttpClient)
+
+    subscription!: Subscription;
+    
+    private backUrl = 'http://' + environment.host + '/api/v1/';
+
+    constructor(private token : TokenStorageService,
+                private http : HttpClient,
+                private socket: Socket) 
     {
-        if (this.token.getToken())
-        {
-                this.user = this.getCurrentUserFromBack();
+
+        if (this.token.getToken()) {
+          this.user = this.getCurrentUserFromBack();
         }
     }
 
     initOrActualizeConnection(): void
     {
-        if (this.token.getToken())
-        {
-                this.user = this.getCurrentUserFromBack();
+        if (this.token.getToken()) {
+          this.user = this.getCurrentUserFromBack();
         }
     }
 
@@ -36,11 +42,17 @@ export class CurrentUserService {
 
     getCurrentUserFromBack(): Observable<UserI>
     {
-      return this.http.get<UserI>("http://"+ environment.host + ":3000/api/v1/user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+      return this.http.get<UserI>(this.backUrl + "user/me", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
 
     getFriendFromBack(): Observable<any>
     {
-      return this.http.get<any>("http://"+ environment.host + ":3000/api/v1/user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+      return this.http.get<any>(this.backUrl + "user/friends/get", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     }
+
+    getBlockedUserFromBack(): Observable<any>
+    {
+      return this.http.get<any>(this.backUrl + "user/blocked", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    }
+
 }
