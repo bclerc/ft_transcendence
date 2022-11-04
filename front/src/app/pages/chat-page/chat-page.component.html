@@ -80,7 +80,7 @@
 								<ul>
                   <li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
                     <p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).intra_name }}</p>
-                    <ng-container *ngIf="!room.seen">
+                    <ng-container *ngIf="!dm.seen">
                       <svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <title>Oval</title>
                         <g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

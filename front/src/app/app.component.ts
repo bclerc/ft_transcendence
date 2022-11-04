@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { TokenStorageService } from './services/auth/token.storage';
@@ -18,7 +18,8 @@ export class AppComponent implements OnInit{
               private socket: Socket,
               private snackBar: MatSnackBar,
               public navbar : HeaderService,
-              private token : TokenStorageService) { 
+              private token : TokenStorageService,
+              private changeDetector: ChangeDetectorRef,) { 
                 if (token.getToken())
                 navbar.show();
               }   
@@ -32,6 +33,12 @@ export class AppComponent implements OnInit{
           verticalPosition: 'top',
         });
       });
+
+    
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 
 }

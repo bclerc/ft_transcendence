@@ -22,7 +22,6 @@ export class HeaderComponent implements OnInit {
   constructor(private token : TokenStorageService,
               private router : Router,
               public navbar: HeaderService,
-              public currentuser: CurrentUserService,
               public socket: Socket)
               { }
 
