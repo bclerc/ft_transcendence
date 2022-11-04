@@ -13,10 +13,10 @@ body{
 	background-color: #1f1f1f;
 }
 a{
-	color: inherit; /*pk ?*/
+	color: inherit;
 }
 
-.center{
+.center-profile{
 	margin: auto;
 	max-width: 1290px;
 	color: #1f1f1f;
@@ -30,42 +30,215 @@ hr.clear{
 	height: 0px;
 	display: block;
 }
-main{
+#head{
     display: flex;
     flex-direction: row;
+	margin-bottom: 30px;
 }
 
-#right, #left{
-    width: 100%;
+#user-info-profile, #stats{
+	background-color: #2B2A28;
+	border-radius: 20px;
 }
-
-
-div {
-    text-align: center;
-}
-
-#user-info{
-    background-color: mediumseagreen;
+#user-info-profile{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+	width: 100%;
+	padding: 60px;
+}
+.profil-left img{
+	min-width: 140px;
+	height: 140px;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 4px solid #ee481e;
+	box-shadow: -7px 7px #ee481e;
+}
+.profil-info{
+	width: 100%;
+	padding-left: 30px;
+	align-self: center;
 }
 
+.status{
+	display: flex;
+	flex-direction: row;
+	align-self: center;
+	border: 2px solid #44433f;
+	width:fit-content;
+	padding: 4px 10px 5px 10px;
+	border-radius: 6px;
+}
+.status p{
+	margin-bottom: 0px;
+	font-family: ReadexPro-Light;
+	font-size: 14px;
+	color:#FEEFCF;
+	margin-right: 6px;
+}
+.status img{
+	margin-top: 1px;
+}
+.profil-info #name{
+	font-family: Titan One;
+	font-size: 60px;
+	color:#FEEFCF;
+	margin-bottom: 20px;
+}
+.profil-info #email{
+	font-family: ReadexPro-Medium;
+	font-size: 16px;
+	color:#FEEFCF;
+	margin-bottom: 10px;
+}
+.profil-info #date{
+	font-family: ReadexPro-Light;
+	font-size: 14px;
+	color:#FEEFCF;
+}
+.profil-right{
+	min-width: fit-content;
+}
+.profil-right button{
+	background-color: transparent;
+	padding: 10px 25px 10px 30px;
+	font-family: ReadexPro-SemiBold;
+	color: #FEEFCF;
+	font-size: 14px;
+	border: 2px solid #44433f;
+	border-radius: 6px;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+.profil-right button a{
+	display: flex;
+	align-items: center;
+}
+.profil-right button img{
+	margin-left: 10px;
+	width: 20px;
+	height: 20px;
+}
+.profil-right button:hover{
+	border: 2px solid #ee481e;
+	color: #ee481e;
+}
 
 #stats{
-    background-color: coral;
+	width: 50%;
+	margin-left: 30px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+	align-items: center;
+	padding: 50px 30px 50px 30px;
+	text-align: center;
+}
+.data{
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+}
+.data span{
+	font-family: Titan One;
+	font-size: 35px;
+	margin-bottom: 10px;
+}
+#red {
+	color: #EE481E;
+}
+#orange {
+	color: #EF7E00;
+}
+#yellow {
+	color: #EFC10A;
+}
+.data p{
+	font-family: ReadexPro-Medium;
+	font-size: 13px;
+	color:#FEEFCF;
 }
 
-#historique-match{
-    background-color: mediumslateblue;
+.my-profile-content{
+	border: 2px solid #FEEFCF;
+	border-radius: 20px;
+	padding: 40px;
+}
+#friend-n-match{
     display: flex;
     flex-direction: column;
+
 }
 
-@media only screen and (max-width: 767px) {
 
-    main{
+
+/* Styles for tab labels */
+/* .mat-tab-label {
+	padding: 5px;
+	border-radius: 40px;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	font-size: 14px;
+	text-decoration: none;
+	letter-spacing: -0,16;
+} */
+
+/* Styles for the active tab label */
+/* .mat-tab-label.mat-tab-label-active {
+	padding: 15px;
+	background-color: #ee481e;
+	border-radius: 40px;
+	border: 2px solid #feefcf;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+} */
+
+/* Styles for the ink bar */
+/* .mat-ink-bar {
+	display: none;
+} */
+
+/* .mat-tab-group ul{
+	flex-direction: column;
+	margin-top: 30px;
+	list-style-type: none;
+	max-height: 320px;
+	padding-left: 10px;
+} */
+
+/* Styles for group list / friend list */
+/* .mat-tab-group ul li{
+	font-family: ReadexPro-Bold;
+	color: #feefcf;
+	font-size: 14px;
+	margin-top: 20px;
+} */
+/* .mat-tab-group ul li:hover{
+	transition: all ease 0.00001s;
+	font-size: 18px;
+	cursor: pointer;
+} */
+
+
+
+
+@media only screen and (max-width: 1292px) {
+
+	.center{
+		margin: 0px 20px 0px 20px;
+	}
+    #head{
 		display: block;
 	}
+	#stats{
+		width: 100%;
+		margin-left: 0px;
+	}
+	#user-info-profile{
+		margin-bottom: 30px;
+	}
+
+	
 }

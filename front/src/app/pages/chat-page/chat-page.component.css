@@ -23,6 +23,12 @@ a{
 	font-weight: 300;
 }
 @font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
 	font-family: 'ReadexPro-Regular';
 	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
 	font-style: normal;
@@ -31,6 +37,12 @@ a{
 @font-face {
 	font-family: 'ReadexPro-Medium';
 	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
