@@ -31,32 +31,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
 	){
 		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
-		console.log("constructor gate");
 		this.connectedUsers = [];
 		this.state = {
 			obstacle: {
@@ -180,12 +154,13 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
 			if (game.player2.socket)
 				game.player2.socket.emit('stopSearchLoop', game.id_searchinterval2);
+			console.log(game.id_searchinterval1,  game.id_searchinterval2);
 			game.id_searchinterval1 = 0;
 			game.id_searchinterval2 = 0;
 			await this.pongService.drawInit(game);
 	      	this.server.emit('user1', game.player1.user);
       		this.server.emit('user2', game.player2.user);
-			this.startGame(game, NORMALGAME);
+			await this.pongService.startGame(game, NORMALGAME);
 		}
 		else
 		{
@@ -202,18 +177,21 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		{
 			this.pongService.joinGame(client, game);
 			client.emit('drawName', RIGHTSIDE);
-			// var x = Math.floor(Math.random() * (MAX_MAPID - 1 + 1) + 1); 		// choose random map id
-			var x = 3; //pour les tests je prends celle que je souhaite tester
+			var x = Math.floor(Math.random() * (MAX_MAP - 1 + 1) + 1); 		// choose random map id
+			// var x = 1; //pour les tests je prends celle que je souhaite tester
 		
 			await this.pongService.delay(1500);
 			if (game.player1.socket)
 			game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
 			if (game.player2.socket)
 			game.player2.socket.emit('stopSearchLoop', game.id_searchinterval2);
+			console.log(game.id_searchinterval1,  game.id_searchinterval2);
 			game.id_searchinterval1 = 0;
 			game.id_searchinterval2 = 0;
 			await this.pongService.drawInit(game);
-			this.startGame(game, x);
+			this.server.emit('user1', game.player1.user);
+			this.server.emit('user2', game.player2.user);
+			await this.pongService.startGame(game, x);
 		}
 		else
 		{
@@ -281,6 +259,14 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 //A TRIER
 //////
 
+	searchGameAwaiting(): GameI {
+		return this.allGames.find(game => (game.player1 != undefined && game.player2 != undefined) ? false : true);
+	}
+
+	searchGameAwaitingRandom(): GameI {
+		return this.allRandomGames.find(game => (game == undefined || (game.player1 != undefined && game.player2 != undefined)) ? false : true);
+	}
+
 	private addNewUser(client: Socket)
 	{
 		var user: UserI = {
@@ -290,43 +276,36 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 	
 
-	async startGame(game: GameI, mapid: number){
-			if (mapid === 0)
-		{
-			game.id_interval = setInterval(() => {
-				this.pongService.loopGameNormal(game);
-			}, 1000/60);
-		}
-		else if (mapid === 1)
-		{
-			console.log("ici back 01")
-			game.id_interval = setInterval(() => {
-				this.pongService.loopGameMap1(game);
-			}, 1000/60);
-		}
-		else if (mapid === 2)
-		{
-			console.log("ici back 02")
-			game.id_interval = setInterval(() => {
-				this.pongService.loopGameMap2(game);
-			}, 1000/60);
-		}		
-		else if (mapid === 3)
-		{
-			console.log("ici back 03")
-			game.id_interval = setInterval(() => {
-				this.pongService.loopGameMap3(game);
-			}, 1000/60);
-		}
-	}
+	// async startGame(game: GameI, mapid: number){
+	// 		if (mapid === 0)
+	// 	{
+	// 		game.id_interval = setInterval(() => {
+	// 			this.pongService.loopGameNormal(game);
+	// 		}, 1000/60);
+	// 	}
+	// 	else if (mapid === 1)
+	// 	{
+	// 		console.log("ici back 01")
+	// 		game.id_interval = setInterval(() => {
+	// 			this.pongService.loopGameMap1(game);
+	// 		}, 1000/60);
+	// 	}
+	// 	else if (mapid === 2)
+	// 	{
+	// 		console.log("ici back 02")
+	// 		game.id_interval = setInterval(() => {
+	// 			this.pongService.loopGameMap2(game);
+	// 		}, 1000/60);
+	// 	}		
+	// 	else if (mapid === 3)
+	// 	{
+	// 		console.log("ici back 03")
+	// 		game.id_interval = setInterval(() => {
+	// 			this.pongService.loopGameMap3(game);
+	// 		}, 1000/60);
+	// 	}
+	// }
 
-	searchGameAwaiting(): GameI {
-		return this.allGames.find(game => (game.player1 != undefined && game.player2 != undefined) ? false : true);
-	}
-
-	searchGameAwaitingRandom(): GameI {
-		return this.allRandomGames.find(game => (game == undefined || (game.player1 != undefined && game.player2 != undefined)) ? false : true);
-	}
 	
 	creatNewGame(client: Socket): GameI {
 		var game: GameI = this.pongService.initState();

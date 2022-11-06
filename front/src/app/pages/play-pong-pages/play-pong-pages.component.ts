@@ -45,7 +45,7 @@ export const MAP2_OBSTACLE_SPEED = 1;
 export const MAP2_OBSTACLE_RADIUS = 2;
 //
 //
-//// MAP2
+//// MAP3
 ///////// obstacle1
 export const MAP3_OBSTACLE1_W = 250; // width
 export const MAP3_OBSTACLE1_H = 20; // height
