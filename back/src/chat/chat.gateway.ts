@@ -237,6 +237,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @SubscribeMessage('pardonUser')
   async onPardonUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() pardon: PardonI) {
+    console.log(pardon);
     this.wschatService.pardonUser(client.id, pardon);
   }
 
