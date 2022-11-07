@@ -1,4 +1,3 @@
-
 <div *ngIf="room.id else no_room">
 		<div class="flexbox">
 			<div #scroll id="chat_box" class="chat-box" >
@@ -83,8 +82,8 @@
 					<div class="chat-input">
 						<input matInput id="chat-input-text" placeholder="J’ecris le super message de la mort qui tue ici" formControlName="message" >
 						<!-- Bouton send + icon -->
-						<button class="send" mat-raised-button type="submit" (action)="sendMessage()" class="send">
-							<svg width="22px" height="22px" viewBox="0 0 22 22">
+						<button id="but-send" mat-raised-button type="submit" (action)="sendMessage()">
+							<svg id="icon-send" width="22px" height="22px" viewBox="0 0 22 22">
 								<title>send icon</title>
 								<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
 									<g id="incons/support" transform="translate(-9.000000, -9.000000)" fill="#FEEFCF" stroke="#FEEFCF">

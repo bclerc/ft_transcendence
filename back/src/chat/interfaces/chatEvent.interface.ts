@@ -50,3 +50,24 @@ export class UserPunishEvent {
   success: boolean;
   message?: string;
 }
+
+export class PardonEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  pardoner: BasicUserI;
+  success: boolean;
+  message?: string;
+}
+
+export class UserCanChatEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  message: string;
+}
+
+export class BlockedUserEvent {
+  user: BasicUserI;
+  blocker: BasicUserI;
+  block: boolean;
+  success: boolean;
+}

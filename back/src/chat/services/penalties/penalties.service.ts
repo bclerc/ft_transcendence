@@ -31,6 +31,30 @@ export class PenaltiesService {
     console.log(ret);
   }
 
+  async getPenaltyById(id: number): Promise<ChatPenalty> {
+    return await this.prisma.chatPenalty.findFirst({
+      where: {
+        id: id
+      }, 
+      include: {
+        user: true,
+        room: {
+          include: {
+            admins: true
+          }
+        },
+      }
+    });
+  }
+
+  async deletePenalty(id: number) {
+    await this.prisma.chatPenalty.delete({
+      where: {
+        id: id
+      }
+    });
+  }
+
   async getRoomPenaltiesForUser(userId: number, roomId: number): Promise<ChatPenalty> {
     console.log(userId, roomId);
     const penalties = await this.prisma.chatPenalty.findFirst({

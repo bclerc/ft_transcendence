@@ -15,7 +15,8 @@ export interface UserI {
     createdAt? :        Date;
     twoFactorEnabled? : boolean;
     friendOf? : UserI[];
-    blockedUsers? : UserI[];
+    blockedBy? : UserI[];
+    blockedUsers?:      UserI[]; 
 }
 
 export class User {
@@ -46,6 +47,7 @@ export class User {
     elo? :              number;
     staff? :            boolean;
     Createdat? :        Date;
+    blockedUsers?:      UserI[]; 
     
     
     constructor(ida: number, usernamea: string, avatarUrla: string) {

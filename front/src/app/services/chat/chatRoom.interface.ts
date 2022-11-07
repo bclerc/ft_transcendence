@@ -1,5 +1,4 @@
 
-import { type } from "os";
 import { UserI } from "src/app/models/user.models";
 import { Message } from "./message.interface";
 export interface ChatRoom {

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FriendRequest, FriendStatus } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
@@ -11,7 +12,9 @@ export class FriendsService {
   constructor(private prisma: PrismaService,
     private userService: UserService,
     private onlineUserService: OnlineUserService,
-    private chatService: ChatService) { }
+    private chatService: ChatService,
+    private eventEmitter: EventEmitter2) { }
+  
 
 
   async addFriend(userId: number, friendId: number) {
@@ -51,6 +54,11 @@ export class FriendsService {
       },
       data: {
         friends: {
+          connect: {
+            id: request.toId,
+          }
+        },
+        friendOf: {
           connect: {
             id: request.toId,
           }

@@ -1,4 +1,4 @@
-@font-face{
+/* @font-face{
 	font-family: 'Titan One';
 	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
 }
@@ -56,7 +56,8 @@ hr.clear{
 }
 
 #param-body{
-    padding: 40px
+    padding: 40px;
+	overflow-y: scroll;
 }
 #param-body h3 {
 	font-family: Titan One;
@@ -69,7 +70,6 @@ hr.clear{
     flex-direction: row;
 }
 #title-n-button button{
-    /* width: 35px; */
     height: 35px;
     margin-left: 25px;
 	font-family: ReadexPro-Medium;
@@ -106,18 +106,17 @@ hr.clear{
 	padding: 4px 10px 4px 10px;
 }
 .param-header button:hover{
-	/* background-color: #ee481e; */
 	color: #ee481e;
 	cursor: pointer;
 	border: 2px solid #ee481e;
 }
 .param-header button img{
 	margin-left: 4px;
-}
+} */
 
 /* champs de text ------------------------------------------------------------------------- */
 
-#input-box{
+/* #input-box{
 	display: flex;
 	flex-direction: column;
 	font-family: ReadexPro-Medium;
@@ -180,10 +179,8 @@ textarea{
 .user-name{
     display: flex;
 	flex-direction: column;
-    /* align-items: flex-start; */
     width: 80%;
 	align-self: center;
-	/* background-color: cadetblue; */
 }
 .user-name #user-name{
 	font-family: Titan One;
@@ -202,51 +199,74 @@ textarea{
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-	/* background-color: blueviolet; */
 }
 #membre button{
     margin-right: 20px;
 	height: 40px;
 	width: 40px;
 	border: none;
-	border-radius: 6px;
-	background-color: #1f1f1f;
+	background-color: transparent;
 }
 #membre button:last-child{
     margin-right: 0px;
 }
+#membre button:hover{
+	cursor: pointer;
+}
 
-#icon-invite-game:hover{
+#icon-invite-game:hover #icon{
 	fill: #ee481e;
-	transition: 0.0000000000000000000000000001ms;
 }
-#icon-ask-friend:hover{
+#icon-invite-game:hover #BG{
+	fill: #ee481e;
+	opacity: 20%;
+}
+
+#icon-ask-friend:hover #icon{
 	fill: #ef5f00;
-	transition: 0.0000000000000000000000000001ms;
 }
-#icon-mute:hover{
+#icon-ask-friend:hover #BG{
+	fill: #ef5f00;
+	opacity: 20%;
+}
+
+#icon-mute:hover #icon{
 	fill: #ef7e00;
-	transition: 0.0000000000000000000000000001ms;
 }
-#icon-block:hover{
+#icon-mute:hover #BG{
+	fill: #ef7e00;
+	opacity: 20%;
+}
+
+#icon-block:hover #icon{
 	fill: #f1a726;
-	transition: 0.0000000000000000000000000001ms;
 }
-#icon-exclure:hover{
+#icon-block:hover #BG{
+	fill: #f1a726;
+	opacity: 20%;
+}
+
+#icon-exclure:hover #icon{
 	fill: #efc10a;
-	transition: 0.0000000000000000000000000001ms;
 }
-#membre button #icon-bannir:hover{
+#icon-exclure:hover #BG{
+	fill: #efc10a;
+	opacity: 20%;
+}
+
+#icon-bannir:hover #icon{
 	fill: #f9e131;
-	transition: 0.0000000000000000000000000001ms;
 }
+#icon-bannir:hover #BG{
+	fill: #f9e131;
+	opacity: 20%;
+} */
 
 
 /*------------------------------------------------------------ Grille */
-.demi-left{
+/* .demi-left{
 	float: left;
 	margin-right: 20px;
-	/* background-color: blue; */
     width: calc(50% - 10px);
 }
 .demi:last-child{
@@ -256,4 +276,4 @@ textarea{
 .demi-right{
 	float: left;
     width: calc(50% - 10px);
-}
+} */

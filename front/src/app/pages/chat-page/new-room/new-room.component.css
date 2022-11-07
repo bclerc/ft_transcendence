@@ -185,8 +185,7 @@ h3{
 	color: #ee481e;
 }
 textarea{
-
-	height:min-content;
+	height: min-content;
 }
 #input-text {
 	border-radius: 10px;
