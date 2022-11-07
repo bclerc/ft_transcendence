@@ -14,11 +14,11 @@
         <a href="javascript:void(0);" (click)="addFriend()">Ajouter en amis</a>
     </ng-template>
     <p></p>
-    <div *ngIf="alreadyBlocked; then thenBlock else elseBlock"></div>
-    <ng-template #thenBlock>
+    <div *ngIf="alreadyBlocked; then thenBloc else elseBloc"></div>
+    <ng-template #thenBloc>
         <a href="javascript:void(0);" (click)="unblockUser()">Debloquer l'utilisateur</a>
     </ng-template>
-    <ng-template #elseBlock>
+    <ng-template #elseBloc>
         <a href="javascript:void(0);" (click)="blockUser()">Bloquer l'utilisateur</a>
     </ng-template>
 

@@ -76,7 +76,7 @@ export class UserService {
 
   ChangeDbInformation(user : UserI): Observable<any>
   {
-    return this.http.put<Observable<any>>(this.backUrl + "user/", user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.put<Observable<any>>(this.backUrl + "user", user, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ActivateFacode(code : string) : Observable<any>
@@ -152,12 +152,12 @@ export class UserService {
 
   blockUser(Id: number)
   {
-    return this.http.post(this.backUrl + "/user/block/" + Id ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    return this.http.post(this.backUrl + "user/block/" + Id ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
   unBlockUser(Id: number)
   {
-    return this.http.post(this.backUrl + "/user/unblock/" + Id ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    return this.http.post(this.backUrl + "user/unblock/" + Id ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
 

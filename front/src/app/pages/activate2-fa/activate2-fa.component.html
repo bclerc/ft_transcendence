@@ -1,9 +1,13 @@
-<p>secret : {{Secret.secret}} </p>
-<p>otpauthUrl : {{Secret.otpauthUrl}} </p>
-<img style="width: 400px" [src]="Secret.qrcode" [alt]="Secret.qrcode"/>
+<ng-container *ngIf="Secret">
+<div>
+    <p>secret : {{Secret.secret}} </p>
+    <p>otpauthUrl : {{Secret.otpauthUrl}} </p>
+    <img style="width: 400px" [src]="Secret.qrcode" [alt]="Secret.qrcode"/>
+</div>
+  </ng-container>
 <p></p>
-<a href="javascript:void(0);" (click)="RegenerateSecret()">Regénerer un secret</a>
-<p></p>
+<!-- <a href="javascript:void(0);" (click)="RegenerateSecret()">Regénerer un secret</a> -->
+<!-- <p></p> -->
 <form class="form" [formGroup]="FaForm" (ngSubmit)="ActivateFa()">
     <input matInput placeholder="Code2Fa" formControlName="codeFa">
     <p></p>
