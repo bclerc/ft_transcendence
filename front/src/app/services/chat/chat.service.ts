@@ -62,6 +62,7 @@ export class ChatService {
     }
 
     pardonUser(userId: number, penaltyId: number) {
+      console.log("+pardonUser", userId, penaltyId);
       this.socket.emit('pardonUser', {userId: userId, penaltyId: penaltyId});
     }
 
