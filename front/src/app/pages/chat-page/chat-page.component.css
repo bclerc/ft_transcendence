@@ -96,21 +96,21 @@ a{
 }
 
 /* Styles for tab labels */
-.mat-tab-label {
-	min-width:25px !important;
-	padding: 5px;
+.pute .mat-tab-label {
+	min-width: 40px !important;
+	padding: 15px;
 	border-radius: 40px;
 	color: #feefcf;
 	font-family: ReadexPro-Medium;
 	text-align: center;
-	font-size: 11px;
+	font-size: 14px;
 	text-decoration: none;
 	letter-spacing: -0,16;
 }
 
 /* Styles for the active tab label */
-.mat-tab-label.mat-tab-label-active {
-	min-width: 55px !important;
+.pute .mat-tab-label.mat-tab-label-active {
+	min-width: 40px !important;
 	padding: 15px;
 	background-color: #ee481e;
 	border-radius: 40px;
