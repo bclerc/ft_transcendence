@@ -27,11 +27,12 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.id= Number( this.router.url.split('/')[2]);
+    
       this.searchFriend();
-      this.searchBlockedUser();
+      //this.searchBlockedUser();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
-          console.log("data =",data);
+          // console.log("data =",data);
           this.user = data;
           if (data === null)
            this.router.navigate(['error']);
@@ -43,65 +44,73 @@ export class ProfilePageComponent implements OnInit {
   }
 
   searchFriend(): void {
-    this.subscription2 = this.currentUserService.getFriendFromBack().subscribe(
+     this.subscription2 = this.currentUserService.getCurrentUser().subscribe(
       (data : any) => {
-        for (var i = 0; data[i];i++)
+        // console.log("current user" , data)
+        for (var i = 0; data.friendOf[i];i++)
         {
-          if (this.id === data[i].id)
+          if (this.id === data.friendOf[i].id)
           {
             this.alreadyFriend = true;
             break;
           }
         }
-      });      
-  }
-
-  searchBlockedUser(): void {
-    this.subscription3 = this.currentUserService.getBlockedUserFromBack().subscribe(
-      (data : any) => {
-        for (var i = 0; data[i];i++)
+        for (var i = 0; data.blockedUsers[i];i++)
         {
-          if (this.id === data[i].id)
+          if (this.id === data.blockedUsers[i].id)
           {
             this.alreadyBlocked = true;
             break;
           }
         }
-      });      
+      }
+    )
   }
 
   ngOnDestroy() : void
   {
     this.subscription.unsubscribe;
     this.subscription2.unsubscribe;
-    this.subscription3.unsubscribe;
+    // this.subscription3.unsubscribe;
   }
 
   addFriend() : void
   {
     this.userService.sendRequest(this.id).subscribe(
-      (data : any) =>{ console.log("friend request" , data)}
+      (data : any) =>{
+        this.alreadyFriend = true
+        //  console.log("friend request" , data)
+      }
     );
   }
 
   removeFriend() : void
   {
     this.userService.removeFriend(this.id).subscribe(
-      (data : any) =>{ console.log("friend request" , data)}
+      (data : any) =>{
+        this.alreadyFriend = false
+        //  console.log("friend request" , data)
+      }
     );
   }
 
   blockUser() : void
   {
     this.userService.blockUser(this.id).subscribe(
-      (data : any) =>{ console.log("block = " , data)}
+      (data : any) =>{
+        this.alreadyBlocked= true
+        //  console.log("block = " , data)
+      }
     )
   }
 
   unblockUser() : void
   {
     this.userService.unBlockUser(this.id).subscribe(
-      (data : any) =>{ console.log("unblock = " , data)}
+      (data : any) =>{ 
+        this.alreadyBlocked= false
+        // console.log("unblock = " , data)
+      }
     )
   }
 

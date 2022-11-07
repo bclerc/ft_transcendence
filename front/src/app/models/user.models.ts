@@ -15,6 +15,7 @@ export interface UserI {
     createdAt? :        Date;
     twoFactorEnabled? : boolean;
     friendOf? : UserI[];
+    blockedUsers? : UserI[];
 }
 
 export class User {

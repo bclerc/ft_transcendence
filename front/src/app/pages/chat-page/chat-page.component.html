@@ -14,10 +14,10 @@
 				<aside class="sidebar">
 					<div class="user-bloc">
 						<img src="{{ actualUser.avatar_url }}" alt="ma belle gueule">
-						<!-- <img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
+						<!-- <img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.displayname"/> -->
 						<!-- <p class="intraName">Valentina salamberemborg</p> -->
 						<div id="user-info">
-							<a class="intraName" routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ actualUser.intra_name }}</a>
+							<a class="intraName" routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ actualUser.displayname }}</a>
 							<span class="intraEmail">{{actualUser.email}}</span>
 						</div>
 					</div>
@@ -82,7 +82,7 @@
                 </ng-template>
 								<ul>
                   <li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
-                    <p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).intra_name }}
+                    <p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).displayname }}
                       <ng-container *ngIf="!dm.seen">
                         <svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                           <title>Oval</title>
