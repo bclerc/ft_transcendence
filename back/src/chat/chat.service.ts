@@ -95,6 +95,22 @@ export class ChatService {
             displayname: true,
             email: true,
             avatar_url: true,
+            blockedBy: {
+              where: {
+                id: userId,
+              },
+              select: {
+                id: true,
+              }
+            },
+            friendOf: {
+              where: {
+                id: userId,
+              },
+              select: {
+                id: true,
+              },
+           },
           },
           orderBy: {
             state: 'asc',
@@ -214,7 +230,10 @@ export class ChatService {
       },
       include: {
         users: true,
-      }
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
     return rooms;
   }
@@ -394,6 +413,31 @@ export class ChatService {
   }
 
   async deleteDm(user1Id: number, user2Id: number) {
+    // delete message befores
+    await this.prisma.message.deleteMany({
+      where: {
+        room: {
+            type: ChatRoomType.DM,
+            AND: [
+              {
+                users: {
+                  some: {
+                    id: user1Id,
+                  }
+                }
+              },
+              {
+                users: {
+                  some: {
+                    id: Number(user2Id),
+                  }
+                }
+              }
+            ]
+          },
+        },
+    });
+
     await this.prisma.chatRoom.deleteMany({
       where: {
         type: ChatRoomType.DM,

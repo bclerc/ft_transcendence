@@ -56,3 +56,10 @@ export class UserCanChatEvent {
   user: BasicUserI;
   message: string;
 }
+
+export class BlockedUserEvent {
+  user: BasicUserI;
+  blocker: BasicUserI;
+  block: boolean;
+  success: boolean;
+}

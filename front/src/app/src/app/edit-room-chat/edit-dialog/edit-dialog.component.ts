@@ -1,6 +1,7 @@
 import { Component, Inject, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
@@ -34,6 +35,7 @@ export class EditDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<EditDialogComponent>,
     private userService: UserService,
     private currentUser: CurrentUserService,
+    private snack: MatSnackBar,
     private socket: Socket,
     public dialog: MatDialog) { 
     this.currentUser.user.subscribe(user => this.user = user);
@@ -48,6 +50,7 @@ export class EditDialogComponent implements OnInit {
         
   
   ngOnInit(): void {
+    console.log(this.room);
     this.editform.setValue({
       name: this.room.name,
       description: this.room.description,
@@ -56,7 +59,34 @@ export class EditDialogComponent implements OnInit {
       users: this.room.users,
     });
   }
+
+  sendRequest(userId: number | undefined)
+  {
+    if (userId)
+    {
+      this.userService.sendRequest(userId).subscribe( (res: any) => {
+        console.log(res);
+        if (res.state == "success")
+        {
+          this.snack.open("Votre demande a bien été envoyée", "OK", {duration: 2000});
+          this.dialogRef.close();
+        }
+        else {
+          this.snack.open("Une erreur est survenue: " + res.message, "OK", {duration: 2000});
+        }
+      });
+    }
+  }
   
+  blockUser(userId: number | undefined, block: boolean)
+  {
+    if (userId)
+    {
+      this.chatService.blockUser(userId, block);
+      this.dialogRef.close();
+    }
+  }
+
   get mame(): FormControl {
     return this.editform.get('name') as FormControl;
   }

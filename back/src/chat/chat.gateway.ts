@@ -1,4 +1,4 @@
-import { AdminUpdateEvent, MessageUpdateEvent, NewRoomEvent, RoomUpdateEvent, UserCanChatEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
+import { AdminUpdateEvent, BlockedUserEvent, MessageUpdateEvent, NewRoomEvent, RoomUpdateEvent, UserCanChatEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 import { DemoteUserI, PromoteUserI } from './interfaces/promote-user-i.interface';
@@ -17,6 +17,7 @@ import { Inject } from '@nestjs/common';
 import { Socket } from 'socket.io';
 import { OnEvent } from '@nestjs/event-emitter';
 import { PusnishI } from './interfaces/punish.interface';
+import { BlockedUser } from './interfaces/blocked.interface';
 
 @WebSocketGateway(8181, { cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
@@ -49,6 +50,22 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   /** 
    *  Emitters
    */
+
+  @OnEvent('user.blocked')
+  async handleBlockUserEvent(event: BlockedUserEvent) {
+      if (event.success)
+      {
+        let onlineUser = this.onlineUserService.getUser(null, event.blocker.id);
+        this.sendToUser(event.blocker, 'notification', "Vous avez " + (event.block ? "bloqué " : "débloqué ") +  event.user.displayname);
+        await this.updateUserRooms(event.blocker);
+        console.log("onlineUser", onlineUser);
+        if (onlineUser.inRoomId)
+        {
+          let room = await this.chatService.getRoomById(onlineUser.inRoomId);
+         await this.updateUsersMessagesInRoom(room);
+        }
+      }
+  }
 
   @OnEvent('room.new')
   handleNewRoomEvent(event: NewRoomEvent) {
@@ -230,6 +247,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @SubscribeMessage('editRoom')
   async onEditRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: newChatRoomI) {
     this.wschatService.editRoom(client.id, room);
+  }
+
+  @SubscribeMessage('blockUser')
+  async onBlockUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() data: BlockedUser) {
+    this.wschatService.blockUser(client.id, data);
   }
 
   @SubscribeMessage('logout')

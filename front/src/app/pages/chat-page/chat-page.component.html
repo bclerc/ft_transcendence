@@ -99,8 +99,10 @@
 											</ng-container>
 										</p>
 									</li>
-									<img width="224px" src="../../../assets/img/illu-aucun-ami.png" alt="Tu n'as aucun ami :(">
-								</ul>
+                  <ng-container *ngIf="!(dmRooms$ | async)">
+                      <img width="224px" src="../../../assets/img/illu-aucun-ami.png" alt="Tu n'as aucun ami :(">
+                  </ng-container>
+                  </ul>
 							</mat-tab>
 						</mat-tab-group>
 						<a class="button-new-room" (click)="NewRoom()">+ Nouveau groupe</a>

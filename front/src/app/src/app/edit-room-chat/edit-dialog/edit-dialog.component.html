@@ -57,8 +57,7 @@
 	  <div class="info">
 		<div class="user-name">
 		  
-		  <p *ngIf="!isAdministrator(member)" id="user-name">{{member.intra_name}}</p>
-		  <p *ngIf="isAdministrator(member)" id="user-admin">{{member.intra_name}}</p>
+		  <p id="user-name">{{member.displayname}}</p>
 		  <p *ngIf="member.state === 'ONLINE'" id="user-status">En ligne</p>
 		  <p *ngIf="member.state === 'INGAME'" id="user-status">En train de jouer</p>
 		  <p *ngIf="member.state === 'WAITING'" id="user-status">Dans la file d'attente</p>
@@ -84,7 +83,7 @@
 
 		  <!-- Ajouter en amis  -->
 
-		  <button id="action" mat-Button matTooltip="Ajouter en ami">
+		  <button *ngIf="!member.friendOf![0]" id="action" mat-Button matTooltip="Ajouter en amis" (click)="sendRequest(member.id)">
 			<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 				<title>icon-ask-friend</title>
 				<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -102,7 +101,7 @@
 		  <!-- Bloquer -->
 		  
 		  
-		  <button id="action" mat-Button matTooltip="Bloquer">
+		  <button *ngIf="!member.blockedBy![0]" id="action" mat-Button matTooltip="Bloquer" (click)="blockUser(member.id, true)">
 			<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 				<title>icon-block</title>
 				<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -115,6 +114,20 @@
 				</g>
 			</svg>
 		  </button>
+
+      <button *ngIf="member.blockedBy![0]" id="action" mat-Button matTooltip="Débloquer" (click)="blockUser(member.id, false)">
+        <svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <title>icon-block</title>
+          <g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Chat-mes-groupes-Copy" transform="translate(-1056.000000, -630.000000)">
+              <g id="icon-block" transform="translate(1056.000000, 630.000000)">
+                <rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+                <path d="M19.9386406,12.0983893 C24.4868679,12.0983893 28.1739347,15.7854561 28.1739347,20.3336835 C28.1739347,24.8819108 24.4868679,28.5689776 19.9386406,28.5689776 C15.3904132,28.5689776 11.7033465,24.8819108 11.7033465,20.3336835 C11.7033465,15.7854561 15.3904132,12.0983893 19.9386406,12.0983893 Z M24.8010307,17.5775269 L17.182484,25.1960735 C17.9958029,25.6580816 18.9364105,25.9219188 19.9386406,25.9219188 C23.0249377,25.9219188 25.5268759,23.4199806 25.5268759,20.3336835 C25.5268759,19.3314534 25.2630387,18.3908458 24.8010307,17.5775269 Z M19.9386406,14.7454482 C16.8523435,14.7454482 14.3504053,17.2473863 14.3504053,20.3336835 C14.3504053,21.3493125 14.6213442,22.3016604 15.0948866,23.1223917 L22.7273489,15.4899294 C21.9066175,15.016387 20.9542696,14.7454482 19.9386406,14.7454482 Z" id="icon" fill="#f1a726"></path>
+              </g>
+            </g>
+          </g>
+        </svg>
+        </button>
 
 			<!-- Mute -->
 

@@ -56,6 +56,11 @@ export class ChatService {
       this.socket.emit('subscribeRoom', object);
     }
 
+    blockUser(userId: number, block: boolean)
+    {
+      this.socket.emit('blockUser', {block: block, userId: userId});
+    }
+
     needRooms() {
       this.socket.emit('needRooms');
     }

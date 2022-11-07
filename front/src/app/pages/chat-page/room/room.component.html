@@ -6,8 +6,8 @@
         <section class="chat-box-header">
           <div class="chat-box-info">
             <div *ngIf="room.type === 'DM'"  style="display: flex">
-              <img src="{{friend.avatar_url}}" alt="{{friend.intra_name}}" class="user-dm-avatar" >
-              <h2  style="display: flex; flex-direction: row;" >{{ friend.intra_name }}</h2>
+              <img src="{{friend.avatar_url}}" alt="{{friend.displayname}}" class="user-dm-avatar" >
+              <h2  style="display: flex; flex-direction: row;" >{{ friend.displayname }}</h2>
             </div>
             <h2 *ngIf="room.type === 'GROUP'" >{{ room.name }}</h2>
             <p id="description">{{room.description}}</p>
@@ -23,7 +23,7 @@
               <mat-chip-list #membres>
                 <mat-chip id="membres" *ngFor="let member of room.users" >
                   <img matChipAvatar class="chip_avatar" src="{{member. avatar_url}}" alt="User avatar">
-                  {{member.intra_name}}
+                  {{member.displayname}}
 
 
                   <svg  *ngIf="member.state ==='ONLINE'" style="margin-left: 10px;" width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -44,7 +44,7 @@
 
 
               
-              <!-- <p id="membres" *ngFor="let user of room.users">{{user.intra_name}}</p> -->
+              <!-- <p id="membres" *ngFor="let user of room.users">{{user.displayname}}</p> -->
             </ng-container>
           </div>
 
@@ -68,7 +68,7 @@
 							</ng-container>
 							<ng-container *ngIf="message.user.id !== user.id">
 								<div class="profile other-profile">
-									<p> {{ message.user.intra_name }} </p>
+									<p> {{ message.user.displayname }} </p>
 									<div id="{{message.id}}" class="message other-message">{{ message.content }}</div>
 									<span class="date">Envoyé le {{ message.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</span>
 								</div>

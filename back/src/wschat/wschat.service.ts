@@ -14,6 +14,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PenaltiesService } from 'src/chat/services/penalties/penalties.service';
 import e from 'express';
 import { PusnishI } from 'src/chat/interfaces/punish.interface';
+import { BlockedUser } from 'src/chat/interfaces/blocked.interface';
 
 @Injectable()
 export class WschatService {
@@ -212,6 +213,22 @@ export class WschatService {
         this.eventEmitter.emit('room.update', {user: user, room: newRoom, success: true });
       } else {
         this.eventEmitter.emit('room.update', {user: user, room: room, success: false, message: 'Seul le propriétaire du salon peut le modifier' });
+      }
+    }
+  }
+
+  async blockUser(socketId: string, event: BlockedUser) {
+    const user = this.onlineUserService.getUser(socketId);
+    const target = await this.userService.findOne(event.userId);
+
+    console.log(event);
+    if (user && target) {
+      if (event.block) {
+        await this.userService.blockUser(user.id, target.id);
+        this.eventEmitter.emit("user.blocked", { user: target, blocker: user, block: true, success: true });
+      } else {
+        await this.userService.unblockUser(user.id, target.id);
+        this.eventEmitter.emit("user.blocked", { user: target, blocker: user, block: false, success: true });
       }
     }
   }
