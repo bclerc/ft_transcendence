@@ -67,6 +67,7 @@ export class ChatService {
         penalities: {
           none:
           {
+            type: 'BAN',
             user: {
               id: userId,
             },
@@ -132,6 +133,7 @@ export class ChatService {
       },
     });
 
+    console.log(rooms);
     rooms.forEach(room => {
       if (room.messages[0]) {
         if (room.messages[0].seenBy.length > 0)

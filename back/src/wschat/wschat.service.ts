@@ -41,8 +41,8 @@ export class WschatService {
   async subscribeToRoom(socketId: string, subRoom: SubscribeRoomDto) {
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(subRoom.roomId);
-    const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);    
-    console.log(penalty);
+    const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);   
+ 
     if (penalty && penalty.type === PenaltyType.BAN) {
       this.eventEmitter.emit('room.user.join', {
         room: room,
@@ -155,8 +155,12 @@ export class WschatService {
     const room = await this.chatService.getRoomById(message.room.id);
 
     if (user) {
-      await this.chatService.newMessage(message);
-      this.eventEmitter.emit('room.message.new', { room: room });
+      try {
+        await this.chatService.newMessage(message);
+        this.eventEmitter.emit('room.message.new', { room: room });
+      } catch (error) {
+        this.eventEmitter.emit('room.user.canchat', { room: room, user: user, message: error.response});
+      }
     }
   }
 

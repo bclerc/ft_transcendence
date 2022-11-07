@@ -50,3 +50,9 @@ export class UserPunishEvent {
   success: boolean;
   message?: string;
 }
+
+export class UserCanChatEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  message: string;
+}

@@ -1,4 +1,4 @@
-import { AdminUpdateEvent, MessageUpdateEvent, NewRoomEvent, RoomUpdateEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
+import { AdminUpdateEvent, MessageUpdateEvent, NewRoomEvent, RoomUpdateEvent, UserCanChatEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 import { DemoteUserI, PromoteUserI } from './interfaces/promote-user-i.interface';
@@ -96,6 +96,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     else {
       this.sendToUser(event.punisher, 'notification', "Vous n'avez pas pu punir " + event.user.intra_name + " de la room " + event.room.name + ". Raison : " + event.message);
     }
+  }
+
+  @OnEvent('room.user.canchat')
+  handleUserCanChat(event: UserCanChatEvent)
+  {
+    this.sendToUser(event.user, 'notification', event.message); 
   }
 
   @OnEvent('room.message.new')
@@ -253,7 +259,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   async updateUsersMessagesInRoom(room: ChatRoomI) {
     for (let user of room.users) {
-      let onlineUser = this.onlineUserService.getUser(null, user.id);{
+      let onlineUser = this.onlineUserService.getUser(null, user.id);
+      if (onlineUser && onlineUser.inRoomId == room.id) {
         const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
         this.sendToUser(user, 'messages', messages);
       }
