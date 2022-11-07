@@ -48,6 +48,8 @@ export class PenaltiesService {
   }
 
   async deletePenalty(id: number) {
+    if (!id)
+      return ;
     await this.prisma.chatPenalty.delete({
       where: {
         id: id
