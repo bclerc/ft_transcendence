@@ -202,7 +202,7 @@ hr.clear{
 }
 
 /* Styles for group list / friend list */
-.mat-tab-group ul li{
+.my-profile-content .mat-tab-group ul li{
 	display:flex;
 	flex-direction: row;
 	background-color: #343330;
@@ -213,7 +213,7 @@ hr.clear{
 	font-size: 18px;
 	margin-top: 30px;
 }
-.mat-tab-group ul li a:hover{
+.my-profile-content .mat-tab-group ul li a:hover{
 	color: #ee481e;
 	cursor: pointer;
 }
