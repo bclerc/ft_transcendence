@@ -1,6 +1,6 @@
-import { AdminUpdateEvent, BlockedUserEvent, MessageUpdateEvent, NewRoomEvent, RoomUpdateEvent, UserCanChatEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
+import { AdminUpdateEvent, BlockedUserEvent, MessageUpdateEvent, NewRoomEvent, PardonEvent, RoomUpdateEvent, UserCanChatEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
+import { ChatRoomI, MessageI, newChatRoomI, PardonI } from './interfaces/chatRoom.interface';
 import { DemoteUserI, PromoteUserI } from './interfaces/promote-user-i.interface';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { SubscribeRoomDto } from './dto/subscribe-room.dto';
@@ -115,6 +115,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
   }
 
+  @OnEvent('room.user.pardoned')
+  handleUserPardoned(event: PardonEvent)
+  {
+    if (event.success)
+    {
+      this.updateRoomForUsersInRoom(event.room.id);
+      this.sendToUser(event.user, 'notification', "Vous avez été pardonné de la room " + event.room.name + " par " + event.pardoner.intra_name);
+      this.sendToUser(event.pardoner, 'notification', "Vous avez pardonné " + event.user.intra_name + " de la room " + event.room.name);
+    }
+  }
+
   @OnEvent('room.user.canchat')
   handleUserCanChat(event: UserCanChatEvent)
   {
@@ -222,6 +233,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @SubscribeMessage('punishUser')
   async onBanUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() penalty: PusnishI) {
     this.wschatService.punishUser(client.id, penalty);
+  }
+
+  @SubscribeMessage('pardonUser')
+  async onPardonUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() pardon: PardonI) {
+    this.wschatService.pardonUser(client.id, pardon);
   }
 
   @SubscribeMessage('leaveRoom')

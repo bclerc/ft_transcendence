@@ -44,6 +44,11 @@ export interface DmChatRoomI {
   messages?: any[];
 }
 
+export interface PardonI {
+  userId: number;
+  penaltyId: number;
+}
+
 export interface MessageI {
   id: number;
   content: string;

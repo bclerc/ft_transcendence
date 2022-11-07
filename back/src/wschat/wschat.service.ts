@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { WebSocketServer } from '@nestjs/websockets';
-import { ChatRoom, Message, PenaltyType, User } from '@prisma/client';
+import { ChatPenalty, ChatRoom, Message, PenaltyType, User } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { SubscribeRoomDto } from 'src/chat/dto/subscribe-room.dto';
-import { ChatRoomI, MessageI, newChatRoomI } from 'src/chat/interfaces/chatRoom.interface';
+import { ChatRoomI, MessageI, newChatRoomI, PardonI } from 'src/chat/interfaces/chatRoom.interface';
 import { EjectRoomI } from 'src/chat/interfaces/eject-room-i.interface';
 import { DemoteUserI, PromoteUserI } from 'src/chat/interfaces/promote-user-i.interface';
 import { PasswordUtils } from 'src/chat/utils/chat-utils';
@@ -97,6 +97,22 @@ export class WschatService {
           { room: room, user: target, punisher: user, type: event.type, success: false, message: 'Vous n\'êtes pas administrateur de ce salon'});
       }
     }
+  }
+
+
+  async pardonUser(socketId: string, event: PardonI) {
+    const user = this.onlineUserService.getUser(socketId);
+    const target = await this.userService.findOne(event.userId);
+    const penalty: any = await this.penaltiesService.getPenaltyById(event.penaltyId);
+    
+    if (user && target && penalty) {
+          const room = penalty.room;
+          if (room.admins.find(admin => admin.id == user.id)) {
+            console.log(penalty);
+            this.penaltiesService.deletePenalty(penalty.id);
+            this.eventEmitter.emit('room.user.pardoned', { room: room, user: target, pardoner: user, success: true});
+          }       
+      }
   }
 
   async ejectUserFromRoom(socketId: string, room: EjectRoomI) {
@@ -222,7 +238,7 @@ export class WschatService {
     const target = await this.userService.findOne(event.userId);
 
     console.log(event);
-    if (user && target) {
+    if (user && target && user.id != target.id) {
       if (event.block) {
         await this.userService.blockUser(user.id, target.id);
         this.eventEmitter.emit("user.blocked", { user: target, blocker: user, block: true, success: true });

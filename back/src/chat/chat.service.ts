@@ -126,6 +126,28 @@ export class ChatService {
             avatar_url: true,
           },
         },
+        penalities: {
+          where: {     
+            OR: [
+              {
+                endTime: {
+                  gte: new Date(),
+                },
+              },
+              {
+                timetype: 'PERM',
+              } 
+            ]
+          },
+          select: {
+            user: {
+              select: {
+                id: true,
+              }
+            },
+          type: true,
+          }
+        },
         messages: {
           orderBy: {
             createdAt: 'desc',
@@ -149,6 +171,7 @@ export class ChatService {
       },
     });
 
+    
     console.log(rooms);
     rooms.forEach(room => {
       if (room.messages[0]) {
