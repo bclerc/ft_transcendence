@@ -61,6 +61,10 @@ export class ChatService {
       this.socket.emit('blockUser', {block: block, userId: userId});
     }
 
+    pardonUser(userId: number, penaltyId: number) {
+      this.socket.emit('pardonUser', {userId: userId, penaltyId: penaltyId});
+    }
+
     needRooms() {
       this.socket.emit('needRooms');
     }

@@ -8,6 +8,7 @@ export interface ChatRoom {
   users?: UserI[];
   type?: ChatRoomType;
   messages?: Message[];
+  penalities?: any[];
   ownerId?: number;
   admins?: UserI[];
   public?: boolean;
@@ -25,6 +26,7 @@ export interface ChatRoomI {
   users: UserI[];
   ownerId: number;
   admins: UserI[];
+  penalities?: any[];
   public: boolean;
   seen?: boolean;
   password?: string;

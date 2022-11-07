@@ -87,6 +87,55 @@ export class EditDialogComponent implements OnInit {
     }
   }
 
+  isMute(userId: number | undefined): boolean
+  {
+    if (userId && this.room.penalities) {
+        for (let penalty of this.room.penalities) {
+          if (penalty.user.id == userId && penalty.type == "MUTE")
+            return true;
+        };
+    }
+    return false;
+  }
+
+
+  isBan(userId: number | undefined): boolean
+  {
+    if (userId && this.room.penalities) {
+        for (let penalty of this.room.penalities) {
+          if (penalty.user.id == userId && penalty.type == "BAN")
+            return true;
+        };
+    }
+    return false;
+  }
+
+  unBan(userId: number | undefined)
+  {
+    if (userId && this.room.penalities) {
+      for (let penalty of this.room.penalities) {
+        if (penalty.user.id == userId && penalty.type == "BAN")
+        {
+          this.chatService.pardonUser(userId, penalty.id);
+          this.dialogRef.close();
+        }
+      };
+    }
+  }
+
+  unMute(userId: number | undefined)
+  {
+    if (userId && this.room.penalities) {
+      for (let penalty of this.room.penalities) {
+        if (penalty.user.id == userId && penalty.type == "MUTE")
+        {
+          this.chatService.pardonUser(userId, penalty.id);
+          this.dialogRef.close();
+        }
+      };
+    }
+  }
+
   get mame(): FormControl {
     return this.editform.get('name') as FormControl;
   }
@@ -125,18 +174,15 @@ export class EditDialogComponent implements OnInit {
   show: boolean = false;
   
   isAdministrator(user: UserI) {
+    if (!user)
+      return false;
     if (this.room.admins) {
       return this.room.admins.find(admin => admin.id === user.id);
     }
     return this.room.ownerId == user.id;
   }
 
-  showParam() {
-    this.show = true;
-  }
-  hideParam() {
-    this.show = false;
-  }
+  
   ejectUser(user: UserI) {
     if (this.room.ownerId != this.user.id) {
       this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
