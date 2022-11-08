@@ -8,6 +8,9 @@ export interface GameI {
 	player1?: PlayerI; 		//info du playeur 1
 	player2?: PlayerI;		//info du playeur 2
 	ball?: BallI;			//info de la balle
+
+	obstacle:PointI;
+	
 	// acceleration?: number;	//option de partie
 	// direction?: PointI;		//option de partie
 	key_handler1?: number;
@@ -18,5 +21,5 @@ export interface GameI {
 	id_interval?: NodeJS.Timer; //id pour arreter la loop du game
 	id_searchinterval1?: number; //id pour arreter la loop du game pour le player 1
 	id_searchinterval2?: number; //id pour arreter la loop du game pour le player 2
-	type?: number;			//type de la partie; normal/classé 
+	type?: number;			//type de la partie; normal/random 
 }

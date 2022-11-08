@@ -7,6 +7,7 @@ import { UserModule } from 'src/user/user.module';
 import { UserService } from 'src/user/user.service';
 import { PongGateway } from './pong.gateway';
 import { PongService } from './services/pong.service';
+import { VariablePong } from './variables.pong';
 
 @Module({
   controllers: [],

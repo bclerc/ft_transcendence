@@ -24,7 +24,8 @@ export class OnlineUserService {
   (@Inject(forwardRef(() => UserService)) public readonly userService: UserService, 
   @Inject(JwtService) private readonly jwtService: JwtService,
   )
-  {}
+  {
+  }
   
   async initUser(socketId: string, user: BasicUserI) {
     this.onlineUsers.set(socketId, user);

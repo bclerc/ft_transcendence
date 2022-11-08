@@ -48,6 +48,7 @@ import { HeaderService } from './services/user/header.service';
 import { CurrentUserService } from './services/user/current_user.service';
 import { FileUploaderComponent } from './file-uploader/file-uploader.component';
 import { NewRoomComponent } from './pages/chat-page/new-room/new-room.component';
+// import { VariablePong } from './variables/variables.pong';
 import {MatDialogModule} from '@angular/material/dialog';
 import { PenaltyDialogComponent } from './src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
 import {MatSelectModule} from '@angular/material/select';
@@ -125,10 +126,14 @@ export function tokenGetter() {
     CommonModule,
     SocketIoModule,
   ],
-  providers: [    UserService,
+  providers: 
+  [    
+    UserService,
+    // VariablePong,
     UserResolver,
     HeaderService,
-  CurrentUserService],
+    CurrentUserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
