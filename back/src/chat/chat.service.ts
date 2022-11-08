@@ -284,7 +284,7 @@ export class ChatService {
         user: true,
       },
       orderBy: {
-      createdAt: 'asc',
+       createdAt: 'asc',
     },
 
     });
@@ -343,6 +343,9 @@ export class ChatService {
         user: true,
         seenBy: true,
       },
+      orderBy: {
+        createdAt: 'asc',
+     },
     });
     return messages;
   }
