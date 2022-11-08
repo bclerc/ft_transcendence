@@ -57,7 +57,7 @@ import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-d
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
     query: {
-      token: sessionStorage.getItem('auth-token')
+      token: localStorage.getItem('auth-token')
     }
   },
 };

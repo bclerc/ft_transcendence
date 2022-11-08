@@ -47,6 +47,10 @@ export class EditDialogComponent implements OnInit {
       data: {target: target, room: this.room, penalty: penalty}
     });
   }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
         
   
   ngOnInit(): void {
@@ -176,15 +180,22 @@ export class EditDialogComponent implements OnInit {
   isAdministrator(user: UserI) {
     if (!user)
       return false;
+    if (user.id == this.room.ownerId)
+      return true;
     if (this.room.admins) {
       return this.room.admins.find(admin => admin.id === user.id);
     }
-    return this.room.ownerId == user.id;
+    return false;
   }
 
+
+  leaveRoom() {
+    this.chatService.leaveRoom(this.room)
+    this.dialogRef.close();
+  }
   
   ejectUser(user: UserI) {
-    if (this.room.ownerId != this.user.id) {
+    if (this.room.ownerId != user.id) {
       this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
       this.room.users = this.room.users.filter(u => u.id !== user.id);
     }

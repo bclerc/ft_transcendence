@@ -1,8 +1,8 @@
 <div id="param-body">
 	<div class="param-header">
-		<!-- <img src="../../../../assets/svg/return.svg" alt="return"> -->
+		 <img style="margin-right: 10px; margin-top: -8px" src="../../../../assets/svg/return.svg" alt="return" (click)="closeDialog()">
 		<h2>Paramètres de {{room.name}}</h2>
-		<button id="action" mat-Button matTooltip="quitter le groupe">
+		<button id="action" mat-Button matTooltip="quitter le groupe" (click)="leaveRoom()">
 			Quitter le groupe
 			<img src="../../../../assets/svg/quit.svg" alt="">
 		</button>

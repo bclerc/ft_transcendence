@@ -144,6 +144,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       this.sendToUser(event.user, 'notification', "Vous avez rejoint la room " + event.room.name);
       this.sendToUsersInRoom(event.room.id, 'notification', event.user.intra_name + " a rejoint la room");
       this.updateRoomForUsersInRoom(event.room.id);
+      if (event.room.public)
+        this.updatePublicRooms();
     } else {
       this.sendToUser(event.user, 'notification', "Vous n'avez pas pu rejoindre la room " + event.room.name + ". Raison : " + event.message);
     }
@@ -237,7 +239,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @SubscribeMessage('pardonUser')
   async onPardonUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() pardon: any) {
-    console.log("Receiving pardon Request:", pardon);
     this.wschatService.pardonUser(client.id, pardon);
   }
 

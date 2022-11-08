@@ -82,7 +82,7 @@ export class WschatService {
     let endTime: Date;
 
     if (user && target && room) {
-      if (room.admins.find(admin => admin.id == user.id)) {
+      if (room.admins.find(admin => admin.id == user.id) || user.id == room.ownerId) {
         if (room.ownerId != target.id) {
           endTime = new Date(now + event.time);
           this.penaltiesService.punishUser(target.id, room.id, event.type, event.perm ? null : endTime);
@@ -107,7 +107,7 @@ export class WschatService {
     
     if (user && target && penalty) {
           const room = penalty.room;
-          if (room.admins.find(admin => admin.id == user.id)) {
+          if (room.admins.find(admin => admin.id == user.id) || user.id == room.ownerId) {
             console.log(penalty);
             this.penaltiesService.deletePenalty(penalty.id);
             this.eventEmitter.emit('room.user.pardoned', { room: room, user: target, pardoner: user, success: true});
@@ -119,9 +119,8 @@ export class WschatService {
     const user = this.onlineUserService.getUser(socketId);
     const target = await this.userService.findOne(room.targetId);
     const roomToEject = await this.chatService.getRoomById(room.roomId);
-
     if (user && target.id != roomToEject.ownerId) {
-      if (roomToEject.admins.find(admin => admin.id == user.id)) {
+      if (roomToEject.admins.find(admin => admin.id == user.id) || user.id == roomToEject.ownerId) {
         await this.chatService.removeUsersFromRoom(roomToEject.id, target.id);
         this.eventEmitter.emit('room.user.kicked', { room: roomToEject, user: target, kicker: user });
       }
@@ -197,12 +196,13 @@ export class WschatService {
     
     if (user) {
       const newRoom = await this.chatService.removeUsersFromRoom(room.id, user.id);
+      console.log(newRoom);
       if (room.ownerId == user.id) {
         if (newRoom.users.length > 0) {
-          this.chatService.updateRoomOwner(room.id, newRoom.users[0].id);
-          this.updateRoomForUsersInRoom(room.id);
+         await this.chatService.updateRoomOwner(room.id, newRoom.users[0].id);
         } else {
           // delete
+
           this.eventEmitter.emit('room.delete', { room: room });
         }
       }
