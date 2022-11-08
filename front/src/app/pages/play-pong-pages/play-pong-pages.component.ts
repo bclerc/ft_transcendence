@@ -125,27 +125,32 @@ export class PlayPongPagesComponent {
   }
 
   ngOnInit(): void {
-    // console.log(this.variables);
-    this.socket.on('score', this.updateScore);
     this.socket.on('drawNormalMap', this.drawNormalMap);
     this.socket.on('drawMap1', this.drawMap1);
     this.socket.on('drawMap2', this.drawMap2);
     this.socket.on('drawMap3', this.drawMap3);
-    this.socket.on('id', this.idMessage);
-    this.socket.on('enableButtonS', this.enableButtonS);
+    
+    this.socket.on('win', this.win);
+    this.socket.on('lose', this.lose);
+ 
     this.socket.on('drawInit', this.drawInit);
     this.socket.on('drawText', this.drawText);
     this.socket.on('drawName', this.drawName);
+ 
+    this.socket.on('score', this.updateScore);
+    this.socket.on('id', this.idMessage);
+    this.socket.on('enableButtonS', this.enableButtonS);
     this.socket.on('stopSearchLoop', this.stopSearchLoop);
-    this.socket.on('win', this.win);
-    this.socket.on('lose', this.lose);
     // this.socket.on('play', this.playAudio);
+ 
     this.socket.emit('init');
   }
   
   ngOnDestroy(): void {
+    console.log("ng destroy")
     this.stopSearchLoop(this.var_interval);
-    this.socket.emit('stopGame', this.socket);
+    console.log("ng destroy2")
+    this.socket.emit('stopGame');
   }
 
   @HostListener('document:keydown.z', ['$event'])  //$event is the event object

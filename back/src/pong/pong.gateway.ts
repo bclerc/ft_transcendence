@@ -177,8 +177,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		{
 			this.pongService.joinGame(client, game);
 			client.emit('drawName', RIGHTSIDE);
-			var x = Math.floor(Math.random() * (MAX_MAP - 1 + 1) + 1); 		// choose random map id
-			// var x = 1; //pour les tests je prends celle que je souhaite tester
+			// var x = Math.floor(Math.random() * (MAX_MAP - 1 + 1) + 1); 		// choose random map id
+			var x = 3; //pour les tests je prends celle que je souhaite tester
 		
 			await this.pongService.delay(1500);
 			if (game.player1.socket)
@@ -204,13 +204,15 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	stopgame(client: Socket)
 	{
 		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-		if (game){
+		if (game)
+		{
 			clearInterval(game.id_interval);
 			if (game.player1)
 				this.init(game.player1.socket);
 			if (game.player2)
 				this.init(game.player2.socket);
 			this.pongService.deleteGame(game, this.allGames);
+			console.log("stop1")
 		}
 		else
 		{
@@ -222,12 +224,13 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				if (game.player2)
 					this.init(game.player2.socket);
 				this.pongService.deleteGame(game, this.allRandomGames);
+				console.log("stop2")
 			}	
 		}
 	}
 	
 	////////
-	///LOOP HANDLER
+	///LOOP HANDLER SEARCHING OPPONENT
 	///////
 
 	@SubscribeMessage('id_interval')
@@ -254,16 +257,16 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 	}
 	
-	
-///////
-//A TRIER
-//////
+		
+	///////
+	//OTHER
+	//////
 
-	searchGameAwaiting(): GameI {
+	private searchGameAwaiting(): GameI {
 		return this.allGames.find(game => (game.player1 != undefined && game.player2 != undefined) ? false : true);
 	}
 
-	searchGameAwaitingRandom(): GameI {
+	private searchGameAwaitingRandom(): GameI {
 		return this.allRandomGames.find(game => (game == undefined || (game.player1 != undefined && game.player2 != undefined)) ? false : true);
 	}
 
@@ -275,39 +278,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.connectedUsers.push(user);
 	}
 	
-
-	// async startGame(game: GameI, mapid: number){
-	// 		if (mapid === 0)
-	// 	{
-	// 		game.id_interval = setInterval(() => {
-	// 			this.pongService.loopGameNormal(game);
-	// 		}, 1000/60);
-	// 	}
-	// 	else if (mapid === 1)
-	// 	{
-	// 		console.log("ici back 01")
-	// 		game.id_interval = setInterval(() => {
-	// 			this.pongService.loopGameMap1(game);
-	// 		}, 1000/60);
-	// 	}
-	// 	else if (mapid === 2)
-	// 	{
-	// 		console.log("ici back 02")
-	// 		game.id_interval = setInterval(() => {
-	// 			this.pongService.loopGameMap2(game);
-	// 		}, 1000/60);
-	// 	}		
-	// 	else if (mapid === 3)
-	// 	{
-	// 		console.log("ici back 03")
-	// 		game.id_interval = setInterval(() => {
-	// 			this.pongService.loopGameMap3(game);
-	// 		}, 1000/60);
-	// 	}
-	// }
-
-	
-	creatNewGame(client: Socket): GameI {
+	private creatNewGame(client: Socket): GameI {
 		var game: GameI = this.pongService.initState();
 		game = {
 			id: client.id,
@@ -325,7 +296,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		return game;
 	}
 
-	creatNewGameRandom(client: Socket): GameI {
+	private creatNewGameRandom(client: Socket): GameI {
 		var game: GameI = this.pongService.initState();
 		game = {
 			id: client.id,

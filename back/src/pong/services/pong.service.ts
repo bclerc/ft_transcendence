@@ -76,7 +76,6 @@ export class PongService {
         // private variables: VariablePong
     )
     {
-        console.log("PongService Constructor");
     };
 
 
