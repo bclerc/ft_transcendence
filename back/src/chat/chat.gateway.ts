@@ -33,6 +33,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   ) { }
 
   afterInit(server: any) {
+    this.userService.disconnectAll();  
     this.onlineUserService.server = server;
   }
 
@@ -58,7 +59,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         let onlineUser = this.onlineUserService.getUser(null, event.blocker.id);
         this.sendToUser(event.blocker, 'notification', "Vous avez " + (event.block ? "bloqué " : "débloqué ") +  event.user.displayname);
         await this.updateUserRooms(event.blocker);
-        console.log("onlineUser", onlineUser);
         if (onlineUser.inRoomId)
         {
           let room = await this.chatService.getRoomById(onlineUser.inRoomId);
@@ -236,7 +236,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @SubscribeMessage('pardonUser')
-  async onPardonUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() pardon: PardonI) {
+  async onPardonUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() pardon: any) {
+    console.log("Receiving pardon Request:", pardon);
     this.wschatService.pardonUser(client.id, pardon);
   }
 

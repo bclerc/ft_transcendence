@@ -74,6 +74,9 @@ a{
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 3px;
+  margin-left: 10px;
+  margin-top: 10px;
+
 }
 .intraEmail{
 	font-family: ReadexPro-Medium;
@@ -81,6 +84,9 @@ a{
 	text-decoration: none;
 	display: flex;
 	flex-direction: column;
+  margin-left: 10px;
+  margin-top: 8px;
+
 }
 .user-bloc img{
 	width: 64px;

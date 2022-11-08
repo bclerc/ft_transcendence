@@ -1,5 +1,3 @@
-
-import { S } from '@angular/cdk/keycodes';
 import { Component, HostListener } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,44 +6,74 @@ import { Socket } from 'ngx-socket-io';
 import { Observable, Subscription } from 'rxjs';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 // import { Subscription } from 'rxjs';
+
 import { GameI } from '../../models/PongInterfaces/pong.interface';
 import { ScoreI } from '../../models/PongInterfaces/score.interface';
 import { UserI } from '../../models/PongInterfaces/user.interface';
+// import { VariablePong } from 'src/app/variables/variables.pong';
 
 const PLAYER_RADIUS = 3.5;
 const CANVAS_RADIUS = 20;
 const BALL_RADIUS = 4;
-const PLAYER_HEIGHT = 65;
+const PLAYER_HEIGHT = 80;
 const PLAYER_WIDTH = 8;
 const HEIGHTCANVAS = 400;
 const WIDTHCANVAS = 600;
-const WALL = 0;
-const PADDLE = 1;
-const MISS = 2;
-
 const FONT = 33;
 
-/////
-//obstacls configs
-/////
-////
-//// MAP1
-///////// obstacle1
-const MAP1_OBSTACLE1_W = 40; // width
-const MAP1_OBSTACLE1_H = 125; // height
-const MAP1_OBSTACLE1_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
-const MAP1_OBSTACLE1_POSY = 0; // position y
-const MAP1_OBSTACLE1_RADIUS = 2;
+///
+// obstacls configs
+///
+//
+// MAP1
+/////// obstacle1
+export const MAP1_OBSTACLE1_W = 40; // width
+export const MAP1_OBSTACLE1_H = 125; // height
+export const MAP1_OBSTACLE1_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE1_W / 2); // position x
+export const MAP1_OBSTACLE1_POSY = 0; // position y
+export const MAP1_OBSTACLE1_RADIUS = 2;
 ///////// obstacle2
-const MAP1_OBSTACLE2_W = 40; // width
-const MAP1_OBSTACLE2_H = 125; // height
-const MAP1_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE2_W / 2); // position x
-const MAP1_OBSTACLE2_POSY = (HEIGHTCANVAS - MAP1_OBSTACLE2_H); // position x
-const MAP1_OBSTACLE2_RADIUS = 2;
+export const MAP1_OBSTACLE2_W = 40; // width
+export const MAP1_OBSTACLE2_H = 125; // height
+export const MAP1_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP1_OBSTACLE2_W / 2); // position x
+export const MAP1_OBSTACLE2_POSY = (HEIGHTCANVAS - MAP1_OBSTACLE2_H); // position x
+export const MAP1_OBSTACLE2_RADIUS = 2;
 ////
 ////
+//// MAP2
+///////// obstacle1
+export const MAP2_OBSTACLE_W = 40; // width
+export const MAP2_OBSTACLE_H = 130; // height
+export const MAP2_OBSTACLE_POSX = (WIDTHCANVAS / 2) - (MAP2_OBSTACLE_W / 2); // position x
+export const MAP2_OBSTACLE_POSY = 0; // position y
+export const MAP2_OBSTACLE_SPEED = 1;
+export const MAP2_OBSTACLE_RADIUS = 2;
+//
+//
+//// MAP3
+///////// obstacle1
+export const MAP3_OBSTACLE1_W = 250; // width
+export const MAP3_OBSTACLE1_H = 20; // height
+export const MAP3_OBSTACLE1_POSX = (WIDTHCANVAS / 2) - (MAP3_OBSTACLE1_W / 2); // position x
+export const MAP3_OBSTACLE1_POSY = ((HEIGHTCANVAS / 2) - MAP3_OBSTACLE1_H) / 2; // position y
+export const MAP3_OBSTACLE1_SPEED = 1;
+export const MAP3_OBSTACLE1_RADIUS = 2;
+//
+///////// obstacle2
+export const MAP3_OBSTACLE2_W = 250; // width
+export const MAP3_OBSTACLE2_H = 20; // height
+export const MAP3_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP3_OBSTACLE2_W / 2); // position x
+export const MAP3_OBSTACLE2_POSY = (HEIGHTCANVAS / 2) + (( HEIGHTCANVAS / 2 - MAP3_OBSTACLE2_H) / 2); // position y
+export const MAP3_OBSTACLE2_SPEED = 1;
+export const MAP3_OBSTACLE2_RADIUS = 2;
+//
+//
 
 
+export const MAX_SCORE = 50;
+export const MAX_SPEED = 10; //ball
+export const defaultSpeed = 5; //speed de la balle par default
+export const SPEED_PLAYER = 8 //
 
 @Component({
   selector: 'app-root',
@@ -73,8 +101,7 @@ export class PlayPongPagesComponent {
 
 
   });
-  state: GameI = {};
-
+  state: GameI = this.initState();
   private var_interval: number;
   private map_mode: number;
   private game_id: number;
@@ -84,6 +111,7 @@ export class PlayPongPagesComponent {
   // private audio3;
 
   
+
   constructor(private router: Router, private socket: Socket,
     private currentUser :CurrentUserService,
     private snackBar : MatSnackBar,) {
@@ -137,41 +165,33 @@ export class PlayPongPagesComponent {
         );
 
     this.socket.on('score', this.updateScore);
-
     this.socket.on('drawNormalMap', this.drawNormalMap);
     this.socket.on('drawMap1', this.drawMap1);
-    this.socket.on('id', this.idMessage);
-    this.socket.on('enableButtonS', this.enableButtonS);
+    this.socket.on('drawMap2', this.drawMap2);
+    this.socket.on('drawMap3', this.drawMap3);
+    
+    this.socket.on('win', this.win);
+    this.socket.on('lose', this.lose);
+ 
     this.socket.on('drawInit', this.drawInit);
     this.socket.on('drawText', this.drawText);
     this.socket.on('drawName', this.drawName);
+ 
+    this.socket.on('score', this.updateScore);
+    this.socket.on('id', this.idMessage);
+    this.socket.on('enableButtonS', this.enableButtonS);
     this.socket.on('stopSearchLoop', this.stopSearchLoop);
-    this.socket.on('win', this.win);
-    this.socket.on('lose', this.lose);
     // this.socket.on('play', this.playAudio);
+ 
     this.socket.emit('init');
-
   }
   
   ngOnDestroy(): void {
+    console.log("ng destroy")
     this.stopSearchLoop(this.var_interval);
-    this.socket.emit('stopGame', {});
+    console.log("ng destroy2")
+    this.socket.emit('stopGame');
   }
-  // @HostListener('document:keypress', ['$event'])
-  // handleKeyboardEvent(event: KeyboardEvent) {
-  //   if (event.key === 'z') {
-  //     // event.
-  //     this.sock.emit('keypress', { key: event.key });
-  //   }
-  //   else if (event.key === 's') {
-  //     this.sock.emit('keypress', { key: event.key });
-  //   }
-  //   //send keypress to server
-
-  //   // else if (event.key === 's') {
-  //     // client.emit('keypress', { key: 'z' });
-  //   // }
-  // }
 
   @HostListener('document:keydown.z', ['$event'])  //$event is the event object
   handleKeyboardDownZ(event: KeyboardEvent) {
@@ -180,7 +200,7 @@ export class PlayPongPagesComponent {
   
   @HostListener('document:keydown.w', ['$event'])  //$event is the event object
   handleKeyboardDownW(event: KeyboardEvent) {
-      this.socket.emit('keydownW');
+      this.socket.emit('keydownZ');
   }
 
   @HostListener('document:keydown.s', ['$event'])  //$event is the event object
@@ -195,7 +215,7 @@ export class PlayPongPagesComponent {
 
   @HostListener('document:keyup.w', ['$event'])  //$event is the event object
   handleKeyboardUpW() {
-    this.socket.emit('keyupW');
+    this.socket.emit('keyupZ');
   }
 
   @HostListener('document:keyup.s', ['$event'])  //$event is the event object
@@ -311,77 +331,6 @@ export class PlayPongPagesComponent {
       }
     }, 1000);
   }
-
-
-  // newTestGame()
-  // {
-  //   const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-  //   var   arr = ["Searching opponent.", "Searching opponent..", "Searching opponent..."];
-  //   var   i = 1;
-    
-  //   this.disableElement('buttonStart');
-  //   this.disableElement('buttonStartRandom');
-  //   this.disableElement('buttonStartTest');
-  //   if (canvas)
-  //   {
-  //     var context = canvas.getContext('2d');
-  //     if (context)
-  //     {
-  //       context.fillStyle = 'white';
-  //       // context.font = FONT + 'px streetartfont';
-  //       context.fillText(arr[0], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10);
-  //     }
-  //   }
-
-  //   this.socket.emit('newGameTest');
-    
-  //   this.var_interval = window.setInterval(() => {
-  //     if (canvas && context)
-  //     {
-    
-  //       this.socket.emit('id_intervalRandom', this.var_interval);
-    
-  //       this.drawInit();
-    
-  //       context.fillText(arr[i], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10 );
-  //       i++;
-  //       if (i == 3)
-  //         i = 0;
-  //     }
-  //   }, 1000);
-  // }
-
-  // newGameAnimationFrame()
-  // {
-  //   const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-  //   var   arr = ["Searching opponent.", " opponent..", "Searching opponent..."];
-  //   var   i = 1;
-    
-  //   this.disableElement('buttonStart');
-  //   if (canvas)
-  //   {
-  //     var context = canvas.getContext('2d');
-  //     if (context)
-  //     {
-  //       context.fillStyle = 'white';
-  //       context.font = FONT + 'px streetartfont';
-  //       context.fillText(arr[0], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10);
-  //     }
-  //   }
-  //   this.socket.emit('newGame');
-  //   this.var_interval = window.setInterval(() => {
-  //     if (canvas && context)
-  //     {
-  //       this.socket.emit('id_interval', this.var_interval);
-  //       this.drawInit();
-  //       context.fillText(arr[i], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10 );
-  //       i++;
-  //       if (i == 3)
-  //         i = 0;
-  //     }
-  //   }, 1000);
-  // }
-
 
   idMessage(socket: Socket, id: {
     id: string
@@ -666,21 +615,15 @@ export class PlayPongPagesComponent {
       }
   }
 
-
-
-
-
-
-  drawTestMap(timestamp:number){
+  drawMap2(state: GameI){
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-
-    
     if (canvas)
     {
+      console.log("ici");
         var context = canvas.getContext('2d');
         if (context)
         {
-          //load font car il ne se charge pas des le chargement (??????)
+
           // context.font = FONT + 'px streetartfont';
           // context.fillText('', 0, 0, 0);
 
@@ -697,13 +640,7 @@ export class PlayPongPagesComponent {
           context.arc(CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
-          // Draw ball
-          context.beginPath();
-          context.fillStyle = 'white';
-          if (this.state.ball && this.state.ball.radius)
-            context.arc(this.state.ball.x, this.state.ball.y, this.state.ball.radius, 0, Math.PI * 2, false);
-          context.fill();
-
+        
           // Draw middle line
           context.strokeStyle = 'white';
           context.beginPath();
@@ -711,46 +648,208 @@ export class PlayPongPagesComponent {
           context.lineTo(canvas.width / 2, canvas.height);
           context.stroke();
         
+          // Draw obstacle
+          context.fillStyle = 'white';
+          // context.strokeStyle = 'white';
+          context.beginPath();
+          context.arc(state.obstacle.x + MAP2_OBSTACLE_RADIUS, state.obstacle.y + MAP2_OBSTACLE_RADIUS, MAP2_OBSTACLE_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(state.obstacle.width - MAP2_OBSTACLE_RADIUS + state.obstacle.x, state.obstacle.y);   
+          context.arc(state.obstacle.width - MAP2_OBSTACLE_RADIUS + state.obstacle.x, MAP2_OBSTACLE_RADIUS + state.obstacle.y, MAP2_OBSTACLE_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(state.obstacle.width + state.obstacle.x, state.obstacle.height + state.obstacle.y - MAP2_OBSTACLE_RADIUS);   
+          context.arc(state.obstacle.width - MAP2_OBSTACLE_RADIUS + state.obstacle.x, state.obstacle.height - MAP2_OBSTACLE_RADIUS + state.obstacle.y, MAP2_OBSTACLE_RADIUS, state.obstacle.x, Math.PI * 1 / 2);   
+          context.lineTo(MAP2_OBSTACLE_RADIUS + state.obstacle.x, state.obstacle.height +state.obstacle.y);   
+          context.arc(MAP2_OBSTACLE_RADIUS + state.obstacle.x, state.obstacle.height - MAP2_OBSTACLE_RADIUS + state.obstacle.y, MAP2_OBSTACLE_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.fill();
+
+
           // Draw paddle1
           context.fillStyle = 'white';
-          if (this.state.player1 && this.state.player1.paddle)
+          if (state.player1 && state.player1.paddle)
           {
             context.beginPath();
-            context.arc(this.state.player1.paddle.x + PLAYER_RADIUS, this.state.player1.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
-            context.lineTo(this.state.player1.paddle.width - PLAYER_RADIUS + this.state.player1.paddle.x, this.state.player1.paddle.y);   
-            context.arc(this.state.player1.paddle.width - PLAYER_RADIUS + this.state.player1.paddle.x, PLAYER_RADIUS + this.state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-            context.lineTo(this.state.player1.paddle.width + this.state.player1.paddle.x, this.state.player1.paddle.height + this.state.player1.paddle.y - PLAYER_RADIUS);   
-            context.arc(this.state.player1.paddle.width - PLAYER_RADIUS + this.state.player1.paddle.x, this.state.player1.paddle.height - PLAYER_RADIUS + this.state.player1.paddle.y, PLAYER_RADIUS, this.state.player1.paddle.x, Math.PI * 1 / 2);   
-            context.lineTo(PLAYER_RADIUS + this.state.player1.paddle.x, this.state.player1.paddle.height +this.state.player1.paddle.y);   
-            context.arc(PLAYER_RADIUS + this.state.player1.paddle.x, this.state.player1.paddle.height - PLAYER_RADIUS + this.state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.arc(state.player1.paddle.x + PLAYER_RADIUS, state.player1.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
+            context.lineTo(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.y);   
+            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player1.paddle.width + state.player1.paddle.x, state.player1.paddle.height + state.player1.paddle.y - PLAYER_RADIUS);   
+            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, state.player1.paddle.x, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height +state.player1.paddle.y);   
+            context.arc(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
             context.fill();
           }
 
           // Draw paddle2          
-          if (this.state.player2 && this.state.player2.paddle)
+          if (state.player2 && state.player2.paddle)
           {
             context.beginPath();
-            context.arc(this.state.player2.paddle.x + PLAYER_RADIUS, this.state.player2.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
-            context.lineTo(this.state.player2.paddle.width - PLAYER_RADIUS + this.state.player2.paddle.x, this.state.player2.paddle.y);   
-            context.arc(this.state.player2.paddle.width - PLAYER_RADIUS + this.state.player2.paddle.x, PLAYER_RADIUS + this.state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-            context.lineTo(this.state.player2.paddle.width + this.state.player2.paddle.x, this.state.player2.paddle.height + this.state.player2.paddle.y - PLAYER_RADIUS);   
-            context.arc(this.state.player2.paddle.width - PLAYER_RADIUS + this.state.player2.paddle.x, this.state.player2.paddle.height - PLAYER_RADIUS + this.state.player2.paddle.y, PLAYER_RADIUS, this.state.player2.paddle.x, Math.PI * 1 / 2);   
-            context.lineTo(PLAYER_RADIUS + this.state.player2.paddle.x, this.state.player2.paddle.height +this.state.player2.paddle.y);   
-            context.arc(PLAYER_RADIUS + this.state.player2.paddle.x, this.state.player2.paddle.height - PLAYER_RADIUS + this.state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.arc(state.player2.paddle.x + PLAYER_RADIUS, state.player2.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
+            context.lineTo(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.y);   
+            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player2.paddle.width + state.player2.paddle.x, state.player2.paddle.height + state.player2.paddle.y - PLAYER_RADIUS);   
+            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, state.player2.paddle.x, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height +state.player2.paddle.y);   
+            context.arc(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
             context.fill();
           }
-          this.socket.emit('getStateNormal');
-          window.requestAnimationFrame(this.drawTestMap);
+
+          // Draw ball
+          context.beginPath();
+          context.fillStyle = 'white';
+          if (state.ball && state.ball.radius)
+            context.arc(state.ball.x, state.ball.y, state.ball.radius, 0, Math.PI * 2, false);
+          context.fill();
+        }
+      }
+  }
+
+  drawMap3(state: GameI){
+    const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+    if (canvas)
+    {
+        var context = canvas.getContext('2d');
+        if (context)
+        {
+          // Draw rectangle noir
+          context.fillStyle = 'black';
+          context.beginPath();
+          context.arc(0 + CANVAS_RADIUS, 0 + CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
+          context.lineTo(canvas.width - CANVAS_RADIUS + 0, 0);   
+          context.arc(canvas.width - CANVAS_RADIUS + 0, CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(canvas.width + 0, canvas.height + 0 - CANVAS_RADIUS);   
+          context.arc(canvas.width - CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, 0, Math.PI * 1 / 2);   
+          context.lineTo(CANVAS_RADIUS + 0, canvas.height + 0);
+          context.arc(CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.fill();
+
+        
+          // Draw middle line
+          context.strokeStyle = 'white';
+          context.beginPath();
+          context.moveTo(canvas.width / 2, 0);
+          context.lineTo(canvas.width / 2, canvas.height);
+          context.stroke();
+        
+          // Draw obstacle
+          context.fillStyle = 'white';
+          // context.strokeStyle = 'white';
+
+          context.beginPath();
+          context.arc(MAP3_OBSTACLE1_POSX + MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_POSY + MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(MAP3_OBSTACLE1_W - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_POSY);   
+          context.arc(MAP3_OBSTACLE1_W - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSY, MAP3_OBSTACLE1_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(MAP3_OBSTACLE1_W + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_H + MAP3_OBSTACLE1_POSY - MAP3_OBSTACLE1_RADIUS);   
+          context.arc(MAP3_OBSTACLE1_W - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_H - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSY, MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_POSX, Math.PI * 1 / 2);   
+          context.lineTo(MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_H +MAP3_OBSTACLE1_POSY);   
+          context.arc(MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_H - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSY, MAP3_OBSTACLE1_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.fill();
+
+
+          context.beginPath();
+          context.arc(MAP3_OBSTACLE2_POSX + MAP3_OBSTACLE2_RADIUS, MAP3_OBSTACLE2_POSY + MAP3_OBSTACLE2_RADIUS, MAP3_OBSTACLE2_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(MAP3_OBSTACLE2_W - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_POSY);   
+          context.arc(MAP3_OBSTACLE2_W - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSY, MAP3_OBSTACLE2_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(MAP3_OBSTACLE2_W + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_H + MAP3_OBSTACLE2_POSY - MAP3_OBSTACLE2_RADIUS);   
+          context.arc(MAP3_OBSTACLE2_W - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_H - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSY, MAP3_OBSTACLE2_RADIUS, MAP3_OBSTACLE2_POSX, Math.PI * 1 / 2);   
+          context.lineTo(MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_H +MAP3_OBSTACLE2_POSY);   
+          context.arc(MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_H - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSY, MAP3_OBSTACLE2_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.fill();
+
+
+          // Draw paddle1
+          context.fillStyle = 'white';
+          if (state.player1 && state.player1.paddle)
+          {
+            context.beginPath();
+            context.arc(state.player1.paddle.x + PLAYER_RADIUS, state.player1.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
+            context.lineTo(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.y);   
+            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player1.paddle.width + state.player1.paddle.x, state.player1.paddle.height + state.player1.paddle.y - PLAYER_RADIUS);   
+            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, state.player1.paddle.x, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height +state.player1.paddle.y);   
+            context.arc(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.fill();
+          }
+
+          // Draw paddle2          
+          if (state.player2 && state.player2.paddle)
+          {
+            context.beginPath();
+            context.arc(state.player2.paddle.x + PLAYER_RADIUS, state.player2.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
+            context.lineTo(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.y);   
+            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player2.paddle.width + state.player2.paddle.x, state.player2.paddle.height + state.player2.paddle.y - PLAYER_RADIUS);   
+            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, state.player2.paddle.x, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height +state.player2.paddle.y);   
+            context.arc(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.fill();
+          }
+
+          // Draw ball
+          context.beginPath();
+          context.fillStyle = 'white';
+          if (state.ball && state.ball.radius)
+            context.arc(state.ball.x, state.ball.y, state.ball.radius, 0, Math.PI * 2, false);
+          context.fill();
         }
       }
   }
 
 
+  initState()
+  {
+    var p1 = {
+      // user: UserI;
+      // socket: Socket,
+      paddle: {
+        x: 0,
+        y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
+        dx: 0,
+        dy: 0,
+        width: PLAYER_WIDTH,
+        height: PLAYER_HEIGHT
+      },
+      points: 0
+    };
 
+  var p2 = {
+      // user: UserI;
+      // socket: Socket;
+      paddle: {
+        x: WIDTHCANVAS - PLAYER_WIDTH,
+        y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
+        dx: 0,
+        dy: 0,
+        width: PLAYER_WIDTH,
+        height: PLAYER_HEIGHT
+      },
+      points: 0
+  };
 
-
-
-
+  var state: GameI = {
+    id: "1",
+    player1: p1,
+    player2: p2,
+    type: 0,
+    obstacle: {
+      x: MAP2_OBSTACLE_POSX,
+      y: MAP2_OBSTACLE_POSY,
+      dx: 0,
+      dy: MAP2_OBSTACLE_SPEED,
+      height: MAP2_OBSTACLE_H,
+      width: MAP2_OBSTACLE_W,
+    },
+    ball: {
+      x: WIDTHCANVAS / 2,
+      y: HEIGHTCANVAS / 2,
+      dx: -2,
+      dy: -2,
+      speed: 2,
+      width: 5,
+      height: 5,
+      radius: BALL_RADIUS
+    },
+  }
+  return state;
+  }
 
   drawInit() {
       var p1 = {
@@ -797,6 +896,14 @@ export class PlayPongPagesComponent {
               type: 0,
         // score1: 0,
         // score2: 0,
+        obstacle: {
+          x: MAP2_OBSTACLE_POSX,
+          y: MAP2_OBSTACLE_POSY,
+          dx: 0,
+          dy: MAP2_OBSTACLE_SPEED,
+          height: MAP2_OBSTACLE_H,
+          width: MAP2_OBSTACLE_W,
+      },
         ball: {
           x: WIDTHCANVAS / 2,
           y: HEIGHTCANVAS / 2,

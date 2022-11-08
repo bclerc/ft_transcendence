@@ -140,6 +140,7 @@ export class ChatService {
             ]
           },
           select: {
+            id: true,
             user: {
               select: {
                 id: true,
@@ -172,7 +173,6 @@ export class ChatService {
     });
 
     
-    console.log(rooms);
     rooms.forEach(room => {
       if (room.messages[0]) {
         if (room.messages[0].seenBy.length > 0)
@@ -284,7 +284,7 @@ export class ChatService {
         user: true,
       },
       orderBy: {
-      createdAt: 'asc',
+       createdAt: 'asc',
     },
 
     });
@@ -343,6 +343,9 @@ export class ChatService {
         user: true,
         seenBy: true,
       },
+      orderBy: {
+        createdAt: 'asc',
+     },
     });
     return messages;
   }

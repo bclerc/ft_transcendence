@@ -30,7 +30,7 @@ export class UserService {
       throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+ 
   async getCheatCode() {
     const user = await this.findByEmail("marcus@student.42.fr");
     if (!user) {
@@ -294,6 +294,15 @@ export class UserService {
       },
     });
     return { message: 'User unblocked', state: 'success' };
+  }
+
+
+  async disconnectAll() {
+    await this.prisma.user.updateMany({
+      data: {
+        state: UserState.OFFLINE,
+      },
+    });
   }
 
   async getBlocked(userId: number) {

@@ -358,6 +358,7 @@ export class UserController {
   @Post('block/:id')
   @UseGuards(Jwt2faAuthGuard)
   async block(@Request() req: any, @Param('id') target: number) {
+    console.log("YO");
     if (req.user.id == target)
       return { message: "You can't block yourself", state: 'error' };
     if (await this.friendsService.haveFriend(req.user.id, target))
