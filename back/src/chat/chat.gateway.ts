@@ -33,6 +33,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   ) { }
 
   afterInit(server: any) {
+    this.userService.disconnectAll();  
     this.onlineUserService.server = server;
   }
 

@@ -159,7 +159,7 @@ h3{
 #description{
 	font-family: ReadexPro-Regular;
 	font-size: 12px;
-	margin-bottom: 8px;
+	margin-bottom: 15px;
 }
 
 /* champs de text ------------------------------------------------------------------------- */
@@ -235,3 +235,29 @@ textarea{
 .demi-create{
 	width: calc(50% - 10px);
 }
+
+
+.avatars {
+  display: flex;
+}
+
+.avatars__item {
+  /* Nagative margin make avatar overlap to previous one */
+  margin-left: -0.95rem;
+  
+}
+.avatars__item:first-child {
+  margin-left: 0;
+}
+
+.avatars img {
+  border-radius: 50%;
+  object-fit: cover;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #ee481e;
+}
+
