@@ -1,7 +1,12 @@
 import { Component, HostListener } from '@angular/core';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
+import { Observable, Subscription } from 'rxjs';
+import { CurrentUserService } from 'src/app/services/user/current_user.service';
+// import { Subscription } from 'rxjs';
+
 import { GameI } from '../../models/PongInterfaces/pong.interface';
 import { ScoreI } from '../../models/PongInterfaces/score.interface';
 import { UserI } from '../../models/PongInterfaces/user.interface';
@@ -106,8 +111,21 @@ export class PlayPongPagesComponent {
   // private audio3;
 
   
-  constructor(private router: Router, private socket: Socket
-    ) {
+
+  constructor(private router: Router, private socket: Socket,
+    private currentUser :CurrentUserService,
+    private snackBar : MatSnackBar,) {
+    // socket.on('score', this.updateScore);
+    // socket.on('draw', this.drawMessage);
+    // socket.on('id', this.idMessage);
+    // socket.on('enableButtonS', this.enableButtonS);
+    // socket.on('drawInit', this.drawInit);
+    // socket.on('drawText', this.drawText);
+    // socket.on('drawName', this.drawName);
+    // socket.on('stopSearchLoop', this.stopSearchLoop);
+    // socket.on('win', this.win);
+    // socket.on('lose', this.lose);
+    // socket.on('play', this.playAudio);
     this.var_interval = 0;
     this.map_mode = -1;
     this.game_id = -1;
@@ -123,8 +141,30 @@ export class PlayPongPagesComponent {
     // this.audio3.src = "../../../assets/audio/ping_pong_8bit_peeeeeep.wav";
     // this.audio3.load();
   }
-
+  subscription!: Subscription;
   ngOnInit(): void {
+        this.subscription = this.currentUser.getCurrentUser().subscribe(
+        (data : any) => {
+          console.log("data =", data)
+          this.user = data;
+        },
+          (error : any) => 
+          {
+            if (error.status === 401 && error.error.message === "2FA_REQUIRED")
+            {
+              this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
+                duration: 3000
+              })
+              this.router.navigate(['code'])
+            }
+            else
+            {
+              this.router.navigate([''])
+            }
+          }
+        );
+
+    this.socket.on('score', this.updateScore);
     this.socket.on('drawNormalMap', this.drawNormalMap);
     this.socket.on('drawMap1', this.drawMap1);
     this.socket.on('drawMap2', this.drawMap2);

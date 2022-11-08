@@ -3,6 +3,8 @@ import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
@@ -44,16 +46,39 @@ export class ChatPageComponent implements OnInit {
 	constructor(private chatService: ChatService,
 	private userService: UserService,
   private socket: Socket,
+  private router: Router,
+  private snackBar : MatSnackBar
   ) { }
 	
 	async ngOnInit() {
     this.chatService.needRooms();
     this.chatService.needPublicRooms();
     this.chatService.needDmRooms();
+	// console.log("cyo");
+		this.userService.getLoggedUser().subscribe(
+			(data : any) => {
+			//   console.log("data =", data)
+			  this.actualUser = data;
+			},
+			  (error : any) => 
+			  {
+				if (error.status === 401 && error.error.message === "2FA_REQUIRED")
+				{
+				  this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
+					duration: 3000
+				  })
+				  this.router.navigate(['code'])
+				}
+				else
+				{
+				  this.router.navigate([''])
+				}
+			  }
+			);
+		
+		
+		
 
-		this.userService.getLoggedUser().subscribe((user: UserI) => {
-			this.actualUser = user;
-		});
 
 		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
       let roomChanged, roomSeen: boolean = false;

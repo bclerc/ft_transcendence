@@ -161,7 +161,4 @@ export class UserService {
     return this.http.post(this.backUrl + "user/unblock/" + Id, null ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
-
-
-  
 }
