@@ -1,6 +1,7 @@
 import { Component, ElementRef, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { ConnectableObservable, Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
@@ -36,7 +37,8 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private chatService: ChatService,
     private userService: UserService,
     private socket: Socket,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    private router : Router) { }
               
              
   openDialog(target: UserI, penalty: string): void {

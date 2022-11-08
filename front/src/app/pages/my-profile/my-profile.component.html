@@ -143,9 +143,10 @@
 						<div class="mes-amis">
 							<mat-list-item *ngFor="let friend of (user?.friendOf)">
 								<div class="ami">
-								 
+									<a [routerLink]="['/profile/' + friend.id ]">
 									<img style="width: 100px" style="height:200px" id="photo-profile" src={{friend.avatar_url}}  atl="UNE BELLE GUEULE">
 									<span class="friend-pseudo">{{friend.displayname}}</span>
+								</a>
 									<!-- <p class="rank">{{friend.rank}}</p> Pas de rank pour le moment -->
 									<div class="tri-action">
 										<button>
