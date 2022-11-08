@@ -111,7 +111,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       this.sendToUser(event.punisher, 'notification', "Vous avez puni " + event.user.intra_name + " de la room " + event.room.name);
     }
     else {
-      this.sendToUser(event.punisher, 'notification', "Vous n'avez pas pu punir " + event.user.intra_name + " de la room " + event.room.name + ". Raison : " + event.message);
+      this.sendToUser(event.punisher, 'notifica\tion', "Vous n'avez pas pu punir " + event.user.intra_name + " de la room " + event.room.name + ". Raison : " + event.message);
     }
   }
 
@@ -215,6 +215,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     const user = await this.onlineUserService.getUser(client.id);
     const messages = await this.chatService.getMessagesFromRoom(user.id, room);
     user.inRoomId = room.id;
+    console.log(user.intra_name, " joined ", room.name);
+    console.log(user.inRoomId);
+    this.onlineUserService.deleteUser(client.id);
     this.onlineUserService.onlineUsers.set(client.id, user);
     this.server.to(client.id).emit('messages', messages);
     if (!room.seen)
@@ -299,8 +302,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   async updateUsersMessagesInRoom(room: ChatRoomI) {
     for (let user of room.users) {
-      let onlineUser = this.onlineUserService.getUser(null, user.id);
+      const onlineUser = this.onlineUserService.getUser(null, user.id);
       if (onlineUser && onlineUser.inRoomId == room.id) {
+        console.log(onlineUser.intra_name);
         const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
         this.sendToUser(user, 'messages', messages);
       }
