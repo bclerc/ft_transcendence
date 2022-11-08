@@ -22,10 +22,10 @@
               <!--- MatChip list with avatar. chip id is #membres -->
               <mat-chip-list #membres>
                 <mat-chip id="membres" *ngFor="let member of room.users" >
-					<a [routerLink]="['/profile/' + member.id ]">
+					<!-- <a [routerLink]="['/profile/' + member.id ]"> -->
                   <img matChipAvatar class="chip_avatar"  src="{{member. avatar_url}}" alt="User avatar"  >
                   {{member.displayname}} 
-				</a>
+				<!-- </a> -->
 
                   <svg  *ngIf="member.state ==='ONLINE'" style="margin-left: 10px;" width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>Oval</title>
