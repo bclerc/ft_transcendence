@@ -31,6 +31,7 @@ export class MyProfileComponent implements OnInit {
   userList!: UserI[];
   userList2$!: Observable <UserI[]>;
   subscription!: Subscription;
+  friends = this.userService.getFriends();
 
   userLi!: Observable <UserI> | undefined;
   async ngOnInit(){
@@ -39,6 +40,7 @@ export class MyProfileComponent implements OnInit {
       {
         this.subscription = this.userLi.subscribe(
         (data : any) => {
+          console.log("data =", data)
           this.user = data;
         },
           (error : any) => 

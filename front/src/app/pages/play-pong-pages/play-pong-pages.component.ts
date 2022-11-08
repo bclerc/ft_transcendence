@@ -2,9 +2,11 @@
 import { S } from '@angular/cdk/keycodes';
 import { Component, HostListener } from '@angular/core';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { CurrentUserService } from 'src/app/services/user/current_user.service';
 // import { Subscription } from 'rxjs';
 import { GameI } from '../../models/PongInterfaces/pong.interface';
 import { ScoreI } from '../../models/PongInterfaces/score.interface';
@@ -82,7 +84,9 @@ export class PlayPongPagesComponent {
   // private audio3;
 
   
-  constructor(private router: Router, private socket: Socket) {
+  constructor(private router: Router, private socket: Socket,
+    private currentUser :CurrentUserService,
+    private snackBar : MatSnackBar,) {
     // socket.on('score', this.updateScore);
     // socket.on('draw', this.drawMessage);
     // socket.on('id', this.idMessage);
@@ -109,8 +113,29 @@ export class PlayPongPagesComponent {
     // this.audio3.src = "../../../assets/audio/ping_pong_8bit_peeeeeep.wav";
     // this.audio3.load();
   }
-
+  subscription!: Subscription;
   ngOnInit(): void {
+        this.subscription = this.currentUser.getCurrentUser().subscribe(
+        (data : any) => {
+          console.log("data =", data)
+          this.user = data;
+        },
+          (error : any) => 
+          {
+            if (error.status === 401 && error.error.message === "2FA_REQUIRED")
+            {
+              this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
+                duration: 3000
+              })
+              this.router.navigate(['code'])
+            }
+            else
+            {
+              this.router.navigate([''])
+            }
+          }
+        );
+
     this.socket.on('score', this.updateScore);
 
     this.socket.on('drawNormalMap', this.drawNormalMap);
