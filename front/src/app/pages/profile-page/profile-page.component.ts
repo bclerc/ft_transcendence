@@ -18,147 +18,100 @@ export class ProfilePageComponent implements OnInit {
   id! : number;
   subscription! : Subscription;
   subscription2! : Subscription;
+  subscription3! : Subscription;
   alreadyFriend : boolean = false;
-  //user? : Observable<User>;
+  alreadyBlocked : boolean = false;
+  
   constructor(private userService: UserService, private router: Router, private route : ActivatedRoute, private token : TokenStorageService
     ,public currentUserService : CurrentUserService) { }
 
-  /*ngOnInit(): void {
-
-		this.authService.getUserId().pipe(
-		  switchMap((idt: number) => this.userService.findOne(idt).pipe(
-			tap((user) => {
-			  this.user = this.userService.findOne(user.id);
-			  this.history = this.historyService.findAllByUserId(user.id);
-			  this.getImageFromService(user.id);
-			})
-		  ))
-		).subscribe();
-	  }	*/
-
   ngOnInit(): void {
     this.id= Number( this.router.url.split('/')[2]);
-
-    //this.userService.changeUserList(this.userList);
     
-    /*try {
-      this.user = this.userService.getUserById(this.id);
-    } catch (error) {
-      this.router.navigate(['error'])
-    }*/
       this.searchFriend();
+      //this.searchBlockedUser();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
-          console.log("data =",data);
+          // console.log("data =",data);
           this.user = data;
           if (data === null)
            this.router.navigate(['error']);
         },
         error => this.router.navigate(['error'])
         );
-
       if (this.id === this.token.getId() )
         this.router.navigate(['/myprofile']);
-      /*if (this.user === null)
-          this.router.navigate(['error']);*/
-
-
-
-
-    /*this.userList2$ =  this.route.data.pipe(
-      map(data => data['userList']));
-      this.subscription = this.userList2$.subscribe(
-        (data : any) => {
-          console.log("data =",data);
-          this.userList = data;
-        },
-        error => this.router.navigate([''])
-        );
-        this.id= Number( this.router.url.split('/')[2]);
-        this.userService.changeUserList(this.userList);
-        
-        try {
-          this.user = this.userService.getUserById(this.id);
-        } catch (error) {
-          this.router.navigate(['error'])
-        }
-        if (this.id === this.token.getId() )
-          this.router.navigate(['/myprofile'])*/
-        /*if (this.user === null)
-          this.router.navigate([''])*/
-   
-
-    
-
   }
 
-  //yolo? : UserI[]; 
   searchFriend(): void {
-    this.subscription2 = this.currentUserService.getFriendFromBack().subscribe(
+     this.subscription2 = this.currentUserService.getCurrentUser().subscribe(
       (data : any) => {
-        for (var i = 0; data[i];i++)
+        // console.log("current user" , data)
+        for (var i = 0; data.friendOf[i];i++)
         {
-          if (this.id === data[i].id)
+          if (this.id === data.friendOf[i].id)
           {
             this.alreadyFriend = true;
             break;
           }
         }
-      });
-      
-      //console.log("coucou = ", this.yolo);
-      //if (this.yolo != undefined)
-      //{
-        //console.log("coucou532");
-        /*for (var i = 0; this.yolo[i];i++);
+        for (var i = 0; data.blockedUsers[i];i++)
         {
-        
-        }*/
-      //}
-
-     /*this.currentUserService.getCurrentUser().subscribe(
-      (data : any) => {
-        console.log("data currentuser =",data);
-        this.currentUser = data;
-      });
-      var i = 0;
-      console.log("coucou");
-      if (this.currentUser?.friendOf)
-      {
-      console.log("coucou2");
-
-        while (this.currentUser?.friendOf[i])
-        {
-          if (this.id === this.currentUser.friendOf[i].id)
+          if (this.id === data.blockedUsers[i].id)
           {
-            this.alreadyFriend = true;
-            console.log("bool = ", this.alreadyFriend);
-            return;
+            this.alreadyBlocked = true;
+            break;
           }
-          i++;
         }
-      }*/
-      
+      }
+    )
   }
 
   ngOnDestroy() : void
   {
     this.subscription.unsubscribe;
     this.subscription2.unsubscribe;
+    // this.subscription3.unsubscribe;
   }
 
   addFriend() : void
   {
     this.userService.sendRequest(this.id).subscribe(
-      (data : any) =>{ console.log("friend request" , data)}
+      (data : any) =>{
+        this.alreadyFriend = true
+        //  console.log("friend request" , data)
+      }
     );
   }
 
   removeFriend() : void
   {
     this.userService.removeFriend(this.id).subscribe(
-      (data : any) =>{ console.log("friend request" , data)}
+      (data : any) =>{
+        this.alreadyFriend = false
+        //  console.log("friend request" , data)
+      }
     );
+  }
+
+  blockUser() : void
+  {
+    this.userService.blockUser(this.id).subscribe(
+      (data : any) =>{
+        this.alreadyBlocked= true
+        //  console.log("block = " , data)
+      }
+    )
+  }
+
+  unblockUser() : void
+  {
+    this.userService.unBlockUser(this.id).subscribe(
+      (data : any) =>{ 
+        this.alreadyBlocked= false
+        // console.log("unblock = " , data)
+      }
+    )
   }
 
 }

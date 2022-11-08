@@ -85,13 +85,13 @@ export class PlayPongPagesComponent {
   player1: any = this.socket.fromEvent("user1").subscribe((data: any) => {
     let l = document.getElementById("rightName");
     if (l != null) {
-      l.innerHTML = data.intra_name + "<br />" + "<img src=" + data.avatar_url + " alt='profile picture' width='50' height='50'>";
+      l.innerHTML = data.displayname + "<br />" + "<img src=" + data.avatar_url + " alt='profile picture' width='50' height='50'>";
     }
   });
   player2: any = this.socket.fromEvent("user2").subscribe((data: any) => {
     let l = document.getElementById("leftName");
       if (l != null) {
-        l.innerHTML = data.intra_name + "<br />" + "<img src=" + data.avatar_url + " alt='profile picture' width='50' height='50'>";
+        l.innerHTML = data.displayname + "<br />" + "<img src=" + data.avatar_url + " alt='profile picture' width='50' height='50'>";
       }
 
 

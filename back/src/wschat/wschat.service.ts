@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { WebSocketServer } from '@nestjs/websockets';
-import { ChatRoom, Message, PenaltyType, User } from '@prisma/client';
+import { ChatPenalty, ChatRoom, Message, PenaltyType, User } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { SubscribeRoomDto } from 'src/chat/dto/subscribe-room.dto';
-import { ChatRoomI, MessageI, newChatRoomI } from 'src/chat/interfaces/chatRoom.interface';
+import { ChatRoomI, MessageI, newChatRoomI, PardonI } from 'src/chat/interfaces/chatRoom.interface';
 import { EjectRoomI } from 'src/chat/interfaces/eject-room-i.interface';
 import { DemoteUserI, PromoteUserI } from 'src/chat/interfaces/promote-user-i.interface';
 import { PasswordUtils } from 'src/chat/utils/chat-utils';
@@ -12,6 +12,9 @@ import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PenaltiesService } from 'src/chat/services/penalties/penalties.service';
+import e from 'express';
+import { PusnishI } from 'src/chat/interfaces/punish.interface';
+import { BlockedUser } from 'src/chat/interfaces/blocked.interface';
 
 @Injectable()
 export class WschatService {
@@ -39,15 +42,14 @@ export class WschatService {
   async subscribeToRoom(socketId: string, subRoom: SubscribeRoomDto) {
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(subRoom.roomId);
-    const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);
-    
-    
+    const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);   
+ 
     if (penalty && penalty.type === PenaltyType.BAN) {
       this.eventEmitter.emit('room.user.join', {
         room: room,
         user: user,
         success: false,
-        message: 'Vous avez été banni de ce salon' + (penalty.timetype === 'PERM' ? '.' : ' jusqu\'au ' + penalty.endTime)
+        message: 'Vous avez été banni de ce salon' + (penalty.timetype === 'PERM' ? '.' : ' jusqu\'au ' + penalty.endTime.toLocaleString('fr-FR'))
       });
       return ;
     }
@@ -70,6 +72,47 @@ export class WschatService {
         success: true,
       });
     }
+  }
+
+  async punishUser(socketId: string, event: PusnishI) {
+    const user = this.onlineUserService.getUser(socketId);
+    const target = await this.userService.findOne(event.targetId);
+    const room = await this.chatService.getRoomById(event.roomId);
+    const now = new Date().getTime();
+    let endTime: Date;
+
+    if (user && target && room) {
+      if (room.admins.find(admin => admin.id == user.id)) {
+        if (room.ownerId != target.id) {
+          endTime = new Date(now + event.time);
+          this.penaltiesService.punishUser(target.id, room.id, event.type, event.perm ? null : endTime);
+          this.eventEmitter.emit('room.user.punished', 
+          { room: room, user: target, punisher: user, type: event.type, success: true});
+        } else {
+          this.eventEmitter.emit('room.user.punished',
+            { room: room, user: target, punisher: user, type: event.type, success: false, message: 'Vous ne pouvez pas punir le propriétaire du salon'});
+        }
+      } else {
+        this.eventEmitter.emit('room.user.punished', 
+          { room: room, user: target, punisher: user, type: event.type, success: false, message: 'Vous n\'êtes pas administrateur de ce salon'});
+      }
+    }
+  }
+
+
+  async pardonUser(socketId: string, event: PardonI) {
+    const user = this.onlineUserService.getUser(socketId);
+    const target = await this.userService.findOne(event.userId);
+    const penalty: any = await this.penaltiesService.getPenaltyById(event.penaltyId);
+    
+    if (user && target && penalty) {
+          const room = penalty.room;
+          if (room.admins.find(admin => admin.id == user.id)) {
+            console.log(penalty);
+            this.penaltiesService.deletePenalty(penalty.id);
+            this.eventEmitter.emit('room.user.pardoned', { room: room, user: target, pardoner: user, success: true});
+          }       
+      }
   }
 
   async ejectUserFromRoom(socketId: string, room: EjectRoomI) {
@@ -129,8 +172,12 @@ export class WschatService {
     const room = await this.chatService.getRoomById(message.room.id);
 
     if (user) {
-      await this.chatService.newMessage(message);
-      this.eventEmitter.emit('room.message.new', { room: room });
+      try {
+        await this.chatService.newMessage(message);
+        this.eventEmitter.emit('room.message.new', { room: room });
+      } catch (error) {
+        this.eventEmitter.emit('room.user.canchat', { room: room, user: user, message: error.response});
+      }
     }
   }
 
@@ -166,25 +213,40 @@ export class WschatService {
   async editRoom(socketId: string, newRoom: newChatRoomI){
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(newRoom.id);
+    if (!newRoom.name
+        || newRoom.name.length < 3
+        || newRoom.name.length > 20
+        || !newRoom.description
+        || newRoom.description.length < 3
+        || newRoom.description.length > 100)
+      {
+        this.eventEmitter.emit('room.update', {user: user, room: room, success: false, message: 'Les champs ne sont pas valides' });
+        return ;
+      }
     if (user) {
       if (room.ownerId == user.id) {
         await this.chatService.editRoom(newRoom);
-        this.eventEmitter.emit('room.update', { room: newRoom });
+        this.eventEmitter.emit('room.update', {user: user, room: newRoom, success: true });
+      } else {
+        this.eventEmitter.emit('room.update', {user: user, room: room, success: false, message: 'Seul le propriétaire du salon peut le modifier' });
       }
     }
   }
 
-  async updateUserRooms(user: BasicUserI) {
+  async blockUser(socketId: string, event: BlockedUser) {
+    const user = this.onlineUserService.getUser(socketId);
+    const target = await this.userService.findOne(event.userId);
 
-    const rooms = await this.chatService.getRoomsFromUser(user.id);
-    this.sendToUser(user, 'rooms', rooms);
-  }
-
-  async updateUsersMessagesInRoom (room: ChatRoomI) {
-      for (let user of room.users) {
-        const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
-        this.sendToUser(user, 'messages', messages);
+    console.log(event);
+    if (user && target && user.id != target.id) {
+      if (event.block) {
+        await this.userService.blockUser(user.id, target.id);
+        this.eventEmitter.emit("user.blocked", { user: target, blocker: user, block: true, success: true });
+      } else {
+        await this.userService.unblockUser(user.id, target.id);
+        this.eventEmitter.emit("user.blocked", { user: target, blocker: user, block: false, success: true });
       }
+    }
   }
 
   async updateRoomForUsersInRoom(roomId: number) {
@@ -197,14 +259,8 @@ export class WschatService {
   }
 
   sendToUser(user: BasicUserI, prefix: string, data: any) {
-    this.onlineUserService.sendToUser(user, prefix, data);
+    this.sendToUser(user, prefix, data);
   }
 
-  async sendToUsersInRoom(roomId: number, prefix: string, data: any) {
-    let room = await this.chatService.getRoomById(roomId);
 
-    room.users.forEach(user => {
-      this.sendToUser(user, prefix, data);
-    });
-  }
 }

@@ -10,13 +10,15 @@ import { BasicUserI } from './interface/basicUser.interface';
 import { FriendsService } from 'src/friends/friends.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService,
     private readonly friendsService: FriendsService,
-    private readonly CloudinaryService: CloudinaryService) { }
+    private readonly CloudinaryService: CloudinaryService,
+    private readonly eventEmitter: EventEmitter2) { }
 
   /**
   * @api {get} /user/ Récupérer la liste des utilisateurs
@@ -77,7 +79,7 @@ export class UserController {
   @Get(':id')
   @UseGuards(Jwt2faAuthGuard)
   async findOne(@Request() req, @Param('id') id: number): Promise<BasicUserI> {
-      return this.userService.getBasicUser(id);
+      return this.userService.getBasicUser(Number(id));
   }
 
   /**
@@ -308,7 +310,7 @@ export class UserController {
       return { message: "You already have a friend request", state: 'error' };
     if (await this.userService.isBlocked(req.user.id, data.toId))
       return { message: "Request failed", state: 'error'}
-    return await this.friendsService.addFriend(req.user.id, data.toId);
+      return await this.friendsService.addFriend(req.user.id, data.toId);
   }
 
   @Get('friends/remove/:id')
@@ -356,6 +358,7 @@ export class UserController {
   @Post('block/:id')
   @UseGuards(Jwt2faAuthGuard)
   async block(@Request() req: any, @Param('id') target: number) {
+    console.log("YO");
     if (req.user.id == target)
       return { message: "You can't block yourself", state: 'error' };
     if (await this.friendsService.haveFriend(req.user.id, target))
@@ -381,24 +384,7 @@ export class UserController {
   async unblock(@Request() req: any, @Param('id') target: number) {
     return await this.userService.unblockUser(req.user.id, target);
   }
-
-  
-  /**
-   * @api {post} /user/blocked Liste des utilisateurs bloqués
-   * @apiName blockuser
-   * @apiGroup Blocker
-   * 
-   * @apiHeaderExample {json} Header:
-   * {
-   *     "Authorization": "Bearer ACCESS_TOKEN"
-   * }
-   */
-
-  @Get('blocked')
-  @UseGuards(Jwt2faAuthGuard)
-  async getBlocked(@Request() req: any) {
-    return await this.userService.getBlocked(req.user.id);
-  }       
+   
 
 }
   

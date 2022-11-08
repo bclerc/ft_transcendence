@@ -16,6 +16,10 @@ export class Activate2FaComponent implements OnInit {
     codeFa: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern("^[0-9]*$")]),
         });
   subscription! : Subscription;
+  subscription2! : Subscription;
+  subscription3! : Subscription;
+  
+  
 
   constructor(private fb: FormBuilder, private userService: UserService) { }
 
@@ -30,25 +34,29 @@ export class Activate2FaComponent implements OnInit {
   ngOnDestroy() : void
   {
     this.subscription.unsubscribe;
+    if (this.subscription2 != undefined)
+      this.subscription2.unsubscribe;
+    if (this.subscription3 != undefined)
+      this.subscription2.unsubscribe;
   }
 
   ActivateFa(): void {
     if (this.FaForm.valid)
     {
       // this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue());
-      this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe
+      this.subscription2 =this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe
       (
         (data : any) => {
-          //  console.log("data =",data);
+           //console.log("data =",data);
         },
         );
     }
   }
 
   RegenerateSecret(): void {
-    this.userService.RegenerateSecretFa().subscribe(
+    this.subscription3 =this.userService.RegenerateSecretFa().subscribe(
       (data : any) => {
-        //  console.log("data =",data);
+         //console.log("data =",data);
         //this.ob = data;
       },
       //error => this.router.navigate([''])

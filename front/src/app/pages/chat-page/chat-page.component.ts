@@ -1,7 +1,9 @@
+// import { I } from '@angular/cdk/keycodes';
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
+import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatService } from 'src/app/services/chat/chat.service';
@@ -21,9 +23,13 @@ export class ChatPageComponent implements OnInit {
 	selectedRoom: ChatRoom = {};
 	isAdmin: boolean = false;
 	haveSelectedRoom: boolean = false;
+
 	rooms$: Observable<ChatRoom[]> = this.chatService.getRooms();
-	messages$: Observable<Message[]> = this.chatService.getMessages(this.selectedRoom);
+  dmRooms$: Observable<ChatRoom[]> = this.chatService.getDmRooms();
 	publicrooms: Observable<ChatRoom[]> = this.chatService.getPublicRooms();
+
+  haveNewMessage: boolean = false;
+  haveNewDm: boolean = false;
 	selected = new FormControl(0);
 	actualUser: UserI = {};
 
@@ -36,29 +42,51 @@ export class ChatPageComponent implements OnInit {
 	});
 
 	constructor(private chatService: ChatService,
-	private userService: UserService) { }
+	private userService: UserService,
+  private socket: Socket,
+  ) { }
 	
 	async ngOnInit() {
-		this.publicrooms
-		= await this.chatService.getPublicRooms();
-		this.rooms$ = await this.chatService.getRooms();
+    this.chatService.needRooms();
+    this.chatService.needPublicRooms();
+    this.chatService.needDmRooms();
+
 		this.userService.getLoggedUser().subscribe((user: UserI) => {
 			this.actualUser = user;
 		});
 
 		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
-			if (this.selectedRoom.id) {
+      let roomChanged, roomSeen: boolean = false;
 				for (const room of rooms) {
-					if (room.id === this.selectedRoom.id) {
-						this.haveSelectedRoom = true;
-						this.selectedRoom = room;
-						return ;
-					}
-				}
-			}
-		this.selectedRoom = {};
-		this.haveSelectedRoom = false;
+          if (!room.seen && room.id !== this.selectedRoom.id) 
+            roomSeen = true;
+        }
+        if (this.selectedRoom && this.selectedRoom.type != 'DM') {
+          rooms.forEach((room: ChatRoom) => {
+              if (room.id === this.selectedRoom.id) {
+                 this.selectedRoom = room;
+                 this.haveSelectedRoom = true; 
+                  roomChanged = true;
+              }
+          });
+          if (!roomChanged) {
+            this.haveSelectedRoom = false;
+            this.selectedRoom = {};
+          }
+      }
+
+       this.haveNewMessage = roomSeen;
 		});
+
+    await this.dmRooms$.subscribe((rooms: ChatRoom[]) => {
+      let roomChanged, roomSeen: boolean = false;
+        for (const room of rooms) {
+          if (!room.seen && room.id !== this.selectedRoom.id) 
+            roomSeen = true;
+        }
+       this.haveNewDm = roomSeen;
+    });
+
 	}
 
 	create() {
@@ -145,5 +173,28 @@ export class ChatPageComponent implements OnInit {
 	}
 
 	newRoom: boolean = true;
-	async NewRoom() { this.newRoom = this.newRoom ? false :true }
+	async NewRoom() {
+      if (this.newRoom) {
+        this.newRoom = false;
+      } else {
+        this.chatService.needPublicRooms();
+        this.newRoom = true;
+      }
+    }
+
+  friend(chatRoom: ChatRoom): UserI {
+    let friend: UserI;
+    if (chatRoom.users && chatRoom.users.length > 0) {
+      for (const user of chatRoom.users) {
+        if (user.id !== this.actualUser.id) {
+          friend = user;
+          return friend;
+        }
+      }
+    }
+    return this.actualUser;
+  }
+
+
+
 }

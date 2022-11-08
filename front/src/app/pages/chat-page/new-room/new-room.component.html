@@ -15,8 +15,18 @@
 						</ng-container>
 					</div>
 					<p id="description">{{room.description}}</p>
-					<div id="membres">Avec
-						<span *ngFor="let user of room.users">{{user.intra_name}} </span>
+					<div id="membres">
+
+            <div class="avatars">
+              <!-- Avatar item -->
+              <div *ngFor="let user of room.users" class="avatars__item">
+                  <div class="avatars__image">
+                      <img width="20px" height="20px" src="{{ user.avatar_url }}" alt="{{user.displayname}}" matTooltip="{{user.displayname}}">
+                  </div>
+              </div>
+          </div>
+
+
 					</div>
 				</div>
 				<div class="but">
@@ -38,7 +48,7 @@
 				<div id="input-box">
 					<p id="input-title">Nom du groupe</p>
 					<textarea id="input-text" placeholder="Super groupe de la mort" default="caca" formControlName="name"></textarea>
-					<p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe fdp</p>
+					<p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe superbes</p>
 				</div>
 
 				<!-- Description -->
@@ -48,10 +58,10 @@
 				</div>
 
 				<!-- User select -->
-				<app-userselect [users]="users.value" (addUser)="addUser(initUser($event))" (removeuser)="removeUser($event.id)"></app-userselect>
+				<app-userselect [users]="users.value" (addUser)="addUser($event)" (removeuser)="removeUser($event.id)"></app-userselect>
 
 				<!-- Public -->
-				<mat-checkbox matCheckBox formControlName="public">Public</mat-checkbox>
+				<mat-checkbox id="public-check-box" matCheckBox formControlName="public">Public</mat-checkbox>
 				<div id="input-box" *ngIf="public.value">
 					<p id="input-title">Mot de passe</p>
 					<textarea id="input-text" formControlName="password"></textarea>

@@ -26,6 +26,7 @@ import { FriendsService } from './friends/friends.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { GameModule } from './game/game.module';
 import { VariablePong } from './pong/variables.pong';
+import { GlobalGateway } from './global.gateway';
 
 
 @Module({
@@ -62,7 +63,8 @@ import { VariablePong } from './pong/variables.pong';
      ChatService,
      MessageService,
      WschatService,
-     FriendsService
+     FriendsService,
+     GlobalGateway
     ],
 })
 export class AppModule { }
