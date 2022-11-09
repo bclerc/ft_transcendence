@@ -61,10 +61,7 @@ export class OnlineUserService {
     if (userId) {
       for (let [key, value] of this.onlineUsers) {
         if (value.id == userId)
-        {
-          console.log(value.displayname, value.inRoomId);
           return value;
-        }
       }
     }
     if (basicUser) {

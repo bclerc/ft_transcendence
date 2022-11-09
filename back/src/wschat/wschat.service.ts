@@ -108,7 +108,6 @@ export class WschatService {
     if (user && target && penalty) {
           const room = penalty.room;
           if (room.admins.find(admin => admin.id == user.id) || user.id == room.ownerId) {
-            console.log(penalty);
             this.penaltiesService.deletePenalty(penalty.id);
             this.eventEmitter.emit('room.user.pardoned', { room: room, user: target, pardoner: user, success: true});
           }       
@@ -196,7 +195,6 @@ export class WschatService {
     
     if (user) {
       const newRoom = await this.chatService.removeUsersFromRoom(room.id, user.id);
-      console.log(newRoom);
       if (room.ownerId == user.id) {
         if (newRoom.users.length > 0) {
          await this.chatService.updateRoomOwner(room.id, newRoom.users[0].id);

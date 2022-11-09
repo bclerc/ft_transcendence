@@ -101,9 +101,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @OnEvent('room.user.punished')
-  handleUserPunished(event: UserPunishEvent)
-  {
-    console.log("punish event", event);
+  handleUserPunished(event: UserPunishEvent) {
     if (event.success)
     {
       this.updateRoomForUsersInRoom(event.room.id);

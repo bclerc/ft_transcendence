@@ -193,7 +193,6 @@ export class UserController {
 
       return { message: 'New avatar set', state: 'success' };
     } catch (error) {
-      console.log(error);
       return { message: 'Error while uploading image, please verify you image', state: 'error' };
     }
   }
@@ -358,7 +357,6 @@ export class UserController {
   @Post('block/:id')
   @UseGuards(Jwt2faAuthGuard)
   async block(@Request() req: any, @Param('id') target: number) {
-    console.log("YO");
     if (req.user.id == target)
       return { message: "You can't block yourself", state: 'error' };
     if (await this.friendsService.haveFriend(req.user.id, target))
