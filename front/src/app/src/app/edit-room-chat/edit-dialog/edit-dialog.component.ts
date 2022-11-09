@@ -1,6 +1,7 @@
 import { Component, Inject, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
@@ -34,6 +35,7 @@ export class EditDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<EditDialogComponent>,
     private userService: UserService,
     private currentUser: CurrentUserService,
+    private snack: MatSnackBar,
     private socket: Socket,
     public dialog: MatDialog) { 
     this.currentUser.user.subscribe(user => this.user = user);
@@ -44,6 +46,10 @@ export class EditDialogComponent implements OnInit {
     this.dialog.open(PenaltyDialogComponent, {
       data: {target: target, room: this.room, penalty: penalty}
     });
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
   }
         
   
@@ -56,7 +62,82 @@ export class EditDialogComponent implements OnInit {
       users: this.room.users,
     });
   }
+
+  sendRequest(userId: number | undefined)
+  {
+    if (userId)
+    {
+      this.userService.sendRequest(userId).subscribe( (res: any) => {
+        if (res.state == "success")
+        {
+          this.snack.open("Votre demande a bien été envoyée", "OK", {duration: 2000});
+          this.dialogRef.close();
+        }
+        else {
+          this.snack.open("Une erreur est survenue: " + res.message, "OK", {duration: 2000});
+        }
+      });
+    }
+  }
   
+  blockUser(userId: number | undefined, block: boolean)
+  {
+    if (userId)
+    {
+      this.chatService.blockUser(userId, block);
+      this.dialogRef.close();
+    }
+  }
+
+  isMute(userId: number | undefined): boolean
+  {
+    if (userId && this.room.penalities) {
+        for (let penalty of this.room.penalities) {
+          if (penalty.user.id == userId && penalty.type == "MUTE")
+            return true;
+        };
+    }
+    return false;
+  }
+
+
+  isBan(userId: number | undefined): boolean
+  {
+    if (userId && this.room.penalities) {
+        for (let penalty of this.room.penalities) {
+          if (penalty.user.id == userId && penalty.type == "BAN")
+            return true;
+        };
+    }
+    return false;
+  }
+
+  unBan(userId: number | undefined)
+  {
+    if (userId && this.room.penalities) {
+      for (let penalty of this.room.penalities) {
+        if (penalty.user.id == userId && penalty.type == "BAN")
+        {
+          this.chatService.pardonUser(userId, penalty.id);
+          this.dialogRef.close();
+        }
+      };
+    }
+  }
+
+  unMute(userId: number | undefined)
+  {
+    if (userId && this.room.penalities) {
+      for (let penalty of this.room.penalities) {
+        if (penalty.user.id == userId && penalty.type == "MUTE")
+        {
+          this.chatService.pardonUser(userId, penalty.id);
+          this.dialogRef.close();
+        }
+      };
+    }
+  }
+
   get mame(): FormControl {
     return this.editform.get('name') as FormControl;
   }
@@ -95,20 +176,24 @@ export class EditDialogComponent implements OnInit {
   show: boolean = false;
   
   isAdministrator(user: UserI) {
+    if (!user)
+      return false;
+    if (user.id == this.room.ownerId)
+      return true;
     if (this.room.admins) {
       return this.room.admins.find(admin => admin.id === user.id);
     }
-    return this.room.ownerId == user.id;
+    return false;
   }
 
-  showParam() {
-    this.show = true;
+
+  leaveRoom() {
+    this.chatService.leaveRoom(this.room)
+    this.dialogRef.close();
   }
-  hideParam() {
-    this.show = false;
-  }
+  
   ejectUser(user: UserI) {
-    if (this.room.ownerId != this.user.id) {
+    if (this.room.ownerId != user.id) {
       this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
       this.room.users = this.room.users.filter(u => u.id !== user.id);
     }

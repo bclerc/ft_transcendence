@@ -19,7 +19,6 @@ export class ChatService {
               ) { }
 
    sendMessage(message: Message) {
-      console.log("sendingMessage:", message);
       this.socket.emit('message', message);
     }
 
@@ -54,6 +53,15 @@ export class ChatService {
         password: pass,
       }
       this.socket.emit('subscribeRoom', object);
+    }
+
+    blockUser(userId: number, block: boolean)
+    {
+      this.socket.emit('blockUser', {block: block, userId: userId});
+    }
+
+    pardonUser(userId: number, penaltyId: number) {
+      this.socket.emit('pardonUser', {userId: userId, penaltyId: penaltyId});
     }
 
     needRooms() {

@@ -67,6 +67,7 @@ export class ChatService {
         penalities: {
           none:
           {
+            type: 'BAN',
             user: {
               id: userId,
             },
@@ -94,6 +95,22 @@ export class ChatService {
             displayname: true,
             email: true,
             avatar_url: true,
+            blockedBy: {
+              where: {
+                id: userId,
+              },
+              select: {
+                id: true,
+              }
+            },
+            friendOf: {
+              where: {
+                id: userId,
+              },
+              select: {
+                id: true,
+              },
+           },
           },
           orderBy: {
             state: 'asc',
@@ -108,6 +125,29 @@ export class ChatService {
             email: true,
             avatar_url: true,
           },
+        },
+        penalities: {
+          where: {     
+            OR: [
+              {
+                endTime: {
+                  gte: new Date(),
+                },
+              },
+              {
+                timetype: 'PERM',
+              } 
+            ]
+          },
+          select: {
+            id: true,
+            user: {
+              select: {
+                id: true,
+              }
+            },
+          type: true,
+          }
         },
         messages: {
           orderBy: {
@@ -132,6 +172,7 @@ export class ChatService {
       },
     });
 
+    
     rooms.forEach(room => {
       if (room.messages[0]) {
         if (room.messages[0].seenBy.length > 0)
@@ -212,7 +253,10 @@ export class ChatService {
       },
       include: {
         users: true,
-      }
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
     });
     return rooms;
   }
@@ -240,7 +284,7 @@ export class ChatService {
         user: true,
       },
       orderBy: {
-      createdAt: 'asc',
+       createdAt: 'asc',
     },
 
     });
@@ -299,6 +343,9 @@ export class ChatService {
         user: true,
         seenBy: true,
       },
+      orderBy: {
+        createdAt: 'asc',
+     },
     });
     return messages;
   }
@@ -392,6 +439,31 @@ export class ChatService {
   }
 
   async deleteDm(user1Id: number, user2Id: number) {
+    // delete message befores
+    await this.prisma.message.deleteMany({
+      where: {
+        room: {
+            type: ChatRoomType.DM,
+            AND: [
+              {
+                users: {
+                  some: {
+                    id: user1Id,
+                  }
+                }
+              },
+              {
+                users: {
+                  some: {
+                    id: Number(user2Id),
+                  }
+                }
+              }
+            ]
+          },
+        },
+    });
+
     await this.prisma.chatRoom.deleteMany({
       where: {
         type: ChatRoomType.DM,
@@ -504,7 +576,7 @@ export class ChatService {
   }
 
   async removeUsersFromRoom(roomId: number, userId: number): Promise<any> {
-    const newRoom = this.prisma.chatRoom.update({
+    const newRoom = await this.prisma.chatRoom.update({
       where: {
         id: Number(roomId)
       },
@@ -522,7 +594,7 @@ export class ChatService {
         },
       }
     });
-    return newRoom;
+    return await this.getRoomById(roomId);
   }
 
   async updateRoomOwner(roomId: number, userId: number): Promise<ChatRoom> {

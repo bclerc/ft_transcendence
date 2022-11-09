@@ -28,11 +28,35 @@ export class PenaltiesService {
         endTime: end_at ? end_at : new Date(),
       }
     });
-    console.log(ret);
+  }
+
+  async getPenaltyById(id: number): Promise<ChatPenalty> {
+    return await this.prisma.chatPenalty.findFirst({
+      where: {
+        id: id
+      }, 
+      include: {
+        user: true,
+        room: {
+          include: {
+            admins: true
+          }
+        },
+      }
+    });
+  }
+
+  async deletePenalty(id: number) {
+    if (!id)
+      return ;
+    await this.prisma.chatPenalty.delete({
+      where: {
+        id: id
+      }
+    });
   }
 
   async getRoomPenaltiesForUser(userId: number, roomId: number): Promise<ChatPenalty> {
-    console.log(userId, roomId);
     const penalties = await this.prisma.chatPenalty.findFirst({
       where: {
         userId: userId,

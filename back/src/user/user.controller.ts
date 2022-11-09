@@ -10,13 +10,15 @@ import { BasicUserI } from './interface/basicUser.interface';
 import { FriendsService } from 'src/friends/friends.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService,
     private readonly friendsService: FriendsService,
-    private readonly CloudinaryService: CloudinaryService) { }
+    private readonly CloudinaryService: CloudinaryService,
+    private readonly eventEmitter: EventEmitter2) { }
 
   /**
   * @api {get} /user/ Récupérer la liste des utilisateurs
@@ -191,7 +193,6 @@ export class UserController {
 
       return { message: 'New avatar set', state: 'success' };
     } catch (error) {
-      console.log(error);
       return { message: 'Error while uploading image, please verify you image', state: 'error' };
     }
   }
@@ -308,7 +309,7 @@ export class UserController {
       return { message: "You already have a friend request", state: 'error' };
     if (await this.userService.isBlocked(req.user.id, data.toId))
       return { message: "Request failed", state: 'error'}
-    return await this.friendsService.addFriend(req.user.id, data.toId);
+      return await this.friendsService.addFriend(req.user.id, data.toId);
   }
 
   @Get('friends/remove/:id')

@@ -8,6 +8,9 @@ import { UserService } from './user/user.service';
 import { WschatService } from './wschat/wschat.service';
 import { OnEvent } from '@nestjs/event-emitter';
 import { ConnectableObservable } from 'rxjs';
+import { RequestEvent } from './friends/interfaces/friends.event';
+import { BasicUserI } from './user/interface/basicUser.interface';
+import { ChatRoomI } from './chat/interfaces/chatRoom.interface';
 
 
 @WebSocketGateway(8181, { cors: { origin: '*' } })
@@ -34,6 +37,17 @@ export class GlobalGateway implements  OnGatewayConnection, OnGatewayDisconnect 
   }
 
   
+  @OnEvent('friend.request')
+  async handleFriendRequest(data: RequestEvent) {
+    if (data.success) {
+      this.sendToUser(data.user, 'notification', "Vous avez envoyé une demande d'amitié à " + data.target.displayname);
+      this.sendToUser(data.target, 'notification', data.user.displayname + " vous a envoyé une demande d'amitié");
+    } else {
+      this.sendToUser(data.user, 'notification', 'Impossible d\'envoyer la demande d\'amitié. ' + data.message);
+    }
+  }
+
+
   @SubscribeMessage('whoami')
   async whoami(client: Socket) {
     let user = this.onlineUserService.getUser(client.id);
@@ -42,9 +56,22 @@ export class GlobalGateway implements  OnGatewayConnection, OnGatewayDisconnect 
     }
   }
 
+  sendToUser(user: BasicUserI, prefix: string, data: any) {  
+      if (user) {
+        for (let [key, value] of this.onlineUserService.onlineUsers) {
+          if (value.id == user.id) 
+          {
+            this.server.to(key).emit(prefix, data);
+          }
+        }
+      }
+  }
 
-  @SubscribeMessage('message')
-  handleMessage(client: any, payload: any): string {
-    return 'Hello world!';
+  async sendToUsersInRoom(roomId: number, prefix: string, data: any) {
+    let room = await this.chatService.getRoomById(roomId);
+
+    room.users.forEach(user => {
+      this.sendToUser(user, prefix, data);
+    });
   }
 }

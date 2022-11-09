@@ -2,6 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { WebSocketServer } from '@nestjs/websockets';
 import { UserState } from '@prisma/client';
+import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import { UserInfo } from 'os';
 import { Socket } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
@@ -22,11 +23,14 @@ export class OnlineUserService {
 
   constructor 
   (@Inject(forwardRef(() => UserService)) public readonly userService: UserService, 
-  @Inject(JwtService) private readonly jwtService: JwtService,
-  )
-  {}
+   @Inject(JwtService) private readonly jwtService: JwtService, ){}
   
   async initUser(socketId: string, user: BasicUserI) {
+    this.onlineUsers.forEach((value, key) => {
+      if (value.id == user.id) {
+        this.onlineUsers.delete(key);
+      }
+    });
     this.onlineUsers.set(socketId, user);
     this.userService.setState(user.id, UserState.ONLINE);
   }
@@ -50,6 +54,7 @@ export class OnlineUserService {
   }
 
   getUser(socketId?: string, userId?: number, basicUser?: BasicUserI): BasicUserI {
+    
     if (socketId) {
       return this.onlineUsers.get(socketId);
     }
@@ -82,6 +87,16 @@ export class OnlineUserService {
     for (let user of users) {
       this.sendToUser(user, event, data);
     }
+  }
+  
+  setCurrentRoom(socketId: string, roomId: number) {
+    let user = this.getUser(socketId);
+    if (user) {
+      user.inRoomId = roomId;
+      this.onlineUsers.delete(socketId);
+      this.onlineUsers.set(socketId, user);
+    }
+    let user2 = this.getUser(socketId);
   }
 
   deleteUser(socketId: string) {

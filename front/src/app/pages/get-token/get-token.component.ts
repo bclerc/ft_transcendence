@@ -33,14 +33,14 @@ export class GetTokenComponent implements OnInit {
       this.socket.ioSocket.io.opts.query = 'token=' + this.token.getToken();
       this.socket.connect();
       this.navbar.show();
+      this.router.navigate(['/chat']);
    } catch(Error) {
      //console.log("error");
     this.snackBar.open("Le token est invalide", 'Undo', {
       duration: 3000
     });
+    this.router.navigate(['/']);
    }
-   
-   this.router.navigate(['/']);
 
     //console.log("this.tokenString")
    // console.log("id = ", this.jwtHelper.decodeToken(this.tokenString).sub);

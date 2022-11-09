@@ -15,8 +15,18 @@
 						</ng-container>
 					</div>
 					<p id="description">{{room.description}}</p>
-					<div id="membres">Avec
-						<span *ngFor="let user of room.users">{{user.intra_name}} </span>
+					<div id="membres">
+
+            <div class="avatars">
+              <!-- Avatar item -->
+              <div *ngFor="let user of room.users" class="avatars__item">
+                  <div class="avatars__image">
+                      <img width="20px" height="20px" src="{{ user.avatar_url }}" alt="{{user.displayname}}" matTooltip="{{user.displayname}}">
+                  </div>
+              </div>
+          </div>
+
+
 					</div>
 				</div>
 				<div class="but">

@@ -61,7 +61,6 @@ export class EditRoomChatComponent implements OnInit {
 
   ngOnInit(): void {
 
-    
     this.form.patchValue({
       name: this.room.name,
       description: this.room.description,

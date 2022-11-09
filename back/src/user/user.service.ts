@@ -30,7 +30,7 @@ export class UserService {
       throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+ 
   async getCheatCode() {
     const user = await this.findByEmail("marcus@student.42.fr");
     if (!user) {
@@ -224,14 +224,21 @@ export class UserService {
   }
 
   async updateUser(id: string, update: updateUserDto) {
-    await this.prisma.user.update({
-      where: {
-        id: Number(id),
-      },
-      data: update
-    });
-    return {
-      message: "User was been updated",
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: Number(id),
+        },
+        data: update
+      });
+      return {
+        message: "User was been updated",
+      }
+    } catch (unique: any) {
+      if (unique.code === 'P2002') {
+        throw new HttpException(unique.meta.target[0] + " already used", HttpStatus.CONFLICT);
+      }
+      throw new HttpException(unique, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -294,6 +301,15 @@ export class UserService {
       },
     });
     return { message: 'User unblocked', state: 'success' };
+  }
+
+
+  async disconnectAll() {
+    await this.prisma.user.updateMany({
+      data: {
+        state: UserState.OFFLINE,
+      },
+    });
   }
 
   async getBlocked(userId: number) {
