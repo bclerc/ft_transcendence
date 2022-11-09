@@ -145,7 +145,7 @@ export class PlayPongPagesComponent {
   ngOnInit(): void {
         this.subscription = this.currentUser.getCurrentUser().subscribe(
         (data : any) => {
-          console.log("data =", data)
+          // console.log("data =", data)
           this.user = data;
         },
           (error : any) => 

@@ -17,11 +17,11 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class MyProfileComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private token : TokenStorageService, private jwtHelper: JwtHelperService, public userService : UserService, private router : Router
-    , public currentUser : CurrentUserService, private snackBar : MatSnackBar) 
-  {
- 
-  }
+  constructor ( public userService : UserService,
+                private router : Router,
+                private snackBar : MatSnackBar,
+                public currentUser : CurrentUserService,
+              ) {}
   
   user? : UserI;
   friends! : UserI[];
@@ -89,6 +89,7 @@ export class MyProfileComponent implements OnInit {
       this.userService.blockUser(id).subscribe(
         (data : any) =>
         {
+
         if (this.user && this.friends)
         {
           for (var i = 0; this.friends[i] ;i++)

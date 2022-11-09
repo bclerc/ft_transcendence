@@ -21,7 +21,10 @@ export class Activate2FaComponent implements OnInit {
   
   
 
-  constructor(private fb: FormBuilder, private userService: UserService) { }
+  constructor ( 
+                private fb: FormBuilder,
+                private userService: UserService,
+              ) {}
 
   ngOnInit(): void {
     this.subscription =this.userService.GetSecretFa().subscribe(
