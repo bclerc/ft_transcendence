@@ -99,18 +99,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 	}
 
-	@SubscribeMessage('keydownS')
-	keydownS(client: Socket){
-		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-		if (game)
-			this.pongService.keydownS(game, client);
-		else
-		{
-			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-			if (game)
-				this.pongService.keydownS(game, client);
-		}
-	}
 	
 	@SubscribeMessage('keyupZ')
 	keyupZ(client: Socket){
@@ -124,6 +112,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				this.pongService.keyupZ(game, client);
 		}
 	}
+
 
 	@SubscribeMessage('keyupS')
 	keyupS(client: Socket){

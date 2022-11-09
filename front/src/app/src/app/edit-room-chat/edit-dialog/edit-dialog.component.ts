@@ -65,15 +65,12 @@ export class EditDialogComponent implements OnInit {
 
   sendRequest(userId: number | undefined)
   {
-    if (userId)
-    {
+    if (userId) {
       this.userService.sendRequest(userId).subscribe( (res: any) => {
-        if (res.state == "success")
-        {
+        if (res.state == "success") {
           this.snack.open("Votre demande a bien été envoyée", "OK", {duration: 2000});
           this.dialogRef.close();
-        }
-        else {
+        } else {
           this.snack.open("Une erreur est survenue: " + res.message, "OK", {duration: 2000});
         }
       });
