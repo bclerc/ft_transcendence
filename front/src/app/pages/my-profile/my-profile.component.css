@@ -309,6 +309,7 @@ hr.clear{
 
 #photo-profile{
 	width: 70%;
+	height: 150px;
 	margin: auto;
 	margin-bottom: 30px;
 	object-fit: cover;

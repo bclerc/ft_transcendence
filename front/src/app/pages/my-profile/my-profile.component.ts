@@ -64,7 +64,30 @@ export class MyProfileComponent implements OnInit {
     ngOnDestroy() : void
     {
       this.subscription.unsubscribe;
-    } 
+    }
+
+    friend? : Array<UserI>;
+    removeFriend(id : number | undefined) : void
+    {
+      var i = 0
+      this.userService.removeFriend(id).subscribe(
+      //   if (this.user && this.user.friends)
+      //   {
+      //     for (i = 0; this.user.friends[i] ;i++)
+      //     {
+      //       if (id === this.user.friends[i].id)
+      //         this.user.friends.splice(i, 1)
+      //     }
+      //   }
+      );
+    }
+  
+    blockUser(id : number | undefined) : void
+    {
+      this.userService.blockUser(id).subscribe(
+
+      )
+    }
 }
 
 
