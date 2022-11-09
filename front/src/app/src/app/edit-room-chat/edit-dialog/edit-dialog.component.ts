@@ -54,7 +54,6 @@ export class EditDialogComponent implements OnInit {
         
   
   ngOnInit(): void {
-    console.log(this.room);
     this.editform.setValue({
       name: this.room.name,
       description: this.room.description,
@@ -69,7 +68,6 @@ export class EditDialogComponent implements OnInit {
     if (userId)
     {
       this.userService.sendRequest(userId).subscribe( (res: any) => {
-        console.log(res);
         if (res.state == "success")
         {
           this.snack.open("Votre demande a bien été envoyée", "OK", {duration: 2000});
