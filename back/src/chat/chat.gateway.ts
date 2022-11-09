@@ -29,7 +29,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(ChatService) private readonly chatService: ChatService,
     @Inject(WschatService) private readonly wschatService: WschatService,
-    private readonly onlineUserService: OnlineUserService,
+    @Inject(OnlineUserService) private readonly onlineUserService: OnlineUserService,
   ) { }
 
   afterInit(server: any) {
@@ -214,11 +214,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoomI) {
     const user = await this.onlineUserService.getUser(client.id);
     const messages = await this.chatService.getMessagesFromRoom(user.id, room);
-    user.inRoomId = room.id;
-    console.log(user.intra_name, " joined ", room.name);
-    console.log(user.inRoomId);
-    this.onlineUserService.deleteUser(client.id);
-    this.onlineUserService.onlineUsers.set(client.id, user);
+    this.onlineUserService.setCurrentRoom(client.id, room.id);
     this.server.to(client.id).emit('messages', messages);
     if (!room.seen)
     {
@@ -304,7 +300,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     for (let user of room.users) {
       const onlineUser = this.onlineUserService.getUser(null, user.id);
       if (onlineUser && onlineUser.inRoomId == room.id) {
-        console.log(onlineUser.intra_name);
         const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
         this.sendToUser(user, 'messages', messages);
       }
