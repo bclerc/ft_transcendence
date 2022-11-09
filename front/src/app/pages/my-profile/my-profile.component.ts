@@ -69,7 +69,7 @@ export class MyProfileComponent implements OnInit {
       this.userService.removeFriend(id).subscribe(
         (data : any) =>
         {
-        if (this.friends)
+        if (this.user && this.friends)
         {
           for (var i = 0; this.friends[i] ;i++)
           {
@@ -89,7 +89,8 @@ export class MyProfileComponent implements OnInit {
       this.userService.blockUser(id).subscribe(
         (data : any) =>
         {
-        if (this.friends)
+
+        if (this.user && this.friends)
         {
           for (var i = 0; this.friends[i] ;i++)
           {

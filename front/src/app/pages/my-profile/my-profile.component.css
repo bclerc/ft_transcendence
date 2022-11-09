@@ -202,7 +202,6 @@ hr.clear{
 	padding: 40px;
 }
 
-
 /* Styles for tab labels */
 #friend-n-match .mat-tab-label {
 	padding: 15px;
@@ -230,104 +229,27 @@ hr.clear{
 /* Styles for the ink bar */
 .mat-ink-bar {
 	display: none;
+	box-shadow: none;
 }
 
-/* HISTORIQUE DES MATCHS -------------------------------------------------------- */
-
-.mat-tab-group ul{
-	margin-top: 30px;
-	list-style-type: none;
-}
-
-.my-profile-content .mat-tab-group ul li{
-	display:flex;
-	flex-direction: row;
-	background-color: #2b2a28;
-	padding: 20px;
-	border-radius: 6px;
-	color: #feefcf;
-	margin-top: 30px;
-}
-
-.result{
-	/* background-color: blueviolet; */
-	width: 30%;
-	font-family: Titan One;
-	font-size: 22px;
-	text-align: center;
-	margin: auto;
-	margin-right: 30px;
-}
-.result #win{
-	color: #43ee1e;
-}
-.result #loose{
-	color: #ef7e00;
-}
-
-.VS{
-	/* background-color: blue; */
-	width: 100%;
-	margin: auto;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-
-}
-.VS #my-profile, #my-enemy{
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	font-family: ReadexPro-SemiBold;
-	font-size: 20px;
-	width:100%;
-}
-.VS #my-profile{
-	justify-content: flex-end;
-	
-}
-
-.VS #my-profile img, #my-enemy img{
-	min-width: 50px;
-	height: 50px;
-	object-fit: cover;
-	border-radius: 40px;
-	border: 2px solid #ee481e;
-	box-shadow: -2px 2px #ee481e;
-	margin-right: 10px;
-}
-.VS #my-enemy a:hover{
-	color: #ee481e;
-	cursor: pointer;
-}
-
-#scores{
-	margin: 0px 70px 0px 70px;
-	display:flex;
-	flex-direction: row;
-}
-.VS #scores #score-lol{
-	background-color: #343330;
-	padding: 12px 12px 12px 12px;
-	min-width: 90px;
-	margin-right: 20px;
-	border-radius: 6px;
-	font-family: Titan One;
-	font-size: 52px;
-	text-align: center;
-
-}
-#scores #score-lol:last-child{
-	margin-right: 0px;
-}
-#scores #loser-score{
-	color: #9c9381;
+/* Mes demandes d'amis */
+.mes-demandes-damis{
+	margin-bottom: 100px;
 }
 
 /* Gerer mes amis ------------------------------------------------------------------------------------------ */
 
 .mes-amis{
+	/* margin-top: 30px; */
+	margin-bottom: 100px;
+}
+
+#friend-n-match h2{
+	font-family: Titan One;
+	font-size: 35px;
 	margin-top: 30px;
+	margin-bottom: 30px;
+	color: #feefcf;
 }
 .ami{
 	float: left;
@@ -460,73 +382,10 @@ hr.clear{
 		margin-bottom: 30px;
 	}
 
-	#scores{
-		/* background-color: #EE481E; */
-		margin: 0px 40px 0px 40px;
-	}
-
-
-	.ami{
-		width: calc(33.333% - 20px);
-	}
-	.ami:nth-child(4n){
-		margin-right: 30px;
-	}
-	.ami:nth-child(3n){
-		margin-right: 0px;
-	}
 } 
 
 @media only screen and (max-width: 950px) {
 
-
-	.my-profile-content .mat-tab-group ul li{
-		display: flex;
-		flex-direction: column;
-		/* padding: 20px;
-		margin-top: 30px; */
-	}
-	
-	.result{
-		/* background-color: blueviolet; */
-		width: 100%;
-		margin-bottom: 10px;
-		font-size: 16px;
-		margin-right: 0px;
-	}
-
-	.VS #my-profile, #my-enemy{
-		/* background-color: blue; */
-		font-size: 16px;
-	}
-	
-	.VS #my-profile img, #my-enemy img{
-		min-width: 35px;
-		height: 35px;
-	}
-
-	.VS #scores #score-lol{
-		padding: 12px;
-		min-width: 70px;
-		margin-right: 15px;
-		font-size: 35px;
-	}
-	#scores #score-lol:last-child{
-		margin-right: 0px;
-	}
-
-	.ami{
-		width: calc(50% - 15px);
-	}
-	.ami:nth-child(4n){
-		margin-right: 30px;
-	}
-	.ami:nth-child(3n){
-		margin-right: 30px;
-	}
-	.ami:nth-child(2n){
-		margin-right: 0px;
-	}
 }
 
 @media only screen and (max-width: 830px) {
@@ -572,49 +431,13 @@ hr.clear{
 	#scores{
 		margin: 0px 20px 0px 20px;
 	}
+}
 
-	.VS #my-profile, #my-enemy{
-		/* background-color: blue; */
-		font-size: 12px;
-	}
-	.VS #my-profile img, #my-enemy img{
-		min-width: 30px;
-		height: 30px;
-	}
-	.VS #scores #score-lol{
-		padding: 12px;
-		min-width: 50px;
-		margin-right: 15px;
+@media only screen and (max-width: 610px) {
+
+	#friend-n-match h2{
 		font-size: 25px;
 	}
-	#scores #score-lol:last-child{
-		margin-right: 0px;
-	}
-
-	.ami #photo-profile{
-		width: 100px;
-		height: 100px;
-		/* margin: auto; */
-		margin-bottom: 15px;
-		/* object-fit: cover;
-		border-radius: 6px;
-		border: 3px solid #ee481e;
-		box-shadow: -3px 3px #ee481e; */
-	}
-	.ami .friend-pseudo{
-		/* width: 100%; */
-		/* background-color: #EE481E; */
-		/* font-size: 18px; */
-		margin-bottom: 15px;
-	}
-	.ami .rank{
-		margin-bottom: 15px;
-	}
-	.ami .tri-action button{
-		margin-right: -2px;
-		margin-bottom: 10px;
-	}
-
 }
 
 @media only screen and (max-width: 553px) {
@@ -629,62 +452,6 @@ hr.clear{
 		font-size: 40px;
 	}
 
-	.mat-tab-group ul li{
-		display:flex;
-		flex-direction: column;
-		align-items: center;
-		font-size: 16px;
-		text-align: center;
-		padding: 20px;
-	}
-
-	.my-profile-content .mat-tab-group ul li{
-		display: flex;
-		flex-direction: column;
-		padding: 15px;
-		margin-top: 20px;
-	}
-	
-	.result{
-		/* background-color: blueviolet; */
-		width: 100%;
-		margin-bottom: 10px;
-		font-size: 16px;
-		margin-right: 0px;
-	}
-
-	.VS #my-profile, #my-enemy{
-		/* background-color: blue; */
-		font-size: 11px;
-	}
-
-	.VS #my-profile img, #my-enemy img{
-		display: none;
-	}
-
-	.ami .tri-action button{
-		margin-bottom: 10px;
-		margin-top: 5px;
-	}
-	.ami .tri-action button svg{
-		width: 30px;
-		height: 30px;
-	}
-
-	.ami{
-		padding: 20px;
-	}
-	#photo-profile{
-		width: 100%;
-		margin-bottom: 20px;
-	}
-	.ami .friend-pseudo{
-		font-size: 16px;
-		margin: 0px 0px 0px 0px;
-	}
-	.ami .status p{
-		font-size: 12px;
-	}
 }
 
 @media only screen and (max-width: 490px) {

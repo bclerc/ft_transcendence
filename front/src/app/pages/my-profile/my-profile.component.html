@@ -11,44 +11,43 @@
 		<div class="center-profile">
 			<!-- HEAD -->
 			<div id="head">
-					<!-- USER INFO -->
-					<div id="user-info-profile">
-						<div class="profil-left">
-							<img [src]="user?.avatar_url" [alt]="user?.intra_name"/>
-						</div>
-						<div class="profil-info">
-							<p id="name">{{user?.displayname}}</p>
-							<p id="email">{{user?.email}}</p>
-							<div class="status">
-								<p>En ligne</p>
-								<img src="../../../assets/svg/online.svg" alt="online">
-							</div>
-							<!-- <p id="date">{{user?.createdAt | date}} </p> -->
-						</div>
-
-						<!-- BUTTON NODIFY -->
-						<div class="profil-right">
-							<button>
-								<a routerLink="/modifymyprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Modifier <img src="../../../assets/svg/edit.svg" alt=""></a>
-							</button>
+				<!-- USER INFO -->
+				<div id="user-info-profile">
+					<div class="profil-left">
+						<img [src]="user?.avatar_url" [alt]="user?.intra_name"/>
+					</div>
+					<div class="profil-info">
+						<p id="name">{{user?.displayname}}</p>
+						<p id="email">{{user?.email}}</p>
+						<div class="status">
+							<p>En ligne</p>
+							<img src="../../../assets/svg/online.svg" alt="online">
 						</div>
 					</div>
 
-					<!-- STATISTIQUES -->
-					<div id="stats">
-						<div class="data">
-							<span id="red">123</span>
-							<p>Parties gagnées</p>
-						</div>
-						<div class="data">
-							<span id="orange">531</span>
-							<p>Parties perdues</p>
-						</div>
-						<div class="data">
-							<span id="yellow">#44</span>
-							<p>Au classement</p>
-						</div>
+					<!-- BUTTON NODIFY -->
+					<div class="profil-right">
+						<button>
+							<a routerLink="/modifymyprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Modifier <img src="../../../assets/svg/edit.svg" alt=""></a>
+						</button>
 					</div>
+				</div>
+
+				<!-- STATISTIQUES -->
+				<div id="stats">
+					<div class="data">
+						<span id="red">123</span>
+						<p>Parties gagnées</p>
+					</div>
+					<div class="data">
+						<span id="orange">531</span>
+						<p>Parties perdues</p>
+					</div>
+					<div class="data">
+						<span id="yellow">#44</span>
+						<p>Au classement</p>
+					</div>
+				</div>
 			</div>
 
 			<!-- CONTENT -->
@@ -56,102 +55,41 @@
 				<mat-tab-group id="friend-n-match">
 
 					<!-- HISTORIQUE DES MATCH -->
-					<mat-tab id="lol">
+					<mat-tab id="historique">
 						<ng-template mat-tab-label>
 							<div class="label">
 								Historique des matchs
 							</div>
 						</ng-template>
-						<ul>
 
-							<!-- MATCH -->
-							<li>
-								<div class="result">
-									<span id="win">Victoire</span>
-								</div>
-								<div class="VS">
-
-									<!-- Moi -->
-									<div id="my-profile">
-										<img [src]="user?.avatar_url" [alt]="user?.intra_name"/>
-										<a>{{user?.displayname}}</a>
-									</div>
-
-									<!-- Scores -->
-									<div id="scores">
-										<div id="score-lol"><span id="winner-score">58</span></div>
-										<div id="score-lol"><span id="loser-score">28</span></div>
-									</div>
-
-									<!-- Adversaire -->
-									<div id="my-enemy">
-										<img [src]="user?.avatar_url" [alt]="user?.intra_name">
-										<a href="son-profil">mmarcus</a>
-									</div>
-								</div>
-							</li>
-
-							<!-- MATCH -->
-							<li>
-								<div class="result">
-									<span id="win">Victoire</span>
-								</div>
-								<div class="VS">
-
-									<!-- Moi -->
-									<div id="my-profile">
-										<img [src]="user?.avatar_url" [alt]="user?.intra_name"/>
-										<a>{{user?.displayname}}</a>
-									</div>
-
-									<!-- Scores -->
-									<div id="scores">
-										<div id="score-lol"><span id="winner-score">58</span></div>
-										<div id="score-lol"><span id="loser-score">28</span></div>
-									</div>
-
-									<!-- Adversaire -->
-									<div id="my-enemy">
-										<img [src]="user?.avatar_url" [alt]="user?.intra_name">
-										<a href="son-profil">{{user?.displayname}}</a>
-									</div>
-								</div>
-							</li>
-
-							<!-- MATCH -->
-							<li>
-								<div class="result">
-									<span id="loose">Défaite</span>
-								</div>
-								<div class="VS">
-
-									<!-- Moi -->
-									<div id="my-profile">
-										<img [src]="user?.avatar_url" [alt]="user?.intra_name"/>
-										<a>{{user?.displayname}}</a>
-									</div>
-
-									<!-- Scores -->
-									<div id="scores">
-										<div id="score-lol"><span id="loser-score">12</span></div>
-										<div id="score-lol"><span id="winner-score">71</span></div>
-									</div>
-
-									<!-- Adversaire -->
-									<div id="my-enemy">
-										<img [src]="user?.avatar_url" [alt]="user?.intra_name">
-										<a href="son-profil">0123456789</a>
-									</div>
-								</div>
-							</li>
-						</ul>
+						<!-- <h2>Mes matchs</h2> -->
+						<app-list-match-history></app-list-match-history>
 					</mat-tab>
 
 					<!-- GERER MES AMIS -->
-					<mat-tab>
+					<mat-tab id="gerer-mes-amis">
 						<ng-template mat-tab-label>
 							<div class="label">
-								Gérer mes amitiés
+								Mes amis
+							</div>
+						</ng-template>
+
+						<h2>Mes demandes d'ami</h2>
+						<div class="mes-demandes-damis">
+							<app-friends-page></app-friends-page>
+						</div>
+						<!-- LISTE D'AMIS -->
+						<!-- <h2>Mes amis</h2> -->
+						<app-list-my-friend></app-list-my-friend>
+					</mat-tab>
+					<hr class="clear">
+
+					<!-- UTILISATEURS BLOQUÉS -->
+					<mat-tab id="gerer-mes-amis">
+
+						<ng-template mat-tab-label>
+							<div class="label">
+								Utilisateurs bloqués
 							</div>
 						</ng-template>
 						<div class="mes-amis">
@@ -213,6 +151,10 @@
 									</div>
 								</div> 
 							</ng-container>
+
+						<h2>Utilisateurs bloqués</h2>
+						<div class="blocked-user">
+							<app-list-user-blocked></app-list-user-blocked>
 						</div>
 					</mat-tab>
 					<hr class="clear">
