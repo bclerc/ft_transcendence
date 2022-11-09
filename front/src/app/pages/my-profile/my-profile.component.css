@@ -324,7 +324,7 @@ hr.clear{
 	color: #9c9381;
 }
 
-
+/* Gerer mes amis ------------------------------------------------------------------------------------------ */
 
 .mes-amis{
 	margin-top: 30px;
@@ -347,8 +347,13 @@ hr.clear{
 	margin: auto;
 }
 
-#photo-profile{
-	width: 70%;
+.ami #lien{
+	/* background-color: #43ee1e; */
+	width:100%;
+}
+
+.ami #photo-profile{
+	width: 150px;
 	height: 150px;
 	margin: auto;
 	margin-bottom: 30px;
@@ -358,22 +363,23 @@ hr.clear{
 	box-shadow: -3px 3px #ee481e;
 }
 .ami .friend-pseudo{
+	width: 100%;
+	/* background-color: #EE481E; */
 	font-family: Titan One;
 	font-size: 18px;
-	margin: 0px 40px 0px 40px;
+	margin-bottom: 15px;
 }
 .ami .rank{
 	font-family: Titan One;
 	font-size: 14px;
 	color: #efc10a;
-	margin-top: 10px;
+	margin-bottom: 30px;
 }
 
 .ami .tri-action button{
 	background-color: transparent;
 	border: none;
 	margin-right: 8px;
-	margin-top: 10px;
 	margin-bottom: 20px;
 }
 .ami .tri-action button:last-child{
@@ -584,8 +590,28 @@ hr.clear{
 		margin-right: 0px;
 	}
 
+	.ami #photo-profile{
+		width: 100px;
+		height: 100px;
+		/* margin: auto; */
+		margin-bottom: 15px;
+		/* object-fit: cover;
+		border-radius: 6px;
+		border: 3px solid #ee481e;
+		box-shadow: -3px 3px #ee481e; */
+	}
+	.ami .friend-pseudo{
+		/* width: 100%; */
+		/* background-color: #EE481E; */
+		/* font-size: 18px; */
+		margin-bottom: 15px;
+	}
+	.ami .rank{
+		margin-bottom: 15px;
+	}
 	.ami .tri-action button{
 		margin-right: -2px;
+		margin-bottom: 10px;
 	}
 
 }
