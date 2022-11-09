@@ -155,7 +155,7 @@
 							</div>
 						</ng-template>
 						<div class="mes-amis">
-							<ng-container *ngFor="let friend of (user?.friendOf)">
+							<ng-container *ngFor="let friend of friends">
 								<div class="ami">
 									<div id="lien">
 										<a [routerLink]="['/profile/' + friend.id ]">

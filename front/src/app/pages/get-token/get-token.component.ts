@@ -15,11 +15,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class GetTokenComponent implements OnInit {
   
-  constructor(private router : Router, private token : TokenStorageService,
-    private jwtHelper : JwtHelperService,
-    private navbar: HeaderService,
-    @Inject(Socket) private socket: Socket,
-    private snackBar : MatSnackBar) { }
+  constructor ( 
+                private router : Router,
+                private token : TokenStorageService,
+                private jwtHelper : JwtHelperService,
+                private navbar: HeaderService,
+                @Inject(Socket) private socket: Socket,
+                private snackBar : MatSnackBar,
+              ) {}
+
   tokenString! : string;
   
   ngOnInit(): void {  

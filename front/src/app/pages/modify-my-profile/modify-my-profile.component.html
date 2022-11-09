@@ -1,5 +1,5 @@
 <form class="form" [formGroup]="ChangeDisplaynameForm" (ngSubmit)="ChangeDisplayName()">
-    <input maxlength="20" matInput placeholder="Displayname" formControlName="displayname">
+    <input maxlength="10" matInput placeholder="Displayname" formControlName="displayname">
     <p></p>
     <button [disabled]="!ChangeDisplaynameForm.valid" type="submit" id="change-button">Change Display Name</button>
   </form>
