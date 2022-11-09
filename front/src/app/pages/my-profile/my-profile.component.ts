@@ -24,21 +24,13 @@ export class MyProfileComponent implements OnInit {
  
   }
   
-  tokenString? : string | null;
-  id? : number | null ;
   user? : UserI;
-  filtersLoaded?: Promise<boolean>;
-  userList!: UserI[];
-  userList2$!: Observable <UserI[]>;
+  friends! : UserI[];
   subscription!: Subscription;
-  friends = this.userService.getFriends();
+  subscriptionFriend!: Subscription;
 
-  userLi!: Observable <UserI> | undefined;
   async ngOnInit(){
-      this.userLi = this.currentUser.getCurrentUser();
-      if (this.userLi)
-      {
-        this.subscription = this.userLi.subscribe(
+        this.subscription = this.currentUser.getCurrentUser().subscribe(
         (data : any) => {
           console.log("data =", data)
           this.user = data;
@@ -58,33 +50,59 @@ export class MyProfileComponent implements OnInit {
             }
           }
         );
-      }
+  
+      this.subscriptionFriend =  this.userService.getFriends().subscribe(
+        (data : any) => {
+          this.friends = data;
+        }
+      );
     }
 
     ngOnDestroy() : void
     {
       this.subscription.unsubscribe;
+      if (this.subscriptionFriend != undefined)
+        this.subscriptionFriend.unsubscribe;
     }
 
     friend? : Array<UserI>;
     removeFriend(id : number | undefined) : void
     {
-      var i = 0
       this.userService.removeFriend(id).subscribe(
-      //   if (this.user && this.user.friends)
-      //   {
-      //     for (i = 0; this.user.friends[i] ;i++)
-      //     {
-      //       if (id === this.user.friends[i].id)
-      //         this.user.friends.splice(i, 1)
-      //     }
-      //   }
+        (data : any) =>
+        {
+        if (this.user && this.friends)
+        {
+          for (var i = 0; this.friends[i] ;i++)
+          {
+            if (id === this.friends[i].id)
+            {
+              this.friends.splice(i, 1);
+              break;
+            }
+          }
+        }
+      }
       );
     }
   
     blockUser(id : number | undefined) : void
     {
       this.userService.blockUser(id).subscribe(
+        (data : any) =>
+        {
+        if (this.user && this.friends)
+        {
+          for (var i = 0; this.friends[i] ;i++)
+          {
+            if (id === this.friends[i].id)
+            {
+              this.friends.splice(i, 1);
+              break;
+            }
+          }
+        }
+      }
 
       )
     }

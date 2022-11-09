@@ -141,7 +141,7 @@
 							</div>
 						</ng-template>
 						<div class="mes-amis">
-							<mat-list-item *ngFor="let friend of (user?.friends)">
+							<mat-list-item *ngFor="let friend of friends">
 								<div class="ami">
 									 <a [routerLink]="['/profile/' + friend.id ]"> 
 									<img  id="photo-profile" src={{friend.avatar_url}}  atl="UNE BELLE GUEULE">
