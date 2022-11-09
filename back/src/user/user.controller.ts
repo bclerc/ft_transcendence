@@ -11,6 +11,7 @@ import { FriendsService } from 'src/friends/friends.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ValidationPipe } from './validation.pipe';
 
 
 @Controller('user')
@@ -167,7 +168,7 @@ export class UserController {
 
   @Put()
   @UseGuards(Jwt2faAuthGuard)
-  async updateUser(@Request() req: any, @Body() data: updateUserDto) {
+  async updateUser(@Request() req: any, @Body(new ValidationPipe()) data: updateUserDto) {
     return await this.userService.updateUser(req.user.id, data);
   }
 

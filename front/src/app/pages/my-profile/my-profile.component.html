@@ -155,7 +155,7 @@
 							</div>
 						</ng-template>
 						<div class="mes-amis">
-							<ng-container *ngFor="let friend of (user?.friend)">
+							<ng-container *ngFor="let friend of (user?.friendOf)">
 								<div class="ami">
 									<a [routerLink]="['/profile/' + friend.id ]">
 									<img style="width: 100px" style="height:200px" id="photo-profile" src={{friend.avatar_url}}  atl="UNE BELLE GUEULE">
@@ -204,7 +204,7 @@
 										</div>
 									</div>
 								</div> 
-							</mat-list-item>
+							</ng-container>
 						</div>
 					</mat-tab>
 
