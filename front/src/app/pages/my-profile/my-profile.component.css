@@ -1,5 +1,42 @@
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
 
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
 *{
 	box-sizing: border-box;
 	transition: all ease 0.4s;
@@ -195,96 +232,99 @@ hr.clear{
 	display: none;
 }
 
-.mat-tab-group ul{
+/* HISTORIQUE DES MATCHS -------------------------------------------------------- */
 
+.mat-tab-group ul{
 	margin-top: 30px;
 	list-style-type: none;
 }
 
-/* Styles for group list / friend list */
 .my-profile-content .mat-tab-group ul li{
 	display:flex;
 	flex-direction: row;
-	background-color: #343330;
-	padding: 30px 30px 20px 30px;
+	background-color: #2b2a28;
+	padding: 20px;
 	border-radius: 6px;
-	font-family: ReadexPro-Regular;
 	color: #feefcf;
-	font-size: 18px;
 	margin-top: 30px;
 }
-.my-profile-content .mat-tab-group ul li a:hover{
-	color: #ee481e;
-	cursor: pointer;
-}
 
-.win{
-	font-family: ReadexPro-Bold;
-	color: chartreuse;
-	margin: 15px 30px 0px 0px;
+.result{
+	/* background-color: blueviolet; */
+	width: 30%;
+	font-family: Titan One;
+	font-size: 22px;
+	text-align: center;
+	margin: auto;
+	margin-right: 30px;
+}
+.result #win{
+	color: #43ee1e;
+}
+.result #loose{
+	color: #ef7e00;
 }
 
 .VS{
+	/* background-color: blue; */
+	width: 100%;
+	margin: auto;
 	display: flex;
-	flex-direction: column;
-	/* background-color: #ee481e; */
-	min-width: fit-content;
-	text-align: center;
-}
-.VS span{
-	font-size: 14px;
-	margin-bottom: 15px;
-}
+	flex-direction: row;
+	justify-content: center;
 
-.VS #son-profil{
+}
+.VS #my-profile, #my-enemy{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	font-family: ReadexPro-SemiBold;
+	font-size: 20px;
+	width:100%;
 }
-.VS img{
-	width: 30px;
-	height: 30px;
+.VS #my-profile{
+	justify-content: flex-end;
+	
+}
+
+.VS #my-profile img, #my-enemy img{
+	min-width: 50px;
+	height: 50px;
 	object-fit: cover;
 	border-radius: 40px;
 	border: 2px solid #ee481e;
 	box-shadow: -2px 2px #ee481e;
 	margin-right: 10px;
 }
-.VS a{
-	font-family: Titan One;
-}
-.score{
-	/* background-color: #ef7e00; */
-	display:flex;
-	flex-direction: column;
-	width: 100%;
-}
-.score span{
-	font-size: 14px;
-	text-align: center;
-	margin-bottom: 10px;
-}
-.score p{
-	margin: auto;
-	font-family: Titan One;
-	/* color: #ef7e00; */
-}
-.up-down-rank{
-	display:flex;
-	flex-direction: column;
-	min-width: fit-content;
-}
-.up-down-rank span{
-	font-size: 14px;
-	text-align: center;
-	margin-bottom: 10px;
-}
-.up-down-rank p{
-	margin: auto;
-	font-family: Titan One;
-	/* color: #efc10a; */
+.VS #my-enemy a:hover{
+	color: #ee481e;
+	cursor: pointer;
 }
 
+#scores{
+	margin: 0px 70px 0px 70px;
+	display:flex;
+	flex-direction: row;
+}
+.VS #scores #score-lol{
+	background-color: #343330;
+	padding: 12px 12px 12px 12px;
+	min-width: 90px;
+	margin-right: 20px;
+	border-radius: 6px;
+	font-family: Titan One;
+	font-size: 52px;
+	text-align: center;
+
+}
+#scores #score-lol:last-child{
+	margin-right: 0px;
+}
+#scores #loser-score{
+	color: #9c9381;
+}
+
+/* Gerer mes amis ------------------------------------------------------------------------------------------ */
 
 .mes-amis{
 	margin-top: 30px;
@@ -307,8 +347,14 @@ hr.clear{
 	margin: auto;
 }
 
-#photo-profile{
-	width: 70%;
+
+.ami #lien{
+	/* background-color: #43ee1e; */
+	width:100%;
+}
+
+.ami #photo-profile{
+	width: 150px;
 	height: 150px;
 	margin: auto;
 	margin-bottom: 30px;
@@ -318,22 +364,23 @@ hr.clear{
 	box-shadow: -3px 3px #ee481e;
 }
 .ami .friend-pseudo{
+	width: 100%;
+	/* background-color: #EE481E; */
 	font-family: Titan One;
 	font-size: 18px;
-	margin: 0px 40px 0px 40px;
+	margin-bottom: 15px;
 }
 .ami .rank{
 	font-family: Titan One;
 	font-size: 14px;
 	color: #efc10a;
-	margin-top: 10px;
+	margin-bottom: 30px;
 }
 
 .ami .tri-action button{
 	background-color: transparent;
 	border: none;
 	margin-right: 8px;
-	margin-top: 10px;
 	margin-bottom: 20px;
 }
 .ami .tri-action button:last-child{
@@ -413,6 +460,12 @@ hr.clear{
 		margin-bottom: 30px;
 	}
 
+	#scores{
+		/* background-color: #EE481E; */
+		margin: 0px 40px 0px 40px;
+	}
+
+
 	.ami{
 		width: calc(33.333% - 20px);
 	}
@@ -425,6 +478,42 @@ hr.clear{
 } 
 
 @media only screen and (max-width: 950px) {
+
+
+	.my-profile-content .mat-tab-group ul li{
+		display: flex;
+		flex-direction: column;
+		/* padding: 20px;
+		margin-top: 30px; */
+	}
+	
+	.result{
+		/* background-color: blueviolet; */
+		width: 100%;
+		margin-bottom: 10px;
+		font-size: 16px;
+		margin-right: 0px;
+	}
+
+	.VS #my-profile, #my-enemy{
+		/* background-color: blue; */
+		font-size: 16px;
+	}
+	
+	.VS #my-profile img, #my-enemy img{
+		min-width: 35px;
+		height: 35px;
+	}
+
+	.VS #scores #score-lol{
+		padding: 12px;
+		min-width: 70px;
+		margin-right: 15px;
+		font-size: 35px;
+	}
+	#scores #score-lol:last-child{
+		margin-right: 0px;
+	}
 
 	.ami{
 		width: calc(50% - 15px);
@@ -440,14 +529,14 @@ hr.clear{
 	}
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 830px) {
 
 	.profil-info #name{
 		font-size: 50px;
 	}
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 780px) {
 
 	#user-info-profile, #stats{
 		border-radius: 10px;
@@ -480,6 +569,52 @@ hr.clear{
 		margin-left: 0px;
 	}
 
+	#scores{
+		margin: 0px 20px 0px 20px;
+	}
+
+	.VS #my-profile, #my-enemy{
+		/* background-color: blue; */
+		font-size: 12px;
+	}
+	.VS #my-profile img, #my-enemy img{
+		min-width: 30px;
+		height: 30px;
+	}
+	.VS #scores #score-lol{
+		padding: 12px;
+		min-width: 50px;
+		margin-right: 15px;
+		font-size: 25px;
+	}
+	#scores #score-lol:last-child{
+		margin-right: 0px;
+	}
+
+	.ami #photo-profile{
+		width: 100px;
+		height: 100px;
+		/* margin: auto; */
+		margin-bottom: 15px;
+		/* object-fit: cover;
+		border-radius: 6px;
+		border: 3px solid #ee481e;
+		box-shadow: -3px 3px #ee481e; */
+	}
+	.ami .friend-pseudo{
+		/* width: 100%; */
+		/* background-color: #EE481E; */
+		/* font-size: 18px; */
+		margin-bottom: 15px;
+	}
+	.ami .rank{
+		margin-bottom: 15px;
+	}
+	.ami .tri-action button{
+		margin-right: -2px;
+		margin-bottom: 10px;
+	}
+
 }
 
 @media only screen and (max-width: 553px) {
@@ -503,25 +638,31 @@ hr.clear{
 		padding: 20px;
 	}
 
-	.win{
-		margin: auto;
-		margin-bottom: 30px;
+	.my-profile-content .mat-tab-group ul li{
+		display: flex;
+		flex-direction: column;
+		padding: 15px;
+		margin-top: 20px;
 	}
 	
-	.VS{
-		margin-bottom: 20px;
-	}
-	.VS span{
-		font-size: 14px;
-		margin-bottom: 8px;
+	.result{
+		/* background-color: blueviolet; */
+		width: 100%;
+		margin-bottom: 10px;
+		font-size: 16px;
+		margin-right: 0px;
 	}
 
-	.score{
-		margin-bottom: 20px;
+	.VS #my-profile, #my-enemy{
+		/* background-color: blue; */
+		font-size: 11px;
+	}
+
+	.VS #my-profile img, #my-enemy img{
+		display: none;
 	}
 
 	.ami .tri-action button{
-		margin-right: 0px;
 		margin-bottom: 10px;
 		margin-top: 5px;
 	}
@@ -546,12 +687,19 @@ hr.clear{
 	}
 }
 
-@media only screen and (max-width: 448px) {
+@media only screen and (max-width: 490px) {
 
 	.ami{
 		width: 100%;
 		float: none;
 		margin-right: 0px;
+	}
+	.ami .tri-action button svg{
+		width: 40px;
+		height: 40px;
+	}
+	.ami .tri-action button{
+		margin-right: 5px;
 	}
 
 	/* Styles for tab labels */
@@ -569,13 +717,7 @@ hr.clear{
 	}
 }
 
-@media only screen and (max-width: 385px) {
-
-	.ami{
-		width: 100%;
-		float: none;
-		margin-right: 0px;
-	}
+@media only screen and (max-width: 400px) {
 
 	/* Styles for tab labels */
 	#friend-n-match .mat-tab-label {

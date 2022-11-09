@@ -29,7 +29,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(ChatService) private readonly chatService: ChatService,
     @Inject(WschatService) private readonly wschatService: WschatService,
-    private readonly onlineUserService: OnlineUserService,
+    @Inject(OnlineUserService) private readonly onlineUserService: OnlineUserService,
   ) { }
 
   afterInit(server: any) {
@@ -101,9 +101,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @OnEvent('room.user.punished')
-  handleUserPunished(event: UserPunishEvent)
-  {
-    console.log("punish event", event);
+  handleUserPunished(event: UserPunishEvent) {
     if (event.success)
     {
       this.updateRoomForUsersInRoom(event.room.id);
@@ -111,7 +109,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       this.sendToUser(event.punisher, 'notification', "Vous avez puni " + event.user.intra_name + " de la room " + event.room.name);
     }
     else {
-      this.sendToUser(event.punisher, 'notification', "Vous n'avez pas pu punir " + event.user.intra_name + " de la room " + event.room.name + ". Raison : " + event.message);
+      this.sendToUser(event.punisher, 'notifica\tion', "Vous n'avez pas pu punir " + event.user.intra_name + " de la room " + event.room.name + ". Raison : " + event.message);
     }
   }
 
@@ -144,6 +142,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       this.sendToUser(event.user, 'notification', "Vous avez rejoint la room " + event.room.name);
       this.sendToUsersInRoom(event.room.id, 'notification', event.user.intra_name + " a rejoint la room");
       this.updateRoomForUsersInRoom(event.room.id);
+      if (event.room.public)
+        this.updatePublicRooms();
     } else {
       this.sendToUser(event.user, 'notification', "Vous n'avez pas pu rejoindre la room " + event.room.name + ". Raison : " + event.message);
     }
@@ -212,8 +212,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoomI) {
     const user = await this.onlineUserService.getUser(client.id);
     const messages = await this.chatService.getMessagesFromRoom(user.id, room);
-    user.inRoomId = room.id;
-    this.onlineUserService.onlineUsers.set(client.id, user);
+    this.onlineUserService.setCurrentRoom(client.id, room.id);
     this.server.to(client.id).emit('messages', messages);
     if (!room.seen)
     {
@@ -237,7 +236,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @SubscribeMessage('pardonUser')
   async onPardonUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() pardon: any) {
-    console.log("Receiving pardon Request:", pardon);
     this.wschatService.pardonUser(client.id, pardon);
   }
 
@@ -298,7 +296,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   async updateUsersMessagesInRoom(room: ChatRoomI) {
     for (let user of room.users) {
-      let onlineUser = this.onlineUserService.getUser(null, user.id);
+      const onlineUser = this.onlineUserService.getUser(null, user.id);
       if (onlineUser && onlineUser.inRoomId == room.id) {
         const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
         this.sendToUser(user, 'messages', messages);

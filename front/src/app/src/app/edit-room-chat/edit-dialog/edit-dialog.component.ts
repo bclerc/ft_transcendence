@@ -47,10 +47,13 @@ export class EditDialogComponent implements OnInit {
       data: {target: target, room: this.room, penalty: penalty}
     });
   }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
         
   
   ngOnInit(): void {
-    console.log(this.room);
     this.editform.setValue({
       name: this.room.name,
       description: this.room.description,
@@ -62,16 +65,12 @@ export class EditDialogComponent implements OnInit {
 
   sendRequest(userId: number | undefined)
   {
-    if (userId)
-    {
+    if (userId) {
       this.userService.sendRequest(userId).subscribe( (res: any) => {
-        console.log(res);
-        if (res.state == "success")
-        {
+        if (res.state == "success") {
           this.snack.open("Votre demande a bien été envoyée", "OK", {duration: 2000});
           this.dialogRef.close();
-        }
-        else {
+        } else {
           this.snack.open("Une erreur est survenue: " + res.message, "OK", {duration: 2000});
         }
       });
@@ -176,15 +175,22 @@ export class EditDialogComponent implements OnInit {
   isAdministrator(user: UserI) {
     if (!user)
       return false;
+    if (user.id == this.room.ownerId)
+      return true;
     if (this.room.admins) {
       return this.room.admins.find(admin => admin.id === user.id);
     }
-    return this.room.ownerId == user.id;
+    return false;
   }
 
+
+  leaveRoom() {
+    this.chatService.leaveRoom(this.room)
+    this.dialogRef.close();
+  }
   
   ejectUser(user: UserI) {
-    if (this.room.ownerId != this.user.id) {
+    if (this.room.ownerId != user.id) {
       this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
       this.room.users = this.room.users.filter(u => u.id !== user.id);
     }
