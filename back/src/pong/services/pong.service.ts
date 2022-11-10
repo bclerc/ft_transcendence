@@ -5,6 +5,8 @@ import { PointI } from '../interfaces/point.interface';
 import { GameI } from '../interfaces/game.interface';
 import { Socket } from 'socket.io';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
+import { GameService } from 'src/game/game.service';
+import { BasicUserI } from 'src/user/interface/basicUser.interface';
 
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 80;
@@ -62,7 +64,7 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 //
 
 ////
-export const MAX_SCORE = 50;
+export const MAX_SCORE = 3;
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
 export const SPEED_PLAYER = 8
@@ -73,6 +75,8 @@ export class PongService {
 
     constructor(
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
+	    @Inject(GameService) private gameService: GameService,
+
         // private variables: VariablePong
     )
     {
@@ -590,6 +594,10 @@ export class PongService {
         game.player2.socket.emit('drawInit');
         game.player1.socket.emit('drawText', "Start !");
         game.player2.socket.emit('drawText', "Start !");
+        const dbGame = await this.gameService.createGame([game.player1.user, game.player2.user]);        
+        await this.gameService.startGame(dbGame.id);
+        game.dbGame = dbGame;
+        console.log("Start ! ", game.player1, game.player2);
         await this.delay(200);
     }
 
@@ -817,16 +825,28 @@ export class PongService {
     private finalForAll(game: GameI)
     {
         var i = 0;
-
+        let winner: BasicUserI;
+        let looser: BasicUserI;
+        let winnerScore;
+        let looserScore;
+    
         if (game.player1.points === MAX_SCORE)
         {
             game.player1.socket.emit('win');
             game.player2.socket.emit('lose');
+            winner = game.player1.user;
+            looser = game.player2.user;
+            winnerScore = game.player1.points;
+            looserScore = game.player2.points;
         }
         else
         {
-            game.player1.socket.emit('lose');
-            game.player2.socket.emit('win');
+          game.player1.socket.emit('lose');
+          game.player2.socket.emit('win');
+          winner = game.player2.user;
+          looser = game.player1.user;
+          winnerScore = game.player2.points;
+          looserScore = game.player1.points;
         }
 
         if (game.spectators)
@@ -838,6 +858,10 @@ export class PongService {
                 i++;
             }
         }
+        console.log("final for all", winner, looser);
+
+        this.gameService.stopGame(game.dbGame.id, winner.id, looser.id, looserScore, winnerScore);
+        //this.gameService.stopGame(game.id)
     }
 
 	async startGame(game: GameI, mapid: number){

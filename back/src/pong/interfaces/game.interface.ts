@@ -1,3 +1,4 @@
+import { Game } from "@prisma/client";
 import { BallI } from "./ball.interface";
 import { PlayerI } from "./player.interface";
 import { PointI } from "./point.interface";
@@ -21,5 +22,6 @@ export interface GameI {
 	id_interval?: NodeJS.Timer; //id pour arreter la loop du game
 	id_searchinterval1?: number; //id pour arreter la loop du game pour le player 1
 	id_searchinterval2?: number; //id pour arreter la loop du game pour le player 2
-	type?: number;			//type de la partie; normal/random 
+	type?: number;			//type de la partie; normal/random
+  dbGame?: Game
 }

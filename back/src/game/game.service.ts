@@ -58,5 +58,30 @@ export class GameService {
       }
     });
   }
+
+  async startGame(id: number): Promise<Game> {
+    return await this.prisma.game.update({
+      where: {
+        id: id
+      },
+      data: {
+        state: GameState.STARTED
+      }
+    })
+  }
+  async stopGame(id: number, winnerId: number, loserId: number, loserScore: number, winnerScore: number): Promise<Game> {
+    return await this.prisma.game.update({
+      where: {
+        id: id
+      },
+      data: {
+        state: GameState.ENDED,
+        winnerId: winnerId,
+        loserId: loserId,
+        winnerScore: winnerScore,
+        loserScore: loserScore,
+      }
+    })
+  }
 }
 
