@@ -36,15 +36,18 @@
 	color: #ee481e;
 	width: 85%;
 }
-
-.param-header img{
-    background-color: none;
-    border-radius: 100%;
+.param-header #close-settings{
+	margin-top: -8px;
+	margin-right: 20px;
 }
-.param-header img:hover{
-    cursor: pointer;
-    background-color: #ee481e;
-}
+// .param-header img{
+//     background-color: none;
+//     border-radius: 100%;
+// }
+// .param-header #settings-close:hover{
+//     cursor: pointer;
+//     background-color: #ee481e;
+// }
 
 #edit, #gerer{
     display:flex;
@@ -175,11 +178,14 @@ textarea{
 #public-check-box {
 	font-family: ReadexPro-Medium;
 	margin-bottom: 5px;
+	color:#feefcf;
 }
+
+
 
 #membre{
     display:flex;
-    flex-direction: column;
+    flex-direction: row;
     font-family: ReadexPro-Medium;
     background-color: #343330;
     padding: 20px;
@@ -188,24 +194,20 @@ textarea{
 }
 .info{
     display: flex;
-    flex-direction: row;
-}
-.user-name{
-    display: flex;
 	flex-direction: column;
-    /* align-items: flex-start; */
-    width: 80%;
+	justify-content: start;
+	width: 100%;
 	align-self: center;
-	/* background-color: cadetblue; */
+	background-color: #43EE1E;
 }
-.user-name #user-name{
+
+.info #user-name{
 	font-family: Titan One;
 	color: #feefcf;
 	font-size: 16px;
-
-	margin-top: 3px;
+	margin: -3px 0px 3px 0px;
 }
-.user-name #user-status{
+.info #user-status{
 	font-family: ReadexPro-Regular;
 	color: #9c9381;
 	font-size: 12px;
@@ -214,19 +216,19 @@ textarea{
 .buts{
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
-	/* background-color: blueviolet; */
+    align-items: center;
+	justify-content: end;
+	margin-right: 6px;
+	background-color: blueviolet;
 }
 #membre button{
-    margin-right: 20px;
+    margin-left: 20px;
 	height: 40px;
 	width: 40px;
 	border: none;
 	background-color: transparent;
 }
-#membre button:last-child{
-    margin-right: 0px;
-}
+
 #membre button:hover{
 	cursor: pointer;
 }
@@ -261,6 +263,10 @@ textarea{
 #icon-block:hover #BG{
 	fill: #ef7e00;
 	opacity: 20%;
+}
+#clic{
+	stroke: #ef7e00;
+	stroke-width: 2;
 }
 
 #icon-exclure:hover #icon{
