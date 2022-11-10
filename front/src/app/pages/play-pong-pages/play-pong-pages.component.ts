@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
@@ -6,6 +6,8 @@ import { GameI } from '../../models/PongInterfaces/pong.interface';
 import { ScoreI } from '../../models/PongInterfaces/score.interface';
 import { UserI } from '../../models/PongInterfaces/user.interface';
 // import { VariablePong } from 'src/app/variables/variables.pong';
+// import { createCanvas, CreateCanvasOptions } from '../../../../node_modules/vb-canvas/dist/types';
+
 
 const PLAYER_RADIUS = 3.5;
 const CANVAS_RADIUS = 20;
@@ -75,12 +77,17 @@ export const SPEED_PLAYER = 8 //
   templateUrl: './play-pong-pages.component.html',
   styleUrls: ['./play-pong-pages.component.css']
 })
+
 @Injectable(
   {providedIn: 'root'}
 )
-export class PlayPongPagesComponent {
+export class PlayPongPagesComponent implements OnInit {
   title = 'Best Pong Ever'; //titre page
   user: UserI = {};
+  
+  // canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById('pong');
+  // private canvas!: (HTMLCanvasElement);
+  // private context!: (CanvasRenderingContext2D | null);
 
   player1: any = this.socket.fromEvent("user1").subscribe((data: any) => {
     let l = document.getElementById("rightName");
@@ -96,35 +103,25 @@ export class PlayPongPagesComponent {
 
 
   });
-  state: GameI = this.initState();
+
+  id!: string;// = this.initState();
+  
   private var_interval: number;
-  private map_mode: number;
-  private game_id: number;
+  // private map_mode: number;
+  // private game_id: number;
 
   // private audio1;
   // private audio2;
   // private audio3;
-
   
   constructor(private router: Router, private socket: Socket
-    ) {
+  )
+  {
     this.var_interval = 0;
-    this.map_mode = -1;
-    this.game_id = -1;
-
-    // this.audio1 = new Audio();
-    // this.audio2 = new Audio();
-    // this.audio3 = new Audio();
-    
-    // this.audio1.src = "../../../assets/audio/ping_pong_8bit_plop.wav";
-    // this.audio1.load();
-    // this.audio2.src = "../../../assets/audio/ping_pong_8bit_beeep.wav";
-    // this.audio2.load();
-    // this.audio3.src = "../../../assets/audio/ping_pong_8bit_peeeeeep.wav";
-    // this.audio3.load();
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void 
+  {
     this.socket.on('drawNormalMap', this.drawNormalMap);
     this.socket.on('drawMap1', this.drawMap1);
     this.socket.on('drawMap2', this.drawMap2);
@@ -141,46 +138,28 @@ export class PlayPongPagesComponent {
     this.socket.on('id', this.idMessage);
     this.socket.on('enableButtonS', this.enableButtonS);
     this.socket.on('stopSearchLoop', this.stopSearchLoop);
-    // this.socket.on('play', this.playAudio);
- 
+
+    this.socket.on('state', this.getId);
+
     this.socket.emit('init');
   }
   
   ngOnDestroy(): void {
-    console.log("ng destroy")
     this.stopSearchLoop(this.var_interval);
-    console.log("ng destroy2")
-    this.socket.emit('stopGame');
+    // this.socket.emit('stopGame');
   }
 
-  @HostListener('document:keydown.z', ['$event'])  //$event is the event object
-  handleKeyboardDownZ(event: KeyboardEvent) {
-      this.socket.emit('keydownZ');
-  }
-  
-  @HostListener('document:keydown.w', ['$event'])  //$event is the event object
-  handleKeyboardDownW(event: KeyboardEvent) {
-      this.socket.emit('keydownZ');
+  @HostListener('document:keydown',['$event'])  //$event is the event object
+  handleKeyboardDown(event: KeyboardEvent) {
+    this.socket.emit('getId');
+    console.log(this.id);
+      this.socket.emit('keydown', event.key);
   }
 
-  @HostListener('document:keydown.s', ['$event'])  //$event is the event object
-  handleKeyboardDownS(event: KeyboardEvent) {
-      this.socket.emit('keydownS');
-    }
-
-  @HostListener('document:keyup.z', ['$event'])  //$event is the event object
-  handleKeyboardUpZ() {
-    this.socket.emit('keyupZ');
-  }
-
-  @HostListener('document:keyup.w', ['$event'])  //$event is the event object
-  handleKeyboardUpW() {
-    this.socket.emit('keyupZ');
-  }
-
-  @HostListener('document:keyup.s', ['$event'])  //$event is the event object
-  handleKeyboardUpS() {
-    this.socket.emit('keyupS');
+  @HostListener('document:keyup',['$event'])  //$event is the event object
+  handleKeyboardUp(event: KeyboardEvent) {
+      console.log(this.id);
+      this.socket.emit('keyup', event.key);
   }
 
   updateScore(score: ScoreI){
@@ -192,37 +171,17 @@ export class PlayPongPagesComponent {
     }
   }
 
-  getState(state: GameI){
-    this.state = state;
+  getId(id: string){
+    this.id = id;
+    console.log("getId", this.id);
   }
 
-
-//   stop()
-//   {
-//     this.socket.emit('stopGame', {});
-//     // this.enableElement("buttonDemo");
-//     this.enableElement("buttonNewGame");
-//     if (this.var_interval != 0)
-//     {
-//       window.clearInterval(this.var_interval);
-//       this.var_interval = 0;
-//     }
-
-//     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-//     if (canvas)
-//     {
-//       var context = canvas.getContext('2d');
-//       if (context)
-//         this.drawInit();
-//     }
-// }
-
-  newGame()
+  newGame(normalOrNot: boolean)
   {
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     var   arr = ["Searching opponent.", "Searching opponent..", "Searching opponent..."];
     var   i = 1;
-    
+
     this.disableElement('buttonStart');
     this.disableElement('buttonStartRandom');
     if (canvas)
@@ -235,55 +194,12 @@ export class PlayPongPagesComponent {
         context.fillText(arr[0], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10);
       }
     }
-
-    this.socket.emit('newGame');
-    
+    this.socket.emit('newGame', normalOrNot);
     this.var_interval = window.setInterval(() => {
       if (canvas && context)
       {
-    
-        this.socket.emit('id_interval', this.var_interval);
-  
+        this.socket.emit('id_intervalmap', this.var_interval);
         this.drawInit();
-    
-        context.fillText(arr[i], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10 );
-        i++;
-        if (i == 3)
-          i = 0;
-      }
-    }, 1000);
-  }
-
-
-  newRandomGame()
-  {
-    const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    var   arr = ["Searching opponent.", " opponent..", "Searching opponent..."];
-    var   i = 1;
-    
-    this.disableElement('buttonStart');
-    this.disableElement('buttonStartRandom');
-    if (canvas)
-    {
-      var context = canvas.getContext('2d');
-      if (context)
-      {
-        context.fillStyle = 'white';
-        // context.font = FONT + 'px streetartfont';
-        context.fillText(arr[0], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10);
-      }
-    }
-
-    this.socket.emit('newGameRandom');
-    
-    this.var_interval = window.setInterval(() => {
-      if (canvas && context)
-      {
-    
-        this.socket.emit('id_intervalRandom', this.var_interval);
-    
-        this.drawInit();
-    
         context.fillText(arr[i], WIDTHCANVAS / 4 - FONT, HEIGHTCANVAS / 2 - 10 );
         i++;
         if (i == 3)
@@ -363,24 +279,6 @@ export class PlayPongPagesComponent {
     }
   }
 
-  // playAudio(type: number){
-  //   let audio = new Audio();
-  //   if (type == WALL)
-  //     audio.src = "../../../assets/audio/ping_pong_8bit_plop.wav";
-  //   else if (type == PADDLE)
-  //     audio.src = "../../../assets/audio/ping_pong_8bit_beeep.wav";
-  //   else if (type == MISS)
-  //     audio.src = "../../../assets/audio/ping_pong_8bit_peeeeeep.wav";
-  //   audio.load();
-  //   audio.play();
-  //   // if (type == WALL)
-  //   //   this.audio1.play();
-  //   // else if (type == PADDLE)
-  //   //   this.audio2.play();
-  //   // else if (type == MISS)
-  //   //   this.audio3.play();
-  // }
-
   drawText(text: string)
   {
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
@@ -403,22 +301,16 @@ export class PlayPongPagesComponent {
   {
     const left = document.getElementById('leftName');
     const right = document.getElementById('rightName');
-
   }
 
   drawNormalMap(state: GameI){
+    console.log(this.id)
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     if (canvas)
     {
         var context = canvas.getContext('2d');
         if (context)
         {
-          //load font car il ne se charge pas des le chargement (??????)
-          // context.font = FONT + 'px streetartfont';
-          // context.fillText('', 0, 0, 0);
-
-
-          // Draw rectangle noir
           context.fillStyle = 'black';
           context.beginPath();
           context.arc(0 + CANVAS_RADIUS, 0 + CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
@@ -471,8 +363,7 @@ export class PlayPongPagesComponent {
             context.lineTo(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height +state.player2.paddle.y);   
             context.arc(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
             context.fill();
-          }
-            
+          } 
         }
       }
   }
@@ -484,11 +375,6 @@ export class PlayPongPagesComponent {
         var context = canvas.getContext('2d');
         if (context)
         {
-
-          // context.font = FONT + 'px streetartfont';
-          // context.fillText('', 0, 0, 0);
-
-
           // Draw rectangle noir
           context.fillStyle = 'black';
           context.beginPath();
@@ -500,7 +386,6 @@ export class PlayPongPagesComponent {
           context.lineTo(CANVAS_RADIUS + 0, canvas.height + 0);
           context.arc(CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
-
         
           // Draw middle line
           context.strokeStyle = 'white';
@@ -511,7 +396,6 @@ export class PlayPongPagesComponent {
         
           // Draw obstacle1
           context.fillStyle = 'white';
-          // context.strokeStyle = 'white';
           context.beginPath();
           context.arc(MAP1_OBSTACLE1_POSX + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_POSY + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_RADIUS, Math.PI, Math.PI * 3 / 2);
           context.lineTo(MAP1_OBSTACLE1_W - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_POSY);   
@@ -524,7 +408,6 @@ export class PlayPongPagesComponent {
 
           // Draw obstacle2
           context.fillStyle = 'white';
-          // context.strokeStyle = 'white';
           context.beginPath();
           context.arc(MAP1_OBSTACLE2_POSX + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_POSY + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_RADIUS, Math.PI, Math.PI * 3 / 2);
           context.lineTo(MAP1_OBSTACLE2_W - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_POSY);   
@@ -579,15 +462,9 @@ export class PlayPongPagesComponent {
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     if (canvas)
     {
-      console.log("ici");
         var context = canvas.getContext('2d');
         if (context)
         {
-
-          // context.font = FONT + 'px streetartfont';
-          // context.fillText('', 0, 0, 0);
-
-
           // Draw rectangle noir
           context.fillStyle = 'black';
           context.beginPath();
@@ -753,7 +630,6 @@ export class PlayPongPagesComponent {
       }
   }
 
-
   initState()
   {
     var p1 = {
@@ -788,7 +664,6 @@ export class PlayPongPagesComponent {
     id: "1",
     player1: p1,
     player2: p2,
-    type: 0,
     obstacle: {
       x: MAP2_OBSTACLE_POSX,
       y: MAP2_OBSTACLE_POSY,
@@ -853,7 +728,6 @@ export class PlayPongPagesComponent {
               //     height: 0,
               //     width: 0
               // },
-              type: 0,
         // score1: 0,
         // score2: 0,
         obstacle: {
@@ -876,7 +750,7 @@ export class PlayPongPagesComponent {
         },
       }
 
-      const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+      const canvas = document.getElementById('pong') as HTMLCanvasElement | undefined;
       if (canvas)
       {
           var context = canvas.getContext('2d');

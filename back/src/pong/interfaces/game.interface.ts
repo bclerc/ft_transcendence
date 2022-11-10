@@ -16,6 +16,8 @@ export interface GameI {
 	key_handler1?: number;
 	key_handler2?: number;
 	
+	mapId?: number;
+
 	spectators?: UserI[]; //tableau des utilisateurs qui regardent le match
 
 	id_interval?: NodeJS.Timer; //id pour arreter la loop du game

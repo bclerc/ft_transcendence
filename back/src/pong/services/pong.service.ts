@@ -62,7 +62,7 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 //
 
 ////
-export const MAX_SCORE = 50;
+export const MAX_SCORE = 5;
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
 export const SPEED_PLAYER = 8
@@ -81,11 +81,9 @@ export class PongService {
 
 
     loopGameNormal(game: GameI){
-
         ////
         //MOUVEMENTS DES JOUEURS
         ////
-        
         game.player1.paddle.y += game.player1.paddle.dy;
         game.player2.paddle.y += game.player2.paddle.dy;
 
@@ -569,6 +567,7 @@ export class PongService {
         this.drawForAll("drawMap3", game);
         }
 
+
     async drawInit(game: GameI)
     {
         game.player1.socket.emit('drawInit');
@@ -705,50 +704,61 @@ export class PongService {
 	}
 
 
-    keydownZ(game: GameI, client: Socket)
+
+
+
+    keydown(game: GameI, client: Socket, key: string)
     {
-        if (game.player1.socket === client)
+        if (key === 'z' || key === 'w')
         {
-            if (game.player1.paddle.dy != - SPEED_PLAYER)
+            if (game && game.player1 && game.player1.socket === client)
+            {
                 game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+                if (game.player1.paddle.dy < - SPEED_PLAYER)
+                   game.player1.paddle.dy = -SPEED_PLAYER;
+            }
+            else if (game && game.player2 && game.player2.socket === client)
+            {
+                game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+                if (game.player2.paddle.dy < - SPEED_PLAYER)
+                   game.player2.paddle.dy = -SPEED_PLAYER;
+            }
         }
-        else
+        else if (key === 's')
         {
-            if (game.player2.paddle.dy != - SPEED_PLAYER)
+            if (game && game.player1 && game.player1.socket === client)
+            {
+                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+                if (game.player1.paddle.dy > SPEED_PLAYER)
+                    game.player1.paddle.dy = SPEED_PLAYER;
+            }
+            else if (game && game.player2 && game.player2.socket === client)
+            {
+                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+                if (game.player2.paddle.dy > SPEED_PLAYER)
+                   game.player2.paddle.dy = SPEED_PLAYER;
+            }
+        }
+    }
+
+    keyup(game: GameI, client: Socket,  key: string)
+    {
+        console.log("keyup");
+        if (key === 'z' || key === 'w')
+        {
+            if (game.player1.socket === client)
+                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+            else
+                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+        }
+        else if (key === 's')
+        {
+            if (game.player1.socket === client)
+                game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+            else
                 game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
         }
     }
-
-    keydownS(game: GameI, client: Socket)
-    {
-        if (game.player1.socket === client)
-        {
-            if (game.player1.paddle.dy != SPEED_PLAYER)
-                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
-        }
-        else
-        {
-            if (game.player2.paddle.dy != SPEED_PLAYER)
-                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
-        }
-    }
-
-    keyupZ(game: GameI, client: Socket)
-    {
-        if (game.player1.socket === client)
-           game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
-        else
-            game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
-    }
-
-    keyupS(game: GameI, client: Socket)
-    {
-        if (game.player1.socket === client)
-            game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
-        else
-            game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
-    }
-
 
     joinGame(client: Socket, game: GameI){
 		game.player2 = {
@@ -828,43 +838,38 @@ export class PongService {
             game.player1.socket.emit('lose');
             game.player2.socket.emit('win');
         }
+        //Draw le final dune autre maniere pour les spectators !!!
+        // game.spectators[].socket.emit('');
+    }
 
-        if (game.spectators)
+	async startGame(game: GameI, mapid: number)
+    {
+        game.player1.socket.emit('state', game.id);
+        game.player2.socket.emit('state', game.id);
+        if (mapid === 0)
         {
-            while (game.spectators[i])
-            {
-                //Draw le final dune autre maniere pour les spectators !!!
-                // game.spectators[i].socket.emit('');
-                i++;
-            }
+            game.id_interval = setInterval(() => {
+                this.loopGameNormal(game);
+            }, 1000/60);
         }
-    }
-
-	async startGame(game: GameI, mapid: number){
-    if (mapid === 0)
-    {
-        game.id_interval = setInterval(() => {
-            this.loopGameNormal(game);
-        }, 1000/60);
-    }
-    else if (mapid === 1)
-    {
-        game.id_interval = setInterval(() => {
-            this.loopGameMap1(game);
-        }, 1000/60);
-    }
-    else if (mapid === 2)
-    {
-        game.id_interval = setInterval(() => {
-            this.loopGameMap2(game);
-        }, 1000/60);
-    }		
-    else if (mapid === 3)
-    {
-        game.id_interval = setInterval(() => {
-            this.loopGameMap3(game);
-        }, 1000/60);
-    }
+        else if (mapid === 1)
+        {
+            game.id_interval = setInterval(() => {
+                this.loopGameMap1(game);
+            }, 1000/60);
+        }
+        else if (mapid === 2)
+        {
+            game.id_interval = setInterval(() => {
+                this.loopGameMap2(game);
+            }, 1000/60);
+        }		
+        else if (mapid === 3)
+        {
+            game.id_interval = setInterval(() => {
+                this.loopGameMap3(game);
+            }, 1000/60);
+        }
 }
 
 
