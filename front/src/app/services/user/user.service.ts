@@ -129,7 +129,7 @@ export class UserService {
     return this.http.get(this.backUrl + "user/friends/decline/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
-  removeFriend(userId: number)
+  removeFriend(userId: any)
   {
     return this.http.get(this.backUrl + "user/friends/remove/" + userId, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
 
@@ -150,7 +150,7 @@ export class UserService {
     return this.http.post(this.backUrl + "user/avatar", avatar ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
-  blockUser(Id: number)
+  blockUser(Id: any)
   {
     console.log(this.backUrl + "user/block/" + Id ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     return this.http.post(this.backUrl + "user/block/" + Id,  null, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;

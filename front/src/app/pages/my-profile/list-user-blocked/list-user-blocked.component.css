@@ -2,46 +2,46 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 @font-face {
 	font-family: 'Titan One';
-	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Light';
-	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Regular';
-	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Medium';
-	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-SemiBold';
-	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Bold';
-	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 
-.demandes ul{
+.blocked-list ul{
 	list-style-type: none;
 }
 
-.demandes li {
+.blocked-list li {
 	display: flex;
 	flex-direction: row;
 	background-color: #2b2a28;
@@ -85,14 +85,14 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 }
 
-.demandes .buttts{
+.blocked-list .buttts{
 	/* background-color: blueviolet; */
 	display: flex;
 	align-items: center;
 	min-width: fit-content;
 }
 
-.demandes .buttts button{
+.blocked-list .buttts button{
 	height: 35px;
     margin-left: 25px;
 	font-family: ReadexPro-Medium;
@@ -102,10 +102,10 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 	border: 2px solid #343330;
 	padding: 4px 10px 4px 10px;
 }
-.demandes .buttts button:focus{
+.blocked-list .buttts button:focus{
 	outline: none;
 }
-.demandes .buttts button img{
+.blocked-list .buttts button img{
 	margin-left: 4px;
 }
 #refuse:hover{
@@ -113,7 +113,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 	cursor: pointer;
 	border: 2px solid #ee481e;
 }
-#accept:hover{
+#unblock:hover{
 	color: #43EE1E;
 	cursor: pointer;
 	border: 2px solid #43EE1E;
@@ -121,7 +121,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 @media only screen and (max-width: 610px) {
 
-	.demandes li {
+	.blocked-list li {
 		display: flex;
 		flex-direction: column;
 	}
@@ -131,13 +131,13 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 		justify-content: center;
 	}
 
-	.demandes .buttts{
+	.blocked-list .buttts{
 		min-width: none;
 		width: 100%;
 		justify-content: center;
 		/* background-color: aqua; */
 	}
-	.demandes .buttts button:first-child{
+	.blocked-list .buttts button:first-child{
 		margin-left: 0px;
 	}
 }

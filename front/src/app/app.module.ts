@@ -52,7 +52,11 @@ import { NewRoomComponent } from './pages/chat-page/new-room/new-room.component'
 import {MatDialogModule} from '@angular/material/dialog';
 import { PenaltyDialogComponent } from './src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
 import {MatSelectModule} from '@angular/material/select';
-import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-dialog.component'; 
+import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-dialog.component';
+import { ListUserBlockedComponent } from './pages/my-profile/list-user-blocked/list-user-blocked.component';
+import { ListMyFriendComponent } from './pages/my-profile/list-my-friend/list-my-friend.component';
+import { ListMatchHistoryComponent } from './pages/my-profile/list-match-history/list-match-history.component'; 
+import { MatMenuModule } from '@angular/material/menu';
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
@@ -89,6 +93,9 @@ export function tokenGetter() {
     NewRoomComponent,
     PenaltyDialogComponent,
     EditDialogComponent,
+    ListUserBlockedComponent,
+    ListMyFriendComponent,
+    ListMatchHistoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -125,6 +132,7 @@ export function tokenGetter() {
     MatDialogModule,
     CommonModule,
     SocketIoModule,
+    MatMenuModule,
   ],
   providers: 
   [    

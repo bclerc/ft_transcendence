@@ -1,0 +1,341 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1f1f1f;
+}
+a{
+	color: inherit;
+}
+
+.center-profile{
+	margin: auto;
+	max-width: 1290px;
+	color: #1f1f1f;
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+.status{
+	display: flex;
+	flex-direction: row;
+	align-self: center;
+	background-color: #44433f;
+	/* border: 2px solid #44433f; */
+	width: fit-content;
+	padding: 4px 10px 5px 10px;
+	border-radius: 20px;
+}
+.status p{
+	margin-bottom: 0px;
+	font-family: ReadexPro-Light;
+	font-size: 14px;
+	color:#FEEFCF;
+	margin-right: 6px;
+}
+.status img{
+	margin-top: 1px;
+}
+
+/* Gerer mes amis ------------------------------------------------------------------------------------------ */
+
+.mes-amis{
+	/* margin-top: 30px; */
+	margin-bottom: 100px;
+}
+
+#friend-n-match-h2{
+	font-family: Titan One;
+	font-size: 35px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	color: #feefcf;
+}
+.ami{
+	float: left;
+	margin-right: 30px;
+	width: calc(25% - 22.5px);
+	margin-bottom: 30px;
+	padding: 40px 20px 40px 20px;
+	background-color: #343330;
+	border-radius: 10px;
+	color: #feefcf;
+	text-align: center;
+}
+.ami:nth-child(4n){
+	margin-right: 0px;
+}
+.ami .status{
+	margin: auto;
+}
+
+.ami #lien{
+	/* background-color: #43ee1e; */
+	width:100%;
+}
+
+.ami #photo-profile{
+	width: 150px;
+	height: 150px;
+	margin: auto;
+	margin-bottom: 30px;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 3px solid #ee481e;
+	box-shadow: -3px 3px #ee481e;
+}
+.ami .friend-pseudo{
+	width: 100%;
+	/* background-color: #EE481E; */
+	font-family: Titan One;
+	font-size: 18px;
+	margin-bottom: 15px;
+}
+.ami .rank{
+	font-family: Titan One;
+	font-size: 14px;
+	color: #efc10a;
+	margin-bottom: 30px;
+}
+
+.ami .tri-action button{
+	background-color: transparent;
+	border: none;
+	margin-right: 8px;
+	margin-bottom: 20px;
+}
+.ami .tri-action button:last-child{
+	margin-right: 0px;
+}
+
+
+#icon-invite-game:hover #icon{
+	fill: #ee481e;
+}
+#icon-invite-game:hover #BG{
+	fill: #ee481e;
+	opacity: 20%;
+}
+
+#icon-ask-friend:hover #icon{
+	fill: #ef5f00;
+}
+#icon-ask-friend:hover #BG{
+	fill: #ef5f00;
+	opacity: 20%;
+}
+#icon-delete-friend:hover #icon{
+	fill: #ef5f00;
+}
+#icon-delete-friend:hover #BG{
+	fill: #ef5f00;
+	opacity: 20%;
+}
+
+#icon-mute:hover #icon{
+	fill: #f1a726;
+}
+#icon-mute:hover #BG{
+	fill: #f1a726;
+	opacity: 20%;
+}
+
+#icon-block:hover #icon{
+	fill: #ef7e00;
+}
+#icon-block:hover #BG{
+	fill: #ef7e00;
+	opacity: 20%;
+}
+
+#icon-exclure:hover #icon{
+	fill: #efc10a;
+}
+#icon-exclure:hover #BG{
+	fill: #efc10a;
+	opacity: 20%;
+}
+
+#icon-bannir:hover #icon{
+	fill: #f9e131;
+}
+#icon-bannir:hover #BG{
+	fill: #f9e131;
+	opacity: 20%;
+}
+
+
+@media only screen and (max-width: 1292px) {
+
+	.ami{
+		width: calc(33.333% - 20px);
+	}
+	.ami:nth-child(4n){
+		margin-right: 30px;
+	}
+	.ami:nth-child(3n){
+		margin-right: 0px;
+	}
+} 
+
+@media only screen and (max-width: 950px) {
+
+	.ami{
+		width: calc(50% - 15px);
+	}
+	.ami:nth-child(4n){
+		margin-right: 30px;
+	}
+	.ami:nth-child(3n){
+		margin-right: 30px;
+	}
+	.ami:nth-child(2n){
+		margin-right: 0px;
+	}
+}
+
+@media only screen and (max-width: 830px) {
+
+}
+
+@media only screen and (max-width: 780px) {
+
+	.status{
+		margin: auto;
+	}
+
+	.ami #photo-profile{
+		width: 100px;
+		height: 100px;
+		/* margin: auto; */
+		margin-bottom: 15px;
+		/* object-fit: cover;
+		border-radius: 6px;
+		border: 3px solid #ee481e;
+		box-shadow: -3px 3px #ee481e; */
+	}
+	.ami .friend-pseudo{
+		margin-bottom: 15px;
+	}
+	.ami .rank{
+		margin-bottom: 15px;
+	}
+	.ami .tri-action button{
+		margin-right: -2px;
+		margin-bottom: 10px;
+	}
+
+}
+
+@media only screen and (max-width: 610px) {
+
+	#friend-n-match-h2{
+		font-size: 25px;
+	}
+}
+
+@media only screen and (max-width: 553px) {
+
+	.ami .tri-action button{
+		margin-bottom: 10px;
+		margin-top: 5px;
+	}
+	.ami .tri-action button svg{
+		width: 30px;
+		height: 30px;
+	}
+
+	.ami{
+		padding: 30px;
+	}
+	#photo-profile{
+		width: 100%;
+		margin-bottom: 20px;
+	}
+	.ami .friend-pseudo{
+		font-size: 16px;
+		margin: 0px 0px 0px 0px;
+	}
+	.ami .status p{
+		font-size: 12px;
+	}
+	.ami .friend-pseudo{
+		margin-bottom: 15px;
+	}
+	.ami .rank{
+		margin-bottom: 15px;
+	}
+}
+
+@media only screen and (max-width: 490px) {
+
+	.ami{
+		width: 100%;
+		float: none;
+		margin-right: 0px;
+	}
+	.ami .tri-action button svg{
+		width: 40px;
+		height: 40px;
+	}
+	.ami .tri-action button{
+		margin-right: 5px;
+	}
+
+}
+
+@media only screen and (max-width: 400px) {
+
+}
