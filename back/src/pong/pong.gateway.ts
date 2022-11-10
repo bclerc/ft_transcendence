@@ -87,6 +87,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	////////
 	///KEYS HANDLER
 	///////
+
 	
 	@SubscribeMessage('keydown')
 	keydown(client: Socket, keydown: string)
@@ -97,6 +98,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				this.pongService.keydown(game, client, keydown);
 		}
 	}
+
 
 	@SubscribeMessage('keyup')
 	keyup(client: Socket, keyup: string)

@@ -1,6 +1,7 @@
 import { Component, ElementRef, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { ConnectableObservable, Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
@@ -26,7 +27,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
 
 
   messages$: Observable<Message[]> = this.chatService.getMessages(this.room);
-
+  dialogRef: any;
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
 
   form: FormGroup = new FormGroup({
@@ -36,15 +37,17 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private chatService: ChatService,
     private userService: UserService,
     private socket: Socket,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    private router : Router) { }
               
              
   openDialog(target: UserI, penalty: string): void {
-    this.dialog.open(EditDialogComponent, {
+    this.dialogRef = this.dialog.open(EditDialogComponent, {
       data: this.room,
       width: '90%',
       height: '90%',
     });
+
   }
 
   async sendMessage() {
@@ -69,6 +72,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   }
   
   ngOnInit(): void {
+
     this.messages$.subscribe((messages: Message[]) => {
       const element = document.getElementById('chat_box_body');
 

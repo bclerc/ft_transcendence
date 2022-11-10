@@ -1,7 +1,12 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
+import { Observable, Subscription } from 'rxjs';
+import { CurrentUserService } from 'src/app/services/user/current_user.service';
+// import { Subscription } from 'rxjs';
+
 import { GameI } from '../../models/PongInterfaces/pong.interface';
 import { ScoreI } from '../../models/PongInterfaces/score.interface';
 import { UserI } from '../../models/PongInterfaces/user.interface';
@@ -114,7 +119,8 @@ export class PlayPongPagesComponent implements OnInit {
   // private audio2;
   // private audio3;
   
-  constructor(private router: Router, private socket: Socket
+
+  constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService
   )
   {
     this.var_interval = 0;

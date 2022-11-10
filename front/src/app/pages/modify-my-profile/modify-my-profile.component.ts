@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EmailValidator, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map, Observable, Subscription } from 'rxjs';
@@ -32,9 +33,15 @@ export class ModifyMyProfileComponent implements OnInit {
 
   subscription! : Subscription;
 
-  constructor(private fb: FormBuilder, private token : TokenStorageService, private userService: UserService, private jwtHelper : JwtHelperService, private route : ActivatedRoute, private router: Router
-    , public currentUser : CurrentUserService) 
-  {}
+  constructor ( 
+                private fb: FormBuilder,
+                private token : TokenStorageService,
+                private userService: UserService,
+                private route : ActivatedRoute,
+                private router: Router, 
+                public currentUser : CurrentUserService,
+                private snackBar : MatSnackBar,
+              ) {}
     
   
 
@@ -89,7 +96,7 @@ export class ModifyMyProfileComponent implements OnInit {
   
   ngOnDestroy() : void
   {
-    //this.subscription.unsubscribe;
+    this.subscription.unsubscribe;
   }
 
   /*await getInfo()
@@ -111,9 +118,18 @@ export class ModifyMyProfileComponent implements OnInit {
       if (this.id)
         this.userService.ChangeDbInformation(this.user).subscribe(
           (data : any) => {
-            // console.log("changedb =",data);
-            },
-            //error => this.router.navigate([''])
+          this.snackBar.open("Changement de pseudo confirmé", 'Undo')
+           }
+            ,
+            (error : any) => {
+              if (error.error.message === "displayname already used")
+              {
+                this.snackBar.open("Le pseudo est deja utilisé", 'Undo', {
+                  duration: 3000
+                })
+              }
+
+            }
           );
     }
   }
