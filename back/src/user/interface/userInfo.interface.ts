@@ -1,4 +1,4 @@
-import { UserState } from "@prisma/client";
+import { Game, UserState } from "@prisma/client";
 import { BasicUserI } from "./basicUser.interface";
 
 export class UserInfoI {
@@ -9,6 +9,7 @@ export class UserInfoI {
     email: string;
     avatar_url: string;
     friends: BasicUserI[];
+    games: Game[];
     blockedUsers: BasicUserI[];
     twoFactorEnabled: boolean;
 }
