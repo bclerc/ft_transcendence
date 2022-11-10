@@ -23,7 +23,7 @@
 						</g>
 					</svg>
 				</button>
-				<button>
+				<button (click)="removeFriend(friend.id)">
 					<svg width="40px" height="40px" viewBox="0 0 40 40">
 						<title>icon-delete-friend</title>
 						<g id="icon-delete-friend" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -32,7 +32,7 @@
 						</g>
 					</svg>
 				</button>
-				<button>
+				<button (click)="blockUser(friend.id)">
 					<svg width="40px" height="40px" viewBox="0 0 40 40">
 						<title>icon-block</title>
 						<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

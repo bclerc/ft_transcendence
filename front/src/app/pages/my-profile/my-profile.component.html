@@ -27,8 +27,8 @@
 
 					<!-- BUTTON NODIFY -->
 					<div class="profil-right">
-						<button>
-							<a routerLink="/modifymyprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Modifier <img src="../../../assets/svg/edit.svg" alt=""></a>
+						<button (click)="openDialogEditMyProfile()">
+							<!-- <a routerLink="/modifymyprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Modifier <img src="../../../assets/svg/edit.svg" alt=""></a> -->
 						</button>
 					</div>
 				</div>
@@ -92,7 +92,8 @@
 								Utilisateurs bloqués
 							</div>
 						</ng-template>
-						<div class="mes-amis">
+						<!-- <app-list-my-friend></app-list-my-friend> -->
+						<!-- <div class="mes-amis">
 							<ng-container *ngFor="let friend of friends">
 								<div class="ami">
 									<div id="lien">
@@ -148,9 +149,9 @@
 											<p *ngIf="friend.state === 'OFFLINE'" id="user-status">Hors ligne</p>
 											
 										</div>
-									</div>
-								</div> 
-							</ng-container>
+									</div> -->
+								<!-- </div> 
+							</ng-container> -->
 
 						<h2>Utilisateurs bloqués</h2>
 						<div class="blocked-user">

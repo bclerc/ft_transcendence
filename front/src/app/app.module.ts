@@ -53,7 +53,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { PenaltyDialogComponent } from './src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
 import {MatSelectModule} from '@angular/material/select';
 import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-dialog.component';
-import { ListUserBlockedComponent } from './pages/my-profile/list-user-blocked/list-user-blocked.component';
+import { ListUserBlockedComponent } from './pages/modify-my-profile/list-user-blocked/list-user-blocked.component';
 import { ListMyFriendComponent } from './pages/my-profile/list-my-friend/list-my-friend.component';
 import { ListMatchHistoryComponent } from './pages/my-profile/list-match-history/list-match-history.component'; 
 

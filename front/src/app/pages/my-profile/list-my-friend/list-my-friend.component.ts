@@ -16,11 +16,9 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class ListMyFriendComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private token : TokenStorageService, private jwtHelper: JwtHelperService, public userService : UserService, private router : Router
-    , public currentUser : CurrentUserService, private snackBar : MatSnackBar) 
-  {
- 
-  }
+  constructor (  
+                public userService : UserService,
+              ) {}
 
   friends! : UserI[];
   subscriptionFriend!: Subscription;
@@ -39,44 +37,45 @@ export class ListMyFriendComponent implements OnInit {
         this.subscriptionFriend.unsubscribe;
     }
 
-    // removeFriend(id : number | undefined) : void
-    // {
-    //   this.userService.removeFriend(id).subscribe(
-    //     (data : any) =>
-    //     {
-    //     if (this.user && this.friends)
-    //     {
-    //       for (var i = 0; this.friends[i] ;i++)
-    //       {
-    //         if (id === this.friends[i].id)
-    //         {
-    //           this.friends.splice(i, 1);
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   );
-    // }
+    removeFriend(id : number | undefined) : void
+    {
+      this.userService.removeFriend(id).subscribe(
+        (data : any) =>
+        {
+        if (this.friends)
+        {
+          for (var i = 0; this.friends[i] ;i++)
+          {
+            if (id === this.friends[i].id)
+            {
+              this.friends.splice(i, 1);
+              break;
+            }
+          }
+        }
+      }
+      );
+    }
   
-    // blockUser(id : number | undefined) : void
-    // {
-    //   this.userService.blockUser(id).subscribe(
-    //     (data : any) =>
-    //     {
-    //     if (this.user && this.friends)
-    //     {
-    //       for (var i = 0; this.friends[i] ;i++)
-    //       {
-    //         if (id === this.friends[i].id)
-    //         {
-    //           this.friends.splice(i, 1);
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   )
-    // }
+    blockUser(id : number | undefined) : void
+    {
+      this.userService.blockUser(id).subscribe(
+        (data : any) =>
+        {
+        if (this.friends)
+        {
+          for (var i = 0; this.friends[i] ;i++)
+          {
+            if (id === this.friends[i].id)
+            {
+              // this.user.blockedUsers.
+              this.friends.splice(i, 1);
+              break;
+            }
+          }
+        }
+      }
+      )
+    }
 
 }
