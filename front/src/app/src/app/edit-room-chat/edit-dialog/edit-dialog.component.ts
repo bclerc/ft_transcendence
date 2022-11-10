@@ -1,4 +1,5 @@
-import { Component, Inject, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
 import { FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -195,5 +196,7 @@ export class EditDialogComponent implements OnInit {
       this.room.users = this.room.users.filter(u => u.id !== user.id);
     }
   }
+  
 }
+
 

@@ -25,11 +25,10 @@
     border-bottom: solid 2px #56554F;
     display: flex;
     flex-direction: row;
-	margin-bottom: 40px;
+	margin-bottom: 60px;
 }
 
 .param-header h2 {
-	// font-family: ReadexPro-Light;
 	font-family: Titan One;
 	font-size: 24px;
 	padding-top: 5px;
@@ -40,21 +39,14 @@
 	margin-top: -8px;
 	margin-right: 20px;
 }
-// .param-header img{
-//     background-color: none;
-//     border-radius: 100%;
-// }
-// .param-header #settings-close:hover{
-//     cursor: pointer;
-//     background-color: #ee481e;
-// }
+
 
 #edit, #gerer{
     display:flex;
     flex-direction: column;
 }
 #edit{
-    margin-bottom: 40px;
+    margin-bottom: 60px;
 }
 hr.clear{
 	margin: 0;
@@ -181,7 +173,7 @@ textarea{
 	color:#feefcf;
 }
 
-
+// GERER LES MEMBRES ----------------------------------------------------------------------- //
 
 #membre{
     display:flex;
@@ -194,18 +186,36 @@ textarea{
 }
 .info{
     display: flex;
-	flex-direction: column;
-	justify-content: start;
+	flex-direction: row;
+	justify-content: left;
 	width: 100%;
 	align-self: center;
-	background-color: #43EE1E;
+	// background-color: #43EE1E;
+}
+.info .name-status{
+	display: flex;
+	flex-direction: column;
+	justify-content: left;
+	margin-left: 15px;
+}
+.info .name-admin{
+	display: flex;
+	flex-direction: row;
+}
+.info #photo{
+	height: 40px;
+	width: 40px;
+	object-fit: cover;
+	border-radius: 40px;
+	border: 3px solid #ee481e;
+	box-shadow: -3px 3px #ee481e;
 }
 
 .info #user-name{
 	font-family: Titan One;
 	color: #feefcf;
 	font-size: 16px;
-	margin: -3px 0px 3px 0px;
+	margin: 0px 10px 0px 0px;
 }
 .info #user-status{
 	font-family: ReadexPro-Regular;
@@ -213,13 +223,16 @@ textarea{
 	font-size: 12px;
 }
 
+.buts-menu{
+	display: none;
+}
 .buts{
     display: flex;
     flex-direction: row;
     align-items: center;
 	justify-content: end;
 	margin-right: 6px;
-	background-color: blueviolet;
+	// background-color: blueviolet;
 }
 #membre button{
     margin-left: 20px;
@@ -233,11 +246,21 @@ textarea{
 	cursor: pointer;
 }
 
+#icon-admin:hover #icon{
+	fill: #f42323;
+}
+#icon-admin:hover #BG{
+	fill: #f42323;
+	stroke: #f42323;
+	opacity: 20%;
+}
+
 #icon-invite-game:hover #icon{
 	fill: #ee481e;
 }
 #icon-invite-game:hover #BG{
 	fill: #ee481e;
+	stroke: #ee481e;
 	opacity: 20%;
 }
 
@@ -246,6 +269,7 @@ textarea{
 }
 #icon-ask-friend:hover #BG{
 	fill: #ef5f00;
+	stroke: #ef5f00;
 	opacity: 20%;
 }
 
@@ -254,6 +278,7 @@ textarea{
 }
 #icon-mute:hover #BG{
 	fill: #f1a726;
+	stroke: #f1a726;
 	opacity: 20%;
 }
 
@@ -262,11 +287,8 @@ textarea{
 }
 #icon-block:hover #BG{
 	fill: #ef7e00;
-	opacity: 20%;
-}
-#clic{
 	stroke: #ef7e00;
-	stroke-width: 2;
+	opacity: 20%;
 }
 
 #icon-exclure:hover #icon{
@@ -274,6 +296,7 @@ textarea{
 }
 #icon-exclure:hover #BG{
 	fill: #efc10a;
+	stroke: #efc10a;
 	opacity: 20%;
 }
 
@@ -282,9 +305,39 @@ textarea{
 }
 #icon-bannir:hover #BG{
 	fill: #f9e131;
+	stroke: #f9e131;
 	opacity: 20%;
 }
 
+// SUPPRIMER LE GROUPE -------------------------------------------------------- //
+
+.delete-room{
+	margin-top: 60px;
+}
+.delete-room p{
+	font-family: ReadexPro-Regular;
+	color: #feefcf;
+	font-size: 14px;
+	width: 65%;
+}
+.cool-button{
+
+	font-family: Titan One;
+	font-size: 14px;
+	color: #feefcf;
+	background-color: #ee481e;
+	border-radius: 6px;
+	border: 3px solid #feefcf;
+	box-shadow: -3px 3px #feefcf;
+	// max-width: 190px;
+	display: block;
+	padding: 18px 25px 17px 25px;
+	margin: 40px 0px 70px 0px;
+}
+.cool-button:hover{
+	background-color: #1F1F1F;
+	color: #ee481e;
+}
 
 /*------------------------------------------------------------ Grille */
 .demi-left{
@@ -300,4 +353,32 @@ textarea{
 .demi-right{
 	float: left;
     width: calc(50% - 10px);
+}
+
+
+
+@media only screen and (max-width: 1000px) {
+
+	// #edit{
+	// 	background-color: blue;
+	// }
+	.buts{
+		display: none;
+	}
+	.buts-menu{
+		display: block;
+	}
+	.buts-menu button:hover{
+		background-color: transparent;
+	}
+
+	.demi-left{
+		float: none;
+		width: 100%;
+	}
+	.demi-right{
+		float: none;
+		width: 100%;
+	}
+
 }

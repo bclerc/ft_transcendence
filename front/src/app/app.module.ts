@@ -56,6 +56,7 @@ import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-d
 import { ListUserBlockedComponent } from './pages/my-profile/list-user-blocked/list-user-blocked.component';
 import { ListMyFriendComponent } from './pages/my-profile/list-my-friend/list-my-friend.component';
 import { ListMatchHistoryComponent } from './pages/my-profile/list-match-history/list-match-history.component'; 
+import { MatMenuModule } from '@angular/material/menu';
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
@@ -131,6 +132,7 @@ export function tokenGetter() {
     MatDialogModule,
     CommonModule,
     SocketIoModule,
+    MatMenuModule,
   ],
   providers: 
   [    
