@@ -13,8 +13,8 @@
     <a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
     </ng-template>
   <ng-template #elseBlock>
-    <p *ngIf="!show" id="user-status"><a href="javascript:void(0);" (click)="showActivate2Fa()">Activate authentification with google authentificator</a></p>
-    <p *ngIf="show" id="user-status"><a href="javascript:void(0);" (click)="hideActivate2Fa()">Cacher la barre</a>
+    <p *ngIf="!show"><a href="javascript:void(0);" (click)="showActivate2Fa()">Activate authentification with google authentificator</a></p>
+    <p *ngIf="show"><a href="javascript:void(0);" (click)="hideActivate2Fa()">Cacher la barre</a>
     <app-activate2-fa></app-activate2-fa></p>
   <!-- <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a> -->
   

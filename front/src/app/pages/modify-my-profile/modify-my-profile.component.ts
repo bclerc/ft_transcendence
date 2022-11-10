@@ -16,9 +16,9 @@ import { EventEmitter } from 'stream';
   styleUrls: ['./modify-my-profile.component.css']
 })
 export class ModifyMyProfileComponent implements OnInit {
-  //@Output() user! : UserI;
+  @Output() user! : UserI;
 
-  user! : UserI;
+  // user! : UserI;
   ChangeDisplaynameForm!: FormGroup;
   ChangeAvatar_UrlForm!: FormGroup;
   FaForm: FormGroup = this.fb.group({

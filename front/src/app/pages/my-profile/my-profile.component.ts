@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, Output } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +18,7 @@ import { ModifyMyProfileComponent } from '../modify-my-profile/modify-my-profile
   encapsulation: ViewEncapsulation.None
 })
 export class MyProfileComponent implements OnInit {
+  @Output() user! : UserI;
 
   constructor ( public userService : UserService,
                 private router : Router,
@@ -26,7 +27,7 @@ export class MyProfileComponent implements OnInit {
                 private dialog: MatDialog,
               ) {}
   
-  user? : UserI;
+  // user? : UserI;
   friends! : UserI[];
   subscription!: Subscription;
   subscriptionFriend!: Subscription;

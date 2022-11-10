@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -15,6 +15,7 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./list-my-friend.component.css']
 })
 export class ListMyFriendComponent implements OnInit {
+  @Input() user! : UserI;
 
   constructor (  
                 public userService : UserService,
@@ -68,7 +69,8 @@ export class ListMyFriendComponent implements OnInit {
           {
             if (id === this.friends[i].id)
             {
-              // this.user.blockedUsers.
+              if (this.user.blockedUsers)
+                this.user.blockedUsers.push(this.friends[i]);
               this.friends.splice(i, 1);
               break;
             }
