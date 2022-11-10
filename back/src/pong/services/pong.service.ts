@@ -150,13 +150,13 @@ export class PongService {
             ball.dy = 4;
         ball.dx *= -1.2;
         if (ball.dx > -2 && ball.dx <= 0)
-        ball.dx = -2;
+            ball.dx = -2;
         else if (ball.dx < 2 && ball.dx > 0)
-        ball.dx = 2;
+            ball.dx = 2;
         if (ball.dx < -MAX_SPEED)
-        ball.dx = -MAX_SPEED;
+            ball.dx = -MAX_SPEED;
         else if (ball.dx > MAX_SPEED)
-        ball.dx = MAX_SPEED;
+            ball.dx = MAX_SPEED;
     }
     
     initState(): GameI{

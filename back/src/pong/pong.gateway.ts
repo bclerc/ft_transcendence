@@ -1,12 +1,10 @@
 import { Inject } from "@nestjs/common";
 import { WebSocketServer, SubscribeMessage, WebSocketGateway, ConnectedSocket, OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect } from "@nestjs/websockets";
-import { identity } from "rxjs";
 import { Server, Socket } from "socket.io";
 import { OnlineUserService } from "src/onlineusers/onlineuser.service";
 import { GameI } from "./interfaces/game.interface";
 import { UserI } from "./interfaces/user.interface";
 import { PongService } from "./services/pong.service";
-import { VariablePong } from "./variables.pong";
 
 const NORMALGAME = 0;
 const MAX_MAP = 3;
@@ -141,7 +139,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 			//le front ne sauvegarde pas l'id de la map bordel de mierde de la madre de dia
 			//obliger de boucler a chaque keyboardEvent
-			game.player1.socket.emit('state', game.id);
+			game.player1.socket.emit('state', game.id); //WORK BUT @HostListener on front side can not get the id
 			game.player2.socket.emit('state', game.id);
 
 			await this.pongService.startGame(game, game.mapId);
