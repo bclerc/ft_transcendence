@@ -1,3 +1,600 @@
-div {
-    text-align: center;
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1f1f1f;
+}
+a{
+	color: inherit;
+}
+
+.center-profile{
+	margin: auto;
+	max-width: 1290px;
+	color: #1f1f1f;
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+#head{
+    display: flex;
+    flex-direction: row;
+	margin-bottom: 30px;
+}
+
+#user-info-profile, #stats{
+	background-color: #2B2A28;
+	border-radius: 20px;
+}
+#user-info-profile{
+    display: flex;
+    flex-direction: row;
+	width: 100%;
+	padding: 60px;
+}
+.profil-left img{
+	min-width: 140px;
+	height: 140px;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 4px solid #ee481e;
+	box-shadow: -7px 7px #ee481e;
+}
+.profil-info{
+	width: 100%;
+	padding-left: 30px;
+	align-self: center;
+}
+
+.status{
+	display: flex;
+	flex-direction: row;
+	align-self: center;
+	background-color: #44433f;
+	/* border: 2px solid #44433f; */
+	width: fit-content;
+	padding: 4px 10px 5px 10px;
+	border-radius: 20px;
+}
+.status p{
+	margin-bottom: 0px;
+	font-family: ReadexPro-Light;
+	font-size: 14px;
+	color:#FEEFCF;
+	margin-right: 6px;
+}
+.status img{
+	margin-top: 1px;
+}
+.profil-info #name{
+	font-family: Titan One;
+	font-size: 60px;
+	color:#FEEFCF;
+	margin-bottom: 20px;
+}
+.profil-info #email{
+	font-family: ReadexPro-Medium;
+	font-size: 16px;
+	color:#FEEFCF;
+	margin-bottom: 10px;
+}
+.profil-info #date{
+	font-family: ReadexPro-Light;
+	font-size: 14px;
+	color:#FEEFCF;
+}
+.profil-right{
+	min-width: fit-content;
+}
+.profil-right button{
+	background-color: transparent;
+	padding: 10px 25px 10px 30px;
+	font-family: ReadexPro-SemiBold;
+	color: #FEEFCF;
+	font-size: 14px;
+	border: 2px solid #44433f;
+	border-radius: 6px;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+.profil-right button a{
+	display: flex;
+	align-items: center;
+}
+.profil-right button img{
+	margin-left: 10px;
+	width: 20px;
+	height: 20px;
+}
+.profil-right button:hover{
+	border: 2px solid #ee481e;
+	color: #ee481e;
+}
+
+#stats{
+	width: 50%;
+	margin-left: 30px;
+    display: flex;
+    flex-direction: row;
+	align-items: center;
+	padding: 50px 30px 50px 30px;
+	text-align: center;
+}
+.data{
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+}
+.data span{
+	font-family: Titan One;
+	font-size: 35px;
+	margin-bottom: 10px;
+}
+#red {
+	color: #EE481E;
+}
+#orange {
+	color: #EF7E00;
+}
+#yellow {
+	color: #efc10a;
+}
+.data p{
+	font-family: ReadexPro-Medium;
+	font-size: 13px;
+	color:#FEEFCF;
+}
+
+.my-profile-content{
+	border: 2px solid #FEEFCF;
+	border-radius: 20px;
+	padding: 40px;
+}
+
+
+/* Styles for tab labels */
+#friend-n-match .mat-tab-label {
+	padding: 15px;
+	border-radius: 40px;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	font-size: 14px;
+	text-decoration: none;
+	letter-spacing: -0,16;
+}
+
+/* Styles for the active tab label */
+#friend-n-match .mat-tab-label.mat-tab-label-active {
+	padding: 15px;
+	background-color: #ee481e;
+	border-radius: 40px;
+	border: 2px solid #feefcf;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+/* Styles for the ink bar */
+.mat-ink-bar {
+	display: none;
+}
+
+.mat-tab-group ul{
+
+	margin-top: 30px;
+	list-style-type: none;
+}
+
+/* Styles for group list / friend list */
+.my-profile-content .mat-tab-group ul li{
+	display:flex;
+	flex-direction: row;
+	background-color: #343330;
+	padding: 30px 30px 20px 30px;
+	border-radius: 6px;
+	font-family: ReadexPro-Regular;
+	color: #feefcf;
+	font-size: 18px;
+	margin-top: 30px;
+}
+.my-profile-content .mat-tab-group ul li a:hover{
+	color: #ee481e;
+	cursor: pointer;
+}
+
+.win{
+	font-family: ReadexPro-Bold;
+	color: chartreuse;
+	margin: 15px 30px 0px 0px;
+}
+
+.VS{
+	display: flex;
+	flex-direction: column;
+	/* background-color: #ee481e; */
+	min-width: fit-content;
+	text-align: center;
+}
+.VS span{
+	font-size: 14px;
+	margin-bottom: 15px;
+}
+
+.VS #son-profil{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.VS img{
+	width: 30px;
+	height: 30px;
+	object-fit: cover;
+	border-radius: 40px;
+	border: 2px solid #ee481e;
+	box-shadow: -2px 2px #ee481e;
+	margin-right: 10px;
+}
+.VS a{
+	font-family: Titan One;
+}
+.score{
+	/* background-color: #ef7e00; */
+	display:flex;
+	flex-direction: column;
+	width: 100%;
+}
+.score span{
+	font-size: 14px;
+	text-align: center;
+	margin-bottom: 10px;
+}
+.score p{
+	margin: auto;
+	font-family: Titan One;
+	/* color: #ef7e00; */
+}
+.up-down-rank{
+	display:flex;
+	flex-direction: column;
+	min-width: fit-content;
+}
+.up-down-rank span{
+	font-size: 14px;
+	text-align: center;
+	margin-bottom: 10px;
+}
+.up-down-rank p{
+	margin: auto;
+	font-family: Titan One;
+	/* color: #efc10a; */
+}
+
+
+.mes-amis{
+	margin-top: 30px;
+}
+.ami{
+	float: left;
+	margin-right: 30px;
+	width: calc(25% - 22.5px);
+	margin-bottom: 30px;
+	padding: 40px 20px 40px 20px;
+	background-color: #343330;
+	border-radius: 10px;
+	color: #feefcf;
+	text-align: center;
+}
+.ami:nth-child(4n){
+	margin-right: 0px;
+}
+.ami .status{
+	margin: auto;
+}
+
+#photo-profile{
+	width: 70%;
+	margin: auto;
+	margin-bottom: 30px;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 3px solid #ee481e;
+	box-shadow: -3px 3px #ee481e;
+}
+.ami .friend-pseudo{
+	font-family: Titan One;
+	font-size: 18px;
+	margin: 0px 40px 0px 40px;
+}
+.ami .rank{
+	font-family: Titan One;
+	font-size: 14px;
+	color: #efc10a;
+	margin-top: 10px;
+}
+
+.ami .tri-action button{
+	background-color: transparent;
+	border: none;
+	margin-right: 8px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+.ami .tri-action button:last-child{
+	margin-right: 0px;
+}
+
+
+#icon-invite-game:hover #icon{
+	fill: #ee481e;
+}
+#icon-invite-game:hover #BG{
+	fill: #ee481e;
+	opacity: 20%;
+}
+
+#icon-ask-friend:hover #icon{
+	fill: #ef5f00;
+}
+#icon-ask-friend:hover #BG{
+	fill: #ef5f00;
+	opacity: 20%;
+}
+#icon-delete-friend:hover #icon{
+	fill: #ef5f00;
+}
+#icon-delete-friend:hover #BG{
+	fill: #ef5f00;
+	opacity: 20%;
+}
+
+#icon-mute:hover #icon{
+	fill: #f1a726;
+}
+#icon-mute:hover #BG{
+	fill: #f1a726;
+	opacity: 20%;
+}
+
+#icon-block:hover #icon{
+	fill: #ef7e00;
+}
+#icon-block:hover #BG{
+	fill: #ef7e00;
+	opacity: 20%;
+}
+
+#icon-exclure:hover #icon{
+	fill: #efc10a;
+}
+#icon-exclure:hover #BG{
+	fill: #efc10a;
+	opacity: 20%;
+}
+
+#icon-bannir:hover #icon{
+	fill: #f9e131;
+}
+#icon-bannir:hover #BG{
+	fill: #f9e131;
+	opacity: 20%;
+}
+
+
+@media only screen and (max-width: 1292px) {
+
+	.center-profile{
+		margin: 0px 30px 0px 30px;
+	}
+    #head{
+		display: block;
+	}
+	#stats{
+		width: 100%;
+		margin-left: 0px;
+	}
+	#user-info-profile{
+		margin-bottom: 30px;
+	}
+
+	.ami{
+		width: calc(33.333% - 20px);
+	}
+	.ami:nth-child(4n){
+		margin-right: 30px;
+	}
+	.ami:nth-child(3n){
+		margin-right: 0px;
+	}
+} 
+
+@media only screen and (max-width: 950px) {
+
+	.ami{
+		width: calc(50% - 15px);
+	}
+	.ami:nth-child(4n){
+		margin-right: 30px;
+	}
+	.ami:nth-child(3n){
+		margin-right: 30px;
+	}
+	.ami:nth-child(2n){
+		margin-right: 0px;
+	}
+}
+
+@media only screen and (max-width: 800px) {
+
+	.profil-info #name{
+		font-size: 50px;
+	}
+}
+
+@media only screen and (max-width: 750px) {
+
+	#user-info-profile, #stats{
+		border-radius: 10px;
+	}
+	#stats{
+		padding: 30px;
+	}
+	#user-info-profile{
+		padding: 40px;
+		display: block;
+		text-align: center;
+	}
+	.profil-left img{
+		margin: auto;
+		margin-bottom: 30px;
+	}
+	.profil-info{
+		display:block;
+		padding-left: 0px;
+	}
+	
+	.status{
+		margin:auto;
+	}
+	.profil-right{
+		min-width: fit-content;
+		margin-top: 10px;
+	}
+	.profil-right button{
+		margin-left: 0px;
+	}
+
+}
+
+@media only screen and (max-width: 553px) {
+
+	.profil-left img{
+		min-width: 100px;
+		height: 100px;
+		border: 4px solid #ee481e;
+		box-shadow: -4px 4px #ee481e;
+	}
+	.profil-info #name{
+		font-size: 40px;
+	}
+
+	.mat-tab-group ul li{
+		display:flex;
+		flex-direction: column;
+		align-items: center;
+		font-size: 16px;
+		text-align: center;
+		padding: 20px;
+	}
+
+	.win{
+		margin: auto;
+		margin-bottom: 30px;
+	}
+	
+	.VS{
+		margin-bottom: 20px;
+	}
+	.VS span{
+		font-size: 14px;
+		margin-bottom: 8px;
+	}
+
+	.score{
+		margin-bottom: 20px;
+	}
+
+	.ami .tri-action button{
+		margin-right: 0px;
+		margin-bottom: 10px;
+		margin-top: 5px;
+	}
+	.ami .tri-action button svg{
+		width: 30px;
+		height: 30px;
+	}
+
+	.ami{
+		padding: 20px;
+	}
+	#photo-profile{
+		width: 100%;
+		margin-bottom: 20px;
+	}
+	.ami .friend-pseudo{
+		font-size: 16px;
+		margin: 0px 0px 0px 0px;
+	}
+	.ami .status p{
+		font-size: 12px;
+	}
+}
+
+@media only screen and (max-width: 448px) {
+
+	.ami{
+		width: 100%;
+		float: none;
+		margin-right: 0px;
+	}
+
+	/* Styles for tab labels */
+	#friend-n-match .mat-tab-label {
+		font-size: 12px;
+	}
+
+	/* Styles for the active tab label */
+	#friend-n-match .mat-tab-label.mat-tab-label-active {
+		font-size: 12px;
+	}
+
+	.data{
+		width: 90px;
+	}
+}
+
+@media only screen and (max-width: 385px) {
+
+	.ami{
+		width: 100%;
+		float: none;
+		margin-right: 0px;
+	}
+
+	/* Styles for tab labels */
+	#friend-n-match .mat-tab-label {
+		padding: 10px;
+		font-size: 10px;
+	}
+
+	/* Styles for the active tab label */
+	#friend-n-match .mat-tab-label.mat-tab-label-active {
+		padding: 10px;
+		font-size: 10px;
+	}
+
+	.data{
+		width: 70px;
+	}
+	.data span{
+		font-size: 25px;
+	}
+	.data p{
+		font-size: 12px;
+	}
 }

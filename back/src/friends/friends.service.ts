@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FriendRequest, FriendStatus } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
@@ -11,7 +12,9 @@ export class FriendsService {
   constructor(private prisma: PrismaService,
     private userService: UserService,
     private onlineUserService: OnlineUserService,
-    private chatService: ChatService) { }
+    private chatService: ChatService,
+    private eventEmitter: EventEmitter2) { }
+  
 
 
   async addFriend(userId: number, friendId: number) {
@@ -30,7 +33,8 @@ export class FriendsService {
         status: FriendStatus.PENDING,
       },
     });
-    this.onlineUserService.sendToUser(friendId, 'notification', "Vous avez une nouvelle demande d'amis");
+    // TODO: send notification to friend
+   // sendToUser(friendId, 'notification', "Vous avez une nouvelle demande d'amis");
     return { message: 'Friend request sent', state: 'success' };
   }
 
@@ -53,10 +57,16 @@ export class FriendsService {
           connect: {
             id: request.toId,
           }
+        },
+        friendOf: {
+          connect: {
+            id: request.toId,
+          }
         }
       }
     });
-    this.onlineUserService.sendToUser(request.fromId, 'notification', "Votre demande d'amis a été acceptée");
+    //TODO send notification to friend
+    //this.onlineUserService.sendToUser(request.fromId, 'notification', "Votre demande d'amis a été acceptée");
     this.chatService.creatDm(request.fromId, request.toId);
     return { message: "Friend request accepted", state: 'error' };
   }

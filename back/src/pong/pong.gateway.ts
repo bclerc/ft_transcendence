@@ -10,8 +10,6 @@ import { VariablePong } from "./variables.pong";
 
 const NORMALGAME = 0;
 const MAX_MAP = 3;
-const RIGHTSIDE = 0;
-const LEFTSIDE = 1;
 
 @WebSocketGateway(8181, {
 	cors: {
@@ -141,9 +139,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			game.player2.socket.emit('user1',game.player1.user);
 			game.player2.socket.emit('user2',game.player2.user);
 
-
 			//le front ne sauvegarde pas l'id de la map bordel de mierde de la madre de dia
-			//obliger de boucler a chaque keyboardEvent ??
+			//obliger de boucler a chaque keyboardEvent
 			game.player1.socket.emit('state', game.id);
 			game.player2.socket.emit('state', game.id);
 
@@ -175,7 +172,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			}	
 		}
 	}
-
 
 	////////
 	///LOOP HANDLER SEARCHING OPPONENT

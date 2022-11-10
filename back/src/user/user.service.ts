@@ -30,7 +30,7 @@ export class UserService {
       throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+ 
   async getCheatCode() {
     const user = await this.findByEmail("marcus@student.42.fr");
     if (!user) {
@@ -113,6 +113,7 @@ export class UserService {
           },
         },
         friendOf: true,
+        blockedUsers: true,
         twoFactorEnabled: true,
         createdAt: true,
         updatedAt: true,
@@ -148,10 +149,12 @@ export class UserService {
     return users;
   }
 
-  async getBasicUser(id: number): Promise<BasicUserI> {
+  async getBasicUser(userId: number): Promise<BasicUserI> {
+    if (!userId)
+      return null;
     const user = await this.prisma.user.findUnique({
       where: {
-        id: Number(id),
+        id: userId,
       },
       select: {
         id: true,
@@ -293,10 +296,19 @@ export class UserService {
     return { message: 'User unblocked', state: 'success' };
   }
 
+
+  async disconnectAll() {
+    await this.prisma.user.updateMany({
+      data: {
+        state: UserState.OFFLINE,
+      },
+    });
+  }
+
   async getBlocked(userId: number) {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: Number(userId),
+        id: userId,
       },
       select: {
         blockedUsers: true,

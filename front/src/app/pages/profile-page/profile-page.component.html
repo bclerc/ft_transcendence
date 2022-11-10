@@ -1,4 +1,5 @@
 <div>
+<p>{{user?.state}}</p>
 <p>{{user?.displayname}}</p>
 <p>{{user?.email}}</p>
 <p>{{user?.createdAt | date}}</p>
@@ -12,8 +13,16 @@
     <ng-template #elseBlock>
         <a href="javascript:void(0);" (click)="addFriend()">Ajouter en amis</a>
     </ng-template>
+    <p></p>
+    <div *ngIf="alreadyBlocked; then thenBloc else elseBloc"></div>
+    <ng-template #thenBloc>
+        <a href="javascript:void(0);" (click)="unblockUser()">Debloquer l'utilisateur</a>
+    </ng-template>
+    <ng-template #elseBloc>
+        <a href="javascript:void(0);" (click)="blockUser()">Bloquer l'utilisateur</a>
+    </ng-template>
+
 <!-- <div *ngIf="alreadyBlocked; then thenBlock else elseBlock"></div> -->
 <!-- <ng-template #thenBlock> </ng-template> -->
 <!-- <ng-template #elseBlock> </ng-template> -->
-    <p>Blocker l'utilisateur</p>
 </div>

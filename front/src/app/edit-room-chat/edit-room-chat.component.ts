@@ -29,7 +29,6 @@ export class EditRoomChatComponent implements OnInit {
 
 
   edit(){
-
     const room: ChatRoom = {
       id: this.room.id,
       name: this.form.value.name,
@@ -58,12 +57,10 @@ export class EditRoomChatComponent implements OnInit {
   removeUser(userId: any) {
     this.users.removeAt(this.users.value.findIndex((user: UserI) => user.id === user.id));
     this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: userId });
-
   }
 
   ngOnInit(): void {
 
-    
     this.form.patchValue({
       name: this.room.name,
       description: this.room.description,
