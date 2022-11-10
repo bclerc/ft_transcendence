@@ -113,6 +113,34 @@ export class UserService {
           },
         },
         friendOf: true,
+        games: {
+          select: {
+            id: true,
+            users: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+            winner: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+            loser: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+            winnerScore: true,
+            loserScore: true,
+          }
+        },
         blockedUsers: true,
         twoFactorEnabled: true,
         createdAt: true,
