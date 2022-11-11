@@ -64,7 +64,8 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 //
 
 ////
-export const MAX_SCORE = 3;
+
+export const MAX_SCORE = 5;
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
 export const SPEED_PLAYER = 8
@@ -82,17 +83,316 @@ export class PongService {
     {
     };
 
+    async drawInit(game: GameI)
+    {
+        game.player1.socket.emit('drawInit');
+        game.player2.socket.emit('drawInit');
+        game.player1.socket.emit('drawText', "3");
+        game.player2.socket.emit('drawText', "3");
+        await this.delay(1000);
+        game.player1.socket.emit('drawInit');
+        game.player2.socket.emit('drawInit');
+        game.player1.socket.emit('drawText', "2");
+        game.player2.socket.emit('drawText', "2");
+        await this.delay(1000);
+        game.player1.socket.emit('drawInit');
+        game.player2.socket.emit('drawInit');
+        game.player1.socket.emit('drawText', "1");
+        game.player2.socket.emit('drawText', "1");
+        await this.delay(1000);
+        game.player1.socket.emit('drawInit');
+        game.player2.socket.emit('drawInit');
+        game.player1.socket.emit('drawText', "Start !");
+        game.player2.socket.emit('drawText', "Start !");
+        await this.delay(200);
+    }
+
+	delay(ms: number) {
+		return new Promise( resolve => setTimeout(resolve, ms) );
+    }
+
+    private colision(ball: BallI, paddle: PointI): boolean {
+        if (ball.x + ball.radius < (WIDTHCANVAS - paddle.width) && ball.x - ball.radius > (0 + paddle.width))
+            return false;
+        if (ball.y >= paddle.y && ball.y <= paddle.y + paddle.height)
+        return true;
+        return false;
+    }
+
+    private reinitBall(ball: BallI, dir: number): void {
+        ball.x = WIDTHCANVAS /2;
+        ball.y = HEIGHTCANVAS /2;
+        if (dir > 0)
+        ball.dx = Math.floor(Math.random() * (-1 - -defaultSpeed + 1) + -defaultSpeed);
+        else
+    		ball.dx = Math.floor(Math.random() * (defaultSpeed - 1 + 1) + 1);
+        ball.dy = Math.floor(Math.random() * (defaultSpeed - -defaultSpeed + 1) + -defaultSpeed);
+    }
+
+    private reinitPlayers(player1: PlayerI, player2: PlayerI): void {
+        player1.paddle.y = HEIGHTCANVAS / 2 - player1.paddle.height / 2;
+        player2.paddle.y = HEIGHTCANVAS / 2 - player2.paddle.height / 2;
+    }
+
+    private reinitObstacle(obstacle: PointI): void
+    {
+        obstacle.x = WIDTHCANVAS / 2 - MAP2_OBSTACLE_W / 2;
+        obstacle.y = MAP2_OBSTACLE_POSY;
+        obstacle.dx = 0;
+        obstacle.dy = MAP2_OBSTACLE_SPEED;
+        obstacle.height = MAP2_OBSTACLE_H;
+        obstacle.width = MAP2_OBSTACLE_W;
+    }
+    
+    private rebond(ball: BallI, paddle: PointI): void {
+        var impact = ball.y - paddle.y - paddle.height / 2;
+        var ratio = 100 / (paddle.height / 2);
+
+        ball.dy = Math.round(impact * ratio / 10);
+        if (ball.dy > -4 && ball.dy <= 0)
+            ball.dy = -4;
+        else if (ball.dy < 4 && ball.dy > 0)
+            ball.dy = 4;
+        ball.dx *= -1.2;
+        if (ball.dx > -2 && ball.dx <= 0)
+        ball.dx = -2;
+        else if (ball.dx < 2 && ball.dx > 0)
+        ball.dx = 2;
+        if (ball.dx < -MAX_SPEED)
+        ball.dx = -MAX_SPEED;
+        else if (ball.dx > MAX_SPEED)
+        ball.dx = MAX_SPEED;
+    }
+    
+    initState(): GameI{
+		var p1: PlayerI = {
+	    	paddle: {
+				x: 0,
+				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
+				dx: 0,
+				dy: 0,
+				width: PLAYER_WIDTH,
+				height: PLAYER_HEIGHT
+			},
+    		points: 0
+		};
+
+		var p2: PlayerI = {
+            paddle: {
+				x: WIDTHCANVAS - PLAYER_WIDTH,
+				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
+				dx: 0,
+				dy: 0,
+				width: PLAYER_WIDTH,
+				height: PLAYER_HEIGHT
+			},
+    		points: 0
+		};
+        
+		var state: GameI = {
+            id: "1",
+			player1: p1,
+			player2: p2,
+            type: 0,
+            obstacle: {
+                x: WIDTHCANVAS / 2 - MAP2_OBSTACLE_W / 2,
+                y: MAP2_OBSTACLE_POSY,
+                dx: 0,
+                dy: MAP2_OBSTACLE_SPEED,
+                height: MAP2_OBSTACLE_H,
+                width: MAP2_OBSTACLE_W,
+            },
+			ball: {
+				x: WIDTHCANVAS / 2,
+				y: HEIGHTCANVAS / 2,
+				dx: 2,
+				dy: -5,
+				speed: defaultSpeed,
+				width: 3,
+				height: 3,
+				radius: BALL_RADIUS
+			},
+		}
+		return state;
+	}
+
+    keydown(game: GameI, client: Socket, key: string)
+    {
+        if (key === 'z' || key === 'w')
+        {
+            if (game && game.player1 && game.player1.socket === client)
+            {
+                game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+                if (game.player1.paddle.dy < -SPEED_PLAYER)
+                    game.player1.paddle.dy = -SPEED_PLAYER;
+            }
+            else if (game && game.player2 && game.player2.socket === client)
+            {
+                game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+                if (game.player2.paddle.dy < - SPEED_PLAYER)
+                    game.player2.paddle.dy = -SPEED_PLAYER;
+            }
+        }
+        else if (key === 's')
+        {
+            if (game && game.player1 && game.player1.socket === client)
+            {
+                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+                if (game.player1.paddle.dy > SPEED_PLAYER)
+                    game.player1.paddle.dy = SPEED_PLAYER;
+            }
+            else if (game && game.player2 && game.player2.socket === client)
+            {
+                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+                if (game.player2.paddle.dy > SPEED_PLAYER)
+                   game.player2.paddle.dy = SPEED_PLAYER;
+                }
+        }
+    }
+
+    keyup(game: GameI, client: Socket,  key: string)
+    {
+        console.log("keyup");
+        if (key === 'z' || key === 'w')
+        {
+            if (game.player1.socket === client)
+                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
+            else
+                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+        }
+        else if (key === 's')
+        {
+            if (game.player1.socket === client)
+                game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
+            else
+                game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
+            }
+    }
+
+    joinGame(client: Socket, game: GameI){
+		game.player2 = {
+        user: this.onlineUserService.getUser(client.id),
+        socket: client,
+			paddle: {
+				x: WIDTHCANVAS - PLAYER_WIDTH,
+				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
+				dx: 0,
+				dy: 0,
+				width: PLAYER_WIDTH,
+				height: PLAYER_HEIGHT
+			},
+    		points: 0,
+		}
+	}
+
+    deleteGame(g: GameI, allGames: GameI[]){
+		var newAllGames: GameI[] = allGames.filter(game => game != g);
+		allGames = newAllGames;
+	}
+    
+    private drawForAll(map: string, game: GameI)
+    {
+        var i = 0;
+        var copy = JSON.parse(JSON.stringify(game, (key, value) => {
+            if (key === 'socket')
+                return undefined;
+            return value;
+        }));
+        
+        game.player1.socket.emit(map, copy);
+        game.player2.socket.emit(map, copy);
+        if (game.spectators)
+        {
+            while (game.spectators[i])
+            {
+                // game.spectators[i].socket.emit(map, copy);
+                i++;
+            }
+        }
+    }
+
+    private scoreForAll(game: GameI)
+    {
+        var i = 0;
+        var score = {
+            score1: game.player1.points,
+            score2: game.player2.points
+        }
+        console.log("score for alll")
+    
+
+        game.player1.socket.emit('score', score);
+        game.player2.socket.emit('score', score);
+        if (game.spectators)
+        {
+            while (game.spectators[i])
+            {
+                // game.spectators[i].socket.emit('score', score);
+                i++;
+            }
+        }
+    }
+
+    private finalForAll(game: GameI)
+    {
+        var i = 0;
+
+        if (game.player1.points === MAX_SCORE)
+        {
+            game.player1.socket.emit('win');
+            game.player2.socket.emit('lose');
+        }
+        else
+        {
+            game.player1.socket.emit('lose');
+            game.player2.socket.emit('win');
+        }
+        //Draw le final dune autre maniere pour les spectators !!!
+        // game.spectators[].socket.emit('');
+    }
+
+	async startGame(game: GameI, mapid: number)
+    {
+        game.player1.socket.emit('state', game.id);
+        game.player2.socket.emit('state', game.id);
+        if (mapid === 0)
+        {
+            game.id_interval = setInterval(() => {
+                this.loopGameNormal(game);
+            }, 1000/60);
+        }
+        else if (mapid === 1)
+        {
+            game.id_interval = setInterval(() => {
+                this.loopGameMap1(game);
+            }, 1000/60);
+        }
+        else if (mapid === 2)
+        {
+            game.id_interval = setInterval(() => {
+                this.loopGameMap2(game);
+            }, 1000/60);
+        }		
+        else if (mapid === 3)
+        {
+            game.id_interval = setInterval(() => {
+                this.loopGameMap3(game);
+            }, 1000/60);
+        }
+    }
+
+    //
+    ////LOOPGAME
+    //
 
 
     loopGameNormal(game: GameI){
-
         ////
         //MOUVEMENTS DES JOUEURS
         ////
-        
         game.player1.paddle.y += game.player1.paddle.dy;
         game.player2.paddle.y += game.player2.paddle.dy;
-
+    
         //blocage des paddle pour au'il ne deborde pas en haut ou en bas
         if (game.player1.paddle.y < 0)
             game.player1.paddle.y = 0;
@@ -102,7 +402,7 @@ export class PongService {
             game.player2.paddle.y = 0;
         else if (game.player2.paddle.y > HEIGHTCANVAS - game.player2.paddle.height)
             game.player2.paddle.y =  HEIGHTCANVAS - game.player2.paddle.height;
-
+    
         /////
         //MOUVEMENT DE LA BALLE
         ////
@@ -117,7 +417,7 @@ export class PongService {
             game.ball.dy *= -1;
             game.ball.y = HEIGHTCANVAS - game.ball.height;
         }
-
+    
         game.ball.x += game.ball.dx;
         if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) //sil y a rebond entre balle et paddle
         {
@@ -129,7 +429,7 @@ export class PongService {
             this.rebond(game.ball, game.player2.paddle);
             game.ball.x = WIDTHCANVAS - PLAYER_WIDTH - game.ball.radius;
         }
-
+    
         if ( game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
         {
             if (game.ball.x <= (0 + game.ball.width))
@@ -153,12 +453,12 @@ export class PongService {
         }
         this.drawForAll("drawNormalMap", game);
     }
-
     
-//////
-//LOOP2
-//////
-
+    
+    //////
+    //LOOP2
+    //////
+    
     loopGameMap1(game: GameI){
         ////
         //MOUVEMENTS DES JOUEURS
@@ -193,7 +493,7 @@ export class PongService {
                 game.ball.x = (WIDTHCANVAS/2 + (MAP1_OBSTACLE1_W/2)) + game.ball.radius;
             }
         }
-
+    
         if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle))
         {
             this.rebond(game.ball, game.player1.paddle);
@@ -204,7 +504,7 @@ export class PongService {
             this.rebond(game.ball, game.player2.paddle);
             game.ball.x = WIDTHCANVAS - PLAYER_WIDTH - game.ball.radius;
         }
-
+    
         if ( game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
         {
             if (game.ball.x <= (0 + game.ball.width))
@@ -260,11 +560,11 @@ export class PongService {
         }
         this.drawForAll("drawMap1", game);
     }
-
+    
     //////
     //LOOP3
     /////
-
+    
     loopGameMap2(game: GameI)
     {
         ////
@@ -273,7 +573,7 @@ export class PongService {
         // console.log(this.variables);
         game.player1.paddle.y += game.player1.paddle.dy;
         game.player2.paddle.y += game.player2.paddle.dy;
-
+    
         //blocage des paddle pour au'il ne deborde pas en haut ou en bas
         if (game.player1.paddle.y < 0)
             game.player1.paddle.y = 0;
@@ -283,12 +583,12 @@ export class PongService {
             game.player2.paddle.y = 0;
         else if (game.player2.paddle.y > HEIGHTCANVAS - game.player2.paddle.height)
             game.player2.paddle.y =  HEIGHTCANVAS - game.player2.paddle.height;
-
-
+    
+    
         ///////
         ////Mouvement object
         ///////
-
+    
         game.obstacle.y += game.obstacle.dy;
         if (game.obstacle.dy > 0 && game.obstacle.y + game.obstacle.height >= HEIGHTCANVAS)
         {
@@ -303,7 +603,7 @@ export class PongService {
         /////
         //REBOND OBSTACLE AVANT TOUT
         /////
-
+    
         if  (   game.ball.dy > 0 && 
                 game.ball.x >= game.obstacle.x - game.ball.radius &&
                 game.ball.x <= game.obstacle.x + game.obstacle.width + game.ball.radius &&
@@ -349,7 +649,7 @@ export class PongService {
             game.ball.x = game.obstacle.x - game.ball.radius;
             game.ball.dx *= -1;
         }
-
+    
         /////
         //MOUVEMENT DE LA BALLE
         ////        
@@ -392,7 +692,7 @@ export class PongService {
             this.drawForAll("drawMap2", game);
             return ;
         }
-
+    
         ///////
         ////////VERTICALEMENT
         ///////
@@ -409,9 +709,9 @@ export class PongService {
         }
         this.drawForAll("drawMap2", game);
     }
-
-
-
+    
+    
+    
     loopGameMap3(game: GameI)
     {
         ////
@@ -427,7 +727,7 @@ export class PongService {
             game.player2.paddle.y = 0;
         else if (game.player2.paddle.y > HEIGHTCANVAS - game.player2.paddle.height)
             game.player2.paddle.y =  HEIGHTCANVAS - game.player2.paddle.height;
-
+    
         /////
         //REBOND OBSTACLE AVANT TOUT
         /////
@@ -512,11 +812,11 @@ export class PongService {
             game.ball.x = MAP3_OBSTACLE2_POSX - game.ball.radius;
             game.ball.dx *= -1;
         }
-
+    
         /////
         //MOUVEMENT DE LA BALLE
         ////        
-
+    
         ////////
         //////HORIZONT
         ////////
@@ -555,7 +855,7 @@ export class PongService {
             this.drawForAll("drawMap3", game);
             return ;
         }
-
+    
     ///////
     ////////VERTICALEMENT
     ///////
@@ -571,325 +871,5 @@ export class PongService {
             game.ball.y = HEIGHTCANVAS - game.ball.radius;
         }
         this.drawForAll("drawMap3", game);
-        }
-
-    async drawInit(game: GameI)
-    {
-        game.player1.socket.emit('drawInit');
-        game.player2.socket.emit('drawInit');
-        game.player1.socket.emit('drawText', "3");
-        game.player2.socket.emit('drawText', "3");
-        await this.delay(1000);
-        game.player1.socket.emit('drawInit');
-        game.player2.socket.emit('drawInit');
-        game.player1.socket.emit('drawText', "2");
-        game.player2.socket.emit('drawText', "2");
-        await this.delay(1000);
-        game.player1.socket.emit('drawInit');
-        game.player2.socket.emit('drawInit');
-        game.player1.socket.emit('drawText', "1");
-        game.player2.socket.emit('drawText', "1");
-        await this.delay(1000);
-        game.player1.socket.emit('drawInit');
-        game.player2.socket.emit('drawInit');
-        game.player1.socket.emit('drawText', "Start !");
-        game.player2.socket.emit('drawText', "Start !");
-        const dbGame = await this.gameService.createGame([game.player1.user, game.player2.user]);        
-        await this.gameService.startGame(dbGame.id);
-        game.dbGame = dbGame;
-        console.log("Start ! ", game.player1, game.player2);
-        await this.delay(200);
     }
-
-	delay(ms: number) {
-		return new Promise( resolve => setTimeout(resolve, ms) );
-    }
-
-    private colision(ball: BallI, paddle: PointI): boolean {
-        if (ball.x + ball.radius < (WIDTHCANVAS - paddle.width) && ball.x - ball.radius > (0 + paddle.width))
-            return false;
-        if (ball.y >= paddle.y && ball.y <= paddle.y + paddle.height)
-            return true;
-        return false;
-    }
-
-    private reinitBall(ball: BallI, dir: number): void {
-        ball.x = WIDTHCANVAS /2;
-        ball.y = HEIGHTCANVAS /2;
-        if (dir > 0)
-    		ball.dx = Math.floor(Math.random() * (-1 - -defaultSpeed + 1) + -defaultSpeed);
-        else
-    		ball.dx = Math.floor(Math.random() * (defaultSpeed - 1 + 1) + 1);
-        ball.dy = Math.floor(Math.random() * (defaultSpeed - -defaultSpeed + 1) + -defaultSpeed);
-    }
-
-    private reinitPlayers(player1: PlayerI, player2: PlayerI): void {
-        player1.paddle.y = HEIGHTCANVAS / 2 - player1.paddle.height / 2;
-        // player1.paddle.dy = 0;
-        player2.paddle.y = HEIGHTCANVAS / 2 - player2.paddle.height / 2;
-        // player2.paddle.dy = 0;
-    }
-
-    private reinitObstacle(obstacle: PointI): void
-    {
-        obstacle.x = WIDTHCANVAS / 2 - MAP2_OBSTACLE_W / 2;
-        obstacle.y = MAP2_OBSTACLE_POSY;
-        obstacle.dx = 0;
-        obstacle.dy = MAP2_OBSTACLE_SPEED;
-        obstacle.height = MAP2_OBSTACLE_H;
-        obstacle.width = MAP2_OBSTACLE_W;
-    }
-
-    private rebond(ball: BallI, paddle: PointI): void {
-        var impact = ball.y - paddle.y - paddle.height / 2;
-        var ratio = 100 / (paddle.height / 2);
-
-        ball.dy = Math.round(impact * ratio / 10);
-        if (ball.dy > -4 && ball.dy <= 0)
-            ball.dy = -4;
-        else if (ball.dy < 4 && ball.dy > 0)
-            ball.dy = 4;
-        ball.dx *= -1.2;
-        if (ball.dx > -2 && ball.dx <= 0)
-            ball.dx = -2;
-        else if (ball.dx < 2 && ball.dx > 0)
-            ball.dx = 2;
-        if (ball.dx < -MAX_SPEED)
-			ball.dx = -MAX_SPEED;
-        else if (ball.dx > MAX_SPEED)
-			ball.dx = MAX_SPEED;
-    }
-    
-    initState(): GameI{
-		var p1: PlayerI = {
-	    	paddle: {
-				x: 0,
-				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-				dx: 0,
-				dy: 0,
-				width: PLAYER_WIDTH,
-				height: PLAYER_HEIGHT
-			},
-    		points: 0
-		};
-
-		var p2: PlayerI = {
-	    	paddle: {
-				x: WIDTHCANVAS - PLAYER_WIDTH,
-				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-				dx: 0,
-				dy: 0,
-				width: PLAYER_WIDTH,
-				height: PLAYER_HEIGHT
-			},
-    		points: 0
-		};
-
-		var state: GameI = {
-			id: "1",
-			player1: p1,
-			player2: p2,
-            type: 0,
-            obstacle: {
-                x: WIDTHCANVAS / 2 - MAP2_OBSTACLE_W / 2,
-                y: MAP2_OBSTACLE_POSY,
-                dx: 0,
-                dy: MAP2_OBSTACLE_SPEED,
-                height: MAP2_OBSTACLE_H,
-                width: MAP2_OBSTACLE_W,
-            },
-			ball: {
-				x: WIDTHCANVAS / 2,
-				y: HEIGHTCANVAS / 2,
-				dx: 2,
-				dy: -5,
-				speed: defaultSpeed,
-				width: 3,
-				height: 3,
-				radius: BALL_RADIUS
-			},
-		}
-		return state;
-	}
-
-
-    keydownZ(game: GameI, client: Socket)
-    {
-        if (game.player1.socket === client)
-        {
-            if (game.player1.paddle.dy != - SPEED_PLAYER)
-                game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
-        }
-        else
-        {
-            if (game.player2.paddle.dy != - SPEED_PLAYER)
-                game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
-        }
-    }
-
-    keydownS(game: GameI, client: Socket)
-    {
-        if (game.player1.socket === client)
-        {
-            if (game.player1.paddle.dy != SPEED_PLAYER)
-                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
-        }
-        else
-        {
-            if (game.player2.paddle.dy != SPEED_PLAYER)
-                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
-        }
-    }
-
-    keyupZ(game: GameI, client: Socket)
-    {
-        if (game.player1.socket === client)
-           game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
-        else
-            game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
-    }
-
-    keyupS(game: GameI, client: Socket)
-    {
-        if (game.player1.socket === client)
-            game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
-        else
-            game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
-    }
-
-
-    joinGame(client: Socket, game: GameI){
-		game.player2 = {
-        user: this.onlineUserService.getUser(client.id),
-			socket: client,
-			paddle: {
-				x: WIDTHCANVAS - PLAYER_WIDTH,
-				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-				dx: 0,
-				dy: 0,
-				width: PLAYER_WIDTH,
-				height: PLAYER_HEIGHT
-			},
-    		points: 0,
-		}
-	}
-
-    deleteGame(g: GameI, allGames: GameI[]){
-		var newAllGames: GameI[] = allGames.filter(game => game != g);
-		allGames = newAllGames;
-	}
-
-    private drawForAll(map: string, game: GameI)
-    {
-        var i = 0;
-        var copy = JSON.parse(JSON.stringify(game, (key, value) => {
-            if (key === 'socket')
-                return undefined;
-            return value;
-        }));
-
-        game.player1.socket.emit(map, copy);
-        game.player2.socket.emit(map, copy);
-        if (game.spectators)
-        {
-            while (game.spectators[i])
-            {
-                // game.spectators[i].socket.emit(map, copy);
-                i++;
-            }
-        }
-    }
-
-    private scoreForAll(game: GameI)
-    {
-        var i = 0;
-        var score = {
-            score1: game.player1.points,
-            score2: game.player2.points
-        }
-        console.log("score for alll")
-    
-
-        game.player1.socket.emit('score', score);
-        game.player2.socket.emit('score', score);
-        if (game.spectators)
-        {
-            while (game.spectators[i])
-            {
-                // game.spectators[i].socket.emit('score', score);
-                i++;
-            }
-        }
-    }
-
-    private finalForAll(game: GameI)
-    {
-        var i = 0;
-        let winner: BasicUserI;
-        let looser: BasicUserI;
-        let winnerScore;
-        let looserScore;
-    
-        if (game.player1.points === MAX_SCORE)
-        {
-            game.player1.socket.emit('win');
-            game.player2.socket.emit('lose');
-            winner = game.player1.user;
-            looser = game.player2.user;
-            winnerScore = game.player1.points;
-            looserScore = game.player2.points;
-        }
-        else
-        {
-          game.player1.socket.emit('lose');
-          game.player2.socket.emit('win');
-          winner = game.player2.user;
-          looser = game.player1.user;
-          winnerScore = game.player2.points;
-          looserScore = game.player1.points;
-        }
-
-        if (game.spectators)
-        {
-            while (game.spectators[i])
-            {
-                //Draw le final dune autre maniere pour les spectators !!!
-                // game.spectators[i].socket.emit('');
-                i++;
-            }
-        }
-        console.log("final for all", winner, looser);
-
-        this.gameService.stopGame(game.dbGame.id, winner.id, looser.id, looserScore, winnerScore);
-        //this.gameService.stopGame(game.id)
-    }
-
-	async startGame(game: GameI, mapid: number){
-    if (mapid === 0)
-    {
-        game.id_interval = setInterval(() => {
-            this.loopGameNormal(game);
-        }, 1000/60);
-    }
-    else if (mapid === 1)
-    {
-        game.id_interval = setInterval(() => {
-            this.loopGameMap1(game);
-        }, 1000/60);
-    }
-    else if (mapid === 2)
-    {
-        game.id_interval = setInterval(() => {
-            this.loopGameMap2(game);
-        }, 1000/60);
-    }		
-    else if (mapid === 3)
-    {
-        game.id_interval = setInterval(() => {
-            this.loopGameMap3(game);
-        }, 1000/60);
-    }
-}
-
-
 }
