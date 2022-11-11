@@ -1,4 +1,4 @@
-import { AdminUpdateEvent, BlockedUserEvent, MessageUpdateEvent, NewRoomEvent, PardonEvent, RoomUpdateEvent, UserCanChatEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
+import { AdminUpdateEvent, BlockedUserEvent, DeleteRoomEvent, MessageUpdateEvent, NewRoomEvent, PardonEvent, RoomUpdateEvent, UserCanChatEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { ChatRoomI, MessageI, newChatRoomI, PardonI } from './interfaces/chatRoom.interface';
 import { DemoteUserI, PromoteUserI } from './interfaces/promote-user-i.interface';
@@ -29,15 +29,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     @Inject(JwtService) private readonly jwtService: JwtService,
     @Inject(ChatService) private readonly chatService: ChatService,
     @Inject(WschatService) private readonly wschatService: WschatService,
-    private readonly onlineUserService: OnlineUserService,
+    @Inject(OnlineUserService) private readonly onlineUserService: OnlineUserService,
   ) { }
 
   afterInit(server: any) {
     this.userService.disconnectAll();  
     this.onlineUserService.server = server;
   }
-
-
 
   async handleConnection(socket: Socket) {
     this.onlineUserService.newConnect(socket);
@@ -73,7 +71,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       this.sendToUsersInRoom(event.room.id, 'notification', "Une nouvelle room a été créée : " + event.room.name);
       if (event.room.public)
         this.updatePublicRooms();
-    
   }
 
   @OnEvent('room.update')
@@ -85,6 +82,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.updatePublicRooms();
      } else {
       this.sendToUser(event.user, 'notification', "Vous n'avez pas pu éditer la room " + event.room.name + ". Raison : " + event.message);
+    }
+  }
+
+  @OnEvent('room.delete')
+  handleRoomDeleteEvent(event: DeleteRoomEvent) {
+    if (event.success)
+    {
+      this.sendToUsers(event.room.users, 'notification', "La room " + event.room.name + " a été supprimée par " + event.user.displayname);
+      this.updateRoomForUsers(event.room.users);
+      if (event.room.public)
+        this.updatePublicRooms();
     }
   }
 
@@ -101,9 +109,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @OnEvent('room.user.punished')
-  handleUserPunished(event: UserPunishEvent)
-  {
-    console.log("punish event", event);
+  handleUserPunished(event: UserPunishEvent) {
     if (event.success)
     {
       this.updateRoomForUsersInRoom(event.room.id);
@@ -111,7 +117,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       this.sendToUser(event.punisher, 'notification', "Vous avez puni " + event.user.intra_name + " de la room " + event.room.name);
     }
     else {
-      this.sendToUser(event.punisher, 'notification', "Vous n'avez pas pu punir " + event.user.intra_name + " de la room " + event.room.name + ". Raison : " + event.message);
+      this.sendToUser(event.punisher, 'notifica\tion', "Vous n'avez pas pu punir " + event.user.intra_name + " de la room " + event.room.name + ". Raison : " + event.message);
     }
   }
 
@@ -144,6 +150,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       this.sendToUser(event.user, 'notification', "Vous avez rejoint la room " + event.room.name);
       this.sendToUsersInRoom(event.room.id, 'notification', event.user.intra_name + " a rejoint la room");
       this.updateRoomForUsersInRoom(event.room.id);
+      if (event.room.public)
+        this.updatePublicRooms();
     } else {
       this.sendToUser(event.user, 'notification', "Vous n'avez pas pu rejoindre la room " + event.room.name + ". Raison : " + event.message);
     }
@@ -203,6 +211,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.wschatService.newRoom(client.id, newRoom);
   }
 
+  @SubscribeMessage('deleteRoom')
+  async onDeleteRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() roomId: number) {
+    this.wschatService.deleteRoom(client.id, roomId);
+  }
+
   @SubscribeMessage('subscribeRoom')
   async onSubscribeRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: SubscribeRoomDto) {
     this.wschatService.subscribeToRoom(client.id, room);
@@ -212,8 +225,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoomI) {
     const user = await this.onlineUserService.getUser(client.id);
     const messages = await this.chatService.getMessagesFromRoom(user.id, room);
-    user.inRoomId = room.id;
-    this.onlineUserService.onlineUsers.set(client.id, user);
+    this.onlineUserService.setCurrentRoom(client.id, room.id);
     this.server.to(client.id).emit('messages', messages);
     if (!room.seen)
     {
@@ -237,7 +249,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   @SubscribeMessage('pardonUser')
   async onPardonUser(@ConnectedSocket() client: Socket, payload: any, @MessageBody() pardon: any) {
-    console.log("Receiving pardon Request:", pardon);
     this.wschatService.pardonUser(client.id, pardon);
   }
 
@@ -298,7 +309,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   async updateUsersMessagesInRoom(room: ChatRoomI) {
     for (let user of room.users) {
-      let onlineUser = this.onlineUserService.getUser(null, user.id);
+      const onlineUser = this.onlineUserService.getUser(null, user.id);
       if (onlineUser && onlineUser.inRoomId == room.id) {
         const messages = await this.chatService.getMessagesFromRoomId(user.id, room.id);
         this.sendToUser(user, 'messages', messages);
@@ -313,15 +324,25 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
   }
 
+  async updateRoomForUsers(users: BasicUserI[]) {
+    for (let user of users) {
+      this.updateUserRooms(user);
+    }
+  }
+
   sendToUser(user: BasicUserI, prefix: string, data: any) {  
       if (user) {
         for (let [key, value] of this.onlineUserService.onlineUsers) {
-          if (value.id == user.id) 
-          {
+          if (value.id == user.id) {
             this.server.to(key).emit(prefix, data);
           }
         }
       }
+  }
+  async sendToUsers(users: BasicUserI[], prefix: string, data: any) {
+    for (let user of users) {
+      this.sendToUser(user, prefix, data);
+    }
   }
 
   async sendToUsersInRoom(roomId: number, prefix: string, data: any) {

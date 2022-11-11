@@ -576,7 +576,7 @@ export class ChatService {
   }
 
   async removeUsersFromRoom(roomId: number, userId: number): Promise<any> {
-    const newRoom = this.prisma.chatRoom.update({
+    const newRoom = await this.prisma.chatRoom.update({
       where: {
         id: Number(roomId)
       },
@@ -594,7 +594,7 @@ export class ChatService {
         },
       }
     });
-    return newRoom;
+    return await this.getRoomById(roomId);
   }
 
   async updateRoomOwner(roomId: number, userId: number): Promise<ChatRoom> {
@@ -640,6 +640,14 @@ export class ChatService {
   async deleteRoom(roomId: number): Promise<void> {
 
 
+    await this.prisma.message.deleteMany({
+      where: {
+        room: {
+          id: roomId,
+        },  
+      },
+    });
+  
     await this.prisma.chatRoom.delete({
       where: {
         id: roomId,

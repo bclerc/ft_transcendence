@@ -71,3 +71,10 @@ export class BlockedUserEvent {
   block: boolean;
   success: boolean;
 }
+
+export class DeleteRoomEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  success: boolean;
+  message?: string;
+}

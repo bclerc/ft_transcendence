@@ -1,5 +1,42 @@
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
 
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
 *{
 	box-sizing: border-box;
 	transition: all ease 0.4s;
@@ -165,7 +202,6 @@ hr.clear{
 	padding: 40px;
 }
 
-
 /* Styles for tab labels */
 #friend-n-match .mat-tab-label {
 	padding: 15px;
@@ -193,101 +229,27 @@ hr.clear{
 /* Styles for the ink bar */
 .mat-ink-bar {
 	display: none;
+	box-shadow: none;
 }
 
-.mat-tab-group ul{
-
-	margin-top: 30px;
-	list-style-type: none;
+/* Mes demandes d'amis */
+.mes-demandes-damis{
+	margin-bottom: 100px;
 }
 
-/* Styles for group list / friend list */
-.my-profile-content .mat-tab-group ul li{
-	display:flex;
-	flex-direction: row;
-	background-color: #343330;
-	padding: 30px 30px 20px 30px;
-	border-radius: 6px;
-	font-family: ReadexPro-Regular;
-	color: #feefcf;
-	font-size: 18px;
-	margin-top: 30px;
-}
-.my-profile-content .mat-tab-group ul li a:hover{
-	color: #ee481e;
-	cursor: pointer;
-}
-
-.win{
-	font-family: ReadexPro-Bold;
-	color: chartreuse;
-	margin: 15px 30px 0px 0px;
-}
-
-.VS{
-	display: flex;
-	flex-direction: column;
-	/* background-color: #ee481e; */
-	min-width: fit-content;
-	text-align: center;
-}
-.VS span{
-	font-size: 14px;
-	margin-bottom: 15px;
-}
-
-.VS #son-profil{
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-.VS img{
-	width: 30px;
-	height: 30px;
-	object-fit: cover;
-	border-radius: 40px;
-	border: 2px solid #ee481e;
-	box-shadow: -2px 2px #ee481e;
-	margin-right: 10px;
-}
-.VS a{
-	font-family: Titan One;
-}
-.score{
-	/* background-color: #ef7e00; */
-	display:flex;
-	flex-direction: column;
-	width: 100%;
-}
-.score span{
-	font-size: 14px;
-	text-align: center;
-	margin-bottom: 10px;
-}
-.score p{
-	margin: auto;
-	font-family: Titan One;
-	/* color: #ef7e00; */
-}
-.up-down-rank{
-	display:flex;
-	flex-direction: column;
-	min-width: fit-content;
-}
-.up-down-rank span{
-	font-size: 14px;
-	text-align: center;
-	margin-bottom: 10px;
-}
-.up-down-rank p{
-	margin: auto;
-	font-family: Titan One;
-	/* color: #efc10a; */
-}
-
+/* Gerer mes amis ------------------------------------------------------------------------------------------ */
 
 .mes-amis{
+	/* margin-top: 30px; */
+	margin-bottom: 100px;
+}
+
+#friend-n-match h2{
+	font-family: Titan One;
+	font-size: 35px;
 	margin-top: 30px;
+	margin-bottom: 30px;
+	color: #feefcf;
 }
 .ami{
 	float: left;
@@ -307,8 +269,15 @@ hr.clear{
 	margin: auto;
 }
 
-#photo-profile{
-	width: 70%;
+
+.ami #lien{
+	/* background-color: #43ee1e; */
+	width:100%;
+}
+
+.ami #photo-profile{
+	width: 150px;
+	height: 150px;
 	margin: auto;
 	margin-bottom: 30px;
 	object-fit: cover;
@@ -317,22 +286,23 @@ hr.clear{
 	box-shadow: -3px 3px #ee481e;
 }
 .ami .friend-pseudo{
+	width: 100%;
+	/* background-color: #EE481E; */
 	font-family: Titan One;
 	font-size: 18px;
-	margin: 0px 40px 0px 40px;
+	margin-bottom: 15px;
 }
 .ami .rank{
 	font-family: Titan One;
 	font-size: 14px;
 	color: #efc10a;
-	margin-top: 10px;
+	margin-bottom: 30px;
 }
 
 .ami .tri-action button{
 	background-color: transparent;
 	border: none;
 	margin-right: 8px;
-	margin-top: 10px;
 	margin-bottom: 20px;
 }
 .ami .tri-action button:last-child{
@@ -412,41 +382,20 @@ hr.clear{
 		margin-bottom: 30px;
 	}
 
-	.ami{
-		width: calc(33.333% - 20px);
-	}
-	.ami:nth-child(4n){
-		margin-right: 30px;
-	}
-	.ami:nth-child(3n){
-		margin-right: 0px;
-	}
 } 
 
 @media only screen and (max-width: 950px) {
 
-	.ami{
-		width: calc(50% - 15px);
-	}
-	.ami:nth-child(4n){
-		margin-right: 30px;
-	}
-	.ami:nth-child(3n){
-		margin-right: 30px;
-	}
-	.ami:nth-child(2n){
-		margin-right: 0px;
-	}
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 830px) {
 
 	.profil-info #name{
 		font-size: 50px;
 	}
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 780px) {
 
 	#user-info-profile, #stats{
 		border-radius: 10px;
@@ -479,6 +428,16 @@ hr.clear{
 		margin-left: 0px;
 	}
 
+	#scores{
+		margin: 0px 20px 0px 20px;
+	}
+}
+
+@media only screen and (max-width: 610px) {
+
+	#friend-n-match h2{
+		font-size: 25px;
+	}
 }
 
 @media only screen and (max-width: 553px) {
@@ -493,64 +452,21 @@ hr.clear{
 		font-size: 40px;
 	}
 
-	.mat-tab-group ul li{
-		display:flex;
-		flex-direction: column;
-		align-items: center;
-		font-size: 16px;
-		text-align: center;
-		padding: 20px;
-	}
-
-	.win{
-		margin: auto;
-		margin-bottom: 30px;
-	}
-	
-	.VS{
-		margin-bottom: 20px;
-	}
-	.VS span{
-		font-size: 14px;
-		margin-bottom: 8px;
-	}
-
-	.score{
-		margin-bottom: 20px;
-	}
-
-	.ami .tri-action button{
-		margin-right: 0px;
-		margin-bottom: 10px;
-		margin-top: 5px;
-	}
-	.ami .tri-action button svg{
-		width: 30px;
-		height: 30px;
-	}
-
-	.ami{
-		padding: 20px;
-	}
-	#photo-profile{
-		width: 100%;
-		margin-bottom: 20px;
-	}
-	.ami .friend-pseudo{
-		font-size: 16px;
-		margin: 0px 0px 0px 0px;
-	}
-	.ami .status p{
-		font-size: 12px;
-	}
 }
 
-@media only screen and (max-width: 448px) {
+@media only screen and (max-width: 490px) {
 
 	.ami{
 		width: 100%;
 		float: none;
 		margin-right: 0px;
+	}
+	.ami .tri-action button svg{
+		width: 40px;
+		height: 40px;
+	}
+	.ami .tri-action button{
+		margin-right: 5px;
 	}
 
 	/* Styles for tab labels */
@@ -568,13 +484,7 @@ hr.clear{
 	}
 }
 
-@media only screen and (max-width: 385px) {
-
-	.ami{
-		width: 100%;
-		float: none;
-		margin-right: 0px;
-	}
+@media only screen and (max-width: 400px) {
 
 	/* Styles for tab labels */
 	#friend-n-match .mat-tab-label {

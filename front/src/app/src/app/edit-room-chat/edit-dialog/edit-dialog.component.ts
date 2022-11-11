@@ -1,4 +1,5 @@
-import { Component, Inject, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
 import { FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -47,10 +48,13 @@ export class EditDialogComponent implements OnInit {
       data: {target: target, room: this.room, penalty: penalty}
     });
   }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
         
   
   ngOnInit(): void {
-    console.log(this.room);
     this.editform.setValue({
       name: this.room.name,
       description: this.room.description,
@@ -62,16 +66,12 @@ export class EditDialogComponent implements OnInit {
 
   sendRequest(userId: number | undefined)
   {
-    if (userId)
-    {
+    if (userId) {
       this.userService.sendRequest(userId).subscribe( (res: any) => {
-        console.log(res);
-        if (res.state == "success")
-        {
+        if (res.state == "success") {
           this.snack.open("Votre demande a bien été envoyée", "OK", {duration: 2000});
           this.dialogRef.close();
-        }
-        else {
+        } else {
           this.snack.open("Une erreur est survenue: " + res.message, "OK", {duration: 2000});
         }
       });
@@ -85,6 +85,18 @@ export class EditDialogComponent implements OnInit {
       this.chatService.blockUser(userId, block);
       this.dialogRef.close();
     }
+  }
+
+  promoteUser(userId: number | undefined) {
+    if (userId && this.room && this.room.id) 
+      this.chatService.promoteUser(userId, this.room.id);
+      this.dialogRef.close();  
+   }
+
+  demoteUser(userId: number | undefined) {
+    if (userId && this.room && this.room.id) 
+      this.chatService.demoteUser(userId, this.room.id);
+    this.dialogRef.close();  
   }
 
   isMute(userId: number | undefined): boolean
@@ -176,18 +188,32 @@ export class EditDialogComponent implements OnInit {
   isAdministrator(user: UserI) {
     if (!user)
       return false;
+    if (user.id == this.room.ownerId)
+      return true;
     if (this.room.admins) {
       return this.room.admins.find(admin => admin.id === user.id);
     }
-    return this.room.ownerId == user.id;
+    return false;
   }
 
+
+  leaveRoom() {
+    this.chatService.leaveRoom(this.room)
+    this.dialogRef.close();
+  }
+
+  deleteRoom() {
+    this.chatService.deleteRoom(this.room)
+    this.dialogRef.close();
+  }
   
   ejectUser(user: UserI) {
-    if (this.room.ownerId != this.user.id) {
+    if (this.room.ownerId != user.id) {
       this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
       this.room.users = this.room.users.filter(u => u.id !== user.id);
     }
   }
+  
 }
+
 

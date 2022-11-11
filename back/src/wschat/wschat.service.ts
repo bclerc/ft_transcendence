@@ -43,34 +43,34 @@ export class WschatService {
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(subRoom.roomId);
     const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);   
- 
-    if (penalty && penalty.type === PenaltyType.BAN) {
-      this.eventEmitter.emit('room.user.join', {
-        room: room,
-        user: user,
-        success: false,
-        message: 'Vous avez été banni de ce salon' + (penalty.timetype === 'PERM' ? '.' : ' jusqu\'au ' + penalty.endTime.toLocaleString('fr-FR'))
-      });
-      return ;
-    }
-
-    if (user) {
-      if (!await this.chatService.canJoin(room.id, subRoom.password)) {
+    
+    if (user && room) {
+      if (penalty && penalty.type === PenaltyType.BAN) {
         this.eventEmitter.emit('room.user.join', {
           room: room,
           user: user,
           success: false,
-          message: 'Mot de passe incorrect',
-         });
-         return ;
+          message: 'Vous avez été banni de ce salon' + (penalty.timetype === 'PERM' ? '.' : ' jusqu\'au ' + penalty.endTime.toLocaleString('fr-FR'))
+        });
+        return ;
       }
 
-      await this.chatService.addUsersToRoom(room.id, user.id);
-      this.eventEmitter.emit('room.user.join', {
-        room: room,
-        user: user,
-        success: true,
-      });
+        if (!await this.chatService.canJoin(room.id, subRoom.password)) {
+          this.eventEmitter.emit('room.user.join', {
+            room: room,
+            user: user,
+            success: false,
+            message: 'Mot de passe incorrect',
+          });
+          return ;
+        }
+
+        await this.chatService.addUsersToRoom(room.id, user.id);
+        this.eventEmitter.emit('room.user.join', {
+          room: room,
+          user: user,
+          success: true,
+        });
     }
   }
 
@@ -82,7 +82,7 @@ export class WschatService {
     let endTime: Date;
 
     if (user && target && room) {
-      if (room.admins.find(admin => admin.id == user.id)) {
+      if (room.admins.find(admin => admin.id == user.id) || user.id == room.ownerId) {
         if (room.ownerId != target.id) {
           endTime = new Date(now + event.time);
           this.penaltiesService.punishUser(target.id, room.id, event.type, event.perm ? null : endTime);
@@ -107,8 +107,7 @@ export class WschatService {
     
     if (user && target && penalty) {
           const room = penalty.room;
-          if (room.admins.find(admin => admin.id == user.id)) {
-            console.log(penalty);
+          if (room.admins.find(admin => admin.id == user.id) || user.id == room.ownerId) {
             this.penaltiesService.deletePenalty(penalty.id);
             this.eventEmitter.emit('room.user.pardoned', { room: room, user: target, pardoner: user, success: true});
           }       
@@ -119,9 +118,8 @@ export class WschatService {
     const user = this.onlineUserService.getUser(socketId);
     const target = await this.userService.findOne(room.targetId);
     const roomToEject = await this.chatService.getRoomById(room.roomId);
-
-    if (user && target.id != roomToEject.ownerId) {
-      if (roomToEject.admins.find(admin => admin.id == user.id)) {
+    if (user && target && roomToEject && target.id != roomToEject.ownerId) {
+      if (roomToEject.admins.find(admin => admin.id == user.id) || user.id == roomToEject.ownerId) {
         await this.chatService.removeUsersFromRoom(roomToEject.id, target.id);
         this.eventEmitter.emit('room.user.kicked', { room: roomToEject, user: target, kicker: user });
       }
@@ -133,10 +131,9 @@ export class WschatService {
     const target = await this.userService.findOne(event.targetId);
     const roomToPromote = await this.chatService.getRoomById(event.roomId);
 
-    if (user) {
+    if (user && target && roomToPromote) {
       if (user.id == roomToPromote.ownerId) {
         this.chatService.addAdminsToRoom(roomToPromote.id, target.id);
-        this.updateRoomForUsersInRoom(roomToPromote.id);
         this.eventEmitter.emit('room.admin.update', {
           isPromote: true,
           user: target,
@@ -151,11 +148,11 @@ export class WschatService {
     const user = this.onlineUserService.getUser(socketId);
     const target = await this.userService.findOne(event.targetId);
     const roomToDemote = await this.chatService.getRoomById(event.roomId);
-
-    if (user) {
+    
+    if (user && target && roomToDemote) {
       if (roomToDemote.ownerId == user.id && roomToDemote.ownerId != target.id) {
+        console.log(event);
         this.chatService.removeAdminsFromRoom(roomToDemote.id, target.id);
-        this.updateRoomForUsersInRoom(roomToDemote.id);
         this.eventEmitter.emit('room.admin.update', {
           isPromote: false,
           user: target,
@@ -166,12 +163,24 @@ export class WschatService {
     }
   }
 
+  async deleteRoom(socketId: string, roomId: number) {
+    const user = this.onlineUserService.getUser(socketId);
+    const room = await this.chatService.getRoomById(roomId);
+
+    if (user && room) {
+      if (room.ownerId == user.id) {
+        await this.chatService.deleteRoom(room.id);
+        this.eventEmitter.emit('room.delete', { room: room, user: user, success: true});
+      }
+    }
+  }
+
   async newMessage(socketId: string, message: MessageI) {
     let messages: Message[];
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(message.room.id);
 
-    if (user) {
+    if (user && room) {
       try {
         await this.chatService.newMessage(message);
         this.eventEmitter.emit('room.message.new', { room: room });
@@ -199,10 +208,10 @@ export class WschatService {
       const newRoom = await this.chatService.removeUsersFromRoom(room.id, user.id);
       if (room.ownerId == user.id) {
         if (newRoom.users.length > 0) {
-          this.chatService.updateRoomOwner(room.id, newRoom.users[0].id);
-          this.updateRoomForUsersInRoom(room.id);
+         await this.chatService.updateRoomOwner(room.id, newRoom.users[0].id);
         } else {
           // delete
+
           this.eventEmitter.emit('room.delete', { room: room });
         }
       }
@@ -215,15 +224,15 @@ export class WschatService {
     const room = await this.chatService.getRoomById(newRoom.id);
     if (!newRoom.name
         || newRoom.name.length < 3
-        || newRoom.name.length > 20
+        || newRoom.name.length > 30
         || !newRoom.description
         || newRoom.description.length < 3
-        || newRoom.description.length > 100)
+        || newRoom.description.length > 200)
       {
         this.eventEmitter.emit('room.update', {user: user, room: room, success: false, message: 'Les champs ne sont pas valides' });
         return ;
       }
-    if (user) {
+    if (user && room) {
       if (room.ownerId == user.id) {
         await this.chatService.editRoom(newRoom);
         this.eventEmitter.emit('room.update', {user: user, room: newRoom, success: true });
@@ -237,7 +246,6 @@ export class WschatService {
     const user = this.onlineUserService.getUser(socketId);
     const target = await this.userService.findOne(event.userId);
 
-    console.log(event);
     if (user && target && user.id != target.id) {
       if (event.block) {
         await this.userService.blockUser(user.id, target.id);
@@ -253,7 +261,7 @@ export class WschatService {
     let room = await this.chatService.getRoomById(roomId);
 
     for (let user of room.users) {
-      let rooms = await this.chatService.getRoomsFromUser(user.id);
+      const rooms = await this.chatService.getRoomsFromUser(user.id);
       this.sendToUser(user, 'rooms', rooms);
     }
   }

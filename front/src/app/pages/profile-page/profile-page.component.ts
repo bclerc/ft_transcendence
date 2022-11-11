@@ -1,5 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, observable, Subscription, tap } from 'rxjs';
 import { User, UserI } from 'src/app/models/user.models';
@@ -23,7 +24,7 @@ export class ProfilePageComponent implements OnInit {
   alreadyBlocked : boolean = false;
   
   constructor(private userService: UserService, private router: Router, private route : ActivatedRoute, private token : TokenStorageService
-    ,public currentUserService : CurrentUserService) { }
+    ,public currentUserService : CurrentUserService, private snackBar : MatSnackBar) { }
 
   ngOnInit(): void {
     this.id= Number( this.router.url.split('/')[2]);
@@ -37,7 +38,20 @@ export class ProfilePageComponent implements OnInit {
           if (data === null)
            this.router.navigate(['error']);
         },
-        error => this.router.navigate(['error'])
+        (error : any) =>
+        {
+        if (error.status === 401 && error.error.message === "2FA_REQUIRED")
+        {
+          this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
+            duration: 3000
+          })
+          this.router.navigate(['code'])
+        }
+        else
+        {
+          this.router.navigate(['error'])
+        }
+      }
         );
       if (this.id === this.token.getId() )
         this.router.navigate(['/myprofile']);
@@ -63,8 +77,23 @@ export class ProfilePageComponent implements OnInit {
             break;
           }
         }
+      },
+      (error : any) => 
+      {
+        if (error.status === 401 && error.error.message === "2FA_REQUIRED")
+        {
+          this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
+            duration: 3000
+          })
+          this.router.navigate(['code'])
+        }
+        else
+        {
+          this.router.navigate([''])
+        }
       }
     )
+    
   }
 
   ngOnDestroy() : void

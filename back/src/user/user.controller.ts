@@ -11,6 +11,7 @@ import { FriendsService } from 'src/friends/friends.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ValidationPipe } from './validation.pipe';
 
 
 @Controller('user')
@@ -167,7 +168,7 @@ export class UserController {
 
   @Put()
   @UseGuards(Jwt2faAuthGuard)
-  async updateUser(@Request() req: any, @Body() data: updateUserDto) {
+  async updateUser(@Request() req: any, @Body(new ValidationPipe()) data: updateUserDto) {
     return await this.userService.updateUser(req.user.id, data);
   }
 
@@ -193,7 +194,6 @@ export class UserController {
 
       return { message: 'New avatar set', state: 'success' };
     } catch (error) {
-      console.log(error);
       return { message: 'Error while uploading image, please verify you image', state: 'error' };
     }
   }
@@ -358,7 +358,6 @@ export class UserController {
   @Post('block/:id')
   @UseGuards(Jwt2faAuthGuard)
   async block(@Request() req: any, @Param('id') target: number) {
-    console.log("YO");
     if (req.user.id == target)
       return { message: "You can't block yourself", state: 'error' };
     if (await this.friendsService.haveFriend(req.user.id, target))

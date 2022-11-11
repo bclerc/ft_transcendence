@@ -5,6 +5,8 @@ import { PointI } from '../interfaces/point.interface';
 import { GameI } from '../interfaces/game.interface';
 import { Socket } from 'socket.io';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
+import { GameService } from 'src/game/game.service';
+import { BasicUserI } from 'src/user/interface/basicUser.interface';
 
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 80;
@@ -62,6 +64,7 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 //
 
 ////
+
 export const MAX_SCORE = 5;
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
@@ -73,6 +76,8 @@ export class PongService {
 
     constructor(
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
+	    @Inject(GameService) private gameService: GameService,
+
         // private variables: VariablePong
     )
     {
@@ -867,5 +872,4 @@ export class PongService {
         }
         this.drawForAll("drawMap3", game);
     }
-
 }

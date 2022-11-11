@@ -113,6 +113,34 @@ export class UserService {
           },
         },
         friendOf: true,
+        games: {
+          select: {
+            id: true,
+            users: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+            winner: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+            loser: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+            winnerScore: true,
+            loserScore: true,
+          }
+        },
         blockedUsers: true,
         twoFactorEnabled: true,
         createdAt: true,
@@ -224,14 +252,21 @@ export class UserService {
   }
 
   async updateUser(id: string, update: updateUserDto) {
-    await this.prisma.user.update({
-      where: {
-        id: Number(id),
-      },
-      data: update
-    });
-    return {
-      message: "User was been updated",
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: Number(id),
+        },
+        data: update
+      });
+      return {
+        message: "User was been updated",
+      }
+    } catch (unique: any) {
+      if (unique.code === 'P2002') {
+        throw new HttpException(unique.meta.target[0] + " already used", HttpStatus.CONFLICT);
+      }
+      throw new HttpException(unique, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
