@@ -9,7 +9,7 @@ export class UserInfoI {
     email: string;
     avatar_url: string;
     friends: BasicUserI[];
-    games: Game[];
+    games: any[];
     blockedUsers: BasicUserI[];
     twoFactorEnabled: boolean;
 }

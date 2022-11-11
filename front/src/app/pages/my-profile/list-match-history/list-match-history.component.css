@@ -69,7 +69,7 @@ hr.clear{
 	list-style-type: none;
 }
 
-.match-list li{
+.match-list #match{
 	display: flex;
 	flex-direction: row;
 	background-color: #2b2a28;
@@ -165,7 +165,7 @@ hr.clear{
 @media only screen and (max-width: 950px) {
 
 
-	.match-list li{
+	.match-list #match{
 		display: flex;
 		flex-direction: column;
 		/* padding: 20px;
@@ -239,7 +239,7 @@ hr.clear{
 
 @media only screen and (max-width: 553px) {
 
-	.match-list li{
+	.match-list #match{
 		display:flex;
 		flex-direction: column;
 		align-items: center;
