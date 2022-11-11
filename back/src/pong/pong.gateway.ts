@@ -1,5 +1,6 @@
 import { Inject } from "@nestjs/common";
 import { WebSocketServer, SubscribeMessage, WebSocketGateway, ConnectedSocket, OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect } from "@nestjs/websockets";
+import { identity } from "rxjs";
 import { Server, Socket } from "socket.io";
 import { OnlineUserService } from "src/onlineusers/onlineuser.service";
 import { GameI } from "./interfaces/game.interface";
@@ -9,8 +10,6 @@ import { VariablePong } from "./variables.pong";
 
 const NORMALGAME = 0;
 const MAX_MAP = 3;
-const RIGHTSIDE = 0;
-const LEFTSIDE = 1;
 
 @WebSocketGateway(8181, {
 	cors: {
@@ -25,6 +24,9 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	state: GameI;
 	allGames: GameI[];
 	allRandomGames: GameI[];
+	
+	gamesMap: Map<string, GameI>;
+
 	connectedUsers: UserI[];
 	constructor(
 		private pongService: PongService,
@@ -44,6 +46,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		};
 		this.allGames = [];
 		this.allRandomGames = [];
+		this.gamesMap = new Map<string, GameI>;
 	};
 
 	//////
@@ -54,7 +57,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	handleDisconnect(client: Socket) {
-		this.connectedUsers = this.connectedUsers.filter((user) => user.id != client.id);
+		// this.connectedUsers = this.connectedUsers.filter((user) => user.id != client.id);
+
 		var g = this.allGames.find(game => (game.player1.socket === client));
 		if (g)
 			this.pongService.deleteGame(g, this.allGames);
@@ -86,45 +90,25 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	///KEYS HANDLER
 	///////
 
-	@SubscribeMessage('keydownZ')
-	keydownZ(client: Socket ){
-		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-		if (game)
-			this.pongService.keydownZ(game, client);
-		else
-		{
-			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-			if (game)
-				this.pongService.keydownZ(game, client);
-		}
-	}
-
-
 	
-	@SubscribeMessage('keyupZ')
-	keyupZ(client: Socket){
-		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-		if (game)
-			this.pongService.keyupZ(game, client);
-		else 
+	@SubscribeMessage('keydown')
+	keydown(client: Socket, keydown: string)
+	{
+		for (let game of this.gamesMap.values())
 		{
-			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-			if (game)
-				this.pongService.keyupZ(game, client);
+			if (game.player1 && client === game.player1.socket || game.player2 && client === game.player2.socket)
+				this.pongService.keydown(game, client, keydown);
 		}
 	}
 
 
-	@SubscribeMessage('keyupS')
-	keyupS(client: Socket){
-		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-		if (game)
-			this.pongService.keyupS(game, client);
-		else
+	@SubscribeMessage('keyup')
+	keyup(client: Socket, keyup: string)
+	{
+		for (let game of this.gamesMap.values())
 		{
-			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-			if (game)
-				this.pongService.keyupS(game, client);
+			if (game.player1 && client === game.player1.socket || game.player2 && client === game.player2.socket)
+				this.pongService.keyup(game, client, keyup);
 		}
 	}
 
@@ -133,131 +117,99 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	///////
 
 	@SubscribeMessage('newGame')
-	async newGame(client: Socket) {
-		var game: GameI = this.searchGameAwaiting();
+	async newGame(client: Socket, normalOrNot: boolean)
+	{
+		// var game: GameI = this.searchGameAwaiting();
+		let game: GameI = this.searchGameMapAwaiting(normalOrNot);
 		if (game)
 		{
+			console.log(game);
 			this.pongService.joinGame(client, game);
-			client.emit('drawName', 0);
+			// client.emit('drawName', 0);
 			await this.pongService.delay(1500);
 			if (game.player1.socket)
 				game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
 			if (game.player2.socket)
 				game.player2.socket.emit('stopSearchLoop', game.id_searchinterval2);
-			console.log(game.id_searchinterval1,  game.id_searchinterval2);
+			// console.log(game.id_searchinterval1, game.id_searchinterval2);
 			game.id_searchinterval1 = 0;
 			game.id_searchinterval2 = 0;
 			await this.pongService.drawInit(game);
-	      	this.server.emit('user1', game.player1.user);
-      		this.server.emit('user2', game.player2.user);
-			await this.pongService.startGame(game, NORMALGAME);
+
+			game.player1.socket.emit('user1',game.player1.user);
+			game.player1.socket.emit('user2',game.player2.user);
+			game.player2.socket.emit('user1',game.player1.user);
+			game.player2.socket.emit('user2',game.player2.user);
+
+			//le front ne sauvegarde pas l'id de la map bordel de mierde de la madre de dia
+			//obliger de boucler a chaque keyboardEvent
+			game.player1.socket.emit('state', game.id);
+			game.player2.socket.emit('state', game.id);
+
+			await this.pongService.startGame(game, game.mapId);
+			// console.log("bordel de merde");
+			// this.gamesMap.delete(game.id);
 		}
 		else
 		{
-			game = this.creatNewGame(client);
-			client.emit('drawName', 1);
-		}
-	}
-
-
-	@SubscribeMessage('newGameRandom')
-	async newGameRandom(client: Socket) {
-		var game: GameI = this.searchGameAwaitingRandom();
-		if (game)
-		{
-			this.pongService.joinGame(client, game);
-			client.emit('drawName', RIGHTSIDE);
-			// var x = Math.floor(Math.random() * (MAX_MAP - 1 + 1) + 1); 		// choose random map id
-			var x = 3; //pour les tests je prends celle que je souhaite tester
-		
-			await this.pongService.delay(1500);
-			if (game.player1.socket)
-			game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
-			if (game.player2.socket)
-			game.player2.socket.emit('stopSearchLoop', game.id_searchinterval2);
-			console.log(game.id_searchinterval1,  game.id_searchinterval2);
-			game.id_searchinterval1 = 0;
-			game.id_searchinterval2 = 0;
-			await this.pongService.drawInit(game);
-			this.server.emit('user1', game.player1.user);
-			this.server.emit('user2', game.player2.user);
-			await this.pongService.startGame(game, x);
-		}
-		else
-		{
-			game = this.creatNewGameRandom(client);
-			client.emit('drawName', LEFTSIDE);
-		}
-	}
-
-	@SubscribeMessage("stopGame")
-	stopgame(client: Socket)
-	{
-		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-		if (game)
-		{
-			clearInterval(game.id_interval);
-			if (game.player1)
-				this.init(game.player1.socket);
-			if (game.player2)
-				this.init(game.player2.socket);
-			this.pongService.deleteGame(game, this.allGames);
-			console.log("stop1")
-		}
-		else
-		{
-			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-			if (game){
-				clearInterval(game.id_interval);
-				if (game.player1)
-					this.init(game.player1.socket);
-				if (game.player2)
-					this.init(game.player2.socket);
-				this.pongService.deleteGame(game, this.allRandomGames);
-				console.log("stop2")
-			}	
+			if (normalOrNot == true)
+				this.creatNewGameMap(client, NORMALGAME);
+			else
+			{
+				var x = Math.floor(Math.random() * (MAX_MAP - 1 + 1) + 1); 		// choose random map id
+				this.creatNewGameMap(client, x);
+			}
 		}
 	}
 	
+	@SubscribeMessage('getId')
+	getId(client: Socket){
+		for (let value of this.gamesMap.values())
+		{
+			if (value.player1.socket === client || (value.player2 && value.player2.socket === client))
+			{
+				client.emit('state', value.id);
+				console.log("getidbackfrero");
+				return ;
+			}	
+		}
+	}
+
 	////////
 	///LOOP HANDLER SEARCHING OPPONENT
 	///////
 
-	@SubscribeMessage('id_interval')
-	varSearchLoop(client: Socket, id: number){
-		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-		if (game)
-		{
-			if (game.player1.socket === client)
-				game.id_searchinterval1 = id;
-			else
-				game.id_searchinterval2 = id;
+	@SubscribeMessage('id_intervalmap')
+	varSearchLoopMap(client: Socket, id: number){
+		for (let value of this.gamesMap.values()) {
+			if (value.player1.socket === client)
+				value.id_searchinterval1 = id;
+			else if (value.player2 && value.player2.socket === client)
+				value.id_searchinterval2 = id;
 		}
+		return undefined;
 	}
 
-	@SubscribeMessage('id_intervalRandom')
-	varSearchLoopRandom(client: Socket, id: number){
-		var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
-		if (game)
-		{
-			if (game.player1.socket === client)
-				game.id_searchinterval1 = id;
-			else
-				game.id_searchinterval2 = id;
-		}
-	}
-	
-		
 	///////
 	//OTHER
 	//////
 
-	private searchGameAwaiting(): GameI {
-		return this.allGames.find(game => (game.player1 != undefined && game.player2 != undefined) ? false : true);
-	}
-
-	private searchGameAwaitingRandom(): GameI {
-		return this.allRandomGames.find(game => (game == undefined || (game.player1 != undefined && game.player2 != undefined)) ? false : true);
+	private searchGameMapAwaiting(normalOrNot: boolean): GameI {
+		if (normalOrNot)
+		{
+			for (let value of this.gamesMap.values()) {
+				if (value.mapId === NORMALGAME && value.player2 === undefined)
+					return value;
+			}
+		}
+		else
+		{
+			for (let value of this.gamesMap.values()) {
+				if (value.mapId !== NORMALGAME && value.player2 === undefined)
+					return value;
+			}
+		}
+		return undefined;
 	}
 
 	private addNewUser(client: Socket)
@@ -267,26 +219,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 		this.connectedUsers.push(user);
 	}
-	
-	private creatNewGame(client: Socket): GameI {
-		var game: GameI = this.pongService.initState();
-		game = {
-			id: client.id,
-			player1: {
-        user: this.onlineUserService.getUser(client.id),
-				socket: client,
-				paddle: game.player1.paddle,
-				points: game.player1.points,
-			},
-			player2: undefined,
-			ball: game.ball,
-			obstacle: game.obstacle
-		}
-		this.allGames.push(game);
-		return game;
-	}
 
-	private creatNewGameRandom(client: Socket): GameI {
+	private creatNewGameMap(client: Socket, mapId: number) {
 		var game: GameI = this.pongService.initState();
 		game = {
 			id: client.id,
@@ -297,11 +231,18 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				points: game.player1.points,
 			},
 			player2: undefined,
+			mapId: mapId,
 			ball: game.ball,
 			obstacle: game.obstacle
 		}
-		this.allRandomGames.push(game);
-		return game;
+
+		//Random uniqId:
+
+
+		this.gamesMap.set(game.id, game);
+		console.log(game);
+		client.emit("state", game.id);
+		// this.allGames.push(game);
 	}
 
 }

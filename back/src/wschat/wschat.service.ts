@@ -134,7 +134,6 @@ export class WschatService {
     if (user && target && roomToPromote) {
       if (user.id == roomToPromote.ownerId) {
         this.chatService.addAdminsToRoom(roomToPromote.id, target.id);
-        this.updateRoomForUsersInRoom(roomToPromote.id);
         this.eventEmitter.emit('room.admin.update', {
           isPromote: true,
           user: target,
@@ -149,17 +148,29 @@ export class WschatService {
     const user = this.onlineUserService.getUser(socketId);
     const target = await this.userService.findOne(event.targetId);
     const roomToDemote = await this.chatService.getRoomById(event.roomId);
-
+    
     if (user && target && roomToDemote) {
       if (roomToDemote.ownerId == user.id && roomToDemote.ownerId != target.id) {
+        console.log(event);
         this.chatService.removeAdminsFromRoom(roomToDemote.id, target.id);
-        this.updateRoomForUsersInRoom(roomToDemote.id);
         this.eventEmitter.emit('room.admin.update', {
           isPromote: false,
           user: target,
           promoter: user,
           room: roomToDemote
         })
+      }
+    }
+  }
+
+  async deleteRoom(socketId: string, roomId: number) {
+    const user = this.onlineUserService.getUser(socketId);
+    const room = await this.chatService.getRoomById(roomId);
+
+    if (user && room) {
+      if (room.ownerId == user.id) {
+        await this.chatService.deleteRoom(room.id);
+        this.eventEmitter.emit('room.delete', { room: room, user: user, success: true});
       }
     }
   }

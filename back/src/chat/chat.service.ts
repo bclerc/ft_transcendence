@@ -640,6 +640,14 @@ export class ChatService {
   async deleteRoom(roomId: number): Promise<void> {
 
 
+    await this.prisma.message.deleteMany({
+      where: {
+        room: {
+          id: roomId,
+        },  
+      },
+    });
+  
     await this.prisma.chatRoom.delete({
       where: {
         id: roomId,

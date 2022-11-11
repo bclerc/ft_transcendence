@@ -47,6 +47,10 @@ export class ChatService {
       this.socket.emit('editRoom', room);
     }
 
+    deleteRoom(room: ChatRoom) {
+      this.socket.emit('deleteRoom', room.id);
+    }
+
     subscribeRoom(room: ChatRoom, pass?: string | null) {
       let object = {
         roomId: room.id,
@@ -62,6 +66,14 @@ export class ChatService {
 
     pardonUser(userId: number, penaltyId: number) {
       this.socket.emit('pardonUser', {userId: userId, penaltyId: penaltyId});
+    }
+
+    promoteUser(userId: number, roomId: number) {
+      this.socket.emit('promoteUser', { roomId: roomId, targetId: userId });
+    }
+  
+    demoteUser(userId: number, roomId: number) {
+      this.socket.emit('demoteUser',  { roomId: roomId, targetId: userId });
     }
 
     needRooms() {
