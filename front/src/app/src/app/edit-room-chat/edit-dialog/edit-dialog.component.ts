@@ -87,6 +87,18 @@ export class EditDialogComponent implements OnInit {
     }
   }
 
+  promoteUser(userId: number | undefined) {
+    if (userId && this.room && this.room.id) 
+      this.chatService.promoteUser(userId, this.room.id);
+      this.dialogRef.close();  
+   }
+
+  demoteUser(userId: number | undefined) {
+    if (userId && this.room && this.room.id) 
+      this.chatService.demoteUser(userId, this.room.id);
+    this.dialogRef.close();  
+  }
+
   isMute(userId: number | undefined): boolean
   {
     if (userId && this.room.penalities) {
@@ -187,6 +199,11 @@ export class EditDialogComponent implements OnInit {
 
   leaveRoom() {
     this.chatService.leaveRoom(this.room)
+    this.dialogRef.close();
+  }
+
+  deleteRoom() {
+    this.chatService.deleteRoom(this.room)
     this.dialogRef.close();
   }
   

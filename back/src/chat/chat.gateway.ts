@@ -1,4 +1,4 @@
-import { AdminUpdateEvent, BlockedUserEvent, MessageUpdateEvent, NewRoomEvent, PardonEvent, RoomUpdateEvent, UserCanChatEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
+import { AdminUpdateEvent, BlockedUserEvent, DeleteRoomEvent, MessageUpdateEvent, NewRoomEvent, PardonEvent, RoomUpdateEvent, UserCanChatEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { ChatRoomI, MessageI, newChatRoomI, PardonI } from './interfaces/chatRoom.interface';
 import { DemoteUserI, PromoteUserI } from './interfaces/promote-user-i.interface';
@@ -37,8 +37,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.onlineUserService.server = server;
   }
 
-
-
   async handleConnection(socket: Socket) {
     this.onlineUserService.newConnect(socket);
   }
@@ -73,7 +71,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
       this.sendToUsersInRoom(event.room.id, 'notification', "Une nouvelle room a été créée : " + event.room.name);
       if (event.room.public)
         this.updatePublicRooms();
-    
   }
 
   @OnEvent('room.update')
@@ -85,6 +82,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.updatePublicRooms();
      } else {
       this.sendToUser(event.user, 'notification', "Vous n'avez pas pu éditer la room " + event.room.name + ". Raison : " + event.message);
+    }
+  }
+
+  @OnEvent('room.delete')
+  handleRoomDeleteEvent(event: DeleteRoomEvent) {
+    if (event.success)
+    {
+      this.sendToUsers(event.room.users, 'notification', "La room " + event.room.name + " a été supprimée par " + event.user.displayname);
+      this.updateRoomForUsers(event.room.users);
+      if (event.room.public)
+        this.updatePublicRooms();
     }
   }
 
@@ -203,6 +211,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     this.wschatService.newRoom(client.id, newRoom);
   }
 
+  @SubscribeMessage('deleteRoom')
+  async onDeleteRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() roomId: number) {
+    this.wschatService.deleteRoom(client.id, roomId);
+  }
+
   @SubscribeMessage('subscribeRoom')
   async onSubscribeRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: SubscribeRoomDto) {
     this.wschatService.subscribeToRoom(client.id, room);
@@ -311,15 +324,25 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
   }
 
+  async updateRoomForUsers(users: BasicUserI[]) {
+    for (let user of users) {
+      this.updateUserRooms(user);
+    }
+  }
+
   sendToUser(user: BasicUserI, prefix: string, data: any) {  
       if (user) {
         for (let [key, value] of this.onlineUserService.onlineUsers) {
-          if (value.id == user.id) 
-          {
+          if (value.id == user.id) {
             this.server.to(key).emit(prefix, data);
           }
         }
       }
+  }
+  async sendToUsers(users: BasicUserI[], prefix: string, data: any) {
+    for (let user of users) {
+      this.sendToUser(user, prefix, data);
+    }
   }
 
   async sendToUsersInRoom(roomId: number, prefix: string, data: any) {

@@ -27,7 +27,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
 
 
   messages$: Observable<Message[]> = this.chatService.getMessages(this.room);
-
+  dialogRef: any;
   chatMessage: FormControl = new FormControl(null, [Validators.required]);
 
   form: FormGroup = new FormGroup({
@@ -42,11 +42,12 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
               
              
   openDialog(target: UserI, penalty: string): void {
-    this.dialog.open(EditDialogComponent, {
+    this.dialogRef = this.dialog.open(EditDialogComponent, {
       data: this.room,
       width: '90%',
       height: '90%',
     });
+
   }
 
   async sendMessage() {
@@ -71,6 +72,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   }
   
   ngOnInit(): void {
+
     this.messages$.subscribe((messages: Message[]) => {
       const element = document.getElementById('chat_box_body');
 
