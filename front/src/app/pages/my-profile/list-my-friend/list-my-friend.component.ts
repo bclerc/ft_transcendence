@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -15,12 +15,11 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./list-my-friend.component.css']
 })
 export class ListMyFriendComponent implements OnInit {
+  @Input() user! : UserI;
 
-  constructor(private route: ActivatedRoute, private token : TokenStorageService, private jwtHelper: JwtHelperService, public userService : UserService, private router : Router
-    , public currentUser : CurrentUserService, private snackBar : MatSnackBar) 
-  {
- 
-  }
+  constructor (  
+                public userService : UserService,
+              ) {}
 
   friends! : UserI[];
   subscriptionFriend!: Subscription;
@@ -39,44 +38,46 @@ export class ListMyFriendComponent implements OnInit {
         this.subscriptionFriend.unsubscribe;
     }
 
-    // removeFriend(id : number | undefined) : void
-    // {
-    //   this.userService.removeFriend(id).subscribe(
-    //     (data : any) =>
-    //     {
-    //     if (this.user && this.friends)
-    //     {
-    //       for (var i = 0; this.friends[i] ;i++)
-    //       {
-    //         if (id === this.friends[i].id)
-    //         {
-    //           this.friends.splice(i, 1);
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   );
-    // }
+    removeFriend(id : number | undefined) : void
+    {
+      this.userService.removeFriend(id).subscribe(
+        (data : any) =>
+        {
+        if (this.friends)
+        {
+          for (var i = 0; this.friends[i] ;i++)
+          {
+            if (id === this.friends[i].id)
+            {
+              this.friends.splice(i, 1);
+              break;
+            }
+          }
+        }
+      }
+      );
+    }
   
-    // blockUser(id : number | undefined) : void
-    // {
-    //   this.userService.blockUser(id).subscribe(
-    //     (data : any) =>
-    //     {
-    //     if (this.user && this.friends)
-    //     {
-    //       for (var i = 0; this.friends[i] ;i++)
-    //       {
-    //         if (id === this.friends[i].id)
-    //         {
-    //           this.friends.splice(i, 1);
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   )
-    // }
+    blockUser(id : number | undefined) : void
+    {
+      this.userService.blockUser(id).subscribe(
+        (data : any) =>
+        {
+        if (this.friends)
+        {
+          for (var i = 0; this.friends[i] ;i++)
+          {
+            if (id === this.friends[i].id)
+            {
+              if (this.user.blockedUsers)
+                this.user.blockedUsers.push(this.friends[i]);
+              this.friends.splice(i, 1);
+              break;
+            }
+          }
+        }
+      }
+      )
+    }
 
 }

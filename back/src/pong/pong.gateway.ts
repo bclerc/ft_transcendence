@@ -90,6 +90,20 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	///KEYS HANDLER
 	///////
 
+	@SubscribeMessage('keydownZ')
+	keydownZ(client: Socket ){
+		var game: GameI = this.allGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+		if (game)
+			this.pongService.keydownZ(game, client);
+		else
+		{
+			var game: GameI = this.allRandomGames.find(game => (game.player1.socket === client || (game.player2 && game.player2.socket === client)));
+			if (game)
+				this.pongService.keydownZ(game, client);
+		}
+	}
+
+
 	
 	@SubscribeMessage('keydown')
 	keydown(client: Socket, keydown: string)
