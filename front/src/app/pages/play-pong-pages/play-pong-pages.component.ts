@@ -126,15 +126,6 @@ export class PlayPongPagesComponent implements OnInit {
     this.var_interval = 0;
   }
   subscription!: Subscription;
-  ngOnInit(): void {
-        this.subscription = this.currentUser.getCurrentUser().subscribe(
-        (data : any) => {
-          // console.log("data =", data)
-          this.user = data;
-        },
-          
-
-        );
 
   ngOnInit(): void 
   {
