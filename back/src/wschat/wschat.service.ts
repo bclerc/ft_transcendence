@@ -180,7 +180,8 @@ export class WschatService {
     let messages: Message[];
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(message.room.id);
-
+    if (message.content.length < 2  && message.content.length > 500) 
+      return ;
     if (user && room) {
       try {
         await this.chatService.newMessage(message);
