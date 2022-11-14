@@ -1,5 +1,42 @@
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
 
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
 *{
 	box-sizing: border-box;
 	transition: all ease 0.4s;
@@ -14,32 +51,7 @@ body{
 	height: 100%
 }
 a{
-	color: inherit; /*pk ?*/
-}
-
-@font-face {
-	font-family: 'Titan One';
-	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'ReadexPro-Regular';
-	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'ReadexPro-Medium';
-	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'ReadexPro-Bold';
-	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
+	color: inherit;
 }
 
 .center{
@@ -56,7 +68,7 @@ hr.clear{
 	display: block;
 }
 
-.container{
+.new-room-container{
 	padding: 22px;
 }
 #create-module{
@@ -64,8 +76,9 @@ hr.clear{
 }
 
 .demi-public ul{
+	/* background-color: blueviolet; */
 	flex-direction: column;
-	height: 583px;
+	height: 570px;
 	overflow-y: auto;
 }
 
@@ -76,8 +89,6 @@ hr.clear{
 	margin-bottom: 12px;
 	padding: 20px;
 	display: flex;
-	/* flex-direction: column; */
-	/* justify-content: space-between; */
 }
 .info-list{
 	width: 95%;
@@ -86,30 +97,30 @@ hr.clear{
 	display: flex;
 }
 
-.but{
+.demi-public .but{
 	margin: auto 0px auto 0px;
 }
 
-li button{
+.demi-public li button{
 	background-color: #343330;
 	border: none;
 	border-radius: 4px;
 	width: 30px;
 	height: 30px;
 }
-li button img{
+.demi-public li button img{
 	width: 12px;
 	margin: auto;
 	padding-top: 3px;
 }
-li button:hover{
+.demi-public li button:hover{
 	background-color: #feefcf;
 }
-li img{
+/* .avatars li img{
 	width:11px;
 	margin-top: -3px;
 	margin-left: 3px;
-}
+} */
 
 .button-creer button{
 	font-family: Titan One;
@@ -140,23 +151,23 @@ li img{
 
 /* typo -------------------------------------------------------------------------------- */
 
-h2{
+.new-room-container #tt-h2{
 	font-family: Titan One;
 	font-size: 32px;
 	color: #feefcf;
 	margin-bottom: 25px;
 }
-.demi-public h2{
+/* .demi-public h2{
 	margin-left: 20px;
-}
-h3{
+} */
+.demi-public #tt-h3{
 	font-family: ReadexPro-Bold;
 	font-size: 16px;
 	color: #feefcf;
-	margin-bottom: 3px;
+	margin-bottom: 10px;
 	margin-right: 4px;
 }
-#description{
+.demi-public #description{
 	font-family: ReadexPro-Regular;
 	font-size: 12px;
 	margin-bottom: 15px;
@@ -238,26 +249,25 @@ textarea{
 
 
 .avatars {
-  display: flex;
+	display: flex;
 }
 
 .avatars__item {
-  /* Nagative margin make avatar overlap to previous one */
-  margin-left: -0.95rem;
-  
+	/* Nagative margin make avatar overlap to previous one */
+	margin-left: -0.95rem;
 }
 .avatars__item:first-child {
-  margin-left: 0;
+	margin-left: 0;
 }
 
 .avatars img {
-  border-radius: 50%;
-  object-fit: cover;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 2px solid #ee481e;
+	border-radius: 50%;
+	object-fit: cover;
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	border: 2px solid #ee481e;
 }
 

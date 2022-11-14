@@ -1,34 +1,31 @@
-<!-- <p>new-room works!</p> -->
-<!-- <main class="container">
-</main> -->
+<main class="new-room-container">
 
-<main class="container">
-	<section class="demi-public">
-		<H2>Groupes publics</H2>
+	<!-- LISTE GROUPES PUBLICS -->
+	<div class="demi-public">
+		<h2 id="tt-h2">Groupes publics</h2>
 		<ul>
 			<li *ngFor="let room of (publicrooms | async)">
 				<div class="info-list">
 					<div id="title-list">
-						<h3> {{room.name}}</h3>
+						<h3 id="tt-h3"> {{room.name}}</h3>
 						<ng-container *ngIf="room.password">
 							<img *ngIf="room.password" matTooltip="Mot de passe nécéssaire" src="../../../../assets/svg/lock.svg" alt="mot de passe">
 						</ng-container>
 					</div>
 					<p id="description">{{room.description}}</p>
 					<div id="membres">
-
-            <div class="avatars">
-              <!-- Avatar item -->
-              <div *ngFor="let user of room.users" class="avatars__item">
-                  <div class="avatars__image">
-                      <img width="20px" height="20px" src="{{ user.avatar_url }}" alt="{{user.displayname}}" matTooltip="{{user.displayname}}">
-                  </div>
-              </div>
-          </div>
-
-
+						<div class="avatars">
+							<!-- Avatar item -->
+							<div *ngFor="let user of room.users" class="avatars__item">
+								<div class="avatars__image">
+									<img width="20px" height="20px" src="{{ user.avatar_url }}" alt="{{user.displayname}}" matTooltip="{{user.displayname}}">
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
+
+				<!-- Bouton + -->
 				<div class="but">
 					<button mat-Button matTooltip="Rejoindre le groupe" (click)="joinRoom(room, room.password !== null)">
 						<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
@@ -36,55 +33,55 @@
 				</div>
 			</li>
 		</ul>
-	</section>
-	<section class="demi-create">
-			<H2>Créer un groupe</H2>
-			<!-- <input type="text" matInput placeholder="Nom du groupe" default="caca">
-			<input type="text" matInput placeholder="Description">
-			<input type="text" matInput placeholder="Chercher par pseudo"> -->
-			<form [formGroup]="form" (ngSubmit)="create()">
+	</div>
 
-				<!-- Nom du groupe -->
-				<div id="input-box">
-					<p id="input-title">Nom du groupe</p>
-					<textarea id="input-text"
-                    required minlength="3"
-                    required maxlength="15"
-                    placeholder="Super groupe de la mort"
-                    formControlName="name">
-          </textarea>
-					<p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe superbes</p>
-				</div>
+	<div class="demi-create">
+		<h2 id="tt-h2">Créer un groupe</h2>
+		<form [formGroup]="form" (ngSubmit)="create()">
 
-				<!-- Description -->
-				<div id="input-box">
-					<p id="input-title">Description</p>
-					<textarea id="input-text"
-                    placeholder="Super description de la mort qui tue"
-                    formControlName="description"
-                    required maxlength="120">
+			<!-- Nom du groupe -->
+			<div id="input-box">
+				<p id="input-title">Nom du groupe</p>
+				<textarea id="input-text"
+					required minlength="3"
+					required maxlength="15"
+					placeholder="Super groupe de la mort"
+					formControlName="name">
+				</textarea>
+				<p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe superbes</p>
+			</div>
 
-          </textarea>
-				</div>
+			<!-- Description -->
+			<div id="input-box">
+				<p id="input-title">Description</p>
+				<textarea id="input-text"
+					placeholder="Super description de la mort qui tue"
+					formControlName="description"
+					required maxlength="120">
+				</textarea>
+			</div>
 
-				<!-- User select -->
-				<app-userselect [users]="users.value" (addUser)="addUser($event)" (removeuser)="removeUser($event.id)"></app-userselect>
+			<!-- Description
+			<div id="input-box">
+				<p id="input-title">Description</p>
+				<textarea id="input-text" placeholder="Super description de la mort qui tue" formControlName="description"></textarea>
+			</div> -->
 
-				<!-- Public -->
-				<mat-checkbox id="public-check-box" matCheckBox formControlName="public">Public</mat-checkbox>
-				<div id="input-box" *ngIf="public.value">
-					<p id="input-title">Mot de passe</p>
-					<textarea id="input-text" formControlName="password"></textarea>
-				</div>
-				<!-- <mat-form-field *ngIf="public.value"> -->
-					<!-- <mat-label>Mot de passe</mat-label> -->
-					<!-- <input *ngIf="public.value" class="my-input" matInput type="password" formControlName="password"> -->
+			<!-- User select -->
+			<app-userselect [users]="users.value" (addUser)="addUser($event)" (removeuser)="removeUser($event.id)"></app-userselect>
 
-				<!-- Bouton -->
-				<div class="button-creer">
-					<button mat-button type="submit" [disabled]="!form.valid">Créer le groupe</button>
-				</div>
-			</form>
-	</section>
+			<!-- Public -->
+			<mat-checkbox id="public-check-box" matCheckBox formControlName="public">Public</mat-checkbox>
+			<div id="input-box" *ngIf="public.value">
+				<p id="input-title">Mot de passe</p>
+				<textarea id="input-text" formControlName="password"></textarea>
+			</div>
+
+			<!-- Bouton -->
+			<div class="button-creer">
+				<button mat-button type="submit" [disabled]="!form.valid">Créer le groupe</button>
+			</div>
+		</form>
+	</div>
 
 </main>

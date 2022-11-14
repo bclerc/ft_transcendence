@@ -12,63 +12,87 @@
 
 				<!-- SIDEBAR -->
 				<aside class="sidebar">
+
+					<!-- USER -->
 					<div class="user-bloc">
 						<img src="{{ actualUser.avatar_url }}" alt="ma belle gueule">
-						<!-- <img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.displayname"/> -->
-						<!-- <p class="intraName">Valentina salamberemborg</p> -->
 						<div id="user-info">
 							<a class="intraName" routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ actualUser.displayname }}</a>
 							<span class="intraEmail">{{actualUser.email}}</span>
 						</div>
 					</div>
-					<!-- <div class="pute"> -->
-						<mat-tab-group class="pute" [selectedIndex]="selected.value">
-							<mat-tab>
-								<ng-template mat-tab-label>
-									<ng-container *ngIf="haveNewMessage">
-										<svg  style="margin-right: 5px;" width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-											<title>Oval</title>
-											<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-												<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
-													<g id="Group-2" transform="translate(863.000000, 180.000000)">
-														<g id="Group-3" transform="translate(28.000000, 368.000000)">
-																<circle id="Oval" cx="80" cy="16" r="6"></circle>
-														</g>
+
+					<!-- SWITCH -->
+					<mat-tab-group class="pute" [selectedIndex]="selected.value">
+
+						<!-- MES GROUPES -->
+						<mat-tab>
+							<ng-template mat-tab-label>
+								<ng-container *ngIf="haveNewMessage">
+									<svg  style="margin-right: 5px;" width="12px" height="12px">
+										<title>Oval</title>
+										<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+											<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
+												<g id="Group-2" transform="translate(863.000000, 180.000000)">
+													<g id="Group-3" transform="translate(28.000000, 368.000000)">
+															<circle id="Oval" cx="80" cy="16" r="6"></circle>
 													</g>
 												</g>
 											</g>
+										</g>
 									</svg>
-									</ng-container>
-									Mes groupes 
-								</ng-template>
-								<ul>
-									<li *ngFor="let room of (rooms$ | async)" [value]="room">
-										<p class="roomName" (click)="selectRoom(room)">{{room.name}}
-											<ng-container *ngIf="!room.seen">
-												<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-													<title>Oval</title>
-													<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-														<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
-															<g id="Group-2" transform="translate(863.000000, 180.000000)">
-																<g id="Group-3" transform="translate(28.000000, 368.000000)">
-																	<circle id="Oval" cx="80" cy="16" r="6"></circle>
-																</g>
+								</ng-container>
+								Mes groupes
+							</ng-template>
+							<ul>
+								<li *ngFor="let room of (rooms$ | async)" [value]="room">
+									<p class="roomName" (click)="selectRoom(room)">{{room.name}}
+										<ng-container *ngIf="!room.seen">
+											<svg width="12px" height="12px">
+												<title>Oval</title>
+												<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
+														<g id="Group-2" transform="translate(863.000000, 180.000000)">
+															<g id="Group-3" transform="translate(28.000000, 368.000000)">
+																<circle id="Oval" cx="80" cy="16" r="6"></circle>
 															</g>
 														</g>
 													</g>
-												</svg>
-											</ng-container>
-										</p>
-									</li>
-								</ul>
-							</mat-tab>
-							<mat-tab>
-								<ng-template mat-tab-label>
-									<ng-container *ngIf="haveNewDm">
-										<svg  style="margin-right: 5px;" width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+												</g>
+											</svg>
+										</ng-container>
+									</p>
+								</li>
+							</ul>
+						</mat-tab>
+
+						<!-- MES AMIS -->
+						<mat-tab>
+							<ng-template mat-tab-label>
+								<ng-container *ngIf="haveNewDm">
+									<svg  style="margin-right: 5px;" width="12px" height="12px">
+										<title>Oval</title>
+										<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+											<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
+												<g id="Group-2" transform="translate(863.000000, 180.000000)">
+													<g id="Group-3" transform="translate(28.000000, 368.000000)">
+														<circle id="Oval" cx="80" cy="16" r="6"></circle>
+													</g>
+												</g>
+											</g>
+										</g>
+									</svg>
+								</ng-container>
+								Mes amis
+							</ng-template>
+							<ul>
+								<li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
+									<p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).displayname }}
+										<ng-container *ngIf="!dm.seen">
+											<svg width="12px" height="12px">
 											<title>Oval</title>
 											<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-												<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
+												<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
 													<g id="Group-2" transform="translate(863.000000, 180.000000)">
 														<g id="Group-3" transform="translate(28.000000, 368.000000)">
 															<circle id="Oval" cx="80" cy="16" r="6"></circle>
@@ -76,42 +100,26 @@
 													</g>
 												</g>
 											</g>
-									</svg>
-									</ng-container>
-									Mes amis
-								</ng-template>
-								<ul>
-                  <li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
-                    <p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).displayname }}
-                      <ng-container *ngIf="!dm.seen">
-                        <svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                          <title>Oval</title>
-                          <g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                              <g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
-                                  <g id="Group-2" transform="translate(863.000000, 180.000000)">
-                                      <g id="Group-3" transform="translate(28.000000, 368.000000)">
-                                          <circle id="Oval" cx="80" cy="16" r="6"></circle>
-                                      </g>
-                                  </g>
-                              </g>
-                          </g>
-                      </svg>                        
-                      </ng-container>
-                    </p>      
-                  </li>
-								</ul>
-							</mat-tab>
-						</mat-tab-group>
-						<a class="button-new-room" (click)="NewRoom()">+ Nouveau groupe</a>
-					<!-- </div> -->
-				</aside>
+											</svg>
+										</ng-container>
+									</p>
+								</li>
+							</ul>
+						</mat-tab>
+					</mat-tab-group>
+
+					<!-- BOUTON NOUVEAU GROUPE -->
+					<a class="button-new-room" (click)="NewRoom()">+ Nouveau groupe</a>
+
+				</aside> <!-- Sidebar -->
+
+				<!-- MAIN CONTENT -->
 				<main class="content-chat-page">
 					<ng-container *ngIf="!newRoom">
 						<app-room [friend] = "friend(selectedRoom)" [room]="selectedRoom" [user]="actualUser"></app-room>
 					</ng-container>
 					<ng-container *ngIf="newRoom">
-						<app-new-room>
-						</app-new-room>
+						<app-new-room></app-new-room>
 					</ng-container>
 				</main>
 			</div>
