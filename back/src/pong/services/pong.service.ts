@@ -106,6 +106,8 @@ export class PongService {
         game.player1.socket.emit('drawText', "Start !");
         game.player2.socket.emit('drawText', "Start !");
         await this.delay(200);
+        if (game.dbGame)
+          this.gameService.startGame(game.dbGame.id);
     }
 
 	delay(ms: number) {
@@ -338,18 +340,30 @@ export class PongService {
     {
         var i = 0;
 
+        let winnerId, looserId, winnerScore, looserScore;
+
+
         if (game.player1.points === MAX_SCORE)
         {
             game.player1.socket.emit('win');
             game.player2.socket.emit('lose');
+            winnerId = game.player1.user.id;
+            looserId = game.player2.user.id;
+            winnerScore = game.player1.points;
+            looserScore = game.player2.points;
         }
         else
         {
             game.player1.socket.emit('lose');
             game.player2.socket.emit('win');
+            winnerId = game.player2.user.id;
+            looserId = game.player1.user.id;
+            winnerScore = game.player2.points;
+            looserScore = game.player1.points;
         }
         //Draw le final dune autre maniere pour les spectators !!!
         // game.spectators[].socket.emit('');
+        this.gameService.stopGame(game.dbGame.id, winnerId, looserId, looserScore, winnerScore);
     }
 
 	async startGame(game: GameI, mapid: number)

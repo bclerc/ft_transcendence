@@ -11,7 +11,7 @@
 	</div>
 
 	<!-- EDITER LE GROUPE -->
-	<div *ngIf="isAdministrator(user)" id="edit">
+	<div *ngIf="room.ownerId == user.id" id="edit">
 
 		<div id="title-n-button">
 			<h3>Éditer le groupe</h3>
@@ -147,7 +147,7 @@
 				</button>
 
 				<!-- Mute -->
-				<ng-container *ngIf="isAdministrator(user)">
+				<ng-container *ngIf="userIsAdmin">
 
 					<button *ngIf="!isMute(member.id)" id="action" matTooltip="Rendre muet" (click)='openDialog(member, "MUTE")'>
 						<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
@@ -222,7 +222,7 @@
 
 
 	<!-- SUPPRIMER LE GROUPE -->
-	<ng-container *ngIf="isAdministrator(user)">
+	<ng-container *ngIf="room.ownerId === user.id">
 		<div class="delete-room">
 			<h3>Supprimer le groupe</h3>
 			<p>Ce groupe sera supprimé definitivement. Ta vie n'aura plus aucun sens, et les membres du groupe t'en voudrons toute leur misérable vie.</p>
@@ -230,7 +230,9 @@
 				Supprimer le groupe
 			</button>
 		</div>
-	</ng-container>
+  
+  </ng-container>
+
 
 </div>
 

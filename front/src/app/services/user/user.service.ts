@@ -161,9 +161,9 @@ export class UserService {
     return this.http.post(this.backUrl + "user/unblock/" + Id, null ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
-  isUserAuthentificated()
+  isUserAuthentificated() : Observable<boolean>
   {
-    return this.http.get(this.backUrl + "user/good" , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+    return this.http.get<boolean>(this.backUrl + "user/good" , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
 }
