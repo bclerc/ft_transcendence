@@ -18,6 +18,14 @@ export interface ChatRoom {
   updatedAt?: Date;
 }
 
+export interface newRoom {
+  name: string;
+  description: string;
+  users: UserI[];
+  public: boolean;
+  password?: string;
+}
+
 export interface ChatRoomI {
   id: number;
   name: string;

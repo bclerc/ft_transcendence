@@ -14,5 +14,5 @@ export interface GameI {
 
 	spectators?: UserI[]; //tableau des utilisateurs qui regardent le match
 	id_interval?:any;
-	type?: number;			//type de la partie; normal/classé 
+	mapId?: number;			//type de la partie; normal/classé 
 }

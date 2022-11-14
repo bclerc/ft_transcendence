@@ -1,220 +1,237 @@
 <div id="param-body">
+
+	<!-- HEADER -->
 	<div class="param-header">
-		 <img style="margin-right: 10px; margin-top: -8px" src="../../../../assets/svg/return.svg" alt="return" (click)="closeDialog()">
+		<img id="close-settings" src="../../../../../assets/svg/return.svg" alt="return" (click)="closeDialog()">
 		<h2>Paramètres de {{room.name}}</h2>
-		<button id="action" mat-Button matTooltip="quitter le groupe" (click)="leaveRoom()">
+		<button id="action" matTooltip="Cette action est irréversible" (click)="leaveRoom()">
 			Quitter le groupe
 			<img src="../../../../assets/svg/quit.svg" alt="">
 		</button>
 	</div>
-  <div *ngIf="isAdministrator(user)" id="edit">
 
-	<div id="title-n-button">
-	  <h3>Éditer le groupe</h3>
-	  <button mat-Button matTooltip="Enregister les mofifications" (click)="edit()" >
-		Sauvegarder
-		<img src="../../../../assets/svg/checked.svg" alt="save" >
-	  </button>
+	<!-- EDITER LE GROUPE -->
+	<div *ngIf="isAdministrator(user)" id="edit">
+
+		<div id="title-n-button">
+			<h3>Éditer le groupe</h3>
+			<button matTooltip="Enregister les mofifications" (click)="edit()" >
+				Sauvegarder
+				<img src="../../../../assets/svg/checked.svg" alt="save" >
+			</button>
+		</div>
+		<form [formGroup]="editform" (ngSubmit)="edit()">
+			<div class="lol">
+				<div class="demi-left">
+				<!-- Nom du groupe -->
+				<div id="input-box">
+				<p id="input-title">Nom du groupe</p>
+
+				<textarea id="input-text" placeholder="{{ room.name }}" [value]="room.name" formControlName="name"> </textarea>
+				</div>
+
+				<div id="public-left">
+				<!-- Public -->
+				<mat-checkbox id="public-check-box" matCheckBox formControlName="public"> Public</mat-checkbox>
+				<div id="input-box">
+					<p id="input-title">Mot de passe</p>
+					<textarea id="input-text" placeholder="•••••••••••" formControlName="password"></textarea>
+				</div>
+				</div>
+			</div>
+
+			<div class="demi-right">
+				<div id="input-box">
+				<p id="input-title">Description</p>
+				<textarea id="input-text" placeholder="Super description de la mort qui tue" [value]="room.description" formControlName="description"></textarea>
+				</div>
+			</div>
+			</div>
+		</form>
 	</div>
-	<form [formGroup]="editform" (ngSubmit)="edit()">
-	<div class="lol">
-	  <div class="demi-left">
-		<!-- Nom du groupe -->
-		<div id="input-box">
-		  <p id="input-title">Nom du groupe</p>
 
-		  <textarea id="input-text" placeholder="{{ room.name }}" [value]="room.name" formControlName="name"> </textarea>
+	<!-- GERER LES MEMBRES -->
+	<div id="gerer">
+		<div id="title-n-button">
+		<h3>Gérer les membres</h3>
+		<button matTooltip="Ajouter un membre">
+			Ajouter
+			<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+		</button>
 		</div>
 
-		<div id="public-left">
-		  <!-- Public -->
-		  <mat-checkbox id="public-check-box" matCheckBox formControlName="public"> Public</mat-checkbox>
-		  <div id="input-box">
-			<p id="input-title">Mot de passe</p>
-			<textarea id="input-text" placeholder="•••••••••••" formControlName="password"></textarea>
-		  </div>
-		</div>
-	  </div>
+		<!-- MEMBRE -->
+		<div id="membre" *ngFor="let member of (room.users) ">
+			<div class="info">
+				<img id="photo" [src]="member.avatar_url" [alt]="member.displayname">
+				<div class="name-status">
+					<div class="name-admin">
+						<div id="user-name">{{member.displayname}}</div>
+						<ng-container *ngIf="isAdministrator(member)">
 
-	  <div class="demi-right">
-		<div id="input-box">
-		  <p id="input-title">Description</p>
-		  <textarea id="input-text" placeholder="Super description de la mort qui tue" [value]="room.description" formControlName="description"></textarea>
-		</div>
-	  </div>
-	</div>
-	</form>
-  </div>
+							<img src="../../../../../assets/svg/admin-crown.svg" matTooltip="Administrateur du groupe"  alt="admin">
+						</ng-container>
+					</div>
+					<div *ngIf="member.state === 'ONLINE'" id="user-status">En ligne</div>
+					<div *ngIf="member.state === 'INGAME'" id="user-status">En train de jouer</div>
+					<div *ngIf="member.state === 'WAITING'" id="user-status">Dans la file d'attente</div>
+					<div *ngIf="member.state === 'OFFLINE'" id="user-status">Hors ligne</div>
+				</div>
+			</div>
 
-  <div id="gerer">
-	<div id="title-n-button">
-	  <h3>Gérer les membres</h3>
-	  <button mat-Button matTooltip="Ajouter un membre">
-		Ajouter
-		<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
-	  </button>
-	</div>
-	<div id="membre" *ngFor="let member of (room.users) ">
-	  <div class="info">
-		<div class="user-name">
-		  
-		  <p id="user-name">{{member.displayname}}</p>
-		  <p *ngIf="member.state === 'ONLINE'" id="user-status">En ligne</p>
-		  <p *ngIf="member.state === 'INGAME'" id="user-status">En train de jouer</p>
-		  <p *ngIf="member.state === 'WAITING'" id="user-status">Dans la file d'attente</p>
-		  <p *ngIf="member.state === 'OFFLINE'" id="user-status">Hors ligne</p>
-		</div>
+			<div class="buts">
 
-		<!-- Inviter a jouer -->
+				<!-- Admin -->
+        <ng-container *ngIf="room.ownerId == user.id">
+				<button  *ngIf="!isAdministrator(member)" id="action" matTooltip="Promouvoir admin" (click)="promoteUser(member.id)">
+					<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<title>icon-admin</title>
+						<g id="icon-admin" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+							<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
+							<path d="M12.131831,14.4447539 L15.4517986,21.6158807 C15.5678126,21.8664707 15.8650038,21.9755662 16.1155939,21.8595522 C16.2336394,21.8049015 16.3257392,21.7063973 16.3723427,21.5849495 L19.5751846,13.2384157 C19.6741158,12.9806033 19.9633136,12.8518046 20.221126,12.9507358 C20.3553924,13.0022583 20.4609729,13.1090991 20.5108986,13.2439675 L23.5918358,21.5667596 C23.6877008,21.8257277 23.97535,21.957949 24.2343181,21.8620839 C24.3576864,21.8164154 24.4580868,21.7239678 24.5137582,21.6047787 L27.8705603,14.4180637 C27.9874227,14.1678682 28.2849819,14.0597803 28.5351774,14.1766427 C28.7220896,14.2639465 28.8361945,14.457082 28.8224719,14.6629213 L28.1244641,25.133038 C28.0544244,26.1836337 27.1818216,27 26.1288938,27 L13.8711062,27 C12.8181784,27 11.9455756,26.1836337 11.8755359,25.133038 L11.179205,14.6880753 C11.1608363,14.4125445 11.3693073,14.1742919 11.6448381,14.1559232 C11.851295,14.1421594 12.044901,14.2569852 12.131831,14.4447539 Z" id="icon" fill="#FEEFCF"></path>
+						</g>
+					</svg>
+				</button>
 
-		<div class="buts">
-		  <button id="action" mat-Button matTooltip="inviter a jouer">
-			<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-				<title>icon-invite-game</title>
-				<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-					<g id="Chat-mes-groupes-Copy" transform="translate(-946.000000, -630.000000)">
-						<g id="icon-invite-game" transform="translate(946.000000, 630.000000)">
-							<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+        <button  *ngIf="isAdministrator(member)" id="action" matTooltip="Supprimer des admins" (click)="demoteUser(member.id)">
+					<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<title>icon-admin</title>
+						<g id="icon-admin" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+							<rect id="BG" stroke="#f42323" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
+							<path d="M12.131831,14.4447539 L15.4517986,21.6158807 C15.5678126,21.8664707 15.8650038,21.9755662 16.1155939,21.8595522 C16.2336394,21.8049015 16.3257392,21.7063973 16.3723427,21.5849495 L19.5751846,13.2384157 C19.6741158,12.9806033 19.9633136,12.8518046 20.221126,12.9507358 C20.3553924,13.0022583 20.4609729,13.1090991 20.5108986,13.2439675 L23.5918358,21.5667596 C23.6877008,21.8257277 23.97535,21.957949 24.2343181,21.8620839 C24.3576864,21.8164154 24.4580868,21.7239678 24.5137582,21.6047787 L27.8705603,14.4180637 C27.9874227,14.1678682 28.2849819,14.0597803 28.5351774,14.1766427 C28.7220896,14.2639465 28.8361945,14.457082 28.8224719,14.6629213 L28.1244641,25.133038 C28.0544244,26.1836337 27.1818216,27 26.1288938,27 L13.8711062,27 C12.8181784,27 11.9455756,26.1836337 11.8755359,25.133038 L11.179205,14.6880753 C11.1608363,14.4125445 11.3693073,14.1742919 11.6448381,14.1559232 C11.851295,14.1421594 12.044901,14.2569852 12.131831,14.4447539 Z" id="icon" fill="#f42323"></path>
+						</g>
+					</svg>
+				</button>
+      </ng-container>
+
+				<!-- Inviter a jouer -->
+				<button id="action" matTooltip="inviter a jouer">
+					<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+						<title>icon-invite-game</title>
+						<g id="icon-invite-game" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+							<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
 							<path d="M18.8235294,12.9411765 C18.8235294,12.2914297 19.3502532,11.7647059 20,11.7647059 C20.6497468,11.7647059 21.1764706,12.2914297 21.1764706,12.9411765 L21.1764706,14.1176471 L27.4117647,14.1176471 C28.5163342,14.1176471 29.4117647,15.0130776 29.4117647,16.1176471 L29.4117647,26.2352941 C29.4117647,27.3398636 28.5163342,28.2352941 27.4117647,28.2352941 L12.5882353,28.2352941 C11.4836658,28.2352941 10.5882353,27.3398636 10.5882353,26.2352941 L10.5882353,16.1176471 C10.5882353,15.0130776 11.4836658,14.1176471 12.5882353,14.1176471 L18.8235294,14.1176471 L18.8235294,12.9411765 Z M24.1176471,17.9411765 C22.3308435,17.9411765 20.8823529,19.389667 20.8823529,21.1764706 C20.8823529,22.9632742 22.3308435,24.4117647 24.1176471,24.4117647 C25.9044507,24.4117647 27.3529412,22.9632742 27.3529412,21.1764706 C27.3529412,19.389667 25.9044507,17.9411765 24.1176471,17.9411765 Z M16.0147059,17.9411765 L15.75,17.9411765 C15.3703042,17.9411765 15.056509,18.2233304 15.0068466,18.5894059 L15,18.6911765 L14.9990588,20.2931765 L13.3970588,20.2941176 C13.0173631,20.2941176 12.7035679,20.5762715 12.6539054,20.9423471 L12.6470588,21.0441176 L12.6470588,21.3088235 C12.6470588,21.6885193 12.9292127,22.0023145 13.2952883,22.0519769 L13.3970588,22.0588235 L14.9990588,22.0581765 L15,23.6617647 C15,24.0414605 15.2821539,24.3552557 15.6482294,24.4049181 L15.75,24.4117647 L16.0147059,24.4117647 C16.3944016,24.4117647 16.7081968,24.1296108 16.7578593,23.7635353 L16.7647059,23.6617647 L16.7640588,22.0581765 L18.3676471,22.0588235 C18.7473428,22.0588235 19.061138,21.7766696 19.1108004,21.4105941 L19.1176471,21.3088235 L19.1176471,21.0441176 C19.1176471,20.6644219 18.8354932,20.3506267 18.4694176,20.3009643 L18.3676471,20.2941176 L16.7640588,20.2931765 L16.7647059,18.6911765 C16.7647059,18.2769629 16.4289194,17.9411765 16.0147059,17.9411765 Z M24.1176471,19.4117647 C25.0922672,19.4117647 25.8823529,20.2018504 25.8823529,21.1764706 C25.8823529,22.1510907 25.0922672,22.9411765 24.1176471,22.9411765 C23.1430269,22.9411765 22.3529412,22.1510907 22.3529412,21.1764706 C22.3529412,20.2018504 23.1430269,19.4117647 24.1176471,19.4117647 Z" id="icon" fill="#FEEFCF"></path>
 						</g>
-					</g>
-				</g>
-			</svg>
-		  </button>
+					</svg>
+				</button>
 
-		  <!-- Ajouter en amis  -->
-
-		  <button *ngIf="!member.friendOf![0]" id="action" mat-Button matTooltip="Ajouter en amis" (click)="sendRequest(member.id)">
-			<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-				<title>icon-ask-friend</title>
-				<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-					<g id="Chat-mes-groupes-Copy" transform="translate(-1001.000000, -630.000000)">
-						<g id="icon-ask-friend" transform="translate(1001.000000, 630.000000)">
-							<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+				<!-- Ajouter en amis  -->
+				<button *ngIf="!member.friendOf![0]" id="action" matTooltip="Ajouter en amis" (click)="sendRequest(member.id)">
+					<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+						<title>icon-ask-friend</title>
+						<g id="icon-ask-friend" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+							<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
 							<path d="M29.3488433,17.8945175 C29.3901095,17.9687965 29.4117647,18.0523668 29.4117647,18.1373389 L29.4117647,25.745098 C29.4117647,26.8496675 28.5163342,27.745098 27.4117647,27.745098 L12.5882353,27.745098 C11.4836658,27.745098 10.5882353,26.8496675 10.5882353,25.745098 L10.5882353,18.1373389 C10.5882353,17.8611966 10.8120929,17.6373389 11.0882353,17.6373389 C11.1732074,17.6373389 11.2567778,17.6589942 11.3310568,17.7002603 L19.5143571,22.2465382 C19.8163796,22.4143285 20.1836204,22.4143285 20.4856429,22.2465382 L28.6689432,17.7002603 C28.9103351,17.5661537 29.2147368,17.6531256 29.3488433,17.8945175 Z M27.8431373,12.3529412 C28.7094663,12.3529412 29.4117647,13.0552396 29.4117647,13.9215686 L29.4117647,15.1927872 C29.4117647,15.3760732 29.3114812,15.5446686 29.1504218,15.6321535 L20.4773141,20.3432526 C20.1796443,20.5049423 19.8203557,20.5049423 19.5226859,20.3432526 L10.8495782,15.6321535 C10.6885188,15.5446686 10.5882353,15.3760732 10.5882353,15.1927872 L10.5882353,13.9215686 C10.5882353,13.0552396 11.2905337,12.3529412 12.1568627,12.3529412 L27.8431373,12.3529412 Z" id="icon" fill="#FEEFCF"></path>
 						</g>
-					</g>
-				</g>
-			</svg>
-		  </button>
-		  
-		  
-		  <!-- Bloquer -->
-		  
-		  
-		  <button *ngIf="!member.blockedBy![0]" id="action" mat-Button matTooltip="Bloquer" (click)="blockUser(member.id, true)">
-			<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-				<title>icon-block</title>
-				<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-					<g id="Chat-mes-groupes-Copy" transform="translate(-1056.000000, -630.000000)">
-						<g id="icon-block" transform="translate(1056.000000, 630.000000)">
-							<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+					</svg>
+				</button>
+
+				<!-- Bloquer -->
+				<button *ngIf="!member.blockedBy![0]" id="action" matTooltip="Bloquer" (click)="blockUser(member.id, true)">
+					<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+						<title>icon-block</title>
+						<g id="icon-block" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+							<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
 							<path d="M19.9386406,12.0983893 C24.4868679,12.0983893 28.1739347,15.7854561 28.1739347,20.3336835 C28.1739347,24.8819108 24.4868679,28.5689776 19.9386406,28.5689776 C15.3904132,28.5689776 11.7033465,24.8819108 11.7033465,20.3336835 C11.7033465,15.7854561 15.3904132,12.0983893 19.9386406,12.0983893 Z M24.8010307,17.5775269 L17.182484,25.1960735 C17.9958029,25.6580816 18.9364105,25.9219188 19.9386406,25.9219188 C23.0249377,25.9219188 25.5268759,23.4199806 25.5268759,20.3336835 C25.5268759,19.3314534 25.2630387,18.3908458 24.8010307,17.5775269 Z M19.9386406,14.7454482 C16.8523435,14.7454482 14.3504053,17.2473863 14.3504053,20.3336835 C14.3504053,21.3493125 14.6213442,22.3016604 15.0948866,23.1223917 L22.7273489,15.4899294 C21.9066175,15.016387 20.9542696,14.7454482 19.9386406,14.7454482 Z" id="icon" fill="#FEEFCF"></path>
 						</g>
-					</g>
-				</g>
-			</svg>
-		  </button>
+					</svg>
+				</button>
+				<button *ngIf="member.blockedBy![0]" id="clic" matTooltip="Débloquer" (click)="blockUser(member.id, false)">
+					<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+						<title>icon-block</title>
+						<g id="icon-block" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+							<rect id="BG" stroke="#ef7e00" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
+							<path d="M19.9386406,12.0983893 C24.4868679,12.0983893 28.1739347,15.7854561 28.1739347,20.3336835 C28.1739347,24.8819108 24.4868679,28.5689776 19.9386406,28.5689776 C15.3904132,28.5689776 11.7033465,24.8819108 11.7033465,20.3336835 C11.7033465,15.7854561 15.3904132,12.0983893 19.9386406,12.0983893 Z M24.8010307,17.5775269 L17.182484,25.1960735 C17.9958029,25.6580816 18.9364105,25.9219188 19.9386406,25.9219188 C23.0249377,25.9219188 25.5268759,23.4199806 25.5268759,20.3336835 C25.5268759,19.3314534 25.2630387,18.3908458 24.8010307,17.5775269 Z M19.9386406,14.7454482 C16.8523435,14.7454482 14.3504053,17.2473863 14.3504053,20.3336835 C14.3504053,21.3493125 14.6213442,22.3016604 15.0948866,23.1223917 L22.7273489,15.4899294 C21.9066175,15.016387 20.9542696,14.7454482 19.9386406,14.7454482 Z" id="icon" fill="#ef7e00"></path>
+						</g>
+					</svg>
+				</button>
 
-      <button *ngIf="member.blockedBy![0]" id="action" mat-Button matTooltip="Débloquer" (click)="blockUser(member.id, false)">
-        <svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <title>icon-block</title>
-          <g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g id="Chat-mes-groupes-Copy" transform="translate(-1056.000000, -630.000000)">
-              <g id="icon-block" transform="translate(1056.000000, 630.000000)">
-                <rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
-                <path d="M19.9386406,12.0983893 C24.4868679,12.0983893 28.1739347,15.7854561 28.1739347,20.3336835 C28.1739347,24.8819108 24.4868679,28.5689776 19.9386406,28.5689776 C15.3904132,28.5689776 11.7033465,24.8819108 11.7033465,20.3336835 C11.7033465,15.7854561 15.3904132,12.0983893 19.9386406,12.0983893 Z M24.8010307,17.5775269 L17.182484,25.1960735 C17.9958029,25.6580816 18.9364105,25.9219188 19.9386406,25.9219188 C23.0249377,25.9219188 25.5268759,23.4199806 25.5268759,20.3336835 C25.5268759,19.3314534 25.2630387,18.3908458 24.8010307,17.5775269 Z M19.9386406,14.7454482 C16.8523435,14.7454482 14.3504053,17.2473863 14.3504053,20.3336835 C14.3504053,21.3493125 14.6213442,22.3016604 15.0948866,23.1223917 L22.7273489,15.4899294 C21.9066175,15.016387 20.9542696,14.7454482 19.9386406,14.7454482 Z" id="icon" fill="#f1a726"></path>
-              </g>
-            </g>
-          </g>
-        </svg>
-        </button>
+				<!-- Mute -->
+				<ng-container *ngIf="isAdministrator(user)">
 
-			<!-- Mute -->
-
-
-		  <ng-container *ngIf="isAdministrator(user)">
-
-			<button *ngIf="!isMute(member.id)" id="action" mat-Button matTooltip="Rendre muet" (click)='openDialog(member, "MUTE")'>
-				<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-					<title>icon-mute</title>
-					<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-						<g id="Chat-mes-groupes-Copy" transform="translate(-1111.000000, -630.000000)">
-							<g id="icon-mute" transform="translate(1111.000000, 630.000000)">
-								<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+					<button *ngIf="!isMute(member.id)" id="action" matTooltip="Rendre muet" (click)='openDialog(member, "MUTE")'>
+						<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+							<title>icon-mute</title>
+							<g id="icon-mute" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
 								<path d="M28.4104445,13.6649506 C29.0718676,13.9911957 29.5268759,14.6723071 29.5268759,15.4596914 L29.5268759,25.5773385 C29.5268759,26.681908 28.6314454,27.5773385 27.5268759,27.5773385 L18.266406,27.5773385 C18.1596012,27.5773385 18.055603,27.6115388 17.9696447,27.6749299 L15.7993223,29.2754614 C15.5770782,29.4393581 15.2640491,29.3920582 15.1001524,29.169814 C15.0367613,29.0838557 15.002561,28.9798575 15.002561,28.8730527 L15.002561,28.0773385 C15.002561,27.8011961 14.7787034,27.5773385 14.502561,27.5773385 L14.4963465,27.576646 L28.4104445,13.6649506 Z M28.0463092,10.9295534 L28.2334845,11.1167287 C28.5263777,11.409622 28.5263777,11.8844957 28.2334845,12.1773889 L11.8244477,28.5864257 C11.5315545,28.8793189 11.0566808,28.8793189 10.7637876,28.5864257 L10.5766122,28.3992504 C10.283719,28.1063571 10.283719,27.6314834 10.5766122,27.3385902 L26.985649,10.9295534 C27.2785422,10.6366602 27.753416,10.6366602 28.0463092,10.9295534 Z M22.7913465,13.459646 L10.7033465,25.548646 L10.7033465,15.4596914 C10.7033465,14.3551219 11.598777,13.4596914 12.7033465,13.4596914 L22.7913465,13.459646 Z" id="icon" fill="#FEEFCF"></path>
 							</g>
-						</g>
-					</g>
-				</svg>
-			</button>
-
-			<button *ngIf="isMute(member.id)" id="action" mat-Button matTooltip="Rendre la parole" (click)='unMute(member.id)'>
-				<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-					<title>icon-mute</title>
-					<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-						<g id="Chat-mes-groupes-Copy" transform="translate(-1111.000000, -630.000000)">
-							<g id="icon-mute" transform="translate(1111.000000, 630.000000)">
-								<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
-								<path d="M28.4104445,13.6649506 C29.0718676,13.9911957 29.5268759,14.6723071 29.5268759,15.4596914 L29.5268759,25.5773385 C29.5268759,26.681908 28.6314454,27.5773385 27.5268759,27.5773385 L18.266406,27.5773385 C18.1596012,27.5773385 18.055603,27.6115388 17.9696447,27.6749299 L15.7993223,29.2754614 C15.5770782,29.4393581 15.2640491,29.3920582 15.1001524,29.169814 C15.0367613,29.0838557 15.002561,28.9798575 15.002561,28.8730527 L15.002561,28.0773385 C15.002561,27.8011961 14.7787034,27.5773385 14.502561,27.5773385 L14.4963465,27.576646 L28.4104445,13.6649506 Z M28.0463092,10.9295534 L28.2334845,11.1167287 C28.5263777,11.409622 28.5263777,11.8844957 28.2334845,12.1773889 L11.8244477,28.5864257 C11.5315545,28.8793189 11.0566808,28.8793189 10.7637876,28.5864257 L10.5766122,28.3992504 C10.283719,28.1063571 10.283719,27.6314834 10.5766122,27.3385902 L26.985649,10.9295534 C27.2785422,10.6366602 27.753416,10.6366602 28.0463092,10.9295534 Z M22.7913465,13.459646 L10.7033465,25.548646 L10.7033465,15.4596914 C10.7033465,14.3551219 11.598777,13.4596914 12.7033465,13.4596914 L22.7913465,13.459646 Z" id="icon" fill="#ef7e00"></path>
+						</svg>
+					</button>
+					<button *ngIf="isMute(member.id)" id="clic" matTooltip="Rendre la parole" (click)='unMute(member.id)'>
+						<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+							<title>icon-mute</title>
+							<g id="icon-mute" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								<rect id="BG" stroke="#f1a726" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
+								<path d="M28.4104445,13.6649506 C29.0718676,13.9911957 29.5268759,14.6723071 29.5268759,15.4596914 L29.5268759,25.5773385 C29.5268759,26.681908 28.6314454,27.5773385 27.5268759,27.5773385 L18.266406,27.5773385 C18.1596012,27.5773385 18.055603,27.6115388 17.9696447,27.6749299 L15.7993223,29.2754614 C15.5770782,29.4393581 15.2640491,29.3920582 15.1001524,29.169814 C15.0367613,29.0838557 15.002561,28.9798575 15.002561,28.8730527 L15.002561,28.0773385 C15.002561,27.8011961 14.7787034,27.5773385 14.502561,27.5773385 L14.4963465,27.576646 L28.4104445,13.6649506 Z M28.0463092,10.9295534 L28.2334845,11.1167287 C28.5263777,11.409622 28.5263777,11.8844957 28.2334845,12.1773889 L11.8244477,28.5864257 C11.5315545,28.8793189 11.0566808,28.8793189 10.7637876,28.5864257 L10.5766122,28.3992504 C10.283719,28.1063571 10.283719,27.6314834 10.5766122,27.3385902 L26.985649,10.9295534 C27.2785422,10.6366602 27.753416,10.6366602 28.0463092,10.9295534 Z M22.7913465,13.459646 L10.7033465,25.548646 L10.7033465,15.4596914 C10.7033465,14.3551219 11.598777,13.4596914 12.7033465,13.4596914 L22.7913465,13.459646 Z" id="icon" fill="#f1a726"></path>
 							</g>
-						</g>
-					</g>
-				</svg>
-			</button>
+						</svg>
+					</button>
 
-			<!-- Exclure -->
-			
-			<button id="action" mat-Button matTooltip="Exclure" (click)="ejectUser(member)">
-				<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-					<title>icon-exclure</title>
-					<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-						<g id="Chat-mes-groupes-Copy" transform="translate(-1166.000000, -630.000000)">
-							<g id="icon-exclure" transform="translate(1166.000000, 630.000000)">
-								<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+					<!-- Exclure -->
+					<button id="action" matTooltip="Exclure" (click)="ejectUser(member)">
+						<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+							<title>icon-exclure</title>
+							<g id="icon-exclure" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
 								<path d="M24.2848297,11.1764706 C25.3893992,11.1764706 26.2848297,12.0719011 26.2848297,13.1764706 L26.2839412,15.8544706 L25.3746943,15.2607835 C25.0263158,15.033324 24.6276379,14.8970113 24.2151633,14.8627069 L24.0079454,14.8541056 C22.7376904,14.8541056 21.6887046,15.8014711 21.5289965,17.0281933 L21.513263,17.1897299 L21.5120929,17.2132913 L20.3900929,17.2136223 C19.3357311,17.2136223 18.4719278,18.0295001 18.3955786,19.0643599 L18.3900929,19.2136223 L18.3900929,20.7863777 C18.3900929,21.8407395 19.2059707,22.7045428 20.2408305,22.780892 L20.3900929,22.7863777 L21.5119436,22.7871947 C21.5366211,23.2230238 21.6750766,23.6457025 21.9146233,24.0125939 C22.6380065,25.1205325 24.0908696,25.4654511 25.2282195,24.8279137 L25.3746943,24.739167 L26.2839412,24.1444706 L26.2848297,26.8235294 C26.2848297,27.9280989 25.3893992,28.8235294 24.2848297,28.8235294 L14.3529412,28.8235294 C13.2483717,28.8235294 12.3529412,27.9280989 12.3529412,26.8235294 L12.3529412,13.1764706 C12.3529412,12.0719011 13.2483717,11.1764706 14.3529412,11.1764706 L24.2848297,11.1764706 Z M24.0340557,16.2498943 C24.2282168,16.2498943 24.4181787,16.3064177 24.5807553,16.4125655 L28.792836,19.1626712 C29.2552799,19.464605 29.3853991,20.0842556 29.0834652,20.5466996 C29.0077573,20.6626544 28.9087908,20.7616209 28.792836,20.8373288 L24.5807553,23.5874345 C24.1183114,23.8893683 23.4986607,23.7592492 23.1967269,23.2968052 C23.0905791,23.1342286 23.0340557,22.9442667 23.0340557,22.7501057 L23.0332817,21.3925686 L20.7832817,21.3931889 C20.230997,21.3931889 19.7832817,20.9454736 19.7832817,20.3931889 L19.7832817,19.6068111 C19.7832817,19.0545264 20.230997,18.6068111 20.7832817,18.6068111 L23.0332817,18.6065686 L23.0340557,17.2498943 C23.0340557,16.6976096 23.481771,16.2498943 24.0340557,16.2498943 Z" id="icon" fill="#FEEFCF"></path>
 							</g>
-						</g>
-					</g>
-				</svg>
-			</button>
+						</svg>
+					</button>
 
-
-			<!-- Bannir -->
-			<button *ngIf="!isBan(member.id)" id="action" mat-Button matTooltip="bannir" (click)='openDialog(member, "BAN")'>
-				<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-					<title>icon-bannir</title>
-					<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-						<g id="Chat-mes-groupes-Copy" transform="translate(-1221.000000, -630.000000)">
-							<g id="icon-bannir" transform="translate(1221.000000, 630.000000)">
-								<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+					<!-- Bannir -->
+					<button *ngIf="!isBan(member.id)" id="action" matTooltip="bannir" (click)='openDialog(member, "BAN")'>
+						<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+							<title>icon-bannir</title>
+							<g id="icon-bannir" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
 								<path d="M27.3671927,26.5079014 C27.8122618,26.5079014 28.1795438,26.8409474 28.2334152,27.2714157 L28.2402173,27.3809261 C28.2402173,27.8610553 28.629439,28.250277 29.1095682,28.250277 L29.1555622,28.2500907 C29.6377653,28.2480573 30.0303166,28.6373117 30.03235,29.1195148 L30.0323578,29.1231967 C30.0323578,29.6074418 29.6397995,30 29.1555544,30 L14.7917831,30 C14.307538,30 13.9149798,29.6074418 13.9149798,29.1231967 C13.9149798,28.6389516 14.307538,28.2463933 14.7917831,28.2463933 L14.8735843,28.2463933 C15.3536555,28.2463933 15.7428302,27.8572187 15.7428302,27.3771474 C15.7428302,26.8970761 16.1320049,26.5079014 16.6120762,26.5079014 L27.3671927,26.5079014 Z M17.0000211,10.5860791 L17.8391231,11.3685543 L17.5802868,11.8746693 C17.3288163,12.3663816 17.5235708,12.9688503 18.0152831,13.2203209 C18.3194495,13.375877 18.6819808,13.3653894 18.9766459,13.1925098 L19.4790099,12.8977735 L20.5905552,13.9336671 L20.8482838,13.6585624 C21.2626184,13.2142429 21.958695,13.1899354 22.4030144,13.60427 L22.955094,14.1190926 C23.3994134,14.5334271 23.423721,15.2295037 23.0093864,15.6738231 L22.7517054,15.9489723 L23.8605282,16.9836054 L23.601553,17.5053055 C23.4496493,17.8113123 23.4644762,18.1736921 23.640871,18.4662665 C23.9056606,18.9054555 24.4544983,19.0681064 24.9102412,18.8607879 L25.0135885,18.8063352 L25.500415,18.5128246 L26.339517,19.2952999 C26.7123621,19.6429835 26.7598708,20.2089013 26.4687225,20.6115987 L26.3888724,20.7086519 L22.7147172,24.6487009 C22.3670336,25.021546 21.8011158,25.0690547 21.3984184,24.7779064 L21.3013652,24.6980563 L20.4622632,23.915581 L20.7009827,23.4219338 C20.8427032,23.1288704 20.832905,22.7851654 20.6747189,22.5006516 C20.425516,22.0524346 19.8827288,21.8706101 19.4199864,22.0617959 L19.3147907,22.1125858 L18.8223764,22.3863618 L17.7137835,21.3514821 L12.4182601,27.0314155 C12.0039256,27.475735 11.307849,27.5000425 10.8635296,27.0857079 L10.3114499,26.5708853 C9.86713053,26.1565508 9.842823,25.4604742 10.2571576,25.0161548 L15.5526334,19.3361769 L14.4408581,18.3005299 L14.6796182,17.7902175 C14.9136657,17.2899773 14.6978739,16.6947195 14.1976338,16.460672 C13.9027786,16.322718 13.5592274,16.3369192 13.2767637,16.4987377 L12.8009713,16.7713107 L11.9618693,15.9888355 C11.5579538,15.6121782 11.5358566,14.9793989 11.9125139,14.5754834 L15.5866691,10.6354344 C15.9633264,10.2315189 16.5961056,10.2094218 17.0000211,10.5860791 Z" id="icon" fill="#FEEFCF"></path>
 							</g>
-						</g>
-					</g>
-				</svg>
-			</button>
-
-			<button *ngIf="isBan(member.id)" id="action" mat-Button matTooltip="Padonnez" (click)='unBan(member.id)'>
-				<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-					<title>icon-bannir</title>
-					<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-						<g id="Chat-mes-groupes-Copy" transform="translate(-1221.000000, -630.000000)">
-							<g id="icon-bannir" transform="translate(1221.000000, 630.000000)">
-								<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+						</svg>
+					</button>
+					<button *ngIf="isBan(member.id)" id="clic" matTooltip="Padonner" (click)='unBan(member.id)'>
+						<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+							<title>icon-bannir</title>
+							<g id="icon-bannir" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								<rect id="BG" stroke="#f9e131" stroke-width="2" fill="#1F1F1F" x="1" y="1" width="38" height="38" rx="6"></rect>
 								<path d="M27.3671927,26.5079014 C27.8122618,26.5079014 28.1795438,26.8409474 28.2334152,27.2714157 L28.2402173,27.3809261 C28.2402173,27.8610553 28.629439,28.250277 29.1095682,28.250277 L29.1555622,28.2500907 C29.6377653,28.2480573 30.0303166,28.6373117 30.03235,29.1195148 L30.0323578,29.1231967 C30.0323578,29.6074418 29.6397995,30 29.1555544,30 L14.7917831,30 C14.307538,30 13.9149798,29.6074418 13.9149798,29.1231967 C13.9149798,28.6389516 14.307538,28.2463933 14.7917831,28.2463933 L14.8735843,28.2463933 C15.3536555,28.2463933 15.7428302,27.8572187 15.7428302,27.3771474 C15.7428302,26.8970761 16.1320049,26.5079014 16.6120762,26.5079014 L27.3671927,26.5079014 Z M17.0000211,10.5860791 L17.8391231,11.3685543 L17.5802868,11.8746693 C17.3288163,12.3663816 17.5235708,12.9688503 18.0152831,13.2203209 C18.3194495,13.375877 18.6819808,13.3653894 18.9766459,13.1925098 L19.4790099,12.8977735 L20.5905552,13.9336671 L20.8482838,13.6585624 C21.2626184,13.2142429 21.958695,13.1899354 22.4030144,13.60427 L22.955094,14.1190926 C23.3994134,14.5334271 23.423721,15.2295037 23.0093864,15.6738231 L22.7517054,15.9489723 L23.8605282,16.9836054 L23.601553,17.5053055 C23.4496493,17.8113123 23.4644762,18.1736921 23.640871,18.4662665 C23.9056606,18.9054555 24.4544983,19.0681064 24.9102412,18.8607879 L25.0135885,18.8063352 L25.500415,18.5128246 L26.339517,19.2952999 C26.7123621,19.6429835 26.7598708,20.2089013 26.4687225,20.6115987 L26.3888724,20.7086519 L22.7147172,24.6487009 C22.3670336,25.021546 21.8011158,25.0690547 21.3984184,24.7779064 L21.3013652,24.6980563 L20.4622632,23.915581 L20.7009827,23.4219338 C20.8427032,23.1288704 20.832905,22.7851654 20.6747189,22.5006516 C20.425516,22.0524346 19.8827288,21.8706101 19.4199864,22.0617959 L19.3147907,22.1125858 L18.8223764,22.3863618 L17.7137835,21.3514821 L12.4182601,27.0314155 C12.0039256,27.475735 11.307849,27.5000425 10.8635296,27.0857079 L10.3114499,26.5708853 C9.86713053,26.1565508 9.842823,25.4604742 10.2571576,25.0161548 L15.5526334,19.3361769 L14.4408581,18.3005299 L14.6796182,17.7902175 C14.9136657,17.2899773 14.6978739,16.6947195 14.1976338,16.460672 C13.9027786,16.322718 13.5592274,16.3369192 13.2767637,16.4987377 L12.8009713,16.7713107 L11.9618693,15.9888355 C11.5579538,15.6121782 11.5358566,14.9793989 11.9125139,14.5754834 L15.5866691,10.6354344 C15.9633264,10.2315189 16.5961056,10.2094218 17.0000211,10.5860791 Z" id="icon" fill="#f9e131"></path>
 							</g>
-						</g>
-					</g>
-				</svg>
-			</button>
-		</ng-container>
+						</svg>
+					</button>
+				</ng-container>
+			</div>
 
-
+			<div class="buts-menu">
+				<!-- menu -->
+				<button mat-button [matMenuTriggerFor]="belowMenu">
+					<img src="../../../../../assets/svg/dott-menu.svg" alt="Menu">
+				</button>
+				<mat-menu #belowMenu="matMenu" yPosition="below">
+					<button mat-menu-item>Inviter à jouer</button>
+					<button mat-menu-item>Demander en ami</button>
+					<button mat-menu-item>Promouvoir admin</button>
+					<button mat-menu-item>Bloquer</button>
+					<button mat-menu-item>Rendre muet</button>
+					<button mat-menu-item>Exclure</button>
+					<button mat-menu-item>Bannir</button>
+					<button mat-menu-item>Fermer</button>
+				</mat-menu>
+			</div>
 		</div>
-	  </div>
 	</div>
-  </div>
+
+
+	<!-- SUPPRIMER LE GROUPE -->
+	<ng-container *ngIf="isAdministrator(user)">
+		<div class="delete-room">
+			<h3>Supprimer le groupe</h3>
+			<p>Ce groupe sera supprimé definitivement. Ta vie n'aura plus aucun sens, et les membres du groupe t'en voudrons toute leur misérable vie.</p>
+			<button class="cool-button" matTooltip="Cette action est irréversible" (click)="deleteRoom()">
+				Supprimer le groupe
+			</button>
+		</div>
+	</ng-container>
+
 </div>
 
 <ng-template #no_room>

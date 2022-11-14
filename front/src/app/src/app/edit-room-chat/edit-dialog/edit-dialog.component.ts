@@ -1,4 +1,5 @@
-import { Component, Inject, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
 import { FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -84,6 +85,18 @@ export class EditDialogComponent implements OnInit {
       this.chatService.blockUser(userId, block);
       this.dialogRef.close();
     }
+  }
+
+  promoteUser(userId: number | undefined) {
+    if (userId && this.room && this.room.id) 
+      this.chatService.promoteUser(userId, this.room.id);
+      this.dialogRef.close();  
+   }
+
+  demoteUser(userId: number | undefined) {
+    if (userId && this.room && this.room.id) 
+      this.chatService.demoteUser(userId, this.room.id);
+    this.dialogRef.close();  
   }
 
   isMute(userId: number | undefined): boolean
@@ -188,6 +201,11 @@ export class EditDialogComponent implements OnInit {
     this.chatService.leaveRoom(this.room)
     this.dialogRef.close();
   }
+
+  deleteRoom() {
+    this.chatService.deleteRoom(this.room)
+    this.dialogRef.close();
+  }
   
   ejectUser(user: UserI) {
     if (this.room.ownerId != user.id) {
@@ -195,5 +213,7 @@ export class EditDialogComponent implements OnInit {
       this.room.users = this.room.users.filter(u => u.id !== user.id);
     }
   }
+  
 }
+
 

@@ -9,6 +9,7 @@ import { ChatRoomI, DmChatRoomI, MessageI, newChatRoomI } from './interfaces/cha
 import { PenaltiesService } from './services/penalties/penalties.service';
 import { PasswordUtils } from './utils/chat-utils';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CreateChatDto } from './dto/create-chat.dto';
 
 
 
@@ -382,7 +383,7 @@ export class ChatService {
 
 
 
-  async createRoom(owner: BasicUserI, newRoom: newChatRoomI): Promise<ChatRoom> {
+  async createRoom(owner: BasicUserI, newRoom: CreateChatDto): Promise<ChatRoom> {
     let hashedPassword = null;
 
     if (newRoom.password)
@@ -640,6 +641,14 @@ export class ChatService {
   async deleteRoom(roomId: number): Promise<void> {
 
 
+    await this.prisma.message.deleteMany({
+      where: {
+        room: {
+          id: roomId,
+        },  
+      },
+    });
+  
     await this.prisma.chatRoom.delete({
       where: {
         id: roomId,

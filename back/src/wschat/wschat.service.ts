@@ -15,6 +15,7 @@ import { PenaltiesService } from 'src/chat/services/penalties/penalties.service'
 import e from 'express';
 import { PusnishI } from 'src/chat/interfaces/punish.interface';
 import { BlockedUser } from 'src/chat/interfaces/blocked.interface';
+import { CreateChatDto } from 'src/chat/dto/create-chat.dto';
 
 @Injectable()
 export class WschatService {
@@ -134,7 +135,6 @@ export class WschatService {
     if (user && target && roomToPromote) {
       if (user.id == roomToPromote.ownerId) {
         this.chatService.addAdminsToRoom(roomToPromote.id, target.id);
-        this.updateRoomForUsersInRoom(roomToPromote.id);
         this.eventEmitter.emit('room.admin.update', {
           isPromote: true,
           user: target,
@@ -149,11 +149,11 @@ export class WschatService {
     const user = this.onlineUserService.getUser(socketId);
     const target = await this.userService.findOne(event.targetId);
     const roomToDemote = await this.chatService.getRoomById(event.roomId);
-
+    
     if (user && target && roomToDemote) {
       if (roomToDemote.ownerId == user.id && roomToDemote.ownerId != target.id) {
+        console.log(event);
         this.chatService.removeAdminsFromRoom(roomToDemote.id, target.id);
-        this.updateRoomForUsersInRoom(roomToDemote.id);
         this.eventEmitter.emit('room.admin.update', {
           isPromote: false,
           user: target,
@@ -164,11 +164,24 @@ export class WschatService {
     }
   }
 
+  async deleteRoom(socketId: string, roomId: number) {
+    const user = this.onlineUserService.getUser(socketId);
+    const room = await this.chatService.getRoomById(roomId);
+
+    if (user && room) {
+      if (room.ownerId == user.id) {
+        await this.chatService.deleteRoom(room.id);
+        this.eventEmitter.emit('room.delete', { room: room, user: user, success: true});
+      }
+    }
+  }
+
   async newMessage(socketId: string, message: MessageI) {
     let messages: Message[];
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(message.room.id);
-
+    if (message.content.length < 2  && message.content.length > 500) 
+      return ;
     if (user && room) {
       try {
         await this.chatService.newMessage(message);
@@ -179,7 +192,7 @@ export class WschatService {
     }
   }
 
-  async newRoom(socketId: string, room: newChatRoomI) {
+  async newRoom(socketId: string, room: CreateChatDto) {
     const user = this.onlineUserService.getUser(socketId);
     let newRoom: ChatRoom;
     

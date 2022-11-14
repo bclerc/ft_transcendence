@@ -5,7 +5,8 @@ import { ElementRef, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
-import { ChatRoom } from './chatRoom.interface';
+import { environment } from 'src/environments/environment';
+import { ChatRoom, newRoom } from './chatRoom.interface';
 import { Message } from './message.interface';
 @Injectable({
   providedIn: 'root'
@@ -39,12 +40,22 @@ export class ChatService {
       return  this.socket.fromEvent<ChatRoom[]>('dmRooms');
     }
 
-    createRoom(room: ChatRoom) {
-      this.socket.emit('createRoom', room);
+    createRoom(room: newRoom) {
+      console.log("Creating room", room);
+      this.http.post('http://'+ environment.host +':3000/api/v1/chat/create', room).subscribe(
+        (data: any) => {
+          console.log("data =", data)
+          this.socket.emit('createRoom', data);
+        }
+      )
     }
 
     editRoom(room: ChatRoom) {
       this.socket.emit('editRoom', room);
+    }
+
+    deleteRoom(room: ChatRoom) {
+      this.socket.emit('deleteRoom', room.id);
     }
 
     subscribeRoom(room: ChatRoom, pass?: string | null) {
@@ -62,6 +73,14 @@ export class ChatService {
 
     pardonUser(userId: number, penaltyId: number) {
       this.socket.emit('pardonUser', {userId: userId, penaltyId: penaltyId});
+    }
+
+    promoteUser(userId: number, roomId: number) {
+      this.socket.emit('promoteUser', { roomId: roomId, targetId: userId });
+    }
+  
+    demoteUser(userId: number, roomId: number) {
+      this.socket.emit('demoteUser',  { roomId: roomId, targetId: userId });
     }
 
     needRooms() {
