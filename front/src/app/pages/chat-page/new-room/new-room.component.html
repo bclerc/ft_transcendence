@@ -35,35 +35,37 @@
 		</ul>
 	</div>
 
+	<div class="demi-create">
+		<h2 id="tt-h2">Créer un groupe</h2>
+		<form [formGroup]="form" (ngSubmit)="create()">
 
-				<!-- Nom du groupe -->
-				<div id="input-box">
-					<p id="input-title">Nom du groupe</p>
-					<textarea id="input-text"
-                    required minlength="3"
-                    required maxlength="15"
-                    placeholder="Super groupe de la mort"
-                    formControlName="name">
-          </textarea>
-					<p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe superbes</p>
-				</div>
-
-				<!-- Description -->
-				<div id="input-box">
-					<p id="input-title">Description</p>
-					<textarea id="input-text"
-                    placeholder="Super description de la mort qui tue"
-                    formControlName="description"
-                    required maxlength="120">
-
-          </textarea>
-				</div>
+			<!-- Nom du groupe -->
+			<div id="input-box">
+				<p id="input-title">Nom du groupe</p>
+				<textarea id="input-text"
+					required minlength="3"
+					required maxlength="15"
+					placeholder="Super groupe de la mort"
+					formControlName="name">
+				</textarea>
+				<p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe superbes</p>
+			</div>
 
 			<!-- Description -->
 			<div id="input-box">
 				<p id="input-title">Description</p>
-				<textarea id="input-text" placeholder="Super description de la mort qui tue" formControlName="description"></textarea>
+				<textarea id="input-text"
+					placeholder="Super description de la mort qui tue"
+					formControlName="description"
+					required maxlength="120">
+				</textarea>
 			</div>
+
+			<!-- Description
+			<div id="input-box">
+				<p id="input-title">Description</p>
+				<textarea id="input-text" placeholder="Super description de la mort qui tue" formControlName="description"></textarea>
+			</div> -->
 
 			<!-- User select -->
 			<app-userselect [users]="users.value" (addUser)="addUser($event)" (removeuser)="removeUser($event.id)"></app-userselect>

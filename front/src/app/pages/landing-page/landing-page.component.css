@@ -41,62 +41,68 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 	box-sizing: border-box;
 	transition: all ease 0.4s;
 }
+
+html{
+	height:100%;
+}
 img{
 	max-width: 100%;
 	height: auto;
 }
  
 body{
-	background-color: #1F1F1F;
+	background-color: #121212;
+	height:100%;
 }
 a{
-	color: inherit; /*pk ?*/
+	color: inherit;
 }
 
-.center{
+/* .center{
 	margin: auto;
 	max-width: 1290px;
 	clear: both;
-}
-.left{
 	display:flex;
-	
-	background-color: blue;
+	flex-direction: row;
+} */
+.left{
+	/* background-color: blue; */
+	position: fixed;
+	left: 0;
 	width: 50%;
+	height: 100%;
+	padding: 100px;
+	display: flex;
+	align-items: center;
+
 }
 .right{
-	background-color: blueviolet;
+	/* background-color: blueviolet; */
+	position: fixed;
+	right: 0;
+	/* display:flex;
+	flex-direction: row; */
 	width: 50%;
+	height: 100%;
 }
 
 .logo{
-	/* margin: auto; */
-	/* padding-top: 100px; */
 	width: 220px;
 }
-/* .pong{
-	background-color: #121212;
-	border: 7px solid #EFC10A;
-	border-radius: 6px;
-	height: 260px;
-	width: 410px;
-	margin: 0px auto 30px auto;
-} */
 
 .button-log{
 	font-family: Titan One;
-	font-size: 14px;
+	font-size: 16px;
 	color: #feefcf;
-	text-align: center;
 	text-decoration: none;
 	background-color: #ee481e;
 	border-radius: 6px;
 	border: 3px solid #feefcf;
 	box-shadow: -3px 3px #feefcf;
-	max-width: 190px;
+	width: fit-content;
 	display: block;
-	padding: 18px 25px 17px 25px;
-	margin: 40px auto 70px auto;
+	padding: 25px 35px 24px 35px;
+	margin-top: 40px;
 }
 .button-log:hover{
 	background-color: #1F1F1F;
@@ -105,7 +111,7 @@ a{
 
 h1{
 	font-family: Titan One;
-	/* text-align: center; */
+	width: 70%;
 	font-size: 35px;
 	color: #feefcf;
 	margin: 66px 0px 50px 0px;
