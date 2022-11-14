@@ -35,23 +35,9 @@ export class MyProfileComponent implements OnInit {
   async ngOnInit(){
         this.subscription = this.currentUser.getCurrentUser().subscribe(
         (data : any) => {
-          // console.log("data =", data)
+          console.log("data =", data)
           this.user = data;
         },
-          (error : any) => 
-          {
-            if (error.status === 401 && error.error.message === "2FA_REQUIRED")
-            {
-              this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
-                duration: 3000
-              })
-              this.router.navigate(['code'])
-            }
-            else
-            {
-              this.router.navigate([''])
-            }
-          }
         );
   
       this.subscriptionFriend =  this.userService.getFriends().subscribe(

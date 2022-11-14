@@ -63,21 +63,12 @@ export class ModifyMyProfileComponent implements OnInit {
   ChangeDisplayName(): void {
     if (this.ChangeDisplaynameForm.valid)
     {
+      var switc = this.user.displayname;
       this.user.displayname = this.ChangeDisplaynameForm.controls['displayname'].getRawValue();
       this.userService.ChangeDbInformation(this.user).subscribe(
           (data : any) => 
           {
             this.snackBar.open("Changement de pseudo confirmé", 'Undo')
-          },
-          (error : any) => 
-          {
-            if (error.error.message === "displayname already used")
-            {
-              this.snackBar.open("Le pseudo est deja utilisé", 'Undo', 
-              {
-                duration: 3000
-              })
-            }
           }
         );
     }

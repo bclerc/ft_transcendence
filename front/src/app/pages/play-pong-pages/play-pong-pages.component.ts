@@ -148,20 +148,8 @@ export class PlayPongPagesComponent {
           // console.log("data =", data)
           this.user = data;
         },
-          (error : any) => 
-          {
-            if (error.status === 401 && error.error.message === "2FA_REQUIRED")
-            {
-              this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
-                duration: 3000
-              })
-              this.router.navigate(['code'])
-            }
-            else
-            {
-              this.router.navigate([''])
-            }
-          }
+          
+
         );
 
     this.socket.on('score', this.updateScore);

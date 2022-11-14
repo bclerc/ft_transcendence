@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { UserI } from 'src/app/models/user.models';
 
 @Component({
   selector: 'app-list-match-history',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./list-match-history.component.css']
 })
 export class ListMatchHistoryComponent implements OnInit {
+  @Input() user! : UserI;
 
   constructor() { }
 
