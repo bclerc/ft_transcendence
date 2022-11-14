@@ -62,18 +62,18 @@
 }
 
 .pongCanvas {
-    width: 60%;
-    height: 50%;
-    border-radius: 0.5em;
-    padding: 10px;
-    display: flex;
-    justify-content: space-around;
-    margin: 0em;
-    align-items: center;
-    margin-left: auto;
-    margin-right: auto;
-    color: #282828;
-    font-family: streetartfont;
+    width: 80%;
+    /* height: 70%; */
+    /* border-radius: 0.5em; */
+    /* padding: 10px; */
+    /* display: flex; */
+    /* justify-content: space-around; */
+    /* margin: 0em; */
+    /* align-items: center; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    /* color: #282828; */
+    /* font-family: streetartfont; */
 }
 
 .sidenav {

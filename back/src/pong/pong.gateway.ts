@@ -18,14 +18,11 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	
 	@WebSocketServer()
 	server: Server;
-
 	state: GameI;
-	allGames: GameI[];
-	allRandomGames: GameI[];
-	
 	gamesMap: Map<string, GameI>;
-
 	connectedUsers: UserI[];
+
+
 	constructor(
 		private pongService: PongService,
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
@@ -42,8 +39,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				width:0
 			}
 		};
-		this.allGames = [];
-		this.allRandomGames = [];
+		// this.allGames = [];
+		// this.allRandomGames = [];
 		this.gamesMap = new Map<string, GameI>;
 	};
 
@@ -57,15 +54,15 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	handleDisconnect(client: Socket) {
 		// this.connectedUsers = this.connectedUsers.filter((user) => user.id != client.id);
 
-		var g = this.allGames.find(game => (game.player1.socket === client));
-		if (g)
-			this.pongService.deleteGame(g, this.allGames);
-		else
-		{
-			var g = this.allRandomGames.find(game => (game.player1.socket === client));
-			if (g)
-				this.pongService.deleteGame(g, this.allRandomGames);
-		}
+		// var g = this.allGames.find(game => (game.player1.socket === client));
+		// if (g)
+		// 	this.pongService.deleteGame(g, this.allGames);
+		// else
+		// {
+		// 	var g = this.allRandomGames.find(game => (game.player1.socket === client));
+		// 	if (g)
+		// 		this.pongService.deleteGame(g, this.allRandomGames);
+		// }
 	}
 	  
 	handleConnection(client: Socket, ...args: any[]) {
@@ -88,10 +85,11 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	///KEYS HANDLER
 	///////
 
-	
 	@SubscribeMessage('keydown')
-	keydown(client: Socket, keydown: string)
-	{
+	keydown(client: Socket, keydown: string){
+		// console.log("ici", id);
+		// let game = this.gamesMap.get(id);
+		// this.pongService.keydown(game, client, keydown);
 		for (let game of this.gamesMap.values())
 		{
 			if (game.player1 && client === game.player1.socket || game.player2 && client === game.player2.socket)
@@ -117,7 +115,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@SubscribeMessage('newGame')
 	async newGame(client: Socket, normalOrNot: boolean)
 	{
-		// var game: GameI = this.searchGameAwaiting();
+			// var game: GameI = this.searchGameAwaiting();
+		console.log("game started");
 		let game: GameI = this.searchGameMapAwaiting(normalOrNot);
 		if (game)
 		{
@@ -133,7 +132,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			game.id_searchinterval1 = 0;
 			game.id_searchinterval2 = 0;
 			await this.pongService.drawInit(game);
-
+			console.log("game started");
 			game.player1.socket.emit('user1',game.player1.user);
 			game.player1.socket.emit('user2',game.player2.user);
 			game.player2.socket.emit('user1',game.player1.user);
@@ -141,8 +140,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 			//le front ne sauvegarde pas l'id de la map bordel de mierde de la madre de dia
 			//obliger de boucler a chaque keyboardEvent
-			game.player1.socket.emit('state', game.id); //WORK BUT @HostListener on front side can not get the id
-			game.player2.socket.emit('state', game.id);
+			// game.player1.socket.emit('getId', game.id); 
+			// game.player2.socket.emit('getId', game.id);
 
 			await this.pongService.startGame(game, game.mapId);
 			// console.log("bordel de merde");
@@ -160,18 +159,18 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 	}
 	
-	@SubscribeMessage('getId')
-	getId(client: Socket){
-		for (let value of this.gamesMap.values())
-		{
-			if (value.player1.socket === client || (value.player2 && value.player2.socket === client))
-			{
-				client.emit('state', value.id);
-				console.log("getidbackfrero");
-				return ;
-			}	
-		}
-	}
+	// @SubscribeMessage('getId')
+	// getId(client: Socket){
+	// 	for (let value of this.gamesMap.values())
+	// 	{
+	// 		if (value.player1.socket === client || (value.player2 && value.player2.socket === client))
+	// 		{
+	// 			client.emit('state', value.id);
+	// 			console.log("getidbackfrero");
+	// 			return ;
+	// 		}	
+	// 	}
+	// }
 
 	////////
 	///LOOP HANDLER SEARCHING OPPONENT
@@ -239,8 +238,20 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 		this.gamesMap.set(game.id, game);
 		console.log(game);
-		client.emit("state", game.id);
+		// client.emit("getId", game.id);
 		// this.allGames.push(game);
 	}
 
+	@SubscribeMessage('spectacle')
+	addSpectatorByIntraName(spectator: Socket, toWatch: string, /* idGame: string ??? pour eviter de chercher dans la map*/)
+	{
+		for (let game of this.gamesMap.values())
+		{
+			if (game.player1 && game.player1.user.intra_name === toWatch || game.player2 && game.player2.user.intra_name === toWatch)
+			{
+				game.spectators.push(spectator);
+				return ;
+			}
+		}
+	}
 }

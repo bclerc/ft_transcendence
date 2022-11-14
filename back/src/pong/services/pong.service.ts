@@ -5,8 +5,6 @@ import { PointI } from '../interfaces/point.interface';
 import { GameI } from '../interfaces/game.interface';
 import { Socket } from 'socket.io';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
-import { GameService } from 'src/game/game.service';
-import { BasicUserI } from 'src/user/interface/basicUser.interface';
 
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 80;
@@ -64,7 +62,6 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 //
 
 ////
-
 export const MAX_SCORE = 5;
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
@@ -76,8 +73,6 @@ export class PongService {
 
     constructor(
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
-	    @Inject(GameService) private gameService: GameService,
-
         // private variables: VariablePong
     )
     {
@@ -85,6 +80,7 @@ export class PongService {
 
     async drawInit(game: GameI)
     {
+        console.log("drawInit");
         game.player1.socket.emit('drawInit');
         game.player2.socket.emit('drawInit');
         game.player1.socket.emit('drawText', "3");
@@ -155,13 +151,13 @@ export class PongService {
             ball.dy = 4;
         ball.dx *= -1.2;
         if (ball.dx > -2 && ball.dx <= 0)
-            ball.dx = -2;
+        ball.dx = -2;
         else if (ball.dx < 2 && ball.dx > 0)
-            ball.dx = 2;
+        ball.dx = 2;
         if (ball.dx < -MAX_SPEED)
-            ball.dx = -MAX_SPEED;
+        ball.dx = -MAX_SPEED;
         else if (ball.dx > MAX_SPEED)
-            ball.dx = MAX_SPEED;
+        ball.dx = MAX_SPEED;
     }
     
     initState(): GameI{
@@ -218,19 +214,20 @@ export class PongService {
 
     keydown(game: GameI, client: Socket, key: string)
     {
+        console.log("game",game);
         if (key === 'z' || key === 'w')
         {
             if (game && game.player1 && game.player1.socket === client)
             {
                 game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
                 if (game.player1.paddle.dy < -SPEED_PLAYER)
-                    game.player1.paddle.dy = -SPEED_PLAYER;
+                game.player1.paddle.dy = -SPEED_PLAYER;
             }
             else if (game && game.player2 && game.player2.socket === client)
             {
                 game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
                 if (game.player2.paddle.dy < - SPEED_PLAYER)
-                    game.player2.paddle.dy = -SPEED_PLAYER;
+                game.player2.paddle.dy = -SPEED_PLAYER;
             }
         }
         else if (key === 's')
@@ -239,7 +236,7 @@ export class PongService {
             {
                 game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
                 if (game.player1.paddle.dy > SPEED_PLAYER)
-                    game.player1.paddle.dy = SPEED_PLAYER;
+                game.player1.paddle.dy = SPEED_PLAYER;
             }
             else if (game && game.player2 && game.player2.socket === client)
             {
@@ -258,7 +255,7 @@ export class PongService {
             if (game.player1.socket === client)
                 game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
             else
-                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+            game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
         }
         else if (key === 's')
         {
@@ -353,8 +350,8 @@ export class PongService {
 
 	async startGame(game: GameI, mapid: number)
     {
-        game.player1.socket.emit('state', game.id);
-        game.player2.socket.emit('state', game.id);
+        // game.player1.socket.emit('state', game.id);
+        // game.player2.socket.emit('state', game.id);
         if (mapid === 0)
         {
             game.id_interval = setInterval(() => {
@@ -872,4 +869,5 @@ export class PongService {
         }
         this.drawForAll("drawMap3", game);
     }
+
 }
