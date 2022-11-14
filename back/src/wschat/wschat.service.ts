@@ -15,6 +15,7 @@ import { PenaltiesService } from 'src/chat/services/penalties/penalties.service'
 import e from 'express';
 import { PusnishI } from 'src/chat/interfaces/punish.interface';
 import { BlockedUser } from 'src/chat/interfaces/blocked.interface';
+import { CreateChatDto } from 'src/chat/dto/create-chat.dto';
 
 @Injectable()
 export class WschatService {
@@ -179,7 +180,8 @@ export class WschatService {
     let messages: Message[];
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(message.room.id);
-
+    if (message.content.length < 2  && message.content.length > 500) 
+      return ;
     if (user && room) {
       try {
         await this.chatService.newMessage(message);
@@ -190,7 +192,7 @@ export class WschatService {
     }
   }
 
-  async newRoom(socketId: string, room: newChatRoomI) {
+  async newRoom(socketId: string, room: CreateChatDto) {
     const user = this.onlineUserService.getUser(socketId);
     let newRoom: ChatRoom;
     

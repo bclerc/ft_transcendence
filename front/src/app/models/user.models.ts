@@ -17,7 +17,8 @@ export interface UserI {
     friendOf? :         UserI[];
     friends? :          UserI[];
     blockedBy? :        UserI[];
-    blockedUsers?:      UserI[]; 
+    blockedUsers?:      UserI[];
+    games?:             any[];
 }
 
 export class User {

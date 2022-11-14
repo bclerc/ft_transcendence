@@ -54,32 +54,11 @@ export class ChatPageComponent implements OnInit {
     this.chatService.needRooms();
     this.chatService.needPublicRooms();
     this.chatService.needDmRooms();
-	// console.log("cyo");
 		this.userService.getLoggedUser().subscribe(
 			(data : any) => {
-			//   console.log("data =", data)
 			  this.actualUser = data;
 			},
-			  (error : any) => 
-			  {
-				if (error.status === 401 && error.error.message === "2FA_REQUIRED")
-				{
-				  this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
-					duration: 3000
-				  })
-				  this.router.navigate(['code'])
-				}
-				else
-				{
-				  this.router.navigate([''])
-				}
-			  }
 			);
-		
-		
-		
-
-
 		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
       let roomChanged, roomSeen: boolean = false;
 				for (const room of rooms) {

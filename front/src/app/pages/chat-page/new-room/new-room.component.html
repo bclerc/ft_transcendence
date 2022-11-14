@@ -35,17 +35,29 @@
 		</ul>
 	</div>
 
-	<!-- CREER UN GROUPE -->
-	<div class="demi-create">
-		<h2 id="tt-h2">Créer un groupe</h2>
-		<form [formGroup]="form" (ngSubmit)="create()">
 
-			<!-- Nom du groupe -->
-			<div id="input-box">
-				<p id="input-title">Nom du groupe</p>
-				<textarea id="input-text" placeholder="Super groupe de la mort" default="caca" formControlName="name"></textarea>
-				<p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe superbes</p>
-			</div>
+				<!-- Nom du groupe -->
+				<div id="input-box">
+					<p id="input-title">Nom du groupe</p>
+					<textarea id="input-text"
+                    required minlength="3"
+                    required maxlength="15"
+                    placeholder="Super groupe de la mort"
+                    formControlName="name">
+          </textarea>
+					<p id="input-error" *ngIf="name.touched && name.hasError('required')">Il faut nommer ton groupe superbes</p>
+				</div>
+
+				<!-- Description -->
+				<div id="input-box">
+					<p id="input-title">Description</p>
+					<textarea id="input-text"
+                    placeholder="Super description de la mort qui tue"
+                    formControlName="description"
+                    required maxlength="120">
+
+          </textarea>
+				</div>
 
 			<!-- Description -->
 			<div id="input-box">

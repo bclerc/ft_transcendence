@@ -63,7 +63,6 @@ export class HeaderComponent implements OnInit {
 
   getEnvHost(){
     return environment.host;
-    
   }
 
 

@@ -125,6 +125,7 @@ export class PlayPongPagesComponent implements OnInit {
   {
     this.var_interval = 0;
   }
+  subscription!: Subscription;
 
   ngOnInit(): void 
   {

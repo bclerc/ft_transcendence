@@ -156,9 +156,14 @@ export class UserService {
     return this.http.post(this.backUrl + "user/block/" + Id,  null, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
-  unBlockUser(Id: number)
+  unBlockUser(Id: any)
   {
     return this.http.post(this.backUrl + "user/unblock/" + Id, null ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+  isUserAuthentificated()
+  {
+    return this.http.get(this.backUrl + "user/good" , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
 }

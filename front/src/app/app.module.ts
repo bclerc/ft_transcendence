@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyProfileComponent } from './pages/my-profile/my-profile.component';
 import { ModifyMyProfileComponent } from './pages/modify-my-profile/modify-my-profile.component';
 import { UserService } from './services/user/user.service';
@@ -53,10 +53,11 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { PenaltyDialogComponent } from './src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
 import {MatSelectModule} from '@angular/material/select';
 import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-dialog.component';
-import { ListUserBlockedComponent } from './pages/my-profile/list-user-blocked/list-user-blocked.component';
+import { ListUserBlockedComponent } from './pages/modify-my-profile/list-user-blocked/list-user-blocked.component';
 import { ListMyFriendComponent } from './pages/my-profile/list-my-friend/list-my-friend.component';
 import { ListMatchHistoryComponent } from './pages/my-profile/list-match-history/list-match-history.component'; 
 import { MatMenuModule } from '@angular/material/menu';
+import { HttpErrorInterceptor } from './httpErrorHandler';
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
@@ -140,7 +141,12 @@ export function tokenGetter() {
     // VariablePong,
     UserResolver,
     HeaderService,
-    CurrentUserService
+    CurrentUserService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

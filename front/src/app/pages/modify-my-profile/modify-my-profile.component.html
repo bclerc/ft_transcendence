@@ -1,3 +1,5 @@
+<button (click)="close()">fermer la fenetre</button>
+<p></p>
 <form class="form" [formGroup]="ChangeDisplaynameForm" (ngSubmit)="ChangeDisplayName()">
     <input maxlength="10" matInput placeholder="Displayname" formControlName="displayname">
     <p></p>
@@ -11,7 +13,12 @@
     <a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
     </ng-template>
   <ng-template #elseBlock>
-  <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a>
+    <p *ngIf="!show"><a href="javascript:void(0);" (click)="showActivate2Fa()">Activate authentification with google authentificator</a></p>
+    <p *ngIf="show"><a href="javascript:void(0);" (click)="hideActivate2Fa()">Cacher la barre</a>
+    <app-activate2-fa></app-activate2-fa></p>
+  <!-- <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a> -->
+  
  </ng-template>
  <p></p>
+ <app-list-user-blocked [user]="user"></app-list-user-blocked>
 
