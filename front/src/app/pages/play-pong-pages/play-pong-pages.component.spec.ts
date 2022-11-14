@@ -1,3 +1,4 @@
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlayPongPagesComponent } from './play-pong-pages.component';
@@ -19,5 +20,6 @@ describe('PlayPongPagesComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+
   });
 });

@@ -10,13 +10,16 @@ import { BasicUserI } from './interface/basicUser.interface';
 import { FriendsService } from 'src/friends/friends.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ValidationPipe } from './validation.pipe';
 
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService,
     private readonly friendsService: FriendsService,
-    private readonly CloudinaryService: CloudinaryService) { }
+    private readonly CloudinaryService: CloudinaryService,
+    private readonly eventEmitter: EventEmitter2) { }
 
   /**
   * @api {get} /user/ Récupérer la liste des utilisateurs
@@ -42,11 +45,13 @@ export class UserController {
   * 
   */
 
-  @Get()
+  @Post("good")
   @UseGuards(Jwt2faAuthGuard)
-  async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+  async good(@Request() req: any) {
+    return {message: "User found", state: 'success', user: req.user };
   }
+    
+
 
   @Get("me")
   @UseGuards(Jwt2faAuthGuard)
@@ -77,7 +82,7 @@ export class UserController {
   @Get(':id')
   @UseGuards(Jwt2faAuthGuard)
   async findOne(@Request() req, @Param('id') id: number): Promise<BasicUserI> {
-      return this.userService.getBasicUser(id);
+      return this.userService.getBasicUser(Number(id));
   }
 
   /**
@@ -165,7 +170,7 @@ export class UserController {
 
   @Put()
   @UseGuards(Jwt2faAuthGuard)
-  async updateUser(@Request() req: any, @Body() data: updateUserDto) {
+  async updateUser(@Request() req: any, @Body(new ValidationPipe()) data: updateUserDto) {
     return await this.userService.updateUser(req.user.id, data);
   }
 
@@ -191,7 +196,6 @@ export class UserController {
 
       return { message: 'New avatar set', state: 'success' };
     } catch (error) {
-      console.log(error);
       return { message: 'Error while uploading image, please verify you image', state: 'error' };
     }
   }
@@ -308,7 +312,7 @@ export class UserController {
       return { message: "You already have a friend request", state: 'error' };
     if (await this.userService.isBlocked(req.user.id, data.toId))
       return { message: "Request failed", state: 'error'}
-    return await this.friendsService.addFriend(req.user.id, data.toId);
+      return await this.friendsService.addFriend(req.user.id, data.toId);
   }
 
   @Get('friends/remove/:id')
@@ -381,24 +385,7 @@ export class UserController {
   async unblock(@Request() req: any, @Param('id') target: number) {
     return await this.userService.unblockUser(req.user.id, target);
   }
-
-  
-  /**
-   * @api {post} /user/blocked Liste des utilisateurs bloqués
-   * @apiName blockuser
-   * @apiGroup Blocker
-   * 
-   * @apiHeaderExample {json} Header:
-   * {
-   *     "Authorization": "Bearer ACCESS_TOKEN"
-   * }
-   */
-
-  @Get('blocked')
-  @UseGuards(Jwt2faAuthGuard)
-  async getBlocked(@Request() req: any) {
-    return await this.userService.getBlocked(req.user.id);
-  }       
+   
 
 }
   

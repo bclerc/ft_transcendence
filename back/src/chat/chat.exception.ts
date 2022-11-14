@@ -9,9 +9,8 @@ export class RoomPunishException extends HttpException {
     msg += "Vous avez été ";
     msg += (penalty.type == PenaltyType.BAN ? " banni " : "rendu muet ");
     msg += " de ce salon";
-    msg += (penalty.timetype == PenaltyTimeType.PERM ? " de façon permanente" : " Jusqu'au " + penalty.endTime);
+    msg += (penalty.timetype == PenaltyTimeType.PERM ? " de façon permanente" : " Jusqu'au " + penalty.endTime.toLocaleString('fr-FR'));
 
-    super('Forbidden', HttpStatus.FORBIDDEN,);
-    onlineUserService.sendToUser(penalty.userId, 'notification', msg);
+    super(msg, HttpStatus.FORBIDDEN,);
   }
 }

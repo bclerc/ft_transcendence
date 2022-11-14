@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyProfileComponent } from './pages/my-profile/my-profile.component';
 import { ModifyMyProfileComponent } from './pages/modify-my-profile/modify-my-profile.component';
 import { UserService } from './services/user/user.service';
@@ -47,19 +47,28 @@ import { environment } from 'src/environments/environment';
 import { HeaderService } from './services/user/header.service';
 import { CurrentUserService } from './services/user/current_user.service';
 import { FileUploaderComponent } from './file-uploader/file-uploader.component';
-
-
+import { NewRoomComponent } from './pages/chat-page/new-room/new-room.component';
+// import { VariablePong } from './variables/variables.pong';
+import {MatDialogModule} from '@angular/material/dialog';
+import { PenaltyDialogComponent } from './src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
+import {MatSelectModule} from '@angular/material/select';
+import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-dialog.component';
+import { ListUserBlockedComponent } from './pages/modify-my-profile/list-user-blocked/list-user-blocked.component';
+import { ListMyFriendComponent } from './pages/my-profile/list-my-friend/list-my-friend.component';
+import { ListMatchHistoryComponent } from './pages/my-profile/list-match-history/list-match-history.component'; 
+import { MatMenuModule } from '@angular/material/menu';
+import { HttpErrorInterceptor } from './httpErrorHandler';
 
 const config: SocketIoConfig = {
-  url: 'http://'+ environment.host +':81', options: {
+  url: 'http://'+ environment.host +':8181', options: {
     query: {
       token: sessionStorage.getItem('auth-token')
     }
-  }
+  },
 };
 
 export function tokenGetter() {
-  return localStorage.getItem("auth-token");
+  return sessionStorage.getItem("auth-token");
 }
 
 
@@ -82,6 +91,12 @@ export function tokenGetter() {
     ChatPageComponent,
     FriendsPageComponent,
     FileUploaderComponent,
+    NewRoomComponent,
+    PenaltyDialogComponent,
+    EditDialogComponent,
+    ListUserBlockedComponent,
+    ListMyFriendComponent,
+    ListMatchHistoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -114,13 +129,25 @@ export function tokenGetter() {
     MatTooltipModule,
     MatCheckboxModule,
     MatBadgeModule,
+    MatSelectModule,
+    MatDialogModule,
     CommonModule,
     SocketIoModule,
+    MatMenuModule,
   ],
-  providers: [    UserService,
+  providers: 
+  [    
+    UserService,
+    // VariablePong,
     UserResolver,
     HeaderService,
-  CurrentUserService],
+    CurrentUserService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

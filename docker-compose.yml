@@ -12,8 +12,6 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - ${DB_PORT}:${DB_PORT}
     networks:
       trans_network:
         aliases: 
@@ -34,10 +32,10 @@ services:
         - ./back/src:/app/src
         - ./back/dist:/app/dist
         - .env:/.env
-
+        - ./back/node_modules:/app/node_modules
       ports:
         - 3000:3000
-        - 81:81
+        - 8181:8181
       networks:
         - trans_network
       depends_on:
@@ -57,6 +55,8 @@ services:
       volumes:
         - ./front/src:/app/src/
         - ./front/dist:/app/dist/
+        - ./front/node_modules:/app/node_modules/
+
       ports:
         - 4200:4200
         - 80:80

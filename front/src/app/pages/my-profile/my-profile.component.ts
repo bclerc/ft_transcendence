@@ -1,81 +1,70 @@
-import { Component, OnInit } from '@angular/core';
-import { waitForAsync } from '@angular/core/testing';
+import { Component, ViewEncapsulation, OnInit, Output } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { finalize, map, Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ModifyMyProfileComponent } from '../modify-my-profile/modify-my-profile.component';
 
 @Component({
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
-  styleUrls: ['./my-profile.component.css']
+  styleUrls: ['./my-profile.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MyProfileComponent implements OnInit {
+  @Output() user! : UserI;
 
-  constructor(private route: ActivatedRoute, private token : TokenStorageService, private jwtHelper: JwtHelperService, public userService : UserService, private router : Router
-    , public currentUser : CurrentUserService) 
-  {
- 
-  }
+  constructor ( public userService : UserService,
+                private router : Router,
+                private snackBar : MatSnackBar,
+                public currentUser : CurrentUserService,
+                private dialog: MatDialog,
+              ) {}
   
-  tokenString? : string | null;
-  id? : number | null ;
-  user? : UserI;
-  filtersLoaded?: Promise<boolean>;
-  userList!: UserI[];
-  userList2$!: Observable <UserI[]>;
+  // user? : UserI;
+  friends! : UserI[];
   subscription!: Subscription;
-  userLi!: Observable <UserI> | undefined;
-  async ngOnInit(){
-    // console.log("start");
+  subscriptionFriend!: Subscription;
 
-    /*this.userList2$ =  this.route.data.pipe(
-      map(data => data['userList']));
-       this.subscription = this.userList2$.subscribe(
+  async ngOnInit(){
+        this.subscription = this.currentUser.getCurrentUser().subscribe(
         (data : any) => {
-          console.log("data =",data);
-          this.userList = data;
-        },
-        error => this.router.navigate([''])
-        );
-      this.userService.changeUserList(this.userList);
-      this.id = this.token.getId();
-      if (this.id)
-      {
-        this.user = this.userService.getUserById(this.id);
-      }*/
-      //this.currentUser.initOrActualizeConnection();
-      this.userLi = this.currentUser.getCurrentUser();
-      if (this.userLi)
-      {
-        this.subscription = this.userLi.subscribe(
-        (data : any) => {
-          //console.log("data =",data);
+          console.log("data =", data)
           this.user = data;
         },
-          (error : any) => 
-          {
-            if (error.status === 401 && error.error.message === "2FA_REQUIRED")
-              this.router.navigate(['code'])
-            else
-              this.router.navigate([''])
-          }
         );
-      }
-      // console.log("done");
+  
+      this.subscriptionFriend =  this.userService.getFriends().subscribe(
+        (data : any) => {
+          this.friends = data;
+        }
+      );
     }
 
     ngOnDestroy() : void
     {
       this.subscription.unsubscribe;
+      if (this.subscriptionFriend != undefined)
+        this.subscriptionFriend.unsubscribe;
     }
 
- 
+    openDialogEditMyProfile() {
+      const dialogConfig = new MatDialogConfig();
+  
+      dialogConfig.autoFocus = true;
+      dialogConfig.height = '90%';
+      dialogConfig.width = '90%';
+  
+      dialogConfig.data = {
+          user : this.user,
+      };
+  
+      this.dialog.open(ModifyMyProfileComponent, dialogConfig);
+  }
 }
-
-
-
-

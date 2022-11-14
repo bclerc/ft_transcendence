@@ -1,0 +1,153 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1F1F1F;
+	height: 100%;
+	/* display:flex; */
+}
+a{
+	color: inherit; /*pk ?*/
+}
+
+input[type=number] { 
+  -moz-appearance: textfield;
+  appearance: textfield;
+  margin: 0; 
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
+.penalty {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.penalty-header {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  padding: 0 20px;
+}
+
+.penalty-title {
+  font-family: 'ReadexPro-Bold';
+  font-size: 30px;
+
+  color: #FEEFCF;
+}
+
+.penalty-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: left;
+  padding: 0 20px;
+}
+
+
+.penalty-time-input {
+  display: flex;
+  width: 30px;
+  flex-direction: column;
+  text-align: right;
+  color: #FEEFCF;
+  background-color: #1F1F1F;
+  margin-left: -10px;
+  font-family: 'ReadexPro-Regular';
+  border: none;
+}
+
+.penalty-time-input:focus {
+  outline: none;
+}
+  
+
+.penalty-entry {
+  display: flex;
+  font-family: 'ReadexPro-Regular';
+  flex-direction: row;
+}
+
+.penalty-entry p{
+  font-family: 'ReadexPro-Regular';
+  margin-left: 9%;
+  color: #FEEFCF;
+  align-self: center;
+  display: flex;
+}
+
+.penalty-hint {
+  color: #FEEFCF;
+  font-family: 'ReadexPro-Regular';
+  font-size: 9px;
+  margin-top: 2%;
+  margin-left: 7%;
+  display: flex;
+}
+
+.penalty-footer {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.penalty-footer button{
+
+  font-family: 'ReadexPro-Regular';
+  font-size: 20px;
+  color: #FEEFCF;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.penalty-check-box {
+  font-family: 'ReadexPro-Medium';
+  color: #FEEFCF;
+}

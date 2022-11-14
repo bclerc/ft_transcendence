@@ -5,7 +5,7 @@ export interface UserI {
     state?:             string;
     email? :            string;
     intra_name? :       string;
-    avatar_url? :        string;
+    avatar_url? :       string;
     intra_id? :         number;
     displayname? :      string;
     description? :      string;
@@ -14,8 +14,11 @@ export interface UserI {
     staff? :            boolean;
     createdAt? :        Date;
     twoFactorEnabled? : boolean;
-    friendOf? : UserI[];
-
+    friendOf? :         UserI[];
+    friends? :          UserI[];
+    blockedBy? :        UserI[];
+    blockedUsers?:      UserI[];
+    games?:             any[];
 }
 
 export class User {
@@ -46,6 +49,7 @@ export class User {
     elo? :              number;
     staff? :            boolean;
     Createdat? :        Date;
+    blockedUsers?:      UserI[]; 
     
     
     constructor(ida: number, usernamea: string, avatarUrla: string) {

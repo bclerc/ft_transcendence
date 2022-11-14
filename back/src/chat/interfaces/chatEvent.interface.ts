@@ -9,7 +9,10 @@ export class AdminUpdateEvent {
 }
 
 export class RoomUpdateEvent {
+    user: BasicUserI;
     room: ChatRoomI;
+    success?: boolean;
+    message?: string;
 }
 
 export class MessageUpdateEvent {
@@ -18,6 +21,7 @@ export class MessageUpdateEvent {
 
 export class NewRoomEvent {
   room: ChatRoomI;
+
 }
 
 export class UserJoinEvent {
@@ -36,4 +40,41 @@ export class UserKickEvent {
   room: ChatRoomI;
   user: BasicUserI;
   kicker: BasicUserI;
+}
+
+export class UserPunishEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  punisher: BasicUserI;
+  type: string;
+  success: boolean;
+  message?: string;
+}
+
+export class PardonEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  pardoner: BasicUserI;
+  success: boolean;
+  message?: string;
+}
+
+export class UserCanChatEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  message: string;
+}
+
+export class BlockedUserEvent {
+  user: BasicUserI;
+  blocker: BasicUserI;
+  block: boolean;
+  success: boolean;
+}
+
+export class DeleteRoomEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  success: boolean;
+  message?: string;
 }
