@@ -3,52 +3,51 @@
 
 	<!-- MATCH -->
 
-	
-		<ng-container *ngFor="let games of user.games">
-			<li>
+	<ng-container *ngFor="let games of user.games">
+		<div id="match">
+			<div class="result">
+				<div *ngIf="whoWin(games.winner.id); then thenBlock else elseBlock"></div>
+				<ng-template #thenBlock>
+					<span id="win">Victoire</span>
+				</ng-template>
+				<ng-template #elseBlock>
+					<span id="loose">Défaite</span>
+				</ng-template>
+				<!-- <p *ngIf=whoWin(games.id)>  <span id="win">Victoire</span></p> -->
+				<!-- <p *ngIf=!whoWin(games.id)>  <span id="loose">Défaite</span></p> -->
+			</div>
 
-		<div class="result">
-			<div *ngIf="whoWin(games.winner.id); then thenBlock else elseBlock"></div>
-			<ng-template #thenBlock>
-				<span id="win">Victoire</span>
-			</ng-template>
-			<ng-template #elseBlock>
-				<span id="loose">Défaite</span>
-			</ng-template>
-			<!-- <p *ngIf=whoWin(games.id)>  <span id="win">Victoire</span></p> -->
-			<!-- <p *ngIf=!whoWin(games.id)>  <span id="loose">Défaite</span></p> -->
+			<div class="VS">
+
+				<!-- Moi -->
+				<div id="my-profile">
+					<!-- <img src="../../../../assets/img/default_profile_picture.webp" alt=""> -->
+					<a [routerLink]="['/profile/' + games.winner.id ]">
+						<img [src]="games.winner.avatar_url" [alt]="games.winner.displayname"/>
+						{{games.winner.displayname}}
+					</a>
+				</div>
+
+				<!-- Scores -->
+				<div id="scores">
+					<div id="score-lol"><span id="winner-score">{{games.winnerScore}}</span></div>
+					<div id="score-lol"><span id="loser-score">{{games.loserScore}}</span></div>
+				</div>
+
+				<!-- Adversaire -->
+				<div id="my-enemy">
+					<!-- <img src="games.loser.avatar_url" alt=""> -->
+					<a [routerLink]="['/profile/' + games.loser.id ]">
+						<img [src]="games.loser.avatar_url" [alt]="games.loser.displayname"/>
+						{{games.loser.displayname}}
+					</a>
+				</div>
+			</div>
+
 		</div>
-		
-		
-		<div class="VS">
+	</ng-container>
 
-			<!-- Winner -->
-			<div id="my-profile">
-				<!-- <img src="../../../../assets/img/default_profile_picture.webp" alt=""> -->
-				<a [routerLink]="['/profile/' + games.winner.id ]">
-				<img [src]="games.winner.avatar_url" [alt]="games.winner.displayname"/>
-			{{games.winner.displayname}}
-		</a>
-			</div>
-
-			<!-- Scores -->
-			<div id="scores">
-				<div id="score-lol"><span id="winner-score">{{games.winnerScore}}</span></div>
-				<div id="score-lol"><span id="loser-score">{{games.loserScore}}</span></div>
-			</div>
-
-			<!-- Looser -->
-			<div id="my-enemy">
-				<!-- <img src="games.loser.avatar_url" alt=""> -->
-				<a [routerLink]="['/profile/' + games.loser.id ]">
-				<img [src]="games.loser.avatar_url" [alt]="games.loser.displayname"/>
-				{{games.loser.displayname}}
-			</a>
-			</div>
-		</div>
-
-	</li>
-		</ng-container>
+</div>
 	<!-- </li> -->
 
 	<!-- MATCH -->
