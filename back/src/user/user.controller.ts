@@ -45,6 +45,12 @@ export class UserController {
   * 
   */
 
+  @Post("good")
+  @UseGuards(Jwt2faAuthGuard)
+  async good(@Request() req: any) {
+    return {message: "User found", state: 'success', user: req.user };
+  }
+    
 
 
   @Get("me")
