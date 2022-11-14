@@ -386,7 +386,7 @@ export class ChatService {
   async createRoom(owner: BasicUserI, newRoom: CreateChatDto): Promise<ChatRoom> {
     let hashedPassword = null;
 
-    if (newRoom.password)
+    if (newRoom.password != null)
       hashedPassword = await this.passUtils.hashPass(newRoom.password);
 
     const ret = this.prisma.chatRoom.create({

@@ -114,6 +114,9 @@ export class UserService {
         },
         friendOf: true,
         games: {
+          orderBy: {
+            createdAt: 'desc',
+          },
           select: {
             id: true,
             users: {

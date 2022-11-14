@@ -1,6 +1,6 @@
 <div *ngIf="room.id else no_room">
 		<div class="flexbox">
-			<div #scroll id="chat_box" class="chat-box" >
+			<div #scroll id="chat_box" class="chat-box">
 	
 				<!-- CLASS chat-box-header -->
         <section class="chat-box-header">
@@ -10,7 +10,7 @@
               <h2  style="display: flex; flex-direction: row;" >{{ friend.displayname }}</h2>
             </div>
             <h2 *ngIf="room.type === 'GROUP'" >{{ room.name }}</h2>
-            <p id="description">{{room.description}}</p>
+            <p id="head-description">{{room.description}}</p>
             <ng-container *ngIf="room.type === 'GROUP'">
 
 
