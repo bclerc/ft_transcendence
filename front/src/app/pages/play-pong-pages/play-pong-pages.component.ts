@@ -64,7 +64,6 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 //
 //
 
-
 export const MAX_SCORE = 50;
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
@@ -103,28 +102,12 @@ export class PlayPongPagesComponent implements OnInit {
       }
   });
 
-  
-  // private map_mode: number;
-  // private game_id: number;
-
-  // private audio1;
-  // private audio2;
-  // private audio3;
-  
-
   constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService
   )
   {
     this.var_interval = 0;
     this.ratiox = 1;
     this.ratioy = 1;
-    // var canvas = <HTMLCanvasElement> document.getElementById('pong');
-    // if (canvas != null) {
-    //   this.ratiox = canvas.getBoundingClientRect().width / WIDTHCANVAS;
-    //   this.ratioy = canvas.getBoundingClientRect().height / HEIGHTCANVAS;
-      // console.log("ratiox: " + this.ratiox);
-      // console.log("ratioy: " + this.ratioy);
-    // }
   }
 
   ngOnInit(): void 
@@ -147,18 +130,17 @@ export class PlayPongPagesComponent implements OnInit {
     this.socket.on('stopSearchLoop', this.stopSearchLoop);
 
     this.socket.on('getId', this.getId);
-    this.socket.emit('init');
-    // var canvas = <HTMLCanvasElement> document.getElementById('pong');
-    // if (canvas != null) {
-    //   this.ratiox = canvas.getBoundingClientRect().width / WIDTHCANVAS;
-    //   this.ratioy = canvas.getBoundingClientRect().height / HEIGHTCANVAS;
-      // console.log("ratiox: " + this.ratiox);
-      // console.log("ratioy: " + this.ratioy);
-    // }
+
+    this.enableButtonS();
+    // this.socket.emit('init');
+
+    const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+    canvas!.width = 600;
+    canvas!.height = 400;
+    this.drawInit();
   }
   
   ngAfterInit(): void {
-    this.drawInit();
   }
 
   ngOnDestroy(): void {
@@ -335,29 +317,29 @@ export class PlayPongPagesComponent implements OnInit {
     this.drawInit();
   }
 
-  getRatiox()
-  {
-    console.log("getRatiox1");
-    const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    console.log("getRatiox2");
-    if (canvas)
-    {
-      // console.log("canvasX", canvas.width);
-      return canvas.width / WIDTHCANVAS;
-    }
-    return 1;
-  }
+  // getRatiox()
+  // {
+  //   console.log("getRatiox1");
+  //   const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+  //   console.log("getRatiox2");
+  //   if (canvas)
+  //   {
+  //     // console.log("canvasX", canvas.width);
+  //     return canvas.width / WIDTHCANVAS;
+  //   }
+  //   return 1;
+  // }
 
-  getRatioy()
-  {
-    const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    if (canvas)
-    {
-      // console.log("canvasY", canvas.height);
-      return canvas.height / HEIGHTCANVAS;
-    }
-    return 1;
-  }
+  // getRatioy()
+  // {
+  //   const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+  //   if (canvas)
+  //   {
+  //     // console.log("canvasY", canvas.height);
+  //     return canvas.height / HEIGHTCANVAS;
+  //   }
+  //   return 1;
+  // }
 
   drawName(side: number)
   {
@@ -437,6 +419,9 @@ export class PlayPongPagesComponent implements OnInit {
 
   drawMap1(state: GameI){
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+    var ratiox = canvas!.width / WIDTHCANVAS;
+    var ratioy = canvas!.height / HEIGHTCANVAS;
+    var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
     if (canvas)
     {
         var context = canvas.getContext('2d');
@@ -445,13 +430,13 @@ export class PlayPongPagesComponent implements OnInit {
           // Draw rectangle noir
           context.fillStyle = 'black';
           context.beginPath();
-          context.arc(0 + CANVAS_RADIUS, 0 + CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
-          context.lineTo(canvas.width - CANVAS_RADIUS + 0, 0);   
-          context.arc(canvas.width - CANVAS_RADIUS + 0, CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-          context.lineTo(canvas.width + 0, canvas.height + 0 - CANVAS_RADIUS);   
-          context.arc(canvas.width - CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, 0, Math.PI * 1 / 2);   
-          context.lineTo(CANVAS_RADIUS + 0, canvas.height + 0);
-          context.arc(CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.arc(CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
+          context.lineTo(canvas.width - CANVAS_RADIUS, 0);   
+          context.arc(canvas.width - CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(canvas.width, canvas.height - CANVAS_RADIUS);   
+          context.arc(canvas.width - CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, 0, Math.PI * 1 / 2);   
+          context.lineTo(CANVAS_RADIUS, canvas.height);
+          context.arc(CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
         
           // Draw middle line
@@ -464,25 +449,25 @@ export class PlayPongPagesComponent implements OnInit {
           // Draw obstacle1
           context.fillStyle = 'white';
           context.beginPath();
-          context.arc(MAP1_OBSTACLE1_POSX + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_POSY + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_RADIUS, Math.PI, Math.PI * 3 / 2);
-          context.lineTo(MAP1_OBSTACLE1_W - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_POSY);   
-          context.arc(MAP1_OBSTACLE1_W - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSY, MAP1_OBSTACLE1_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-          context.lineTo(MAP1_OBSTACLE1_W + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_H + MAP1_OBSTACLE1_POSY - MAP1_OBSTACLE1_RADIUS);   
-          context.arc(MAP1_OBSTACLE1_W - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_H - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSY, MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_POSX, Math.PI * 1 / 2);   
-          context.lineTo(MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_H +MAP1_OBSTACLE1_POSY);   
-          context.arc(MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX, MAP1_OBSTACLE1_H - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSY, MAP1_OBSTACLE1_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.arc(MAP1_OBSTACLE1_POSX * ratiox + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_POSY * ratioy + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(MAP1_OBSTACLE1_W * ratiox - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX * ratiox, MAP1_OBSTACLE1_POSY * ratioy);   
+          context.arc(MAP1_OBSTACLE1_W * ratiox - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX * ratiox, MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSY * ratioy, MAP1_OBSTACLE1_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(MAP1_OBSTACLE1_W * ratiox + MAP1_OBSTACLE1_POSX * ratiox, MAP1_OBSTACLE1_H * ratioy + MAP1_OBSTACLE1_POSY * ratioy - MAP1_OBSTACLE1_RADIUS);   
+          context.arc(MAP1_OBSTACLE1_W * ratiox - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX * ratiox, MAP1_OBSTACLE1_H * ratioy - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSY * ratioy, MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_POSX * ratiox, Math.PI * 1 / 2);   
+          context.lineTo(MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX * ratiox, MAP1_OBSTACLE1_H * ratioy +MAP1_OBSTACLE1_POSY * ratioy);   
+          context.arc(MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX * ratiox, MAP1_OBSTACLE1_H * ratioy - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSY * ratioy, MAP1_OBSTACLE1_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
           // Draw obstacle2
           context.fillStyle = 'white';
           context.beginPath();
-          context.arc(MAP1_OBSTACLE2_POSX + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_POSY + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_RADIUS, Math.PI, Math.PI * 3 / 2);
-          context.lineTo(MAP1_OBSTACLE2_W - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_POSY);   
-          context.arc(MAP1_OBSTACLE2_W - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSY, MAP1_OBSTACLE2_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-          context.lineTo(MAP1_OBSTACLE2_W + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_H + MAP1_OBSTACLE2_POSY - MAP1_OBSTACLE2_RADIUS);   
-          context.arc(MAP1_OBSTACLE2_W - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_H - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSY, MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_POSX, Math.PI * 1 / 2);   
-          context.lineTo(MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_H +MAP1_OBSTACLE2_POSY);   
-          context.arc(MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX, MAP1_OBSTACLE2_H - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSY, MAP1_OBSTACLE2_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.arc(MAP1_OBSTACLE2_POSX * ratiox + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_POSY * ratioy + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(MAP1_OBSTACLE2_W * ratiox - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX * ratiox, MAP1_OBSTACLE2_POSY * ratioy);   
+          context.arc(MAP1_OBSTACLE2_W * ratiox - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX * ratiox, MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSY * ratioy, MAP1_OBSTACLE2_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(MAP1_OBSTACLE2_W * ratiox + MAP1_OBSTACLE2_POSX * ratiox, MAP1_OBSTACLE2_H * ratioy + MAP1_OBSTACLE2_POSY * ratioy - MAP1_OBSTACLE2_RADIUS);   
+          context.arc(MAP1_OBSTACLE2_W * ratiox - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX * ratiox, MAP1_OBSTACLE2_H * ratioy - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSY * ratioy, MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_POSX * ratiox, Math.PI * 1 / 2);   
+          context.lineTo(MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX * ratiox, MAP1_OBSTACLE2_H * ratioy +MAP1_OBSTACLE2_POSY * ratioy);   
+          context.arc(MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX * ratiox, MAP1_OBSTACLE2_H * ratioy - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSY * ratioy, MAP1_OBSTACLE2_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
 
@@ -491,13 +476,13 @@ export class PlayPongPagesComponent implements OnInit {
           if (state.player1 && state.player1.paddle)
           {
             context.beginPath();
-            context.arc(state.player1.paddle.x + PLAYER_RADIUS, state.player1.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
-            context.lineTo(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.y);   
-            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-            context.lineTo(state.player1.paddle.width + state.player1.paddle.x, state.player1.paddle.height + state.player1.paddle.y - PLAYER_RADIUS);   
-            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, state.player1.paddle.x, Math.PI * 1 / 2);   
-            context.lineTo(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height +state.player1.paddle.y);   
-            context.arc(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.arc(state.player1.paddle.x * ratiox + PLAYER_RADIUS, state.player1.paddle.y * ratioy + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
+            context.lineTo(state.player1.paddle.width * ratiox - PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.y * ratioy);   
+            context.arc(state.player1.paddle.width * ratiox - PLAYER_RADIUS + state.player1.paddle.x * ratiox, PLAYER_RADIUS + state.player1.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player1.paddle.width * ratiox + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy + state.player1.paddle.y * ratioy - PLAYER_RADIUS);   
+            context.arc(state.player1.paddle.width * ratiox - PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy - PLAYER_RADIUS + state.player1.paddle.y * ratioy, PLAYER_RADIUS, state.player1.paddle.x * ratiox, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy +state.player1.paddle.y * ratioy);   
+            context.arc(PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy - PLAYER_RADIUS + state.player1.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
             context.fill();
           }
 
@@ -505,13 +490,13 @@ export class PlayPongPagesComponent implements OnInit {
           if (state.player2 && state.player2.paddle)
           {
             context.beginPath();
-            context.arc(state.player2.paddle.x + PLAYER_RADIUS, state.player2.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
-            context.lineTo(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.y);   
-            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-            context.lineTo(state.player2.paddle.width + state.player2.paddle.x, state.player2.paddle.height + state.player2.paddle.y - PLAYER_RADIUS);   
-            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, state.player2.paddle.x, Math.PI * 1 / 2);   
-            context.lineTo(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height +state.player2.paddle.y);   
-            context.arc(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.arc(state.player2.paddle.x * ratiox + PLAYER_RADIUS, state.player2.paddle.y * ratioy + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
+            context.lineTo(state.player2.paddle.width * ratiox - PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.y * ratioy);   
+            context.arc(state.player2.paddle.width * ratiox - PLAYER_RADIUS + state.player2.paddle.x * ratiox, PLAYER_RADIUS + state.player2.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player2.paddle.width * ratiox + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy + state.player2.paddle.y * ratioy - PLAYER_RADIUS);   
+            context.arc(state.player2.paddle.width * ratiox - PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy - PLAYER_RADIUS + state.player2.paddle.y * ratioy, PLAYER_RADIUS, state.player2.paddle.x * ratiox, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy +state.player2.paddle.y * ratioy);   
+            context.arc(PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy - PLAYER_RADIUS + state.player2.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
             context.fill();
           }
 
@@ -519,7 +504,7 @@ export class PlayPongPagesComponent implements OnInit {
           context.beginPath();
           context.fillStyle = 'white';
           if (state.ball && state.ball.radius)
-            context.arc(state.ball.x, state.ball.y, state.ball.radius, 0, Math.PI * 2, false);
+            context.arc(state.ball.x * ratiox, state.ball.y * ratioy, state.ball.radius * ratio, 0, Math.PI * 2, false);
           context.fill();
         }
       }
@@ -527,6 +512,9 @@ export class PlayPongPagesComponent implements OnInit {
 
   drawMap2(state: GameI){
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+    var ratiox = canvas!.width / WIDTHCANVAS;
+    var ratioy = canvas!.height / HEIGHTCANVAS;
+    var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
     if (canvas)
     {
         var context = canvas.getContext('2d');
@@ -535,13 +523,13 @@ export class PlayPongPagesComponent implements OnInit {
           // Draw rectangle noir
           context.fillStyle = 'black';
           context.beginPath();
-          context.arc(0 + CANVAS_RADIUS, 0 + CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
-          context.lineTo(canvas.width - CANVAS_RADIUS + 0, 0);   
-          context.arc(canvas.width - CANVAS_RADIUS + 0, CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-          context.lineTo(canvas.width + 0, canvas.height + 0 - CANVAS_RADIUS);   
-          context.arc(canvas.width - CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, 0, Math.PI * 1 / 2);   
-          context.lineTo(CANVAS_RADIUS + 0, canvas.height + 0);
-          context.arc(CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.arc(CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
+          context.lineTo(canvas.width - CANVAS_RADIUS, 0);   
+          context.arc(canvas.width - CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(canvas.width, canvas.height - CANVAS_RADIUS);   
+          context.arc(canvas.width - CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, 0, Math.PI * 1 / 2);   
+          context.lineTo(CANVAS_RADIUS, canvas.height);
+          context.arc(CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
         
@@ -556,13 +544,13 @@ export class PlayPongPagesComponent implements OnInit {
           context.fillStyle = 'white';
           // context.strokeStyle = 'white';
           context.beginPath();
-          context.arc(state.obstacle.x + MAP2_OBSTACLE_RADIUS, state.obstacle.y + MAP2_OBSTACLE_RADIUS, MAP2_OBSTACLE_RADIUS, Math.PI, Math.PI * 3 / 2);
-          context.lineTo(state.obstacle.width - MAP2_OBSTACLE_RADIUS + state.obstacle.x, state.obstacle.y);   
-          context.arc(state.obstacle.width - MAP2_OBSTACLE_RADIUS + state.obstacle.x, MAP2_OBSTACLE_RADIUS + state.obstacle.y, MAP2_OBSTACLE_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-          context.lineTo(state.obstacle.width + state.obstacle.x, state.obstacle.height + state.obstacle.y - MAP2_OBSTACLE_RADIUS);   
-          context.arc(state.obstacle.width - MAP2_OBSTACLE_RADIUS + state.obstacle.x, state.obstacle.height - MAP2_OBSTACLE_RADIUS + state.obstacle.y, MAP2_OBSTACLE_RADIUS, state.obstacle.x, Math.PI * 1 / 2);   
-          context.lineTo(MAP2_OBSTACLE_RADIUS + state.obstacle.x, state.obstacle.height +state.obstacle.y);   
-          context.arc(MAP2_OBSTACLE_RADIUS + state.obstacle.x, state.obstacle.height - MAP2_OBSTACLE_RADIUS + state.obstacle.y, MAP2_OBSTACLE_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.arc(state.obstacle.x * ratiox + MAP2_OBSTACLE_RADIUS, state.obstacle.y * ratioy + MAP2_OBSTACLE_RADIUS, MAP2_OBSTACLE_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(state.obstacle.width * ratiox - MAP2_OBSTACLE_RADIUS + state.obstacle.x * ratiox, state.obstacle.y * ratioy);   
+          context.arc(state.obstacle.width * ratiox - MAP2_OBSTACLE_RADIUS + state.obstacle.x * ratiox, MAP2_OBSTACLE_RADIUS + state.obstacle.y * ratioy, MAP2_OBSTACLE_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(state.obstacle.width * ratiox + state.obstacle.x * ratiox, state.obstacle.height * ratioy + state.obstacle.y * ratioy - MAP2_OBSTACLE_RADIUS);   
+          context.arc(state.obstacle.width * ratiox - MAP2_OBSTACLE_RADIUS + state.obstacle.x * ratiox, state.obstacle.height * ratioy - MAP2_OBSTACLE_RADIUS + state.obstacle.y * ratioy, MAP2_OBSTACLE_RADIUS, state.obstacle.x * ratiox, Math.PI * 1 / 2);   
+          context.lineTo(MAP2_OBSTACLE_RADIUS + state.obstacle.x * ratiox, state.obstacle.height * ratioy +state.obstacle.y * ratioy);   
+          context.arc(MAP2_OBSTACLE_RADIUS + state.obstacle.x * ratiox, state.obstacle.height * ratioy - MAP2_OBSTACLE_RADIUS + state.obstacle.y * ratioy, MAP2_OBSTACLE_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
 
@@ -571,13 +559,13 @@ export class PlayPongPagesComponent implements OnInit {
           if (state.player1 && state.player1.paddle)
           {
             context.beginPath();
-            context.arc(state.player1.paddle.x + PLAYER_RADIUS, state.player1.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
-            context.lineTo(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.y);   
-            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-            context.lineTo(state.player1.paddle.width + state.player1.paddle.x, state.player1.paddle.height + state.player1.paddle.y - PLAYER_RADIUS);   
-            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, state.player1.paddle.x, Math.PI * 1 / 2);   
-            context.lineTo(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height +state.player1.paddle.y);   
-            context.arc(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.arc(state.player1.paddle.x * ratiox + PLAYER_RADIUS, state.player1.paddle.y * ratioy + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
+            context.lineTo(state.player1.paddle.width * ratiox - PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.y * ratioy);   
+            context.arc(state.player1.paddle.width * ratiox - PLAYER_RADIUS + state.player1.paddle.x * ratiox, PLAYER_RADIUS + state.player1.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player1.paddle.width * ratiox + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy + state.player1.paddle.y * ratioy - PLAYER_RADIUS);   
+            context.arc(state.player1.paddle.width * ratiox - PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy - PLAYER_RADIUS + state.player1.paddle.y * ratioy, PLAYER_RADIUS, state.player1.paddle.x * ratiox, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy +state.player1.paddle.y * ratioy);   
+            context.arc(PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy - PLAYER_RADIUS + state.player1.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
             context.fill();
           }
 
@@ -585,13 +573,13 @@ export class PlayPongPagesComponent implements OnInit {
           if (state.player2 && state.player2.paddle)
           {
             context.beginPath();
-            context.arc(state.player2.paddle.x + PLAYER_RADIUS, state.player2.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
-            context.lineTo(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.y);   
-            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-            context.lineTo(state.player2.paddle.width + state.player2.paddle.x, state.player2.paddle.height + state.player2.paddle.y - PLAYER_RADIUS);   
-            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, state.player2.paddle.x, Math.PI * 1 / 2);   
-            context.lineTo(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height +state.player2.paddle.y);   
-            context.arc(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.arc(state.player2.paddle.x * ratiox + PLAYER_RADIUS, state.player2.paddle.y * ratioy + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
+            context.lineTo(state.player2.paddle.width * ratiox - PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.y * ratioy);   
+            context.arc(state.player2.paddle.width * ratiox - PLAYER_RADIUS + state.player2.paddle.x * ratiox, PLAYER_RADIUS + state.player2.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player2.paddle.width * ratiox + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy + state.player2.paddle.y * ratioy - PLAYER_RADIUS);   
+            context.arc(state.player2.paddle.width * ratiox - PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy - PLAYER_RADIUS + state.player2.paddle.y * ratioy, PLAYER_RADIUS, state.player2.paddle.x * ratiox, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy +state.player2.paddle.y * ratioy);   
+            context.arc(PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy - PLAYER_RADIUS + state.player2.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
             context.fill();
           }
 
@@ -599,7 +587,7 @@ export class PlayPongPagesComponent implements OnInit {
           context.beginPath();
           context.fillStyle = 'white';
           if (state.ball && state.ball.radius)
-            context.arc(state.ball.x, state.ball.y, state.ball.radius, 0, Math.PI * 2, false);
+            context.arc(state.ball.x * ratiox, state.ball.y * ratioy, state.ball.radius * ratio, 0, Math.PI * 2, false);
           context.fill();
         }
       }
@@ -607,6 +595,9 @@ export class PlayPongPagesComponent implements OnInit {
 
   drawMap3(state: GameI){
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+    var ratiox = canvas!.width / WIDTHCANVAS;
+    var ratioy = canvas!.height / HEIGHTCANVAS;
+    var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
     if (canvas)
     {
         var context = canvas.getContext('2d');
@@ -615,13 +606,13 @@ export class PlayPongPagesComponent implements OnInit {
           // Draw rectangle noir
           context.fillStyle = 'black';
           context.beginPath();
-          context.arc(0 + CANVAS_RADIUS, 0 + CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
-          context.lineTo(canvas.width - CANVAS_RADIUS + 0, 0);   
-          context.arc(canvas.width - CANVAS_RADIUS + 0, CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-          context.lineTo(canvas.width + 0, canvas.height + 0 - CANVAS_RADIUS);   
-          context.arc(canvas.width - CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, 0, Math.PI * 1 / 2);   
-          context.lineTo(CANVAS_RADIUS + 0, canvas.height + 0);
-          context.arc(CANVAS_RADIUS + 0, canvas.height - CANVAS_RADIUS + 0, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.arc(CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
+          context.lineTo(canvas.width - CANVAS_RADIUS, 0);   
+          context.arc(canvas.width - CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(canvas.width, canvas.height - CANVAS_RADIUS);   
+          context.arc(canvas.width - CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, 0, Math.PI * 1 / 2);   
+          context.lineTo(CANVAS_RADIUS, canvas.height);
+          context.arc(CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
         
@@ -637,24 +628,24 @@ export class PlayPongPagesComponent implements OnInit {
           // context.strokeStyle = 'white';
 
           context.beginPath();
-          context.arc(MAP3_OBSTACLE1_POSX + MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_POSY + MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_RADIUS, Math.PI, Math.PI * 3 / 2);
-          context.lineTo(MAP3_OBSTACLE1_W - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_POSY);   
-          context.arc(MAP3_OBSTACLE1_W - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSY, MAP3_OBSTACLE1_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-          context.lineTo(MAP3_OBSTACLE1_W + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_H + MAP3_OBSTACLE1_POSY - MAP3_OBSTACLE1_RADIUS);   
-          context.arc(MAP3_OBSTACLE1_W - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_H - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSY, MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_POSX, Math.PI * 1 / 2);   
-          context.lineTo(MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_H +MAP3_OBSTACLE1_POSY);   
-          context.arc(MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX, MAP3_OBSTACLE1_H - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSY, MAP3_OBSTACLE1_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.arc(MAP3_OBSTACLE1_POSX * ratiox + MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_POSY * ratioy + MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(MAP3_OBSTACLE1_W * ratiox - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX * ratiox, MAP3_OBSTACLE1_POSY * ratioy);   
+          context.arc(MAP3_OBSTACLE1_W * ratiox - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX * ratiox, MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSY * ratioy, MAP3_OBSTACLE1_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(MAP3_OBSTACLE1_W * ratiox + MAP3_OBSTACLE1_POSX * ratiox, MAP3_OBSTACLE1_H * ratioy + MAP3_OBSTACLE1_POSY * ratioy - MAP3_OBSTACLE1_RADIUS);   
+          context.arc(MAP3_OBSTACLE1_W * ratiox - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX * ratiox, MAP3_OBSTACLE1_H * ratioy - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSY * ratioy, MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_POSX * ratiox, Math.PI * 1 / 2);   
+          context.lineTo(MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX * ratiox, MAP3_OBSTACLE1_H * ratioy +MAP3_OBSTACLE1_POSY * ratioy);   
+          context.arc(MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSX * ratiox, MAP3_OBSTACLE1_H * ratioy - MAP3_OBSTACLE1_RADIUS + MAP3_OBSTACLE1_POSY * ratioy, MAP3_OBSTACLE1_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
 
           context.beginPath();
-          context.arc(MAP3_OBSTACLE2_POSX + MAP3_OBSTACLE2_RADIUS, MAP3_OBSTACLE2_POSY + MAP3_OBSTACLE2_RADIUS, MAP3_OBSTACLE2_RADIUS, Math.PI, Math.PI * 3 / 2);
-          context.lineTo(MAP3_OBSTACLE2_W - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_POSY);   
-          context.arc(MAP3_OBSTACLE2_W - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSY, MAP3_OBSTACLE2_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-          context.lineTo(MAP3_OBSTACLE2_W + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_H + MAP3_OBSTACLE2_POSY - MAP3_OBSTACLE2_RADIUS);   
-          context.arc(MAP3_OBSTACLE2_W - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_H - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSY, MAP3_OBSTACLE2_RADIUS, MAP3_OBSTACLE2_POSX, Math.PI * 1 / 2);   
-          context.lineTo(MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_H +MAP3_OBSTACLE2_POSY);   
-          context.arc(MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX, MAP3_OBSTACLE2_H - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSY, MAP3_OBSTACLE2_RADIUS, Math.PI * 1 / 2, Math.PI);
+          context.arc(MAP3_OBSTACLE2_POSX * ratiox + MAP3_OBSTACLE2_RADIUS, MAP3_OBSTACLE2_POSY * ratioy + MAP3_OBSTACLE2_RADIUS, MAP3_OBSTACLE2_RADIUS, Math.PI, Math.PI * 3 / 2);
+          context.lineTo(MAP3_OBSTACLE2_W * ratiox - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX * ratiox, MAP3_OBSTACLE2_POSY * ratioy);   
+          context.arc(MAP3_OBSTACLE2_W * ratiox - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX * ratiox, MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSY * ratioy, MAP3_OBSTACLE2_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+          context.lineTo(MAP3_OBSTACLE2_W * ratiox + MAP3_OBSTACLE2_POSX * ratiox, MAP3_OBSTACLE2_H * ratioy + MAP3_OBSTACLE2_POSY * ratioy - MAP3_OBSTACLE2_RADIUS);   
+          context.arc(MAP3_OBSTACLE2_W * ratiox - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX * ratiox, MAP3_OBSTACLE2_H * ratioy - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSY * ratioy, MAP3_OBSTACLE2_RADIUS, MAP3_OBSTACLE2_POSX * ratiox, Math.PI * 1 / 2);   
+          context.lineTo(MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX * ratiox, MAP3_OBSTACLE2_H * ratioy +MAP3_OBSTACLE2_POSY * ratioy);   
+          context.arc(MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSX * ratiox, MAP3_OBSTACLE2_H * ratioy - MAP3_OBSTACLE2_RADIUS + MAP3_OBSTACLE2_POSY * ratioy, MAP3_OBSTACLE2_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
 
@@ -663,13 +654,13 @@ export class PlayPongPagesComponent implements OnInit {
           if (state.player1 && state.player1.paddle)
           {
             context.beginPath();
-            context.arc(state.player1.paddle.x + PLAYER_RADIUS, state.player1.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
-            context.lineTo(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.y);   
-            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-            context.lineTo(state.player1.paddle.width + state.player1.paddle.x, state.player1.paddle.height + state.player1.paddle.y - PLAYER_RADIUS);   
-            context.arc(state.player1.paddle.width - PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, state.player1.paddle.x, Math.PI * 1 / 2);   
-            context.lineTo(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height +state.player1.paddle.y);   
-            context.arc(PLAYER_RADIUS + state.player1.paddle.x, state.player1.paddle.height - PLAYER_RADIUS + state.player1.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.arc(state.player1.paddle.x * ratiox + PLAYER_RADIUS, state.player1.paddle.y * ratioy + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);   
+            context.lineTo(state.player1.paddle.width * ratiox - PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.y * ratioy);   
+            context.arc(state.player1.paddle.width * ratiox - PLAYER_RADIUS + state.player1.paddle.x * ratiox, PLAYER_RADIUS + state.player1.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player1.paddle.width * ratiox + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy + state.player1.paddle.y * ratioy - PLAYER_RADIUS);   
+            context.arc(state.player1.paddle.width * ratiox - PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy - PLAYER_RADIUS + state.player1.paddle.y * ratioy, PLAYER_RADIUS, state.player1.paddle.x * ratiox, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy +state.player1.paddle.y * ratioy);   
+            context.arc(PLAYER_RADIUS + state.player1.paddle.x * ratiox, state.player1.paddle.height * ratioy - PLAYER_RADIUS + state.player1.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
             context.fill();
           }
 
@@ -677,13 +668,13 @@ export class PlayPongPagesComponent implements OnInit {
           if (state.player2 && state.player2.paddle)
           {
             context.beginPath();
-            context.arc(state.player2.paddle.x + PLAYER_RADIUS, state.player2.paddle.y + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
-            context.lineTo(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.y);   
-            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
-            context.lineTo(state.player2.paddle.width + state.player2.paddle.x, state.player2.paddle.height + state.player2.paddle.y - PLAYER_RADIUS);   
-            context.arc(state.player2.paddle.width - PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, state.player2.paddle.x, Math.PI * 1 / 2);   
-            context.lineTo(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height +state.player2.paddle.y);   
-            context.arc(PLAYER_RADIUS + state.player2.paddle.x, state.player2.paddle.height - PLAYER_RADIUS + state.player2.paddle.y, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
+            context.arc(state.player2.paddle.x * ratiox + PLAYER_RADIUS, state.player2.paddle.y * ratioy + PLAYER_RADIUS, PLAYER_RADIUS, Math.PI, Math.PI * 3 / 2);
+            context.lineTo(state.player2.paddle.width * ratiox - PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.y * ratioy);   
+            context.arc(state.player2.paddle.width * ratiox - PLAYER_RADIUS + state.player2.paddle.x * ratiox, PLAYER_RADIUS + state.player2.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 3 / 2, Math.PI * 2);   
+            context.lineTo(state.player2.paddle.width * ratiox + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy + state.player2.paddle.y * ratioy - PLAYER_RADIUS);   
+            context.arc(state.player2.paddle.width * ratiox - PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy - PLAYER_RADIUS + state.player2.paddle.y * ratioy, PLAYER_RADIUS, state.player2.paddle.x * ratiox, Math.PI * 1 / 2);   
+            context.lineTo(PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy +state.player2.paddle.y * ratioy);   
+            context.arc(PLAYER_RADIUS + state.player2.paddle.x * ratiox, state.player2.paddle.height * ratioy - PLAYER_RADIUS + state.player2.paddle.y * ratioy, PLAYER_RADIUS, Math.PI * 1 / 2, Math.PI);
             context.fill();
           }
 
@@ -691,7 +682,7 @@ export class PlayPongPagesComponent implements OnInit {
           context.beginPath();
           context.fillStyle = 'white';
           if (state.ball && state.ball.radius)
-            context.arc(state.ball.x, state.ball.y, state.ball.radius, 0, Math.PI * 2, false);
+            context.arc(state.ball.x * ratiox, state.ball.y * ratioy, state.ball.radius * ratio, 0, Math.PI * 2, false);
           context.fill();
         }
       }
@@ -753,31 +744,37 @@ export class PlayPongPagesComponent implements OnInit {
   return state;
   }
 
-  toResponsive(game: GameI): GameI
-  {
-    var canvas = <HTMLCanvasElement | undefined> document.getElementById('pong');
-    var ratiox = 1;
-    var ratioy = 1;
-    if (canvas)
-    {
-      ratiox = canvas.width / WIDTHCANVAS;
-      ratioy = canvas.height / HEIGHTCANVAS;
-    }
+  // toResponsive(game: GameI): GameI
+  // {
+  //   var canvas = <HTMLCanvasElement | undefined> document.getElementById('pong');
+  //   var ratiox = 1;
+  //   var ratioy = 1;
+  //   if (canvas)
+  //   {
+  //     ratiox = canvas.width / WIDTHCANVAS;
+  //     ratioy = canvas.height / HEIGHTCANVAS;
+  //   }
 
-    game.player1!.paddle.x = 0;
-    game.player1!.paddle.y = game.player1!.paddle.y * ratioy;
-    game.player2!.paddle.x = canvas!.width - PLAYER_WIDTH * ratiox;
-    game.player2!.paddle.y = game.player2!.paddle.y * ratioy;
-    return game;
-  }
+  //   game.player1!.paddle.x = 0;
+  //   game.player1!.paddle.y = game.player1!.paddle.y * ratioy;
+  //   game.player2!.paddle.x = canvas!.width - PLAYER_WIDTH * ratiox;
+  //   game.player2!.paddle.y = game.player2!.paddle.y * ratioy;
+  //   return game;
+  // }
 
 
   drawInit() {
-    var canvas = <HTMLCanvasElement | undefined> document.getElementById('pong');
-    var ratiox = 1;
-    var ratioy = 1;
+    // var canvas = <HTMLCanvasElement | undefined> document.getElementById('pong');
+    // var ratiox = 1;
+    // var ratioy = 1;
+    var canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+    var ratiox = canvas!.width / WIDTHCANVAS;
+    var ratioy = canvas!.height / HEIGHTCANVAS;
+    var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
+
     if (canvas)
     {
+      console.log("drawInit555");
       ratiox = canvas.width / WIDTHCANVAS;
       ratioy = canvas.height / HEIGHTCANVAS;
     }
@@ -840,23 +837,23 @@ export class PlayPongPagesComponent implements OnInit {
           speed: 2,
           width: 5 * ratiox,
           height: 5 * ratioy,
-          radius: BALL_RADIUS * ratiox
+          radius: BALL_RADIUS * ratio
         },
       }
       // console.log("ratiox: " + this.ratiox);
       // console.log("ratioy: " + ratioy);
       // console.log("game", state);
       // console.log("gameball", state.ball);
-      var canvas = document.getElementById('pong') as HTMLCanvasElement | undefined;
+      // var canvas = document.getElementById('pong') as HTMLCanvasElement | undefined;
       if (canvas)
       {
-        console.log("canvas");
+        console.log("canvas ", canvas);
           var context = canvas.getContext('2d');
           if (context)
           {
             //load font car il ne se charge pas des le chargement (??????)
-            context.font = FONT + 'px streetartfont';
-            context.fillText('', 160, 0, 0);
+            // context.font = FONT + 'px streetartfont';
+            // context.fillText('', 160, 0, 0);
   
             // Draw rectangle noir
             context.fillStyle = 'black';

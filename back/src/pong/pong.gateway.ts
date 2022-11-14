@@ -77,7 +77,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage('init')
 	init(client: Socket){
-		client.emit('drawInit');
+		// client.emit('drawInit');
 		client.emit('enableButtonS');
 	}
 
@@ -153,6 +153,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				this.creatNewGameMap(client, NORMALGAME);
 			else
 			{
+				// var x = 3; 		// choose random map id
 				var x = Math.floor(Math.random() * (MAX_MAP - 1 + 1) + 1); 		// choose random map id
 				this.creatNewGameMap(client, x);
 			}
