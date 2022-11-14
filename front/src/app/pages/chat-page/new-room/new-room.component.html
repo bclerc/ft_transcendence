@@ -1,4 +1,6 @@
 <main class="new-room-container">
+
+	<!-- LISTE GROUPES PUBLICS -->
 	<div class="demi-public">
 		<h2 id="tt-h2">Groupes publics</h2>
 		<ul>
@@ -22,6 +24,8 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- Bouton + -->
 				<div class="but">
 					<button mat-Button matTooltip="Rejoindre le groupe" (click)="joinRoom(room, room.password !== null)">
 						<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
@@ -30,6 +34,8 @@
 			</li>
 		</ul>
 	</div>
+
+	<!-- CREER UN GROUPE -->
 	<div class="demi-create">
 		<h2 id="tt-h2">Créer un groupe</h2>
 		<form [formGroup]="form" (ngSubmit)="create()">
