@@ -114,7 +114,6 @@ hr.clear{
 }
 .VS #my-profile{
 	justify-content: flex-end;
-	
 }
 
 .VS #my-profile img, #my-enemy img{
@@ -126,7 +125,11 @@ hr.clear{
 	box-shadow: -2px 2px #ee481e;
 	margin-right: 10px;
 }
-.VS #my-enemy a:hover{
+.VS #my-profile a, #my-enemy a{
+	display: flex;
+	align-items: center;
+}
+.VS #my-profile a:hover, #my-enemy a:hover{
 	color: #ee481e;
 	cursor: pointer;
 }
