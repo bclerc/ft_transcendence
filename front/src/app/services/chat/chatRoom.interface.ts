@@ -42,6 +42,11 @@ export interface ChatRoomI {
   updatedAt: Date;
 }
 
+export interface EditRoomI {
+  user: UserI;
+  room: ChatRoomI;
+}
+
 export enum ChatRoomType {
   DM = "DM",
   GROUP = "GROUP",
