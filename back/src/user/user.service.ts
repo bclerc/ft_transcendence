@@ -257,7 +257,9 @@ export class UserService {
         where: {
           id: Number(id),
         },
-        data: update
+        data: {
+          displayname: update.displayname,
+        }
       });
       return {
         message: "User was been updated",
@@ -271,14 +273,16 @@ export class UserService {
   }
 
   async setState(userId: number, status: UserState) {
-    await this.prisma.user.update({
-      where: {
-        id: Number(userId),
-      },
-      data: {
-        state: status,
-      },
-    });
+    if (userId && status) {
+      await this.prisma.user.update({
+        where: {
+          id: Number(userId),
+        },
+        data: {
+          state: status,
+        },
+      });
+    }
   }
 
   /**

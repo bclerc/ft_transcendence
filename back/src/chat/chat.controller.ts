@@ -1,13 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Body, Param, UseGuards, Request, Post } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ChatRoom } from '@prisma/client';
 import { Jwt2faAuthGuard } from 'src/auth/guards/jwt2fa.guard';
+import { ValidationPipe } from 'src/user/validation.pipe';
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
+import { ChatRoomI } from './interfaces/chatRoom.interface';
 
 @Controller('chat')
 export class ChatController {
-  constructor(private readonly chatService: ChatService) {}
+  constructor(private readonly chatService: ChatService,
+              private readonly eventEmitter: EventEmitter2) {}
 
   /**
   * @api {get} /chat/room/ Récupérer la liste des salons
@@ -93,4 +97,13 @@ export class ChatController {
   async getPublicRooms(): Promise<ChatRoom[]> {
     return await this.chatService.getPublicRooms();
   }
+  
+  @Post("create")
+  @UseGuards(Jwt2faAuthGuard)
+  async createRoom(@Request() req, @Body(new ValidationPipe()) createChatDto: CreateChatDto) {
+    const room =  await this.chatService.createRoom(req.user, createChatDto);
+    if (room)
+      this.eventEmitter.emit('room.new', { room: room });
+  }
+
 }

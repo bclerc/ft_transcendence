@@ -15,6 +15,7 @@ import { PenaltiesService } from 'src/chat/services/penalties/penalties.service'
 import e from 'express';
 import { PusnishI } from 'src/chat/interfaces/punish.interface';
 import { BlockedUser } from 'src/chat/interfaces/blocked.interface';
+import { CreateChatDto } from 'src/chat/dto/create-chat.dto';
 
 @Injectable()
 export class WschatService {
@@ -190,7 +191,7 @@ export class WschatService {
     }
   }
 
-  async newRoom(socketId: string, room: newChatRoomI) {
+  async newRoom(socketId: string, room: CreateChatDto) {
     const user = this.onlineUserService.getUser(socketId);
     let newRoom: ChatRoom;
     

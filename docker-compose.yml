@@ -12,8 +12,6 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - ${DB_PORT}:${DB_PORT}
     networks:
       trans_network:
         aliases: 

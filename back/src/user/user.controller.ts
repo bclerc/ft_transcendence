@@ -45,11 +45,7 @@ export class UserController {
   * 
   */
 
-  @Get()
-  @UseGuards(Jwt2faAuthGuard)
-  async findAll(): Promise<User[]> {
-    return this.userService.findAll();
-  }
+
 
   @Get("me")
   @UseGuards(Jwt2faAuthGuard)
