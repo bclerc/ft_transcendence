@@ -149,7 +149,7 @@ export class WschatService {
     const target = await this.userService.findOne(room.targetId);
     const roomToEject = await this.chatService.getRoomById(room.roomId);
     if (user && target && roomToEject && target.id != roomToEject.ownerId) {
-      if (roomToEject.admins.find(admin => admin.id == user.id) || user.id == roomToEject.ownerId) {
+      if (isRoomAdministrator(user, roomToEject)) {
         await this.chatService.removeUsersFromRoom(roomToEject.id, target.id);
         this.eventEmitter.emit('room.user.kicked', { room: roomToEject, user: target, kicker: user });
       }
