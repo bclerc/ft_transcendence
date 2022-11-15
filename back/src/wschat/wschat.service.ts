@@ -16,6 +16,22 @@ import e from 'express';
 import { PusnishI } from 'src/chat/interfaces/punish.interface';
 import { BlockedUser } from 'src/chat/interfaces/blocked.interface';
 import { CreateChatDto } from 'src/chat/dto/create-chat.dto';
+import { UserInfoI } from 'src/user/interface/userInfo.interface';
+
+
+function isRoomAdministrator(user: UserInfoI | BasicUserI, room: ChatRoomI) : boolean {
+    
+  if (!user || !room)
+        return false;
+  if (room.ownerId == user.id)
+      return true;
+  for (const admin of room.admins) {
+      if (admin.id === user.id) {
+          return true;
+      }
+  }
+  return false; 
+}
 
 @Injectable()
 export class WschatService {
@@ -40,65 +56,71 @@ export class WschatService {
     this.sendToUser(user, 'rooms', rooms);
   }
 
+
   async subscribeToRoom(socketId: string, subRoom: SubscribeRoomDto) {
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(subRoom.roomId);
-    const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);   
+    let   message, success = true;
     
     if (user && room) {
+      const penalty = await this.penaltiesService.getRoomPenaltiesForUser(user.id, room.id);   
       if (penalty && penalty.type === PenaltyType.BAN) {
-        this.eventEmitter.emit('room.user.join', {
-          room: room,
-          user: user,
-          success: false,
-          message: 'Vous avez été banni de ce salon' + (penalty.timetype === 'PERM' ? '.' : ' jusqu\'au ' + penalty.endTime.toLocaleString('fr-FR'))
-        });
-        return ;
-      }
-
-        if (!await this.chatService.canJoin(room.id, subRoom.password)) {
-          this.eventEmitter.emit('room.user.join', {
-            room: room,
-            user: user,
-            success: false,
-            message: 'Mot de passe incorrect',
-          });
-          return ;
+          success = false,
+          message = 'Vous avez été banni de ce salon' 
+                  + (penalty.timetype === 'PERM' ? '.' 
+                  : ' jusqu\'au ' + penalty.endTime.toLocaleString('fr-FR'))
         }
 
+      if (!await this.chatService.canJoin(room.id, subRoom.password))
+      {
+         success = false;
+         message =  'Mot de passe incorrect';
+      }
+     
+      if (success)
         await this.chatService.addUsersToRoom(room.id, user.id);
-        this.eventEmitter.emit('room.user.join', {
-          room: room,
-          user: user,
-          success: true,
-        });
+
+     this.eventEmitter.emit('room.user.join', {
+       room: room,
+       user: user,
+       success: success,
+       message: message,
+     });
     }
   }
 
   async punishUser(socketId: string, event: PusnishI) {
-    const user = this.onlineUserService.getUser(socketId);
-    const target = await this.userService.findOne(event.targetId);
-    const room = await this.chatService.getRoomById(event.roomId);
+    const info = {
+      user: await this.userService.findOne(event.targetId),
+      room: await this.chatService.getRoomById(event.roomId),
+      punisher: this.onlineUserService.getUser(socketId)
+    };
     const now = new Date().getTime();
-    let endTime: Date;
+    let message, success = true, endTime: Date;
 
-    if (user && target && room) {
-      if (room.admins.find(admin => admin.id == user.id) || user.id == room.ownerId) {
-        if (room.ownerId != target.id) {
+    if (info.user && info.punisher && info.room) 
+    {
+      if (isRoomAdministrator(info.punisher, info.room)) {
+        if (info.room.ownerId != info.user.id) {
           endTime = new Date(now + event.time);
-          this.penaltiesService.punishUser(target.id, room.id, event.type, event.perm ? null : endTime);
-          this.eventEmitter.emit('room.user.punished', 
-          { room: room, user: target, punisher: user, type: event.type, success: true});
+          this.penaltiesService.punishUser(info.user.id, info.room.id, event.type, event.perm ? null : endTime);
         } else {
-          this.eventEmitter.emit('room.user.punished',
-            { room: room, user: target, punisher: user, type: event.type, success: false, message: 'Vous ne pouvez pas punir le propriétaire du salon'});
+          success = false;
+          message = 'Vous ne pouvez pas punir le propriétaire du salon';
         }
       } else {
-        this.eventEmitter.emit('room.user.punished', 
-          { room: room, user: target, punisher: user, type: event.type, success: false, message: 'Vous n\'êtes pas administrateur de ce salon'});
+        success = false;
+        message = 'Vous n\'avez pas les droits pour punir un utilisateur';
       }
-    }
+      this.eventEmitter.emit('room.user.punished', 
+      { 
+        type: event.type,
+        success: success, 
+        message: message,
+        ...info,
+    });
   }
+}
 
 
   async pardonUser(socketId: string, event: PardonI) {
