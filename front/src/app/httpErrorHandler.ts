@@ -37,10 +37,18 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               errorMessage = error.error.message;
               this.router.navigate(['code'])
             }
-            else if (error.status === 407 && error.error.message === "displayname already used")
+            else if (error.status === 409 && error.error.message === "displayname already used")
             {
               errorMessage = error.error.message;
               this.snackBar.open("Le pseudo est deja utilisé", 'Undo', 
+              {
+                duration: 3000
+              })
+            }
+            else if (error.status === 401)
+            {
+              errorMessage = error.error.message;
+              this.snackBar.open("Invalid 2FA code", 'Undo', 
               {
                 duration: 3000
               })
@@ -51,8 +59,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               this.router.navigate([''])
             }
                     
-            // console.log(errorMessage);
-            return throwError(errorMessage);
+            // console.log(errorMessage);:
+          return throwError(errorMessage);
                 })
             )
     }

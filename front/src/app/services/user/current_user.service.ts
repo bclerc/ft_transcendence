@@ -10,9 +10,7 @@ import { Socket } from "ngx-socket-io";
 
 @Injectable()
 export class CurrentUserService {
-    
     user! : Observable<UserI>;
-
 
     subscription!: Subscription;
     

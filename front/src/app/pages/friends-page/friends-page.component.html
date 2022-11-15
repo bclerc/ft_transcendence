@@ -1,6 +1,6 @@
 
 <div class="container">
-	<mat-card>
+	<!-- <mat-card>
 	<mat-card-title>
 		Amis
 	</mat-card-title>
@@ -21,7 +21,7 @@
 			</mat-list-item>
 		</mat-list>
 		</mat-card-content>
-	</mat-card>
+	</mat-card> -->
 	<ul class="demandes">
 		<li *ngFor="let request of (pandingFriends | async)">
 			<div class="info-demande">
@@ -44,12 +44,12 @@
 		</li>
 	</ul>
 
-	<mat-card>
+	<!-- <mat-card>
 		<mat-card-title>
 			Inviter un utilisateur
 		</mat-card-title>
 		<mat-card-content>
 		<app-userselect (addUser)="addFriend($event)"></app-userselect>
 		</mat-card-content>
-	</mat-card>
+	</mat-card> -->
 </div>
