@@ -1,6 +1,11 @@
 <div *ngIf="navbar.visible">
-    <app-header></app-header>
+	<app-header></app-header>
 </div>
-<router-outlet></router-outlet>
+
+<div *ngIf="burgerMenu.visible">
+	<router-outlet></router-outlet>
+</div>
+
+
 
 
