@@ -54,7 +54,7 @@ export class UserPunishEvent {
 export class PardonEvent {
   room: ChatRoomI;
   user: BasicUserI;
-  pardoner: BasicUserI;
+  pardonner: BasicUserI;
   success: boolean;
   message?: string;
 }

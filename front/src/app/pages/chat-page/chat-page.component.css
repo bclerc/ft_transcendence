@@ -99,12 +99,15 @@ a{
 	box-shadow: -3px 3px #ee481e;
 }
 
-.pute {
+.switch-groupes-amis {
 	flex-direction: column;
+}
+.switch-groupes-amis{
+  width: 240px;
 }
 
 /* Styles for tab labels */
-.pute .mat-tab-label {
+.switch-groupes-amis .mat-tab-label {
 	min-width: 40px !important;
 	padding: 15px;
 	border-radius: 40px;
@@ -117,7 +120,7 @@ a{
 }
 
 /* Styles for the active tab label */
-.pute .mat-tab-label.mat-tab-label-active {
+.switch-groupes-amis .mat-tab-label.mat-tab-label-active {
 	min-width: 40px !important;
 	padding: 15px;
 	background-color: #ee481e;

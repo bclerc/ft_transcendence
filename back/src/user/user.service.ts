@@ -288,6 +288,23 @@ export class UserService {
     }
   }
 
+  async setStates(users: BasicUserI[], status: UserState) {
+    if (users && status) {
+      for (const user of users) {
+        const loggedUser: boolean = this.onlineUserService.getUser(null, user.id) !== undefined;
+        await this.prisma.user.update({
+          where: {
+            id: Number(user.id),
+          },
+          data: {
+            state: loggedUser ? status : UserState.OFFLINE,
+          },
+        });
+      }
+    }
+  }
+
+
   /**
    * Blocked user
    */

@@ -72,11 +72,17 @@ export class ChatService {
             user: {
               id: userId,
             },
-            endTime: {
-              gte: new Date(),
-            },
+            OR: [
+              {
+                endTime: {
+                  gte: new Date(),
+                },
+              },
+              {
+                timetype: 'PERM',
+              } 
+            ]
           }
-
         },
         users: {
           some: {
@@ -264,8 +270,6 @@ export class ChatService {
 
 
   async getMessagesFromRoom(userId: number, room: ChatRoomI): Promise<Message[]> {
-
-
     const messages = await this.prisma.message.findMany({
       where: {
         room: {
@@ -386,6 +390,7 @@ export class ChatService {
   async createRoom(owner: BasicUserI, newRoom: CreateChatDto): Promise<ChatRoom> {
     let hashedPassword = null;
 
+    console.log(newRoom);
     if (newRoom.password != null)
       hashedPassword = await this.passUtils.hashPass(newRoom.password);
 

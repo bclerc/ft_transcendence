@@ -41,9 +41,13 @@ export class EditDialogComponent implements OnInit {
     private snack: MatSnackBar,
     private socket: Socket,
     public dialog: MatDialog) { 
-
         this.user = data.user;
         this.room = data.room;
+        this.room.users.find((user) => {
+          if (user.id == this.user.id) {
+            this.userIsAdmin = true
+          }
+        });
     }
               
              
@@ -66,9 +70,7 @@ export class EditDialogComponent implements OnInit {
       password: null,
       users: this.room.users,
     });
-    if (this.room.admins.includes(this.user)) {
-      this.userIsAdmin = true;
-    }
+
   }
 
   sendRequest(userId: number | undefined)

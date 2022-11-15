@@ -1,11 +1,13 @@
 
 import { C } from '@angular/cdk/keycodes';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ElementRef, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { TokenStorageService } from '../auth/token.storage';
 import { ChatRoom, newRoom } from './chatRoom.interface';
 import { Message } from './message.interface';
 @Injectable({
@@ -16,7 +18,8 @@ export class ChatService {
 
   constructor(public socket: Socket,
               private snackBar: MatSnackBar,
-              private http: HttpClient
+              private http: HttpClient,
+              private token : TokenStorageService, private jwtService : JwtHelperService,
               ) { }
 
    sendMessage(message: Message) {
@@ -41,13 +44,12 @@ export class ChatService {
     }
 
     createRoom(room: newRoom) {
-      console.log("Creating room", room);
       this.http.post('http://'+ environment.host +':3000/api/v1/chat/create', room).subscribe(
-        (data: any) => {
-          console.log("data =", data)
-          this.socket.emit('createRoom', data);
-        }
-      )
+        (data : any) => {
+          this.snackBar.open(data.message, 'OK', {
+            duration: 2000,
+          });
+        });
     }
 
     editRoom(room: ChatRoom) {

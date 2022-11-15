@@ -1,4 +1,5 @@
-import { Game } from "@prisma/client";
+import { Game, GameState, User } from "@prisma/client";
+import { BasicUserI } from "src/user/interface/basicUser.interface";
 import { BallI } from "./ball.interface";
 import { PlayerI } from "./player.interface";
 import { PointI } from "./point.interface";
@@ -26,4 +27,14 @@ export interface GameI {
 	id_searchinterval2?: number; //id pour arreter la loop du game pour le player 2
 	type?: number;			//type de la partie; normal/random
   dbGame?: Game
+}
+
+export interface dbGame {
+  id: number;
+  state: GameState;
+  users: BasicUserI[];
+  winner?: BasicUserI;
+  loser?: BasicUserI;
+  winnerScore?: number;
+  loserScore?: number;
 }
