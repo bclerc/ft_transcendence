@@ -72,11 +72,17 @@ export class ChatService {
             user: {
               id: userId,
             },
-            endTime: {
-              gte: new Date(),
-            },
+            OR: [
+              {
+                endTime: {
+                  gte: new Date(),
+                },
+              },
+              {
+                timetype: 'PERM',
+              } 
+            ]
           }
-
         },
         users: {
           some: {

@@ -103,7 +103,7 @@ export class WschatService {
       if (isRoomAdministrator(info.punisher, info.room)) {
         if (info.room.ownerId != info.user.id) {
           endTime = new Date(now + event.time);
-          this.penaltiesService.punishUser(info.user.id, info.room.id, event.type, event.perm ? null : endTime);
+         await this.penaltiesService.punishUser(info.user.id, info.room.id, event.type, event.perm ? null : endTime);
         } else {
           success = false;
           message = 'Vous ne pouvez pas punir le propriétaire du salon';
@@ -124,15 +124,22 @@ export class WschatService {
 
 
   async pardonUser(socketId: string, event: PardonI) {
-    const user = this.onlineUserService.getUser(socketId);
-    const target = await this.userService.findOne(event.userId);
-    const penalty: any = await this.penaltiesService.getPenaltyById(event.penaltyId);
+    const info = {
+      user: await this.userService.findOne(event.userId),
+      pardonner: await this.onlineUserService.getUser(socketId),
+      penalty: await this.penaltiesService.getPenaltyById(event.penaltyId),
+    }
+
     
-    if (user && target && penalty) {
-          const room = penalty.room;
-          if (room.admins.find(admin => admin.id == user.id) || user.id == room.ownerId) {
-            this.penaltiesService.deletePenalty(penalty.id);
-            this.eventEmitter.emit('room.user.pardoned', { room: room, user: target, pardoner: user, success: true});
+    if (info.pardonner && info.user && info.penalty) {
+          const room = info.penalty.room;
+          if (isRoomAdministrator(info.pardonner, room)) {
+            this.penaltiesService.deletePenalty(info.penalty.id);
+            this.eventEmitter.emit('room.user.pardoned', { 
+                room: room,
+                success: true,
+                ...info
+             });
           }       
       }
   }
@@ -234,8 +241,7 @@ export class WschatService {
         if (newRoom.users.length > 0) {
          await this.chatService.updateRoomOwner(room.id, newRoom.users[0].id);
         } else {
-          // delete
-
+          await this.chatService.deleteRoom(room.id);
           this.eventEmitter.emit('room.delete', { room: room });
         }
       }
