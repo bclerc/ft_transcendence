@@ -23,7 +23,7 @@
 					</div>
 
 					<!-- SWITCH -->
-					<mat-tab-group class="pute" [selectedIndex]="selected.value">
+					<mat-tab-group class="switch-groupes-amis" [selectedIndex]="selected.value">
 
 						<!-- MES GROUPES -->
 						<mat-tab>
@@ -85,6 +85,9 @@
 								</ng-container>
 								Mes amis
 							</ng-template>
+              <ng-container *ngIf="(dmRooms$ | async )">
+                 <img src="../../../assets/img/illu-aucun-ami.png"  alt="empty">
+              </ng-container>
 							<ul>
 								<li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
 									<p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).displayname }}

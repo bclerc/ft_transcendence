@@ -128,8 +128,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     if (event.success)
     {
       this.updateRoomForUsersInRoom(event.room.id);
-      this.sendToUser(event.user, 'notification', "Vous avez été pardonné de la room " + event.room.name + " par " + event.pardoner.intra_name);
-      this.sendToUser(event.pardoner, 'notification', "Vous avez pardonné " + event.user.intra_name + " de la room " + event.room.name);
+      this.sendToUser(event.user, 'notification', "Vous avez été pardonné de la room " + event.room.name + " par " + event.pardonner.intra_name);
+      this.sendToUser(event.pardonner, 'notification', "Vous avez pardonné " + event.user.intra_name + " de la room " + event.room.name);
     }
   }
 
