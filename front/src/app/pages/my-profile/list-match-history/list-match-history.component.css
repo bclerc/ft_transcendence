@@ -118,6 +118,7 @@ hr.clear{
 
 .VS #my-profile img, #my-enemy img{
 	width: 50px; /* TODO: pb en responsive */
+	min-width: 50px;
 	height: 50px;
 	object-fit: cover;
 	border-radius: 40px;
@@ -189,6 +190,7 @@ hr.clear{
 	}
 	
 	.VS #my-profile img, #my-enemy img{
+		width: 35px;
 		min-width: 35px;
 		height: 35px;
 	}
@@ -219,6 +221,7 @@ hr.clear{
 		font-size: 12px;
 	}
 	.VS #my-profile img, #my-enemy img{
+		width: 30px;
 		min-width: 30px;
 		height: 30px;
 	}
