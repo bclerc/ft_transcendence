@@ -264,8 +264,6 @@ export class ChatService {
 
 
   async getMessagesFromRoom(userId: number, room: ChatRoomI): Promise<Message[]> {
-
-
     const messages = await this.prisma.message.findMany({
       where: {
         room: {
