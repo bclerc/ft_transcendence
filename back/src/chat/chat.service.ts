@@ -470,6 +470,7 @@ export class ChatService {
         },
     });
 
+
     await this.prisma.chatRoom.deleteMany({
       where: {
         type: ChatRoomType.DM,
@@ -654,6 +655,12 @@ export class ChatService {
       },
     });
   
+    await this.prisma.chatRoom.delete({
+      where: {
+        id: roomId,
+      },
+    });
+
     await this.prisma.chatRoom.delete({
       where: {
         id: roomId,
