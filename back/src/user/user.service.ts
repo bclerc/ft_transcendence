@@ -262,6 +262,7 @@ export class UserService {
         },
         data: {
           displayname: update.displayname,
+          avatar_url: update.avatar_url,
         }
       });
       return {
@@ -292,6 +293,7 @@ export class UserService {
     if (users && status) {
       for (const user of users) {
         const loggedUser: boolean = this.onlineUserService.getUser(null, user.id) !== undefined;
+        console.log("sending status to user " + user.id + " : " + status);
         await this.prisma.user.update({
           where: {
             id: Number(user.id),
