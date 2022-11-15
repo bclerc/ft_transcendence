@@ -78,6 +78,7 @@ export class ModifyMyProfileComponent implements OnInit {
   DesactivateFa(): void {
     this.userService.DesactivateFacode().subscribe(
       (data : any) => {
+        this.snackBar.open("2FA desactivé", 'Undo')
         //  console.log("data =",data);
         //this.ob = data;
       },
@@ -97,6 +98,4 @@ showActivate2Fa(): void{
 hideActivate2Fa(): void {
   this.show = false;
 }
-  ChangeAvatar_url(): void{
-  }
 }
