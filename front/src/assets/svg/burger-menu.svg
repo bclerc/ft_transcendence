@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="40px" height="28px" viewBox="0 0 40 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>burger menu</title>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="header" transform="translate(-844.000000, -69.000000)" fill="#FEEFCF">
-            <g id="Group" transform="translate(844.000000, 69.000000)">
-                <rect id="rect1" x="0" y="0" width="40" height="6" rx="3"></rect>
-                <rect id="rect3" x="0" y="22" width="40" height="6" rx="3"></rect>
-                <rect id="rect2" x="10" y="11" width="30" height="6" rx="3"></rect>
-            </g>
-        </g>
+<svg width="32px" height="28px" viewBox="0 0 32 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>burger-menu</title>
+    <g id="burger-menu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="rect1" fill="#FEEFCF" x="0" y="0" width="32" height="5" rx="2.5"></rect>
+        <rect id="rect3" fill="#FEEFCF" x="0" y="23" width="32" height="5" rx="2.5"></rect>
+        <rect id="rect2" fill="#FEEFCF" x="10" y="11.5" width="22" height="5" rx="2.5"></rect>
     </g>
 </svg>
