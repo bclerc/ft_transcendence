@@ -15,27 +15,28 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./list-my-friend.component.css']
 })
 export class ListMyFriendComponent implements OnInit {
-  @Input() user! : UserI;
+  @Input() user! : UserI
+  @Input()friends! : UserI[];
 
   constructor (  
                 public userService : UserService,
               ) {}
 
-  friends! : UserI[];
+  
   subscriptionFriend!: Subscription;
 
   ngOnInit(): void {
-    this.subscriptionFriend =  this.userService.getFriends().subscribe(
-      (data : any) => {
-        this.friends = data;
-      }
-    );
+    // this.subscriptionFriend =  this.userService.getFriends().subscribe(
+    //   (data : any) => {
+    //     this.friends = data;
+    //   }
+    // );
   }
 
   ngOnDestroy() : void
     {
-      if (this.subscriptionFriend != undefined)
-        this.subscriptionFriend.unsubscribe;
+      // if (this.subscriptionFriend != undefined)
+      //   this.subscriptionFriend.unsubscribe;
     }
 
     removeFriend(id : number | undefined) : void
