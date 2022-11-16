@@ -65,7 +65,7 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 
 ////
 
-export const MAX_SCORE = 5;
+export const MAX_SCORE = 2;
 
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
@@ -255,7 +255,6 @@ export class PongService {
 
     keyup(game: GameI, client: Socket,  key: string)
     {
-        console.log("keyup");
         if (key === 'z' || key === 'w')
         {
             if (game.player1.socket === client)

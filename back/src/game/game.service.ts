@@ -39,6 +39,7 @@ export class GameService {
         loser: true,
       }
     });
+
   }
 
   async createGame(users: BasicUserI[]): Promise<Game>{
@@ -93,11 +94,24 @@ export class GameService {
   async stopGame(id: number, winnerId: number, loserId: number, loserScore: number, winnerScore: number): Promise<Game> {
     
     const game = await this.getGameById(id);
-
     if (game && game.users)
     {
       this.userService.setState(winnerId, UserState.ONLINE);
       this.userService.setState(loserId, UserState.ONLINE);
+
+      // get leaderboard position
+
+
+      await this.prisma.user.update({
+        where: {
+          id: winnerId
+        },
+        data: {
+          score: {
+            increment: winnerScore
+          }
+        }
+      });
 
       return await this.prisma.game.update({
         where: {
@@ -112,7 +126,10 @@ export class GameService {
         }
       })
     }
+    
+
     return null;
   }
+
 }
 

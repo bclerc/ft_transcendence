@@ -91,7 +91,7 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<UserInfoI> {
-    const user = await this.prisma.user.findUnique({
+    const user: UserInfoI = await this.prisma.user.findUnique({
       where: {
         id: Number(id),
       },
@@ -142,14 +142,23 @@ export class UserService {
             },
             winnerScore: true,
             loserScore: true,
-          }
+          },
         },
         blockedUsers: true,
         twoFactorEnabled: true,
         createdAt: true,
         updatedAt: true,
+        score: true,
+        _count: {
+          select: {
+            games_win: true,
+            games_lose: true,
+            games: true,
+          }
+        }
       }
     });
+    user.position_in_leaderboard = await this.getLeaderboardPosition(user.id);
     return user;
   }
 
@@ -194,6 +203,14 @@ export class UserService {
         displayname: true,
         email: true,
         avatar_url: true,
+        score: true,
+        _count: {
+          select: {
+            games_win: true,
+            games_lose: true,
+            games: true,
+          }
+        }
       },
     });
     if (user === undefined)
@@ -293,7 +310,6 @@ export class UserService {
     if (users && status) {
       for (const user of users) {
         const loggedUser: boolean = this.onlineUserService.getUser(null, user.id) !== undefined;
-        console.log("sending status to user " + user.id + " : " + status);
         await this.prisma.user.update({
           where: {
             id: Number(user.id),
@@ -306,6 +322,46 @@ export class UserService {
     }
   }
 
+  async getFriends(userId: number): Promise<BasicUserI[]> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number(userId),
+      },
+      select: {
+        friends: {
+          select: {
+            id: true,
+            state: true,
+            displayname: true,
+            intra_name: true,
+            email: true,
+            avatar_url: true,
+            score: true,
+            _count: {
+              select: {
+                games_win: true,
+                games_lose: true,
+                games: true,
+              }
+            }
+          },
+        },
+      },
+    });
+    return user.friends;
+  }
+
+  async getLeaderboardPosition(userId: number): Promise<number> {
+    const leaderboard = await this.prisma.user.findMany({
+      orderBy: {
+        score: 'desc',
+      },
+      select: {
+        id: true,
+      },
+    });
+    return leaderboard.findIndex((user) => user.id === userId) + 1;
+  }
 
   /**
    * Blocked user
