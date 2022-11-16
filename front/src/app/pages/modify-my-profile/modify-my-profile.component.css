@@ -107,7 +107,7 @@ a{
 	font-size: 35px;
 	color: #feefcf;
 }
-#edit{
+#edit, #activate, #blocked{
     margin-bottom: 60px;
 }
 
@@ -116,6 +116,39 @@ a{
 	display: flex;
     flex-direction: row;
 	margin-bottom: 30px;
+}
+.input-n-button{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+#edit button{
+    /* width: 35px; */
+    height: 35px;
+    margin-left: 25px;
+	font-family: ReadexPro-Medium;
+	color: #feefcf;
+	background-color: transparent;
+	border-radius: 6px;
+	border: 2px solid #343330;
+	padding: 4px 10px 4px 10px;
+	margin-top: -5px;
+}
+#edit button:hover{
+	color: #ee481e;
+	cursor: pointer;
+	border: 2px solid #ee481e;
+}
+#edit button:focus{
+	outline: none;
+}
+#edit button:hover{
+	color: #43EE1E;
+	cursor: pointer;
+	border: 2px solid #43EE1E;
+}
+#edit button img{
+	margin-left: 4px;
 }
 
 /* champs de text ------------------------------------------------------------------------- */
@@ -147,7 +180,7 @@ textarea{
 #input-text {
 	border-radius: 10px;
 	padding: 15px 15px 0px 15px;
-	width: 100%;
+	/* width: 100%; */
 	background: #343330;
 	border: none;
 	resize: none;
@@ -167,3 +200,5 @@ textarea{
 	margin-bottom: 5px;
 	color:#feefcf;
 }
+
+

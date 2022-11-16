@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
-html, body {
+body {
   background-color: #1F1F1F;
 }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -8,6 +8,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 mat-dialog-container {
-  background-color: #1F1F1F !important;
+  background-color: #1f1f1f !important;
   border-radius: 20px !important;
+}
+
+.custom-modalbox mat-dialog-container{
+  background-color: #1f1f1f !important;
+  /* background-color: #feefcf !important; */
+  border: 12px solid #ee481e;
 }
