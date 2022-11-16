@@ -54,6 +54,7 @@ export class EditDialogComponent implements OnInit {
   openDialog(target: UserI, penalty: string): void {
     this.dialog.open(PenaltyDialogComponent, {
       panelClass: 'custom-modalbox',
+      backdropClass: 'backdropBackground',
       data: {target: target, room: this.room, penalty: penalty}
     });
   }
