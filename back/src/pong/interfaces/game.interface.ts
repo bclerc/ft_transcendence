@@ -6,7 +6,7 @@ import { PointI } from "./point.interface";
 import { UserI } from "./user.interface";
 
 export interface GameI {
-	id?: string;			//id de la partie actuelle
+	id?: number;			//id de la partie actuelle
 	player1?: PlayerI; 		//info du playeur 1
 	player2?: PlayerI;		//info du playeur 2
 	ball?: BallI;			//info de la balle

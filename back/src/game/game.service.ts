@@ -42,21 +42,39 @@ export class GameService {
 
   }
 
-  async createGame(users: BasicUserI[]): Promise<Game>{
-    if (users.length < 2 || users.length > 2)
-      throw new Error("Invalid number of users");
+  async createGame(user: BasicUserI): Promise<Game>{
+    if (user) {
       return this.prisma.game.create({
         data: {
           users: {
-            connect: users.map(user => {
-              return {id: user.id}
-            })
+            connect: {
+              id: user.id
+            },
           },
         },
       })
+    }
   }
 
-  
+  async addPlayerToGame(gameId: number, userId: number): Promise<Game> {
+    const game = await this.getGameById(gameId);
+    if (game && game.users) {
+      if (game.users.length < 2) {
+        return this.prisma.game.update({
+          where: {
+            id: gameId
+          },
+          data: {
+            users: {
+              connect: {
+                id: userId
+              }
+            }
+          }
+        });
+    }
+  }
+}
   async getGameById(id: number): Promise<dbGame> {
     return await this.prisma.game.findUnique({
       where: {

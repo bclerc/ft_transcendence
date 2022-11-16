@@ -1,0 +1,26 @@
+<div class="names">
+  <div class="playerNameLeft" id="leftName">
+    {{ game.users[0].displayname }}
+  </div>
+  <div class="playerNameRight" id="rightName">
+    {{ game.users[1] ? game.users[1].displayname  :"Waiting" }}
+  
+  </div>
+</div>
+
+<div align="center">
+<!-- <canvas id="pong" height=400 width=600 #canvasPong></canvas> -->
+<canvas id="pong" class="pongCanvas" (window:resize)="onResizeWin($event)"></canvas>
+<div id="idGame"></div>
+</div>
+
+<!-- <div id="log">
+<div id="canvasWidth"></div>
+<div id="canvasHeight"></div>
+<div id="ballX"></div>
+<div id="ballY"></div>
+<div id="middleLineX"></div>
+<div id="middleLineY"></div>
+</div> -->
+
+<div class="score_c" id="score">0 : 0</div>

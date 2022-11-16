@@ -5,6 +5,7 @@ import { identity } from "rxjs";
 import { Server, Socket } from "socket.io";
 import { GameService } from "src/game/game.service";
 import { OnlineUserService } from "src/onlineusers/onlineuser.service";
+import { BasicUserI } from "src/user/interface/basicUser.interface";
 import { GameI } from "./interfaces/game.interface";
 import { UserI } from "./interfaces/user.interface";
 import { PongService } from "./services/pong.service";
@@ -12,17 +13,20 @@ import { PongService } from "./services/pong.service";
 const NORMALGAME = 0;
 const MAX_MAP = 3;
 
+
+
 @WebSocketGateway(8181, {
 	cors: {
 		origin: "*"
 	}
 })
+
 export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 	
 	@WebSocketServer()
 	server: Server;
 	state: GameI;
-	gamesMap: Map<string, GameI>;
+	gamesMap: Map<number, GameI>;
 	connectedUsers: UserI[];
 
 
@@ -45,7 +49,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		};
 		// this.allGames = [];
 		// this.allRandomGames = [];
-		this.gamesMap = new Map<string, GameI>;
+		this.gamesMap = new Map<number, GameI>;
 	};
 
 	//////
@@ -120,15 +124,24 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@SubscribeMessage('newGame')
 	async newGame(client: Socket, normalOrNot: boolean)
 	{
+    let user = this.onlineUserService.getUser(client.id);
+    if (user)
+    {
+      if (this.pongService.userIsInGame(user, this.gamesMap))
+      {
+        client.emit('notification', "You are already in a game");
+         return ;
+      }
+    }
+
 		// var game: GameI = this.searchGameAwaiting();
-    let dbGame: Game;
 		let game: GameI = this.searchGameMapAwaiting(normalOrNot);
 		if (game)
 		{
-			console.log(game);
+      console.log(game);
+			console.log("Match found " + client.id + " joined game " + game.id);
 			this.pongService.joinGame(client, game);
 			// client.emit('drawName', 0);
-      game.dbGame = await this.gameService.createGame([game.player1.user, game.player2.user]);
 			await this.pongService.delay(1500);
 			if (game.player1.socket)
 				game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
@@ -138,11 +151,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			game.id_searchinterval1 = 0;
 			game.id_searchinterval2 = 0;
 			await this.pongService.drawInit(game);
-			console.log("game started");
-			game.player1.socket.emit('user1',game.player1.user);
-			game.player1.socket.emit('user2',game.player2.user);
-			game.player2.socket.emit('user1',game.player1.user);
-			game.player2.socket.emit('user2',game.player2.user);
+			console.log("game started", game.id);
 
 			//le front ne sauvegarde pas l'id de la map bordel de mierde de la madre de dia
 			//obliger de boucler a chaque keyboardEvent
@@ -224,12 +233,19 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.connectedUsers.push(user);
 	}
 
-	private creatNewGameMap(client: Socket, mapId: number) {
+	private async creatNewGameMap(client: Socket, mapId: number) {
+    const user = this.onlineUserService.getUser(client.id);
 		var game: GameI = this.pongService.initState();
-		game = {
-			id: client.id,
+    var dbGame: Game = await this.gameService.createGame(user);
+
+    if (game && dbGame)
+    {
+
+      console.log("No match found, creating new game with id:", dbGame.id);
+      game = {
+			id: dbGame.id,
 			player1: {
-        user: this.onlineUserService.getUser(client.id),
+        user: user,
 				socket: client,
 				paddle: game.player1.paddle,
 				points: game.player1.points,
@@ -237,14 +253,15 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			player2: undefined,
 			mapId: mapId,
 			ball: game.ball,
-			obstacle: game.obstacle
+			obstacle: game.obstacle,
+      dbGame: dbGame
 		}
-
+  }
+    
 		//Random uniqId:
 
-
+    
 		this.gamesMap.set(game.id, game);
-		console.log(game);
 		// client.emit("getId", game.id);
 		// this.allGames.push(game);
 	}
@@ -261,4 +278,17 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			}
 		}
 	}
+
+
+  sendToPlayers(game: GameI, event: string, data: any) {
+    if (game && event) {
+      if (game.player1 && game.player1.socket) {
+        game.player1.socket.emit(event, data);
+      }
+      if (game.player2 && game.player2.socket) {
+        game.player2.socket.emit(event, data);
+      }
+      //spectators
+    }
+  }
 }
