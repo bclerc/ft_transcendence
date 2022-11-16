@@ -1,177 +1,50 @@
 <h2>Mes matchs</h2>
-<ul class="match-list">
+<div class="match-list">
 
 	<!-- MATCH -->
-	<li>
-		<div class="result">
-			<span id="win">Victoire</span>
+
+	<ng-container *ngFor="let games of user.games">
+		<div id="match">
+			<div class="result">
+				<div *ngIf="whoWin(games.winner.id); then thenBlock else elseBlock"></div>
+				<ng-template #thenBlock>
+					<span id="win">Victoire</span>
+				</ng-template>
+				<ng-template #elseBlock>
+					<span id="loose">Défaite</span>
+				</ng-template>
+				<!-- <p *ngIf=whoWin(games.id)>  <span id="win">Victoire</span></p> -->
+				<!-- <p *ngIf=!whoWin(games.id)>  <span id="loose">Défaite</span></p> -->
+			</div>
+
+			<div class="VS">
+
+				<!-- Moi -->
+				<div id="my-profile">
+					<!-- <img src="../../../../assets/img/default_profile_picture.webp" alt=""> -->
+					<a [routerLink]="['/profile/' + games.winner.id ]">
+						<img [src]="games.winner.avatar_url" [alt]="games.winner.displayname"/>
+						{{games.winner.displayname}}
+					</a>
+				</div>
+
+				<!-- Scores -->
+				<div id="scores">
+					<div id="score-lol"><span id="winner-score">{{games.winnerScore}}</span></div>
+					<div id="score-lol"><span id="loser-score">{{games.loserScore}}</span></div>
+				</div>
+
+				<!-- Adversaire -->
+				<div id="my-enemy">
+					<!-- <img src="games.loser.avatar_url" alt=""> -->
+					<a [routerLink]="['/profile/' + games.loser.id ]">
+						<img [src]="games.loser.avatar_url" [alt]="games.loser.displayname"/>
+						{{games.loser.displayname}}
+					</a>
+				</div>
+			</div>
+
 		</div>
-		<div class="VS">
+	</ng-container>
 
-			<!-- Moi -->
-			<div id="my-profile">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a>vserra7890</a>
-			</div>
-
-			<!-- Scores -->
-			<div id="scores">
-				<div id="score-lol"><span id="winner-score">58</span></div>
-				<div id="score-lol"><span id="loser-score">28</span></div>
-			</div>
-
-			<!-- Adversaire -->
-			<div id="my-enemy">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a href="son-profil">mmarcus</a>
-			</div>
-		</div>
-	</li>
-
-	<!-- MATCH -->
-	<li>
-		<div class="result">
-			<span id="win">Victoire</span>
-		</div>
-		<div class="VS">
-
-			<!-- Moi -->
-			<div id="my-profile">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a>vserra7890</a>
-			</div>
-
-			<!-- Scores -->
-			<div id="scores">
-				<div id="score-lol"><span id="winner-score">58</span></div>
-				<div id="score-lol"><span id="loser-score">28</span></div>
-			</div>
-
-			<!-- Adversaire -->
-			<div id="my-enemy">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a href="son-profil">vserra7890</a>
-			</div>
-		</div>
-	</li>
-
-	<!-- MATCH -->
-	<li>
-		<div class="result">
-			<span id="loose">Défaite</span>
-		</div>
-		<div class="VS">
-
-			<!-- Moi -->
-			<div id="my-profile">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a>vserra7890</a>
-			</div>
-
-			<!-- Scores -->
-			<div id="scores">
-				<div id="score-lol"><span id="loser-score">12</span></div>
-				<div id="score-lol"><span id="winner-score">71</span></div>
-			</div>
-
-			<!-- Adversaire -->
-			<div id="my-enemy">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a href="son-profil">0123456789</a>
-			</div>
-		</div>
-	</li>
-
-	<!-- MATCH -->
-	<li>
-		<div class="result">
-			<span id="loose">Défaite</span>
-		</div>
-		<div class="VS">
-
-			<!-- Moi -->
-			<div id="my-profile">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a>vserra7890</a>
-			</div>
-
-			<!-- Scores -->
-			<div id="scores">
-				<div id="score-lol"><span id="loser-score">12</span></div>
-				<div id="score-lol"><span id="winner-score">71</span></div>
-			</div>
-
-			<!-- Adversaire -->
-			<div id="my-enemy">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a href="son-profil">0123456789</a>
-			</div>
-		</div>
-	</li>
-
-	<!-- MATCH -->
-	<li>
-		<div class="result">
-			<span id="loose">Défaite</span>
-		</div>
-		<div class="VS">
-
-			<!-- Moi -->
-			<div id="my-profile">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a>vserra7890</a>
-			</div>
-
-			<!-- Scores -->
-			<div id="scores">
-				<div id="score-lol"><span id="loser-score">12</span></div>
-				<div id="score-lol"><span id="winner-score">71</span></div>
-			</div>
-
-			<!-- Adversaire -->
-			<div id="my-enemy">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a href="son-profil">0123456789</a>
-			</div>
-		</div>
-	</li>
-
-	<!-- MATCH -->
-	<li>
-		<div class="result">
-			<span id="loose">Défaite</span>
-		</div>
-		<div class="VS">
-
-			<!-- Moi -->
-			<div id="my-profile">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a>vserra7890</a>
-			</div>
-
-			<!-- Scores -->
-			<div id="scores">
-				<div id="score-lol"><span id="loser-score">12</span></div>
-				<div id="score-lol"><span id="winner-score">71</span></div>
-			</div>
-
-			<!-- Adversaire -->
-			<div id="my-enemy">
-				<img src="../../../../assets/img/default_profile_picture.webp" alt="">
-				<!-- <img [src]="user?.avatar_url" [alt]="user?.intra_name"/> -->
-				<a href="son-profil">0123456789</a>
-			</div>
-		</div>
-	</li>
-</ul>
+</div>

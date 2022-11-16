@@ -1,6 +1,9 @@
 import { Inject } from "@nestjs/common";
 import { WebSocketServer, SubscribeMessage, WebSocketGateway, ConnectedSocket, OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect } from "@nestjs/websockets";
+import { Game } from "@prisma/client";
+import { identity } from "rxjs";
 import { Server, Socket } from "socket.io";
+import { GameService } from "src/game/game.service";
 import { OnlineUserService } from "src/onlineusers/onlineuser.service";
 import { GameI } from "./interfaces/game.interface";
 import { UserI } from "./interfaces/user.interface";
@@ -26,6 +29,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	constructor(
 		private pongService: PongService,
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
+      @Inject(GameService) private gameService: GameService,
 	){
 		console.log("constructor gate");
 		this.connectedUsers = [];
@@ -85,6 +89,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	///KEYS HANDLER
 	///////
 
+
 	@SubscribeMessage('keydown')
 	keydown(client: Socket, keydown: string){
 		// console.log("ici", id);
@@ -115,14 +120,15 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@SubscribeMessage('newGame')
 	async newGame(client: Socket, normalOrNot: boolean)
 	{
-			// var game: GameI = this.searchGameAwaiting();
-		console.log("game started");
+		// var game: GameI = this.searchGameAwaiting();
+    let dbGame: Game;
 		let game: GameI = this.searchGameMapAwaiting(normalOrNot);
 		if (game)
 		{
 			console.log(game);
 			this.pongService.joinGame(client, game);
 			// client.emit('drawName', 0);
+      game.dbGame = await this.gameService.createGame([game.player1.user, game.player2.user]);
 			await this.pongService.delay(1500);
 			if (game.player1.socket)
 				game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);

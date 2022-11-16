@@ -1,11 +1,13 @@
 <ul class="blocked-list">
+    <ng-container *ngIf = user>
+    <ng-container *ngFor="let blocked of user?.blockedUsers">
     <li>
         <div class="info-demande">
             <!-- <img [src]="request.from.avatar_url" [alt]="request.from.intra_name"> -->
-            <img src="../../../../assets/img/default_profile_picture.webp">
+            <img src={{blocked.avatar_url}}>
             <div class="name-n-email">
-                <a href="le profil du gars">vserra7890</a>
-                <span>vserra@student.42.fr</span>
+                <a href="le profil du gars">{{blocked.displayname}}</a>
+                <span>{{blocked.email}}</span>
             </div>
         </div>
         <div class="buttts">
@@ -13,10 +15,18 @@
                 Accepter
                 <img src="../../../../assets/svg/checked.svg" alt="save" >
             </button> -->
-            <button id="unblock">
+            <button id="unblock" (click)="unblock(blocked.id)">
                 Débloquer
                 <!-- <img src="../../../../assets/svg/quit.svg" alt=""> -->
             </button>
         </div>
     </li>
+</ng-container>
+</ng-container>
+
 </ul>
+
+
+
+
+<!-- <p>{{blocked?.displayname }}</p> -->

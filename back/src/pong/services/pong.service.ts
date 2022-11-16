@@ -62,7 +62,9 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 //
 
 ////
-export const MAX_SCORE = 5;
+
+export const MAX_SCORE = 2;
+
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
 export const SPEED_PLAYER = 8
@@ -101,6 +103,8 @@ export class PongService {
         game.player1.socket.emit('drawText', "Start !");
         game.player2.socket.emit('drawText', "Start !");
         await this.delay(200);
+        if (game.dbGame)
+          this.gameService.startGame(game.dbGame.id);
     }
 
 	delay(ms: number) {
@@ -249,7 +253,6 @@ export class PongService {
 
     keyup(game: GameI, client: Socket,  key: string)
     {
-        console.log("keyup");
         if (key === 'z' || key === 'w')
         {
             if (game.player1.socket === client)
@@ -334,18 +337,30 @@ export class PongService {
     {
         var i = 0;
 
+        let winnerId, looserId, winnerScore, looserScore;
+
+
         if (game.player1.points === MAX_SCORE)
         {
             game.player1.socket.emit('win');
             game.player2.socket.emit('lose');
+            winnerId = game.player1.user.id;
+            looserId = game.player2.user.id;
+            winnerScore = game.player1.points;
+            looserScore = game.player2.points;
         }
         else
         {
             game.player1.socket.emit('lose');
             game.player2.socket.emit('win');
+            winnerId = game.player2.user.id;
+            looserId = game.player1.user.id;
+            winnerScore = game.player2.points;
+            looserScore = game.player1.points;
         }
         //Draw le final dune autre maniere pour les spectators !!!
         // game.spectators[].socket.emit('');
+        this.gameService.stopGame(game.dbGame.id, winnerId, looserId, looserScore, winnerScore);
     }
 
 	async startGame(game: GameI, mapid: number)

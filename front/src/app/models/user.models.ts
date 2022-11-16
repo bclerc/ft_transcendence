@@ -16,8 +16,16 @@ export interface UserI {
     twoFactorEnabled? : boolean;
     friendOf? :         UserI[];
     friends? :          UserI[];
+    position_in_leaderboard?: number;
     blockedBy? :        UserI[];
-    blockedUsers?:      UserI[]; 
+    blockedUsers?:      UserI[];
+    score?:              number;
+    _count?: {
+       games_win: number,
+       games_lose: number,
+       games: number 
+      };
+    games?:             any[];
 }
 
 export class User {

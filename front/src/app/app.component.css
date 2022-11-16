@@ -1,3 +1,15 @@
 body {
   background-color: rgb(red, green, blue);
 }
+
+#page{
+	display: block;
+}
+
+/* All mobile sizes (devices and browsers) */
+@media only screen and (max-width: 950px) {
+
+	#page{
+		display: none;
+	}
+}

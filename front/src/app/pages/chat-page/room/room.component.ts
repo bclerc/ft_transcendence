@@ -73,6 +73,8 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   
   ngOnInit(): void {
 
+    // check
+
     this.messages$.subscribe((messages: Message[]) => {
       const element = document.getElementById('chat_box_body');
 
@@ -92,7 +94,10 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
 
   showParam() {
     this.dialog.open(EditDialogComponent, {
-      data: this.room,
+      data: {
+        user: this.user,
+        room: this.room,
+      },
       width: '90%',
       height: '90%',
     });

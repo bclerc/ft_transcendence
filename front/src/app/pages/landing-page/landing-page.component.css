@@ -1,6 +1,49 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
 *{
 	box-sizing: border-box;
 	transition: all ease 0.4s;
+}
+
+html{
+	height:100%;
 }
 img{
 	max-width: 100%;
@@ -8,71 +51,57 @@ img{
 }
  
 body{
-	background-color: #1F1F1F;
+	background-color: #121212;
+	height:100%;
 }
 a{
-	color: inherit; /*pk ?*/
+	color: inherit;
 }
- 
-@font-face {
-	font-family: 'Titan One';
-	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-    font-family: 'ReadexPro-Regular';
-    src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'ReadexPro-Medium';
-    src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'ReadexPro-Bold';
-    src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
- 
-.center{
+
+/* .center{
 	margin: auto;
 	max-width: 1290px;
 	clear: both;
+	display:flex;
+	flex-direction: row;
+} */
+.left{
+	/* background-color: blue; */
+	position: fixed;
+	left: 0;
+	width: 50%;
+	height: 100%;
+	padding: 200px;
+	display: flex;
+	align-items: center;
+
+}
+.right{
+	/* background-color: blueviolet; */
+	position: fixed;
+	right: 0;
+	padding: 10px;
+	width: 50%;
+	height: 100%;
 }
 
 .logo{
-	margin: auto;
-	padding-top: 100px;
-	width: 15%;
-}
-.pong{
-	background-color: #121212;
-	border: 7px solid #EFC10A;
-	border-radius: 6px;
-	height: 260px;
-	width: 410px;
-	margin: 0px auto 30px auto;
+	width: 220px;
 }
 
 .button-log{
 	font-family: Titan One;
-	font-size: 14px;
+	font-size: 16px;
 	color: #feefcf;
-	text-align: center;
 	text-decoration: none;
 	background-color: #ee481e;
 	border-radius: 6px;
 	border: 3px solid #feefcf;
 	box-shadow: -3px 3px #feefcf;
-	max-width: 190px;
+	width: fit-content;
 	display: block;
-	padding: 18px 25px 17px 25px;
-	margin: 40px auto 70px auto;
+	padding: 25px 35px 24px 35px;
+	margin-top: 40px;
 }
 .button-log:hover{
 	background-color: #1F1F1F;
@@ -81,7 +110,7 @@ a{
 
 h1{
 	font-family: Titan One;
-	text-align: center;
+	/* width: 70%; */
 	font-size: 35px;
 	color: #feefcf;
 	margin: 66px 0px 50px 0px;

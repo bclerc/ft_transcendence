@@ -1,17 +1,148 @@
-<form class="form" [formGroup]="ChangeDisplaynameForm" (ngSubmit)="ChangeDisplayName()">
-    <input maxlength="10" matInput placeholder="Displayname" formControlName="displayname">
-    <p></p>
-    <button [disabled]="!ChangeDisplaynameForm.valid" type="submit" id="change-button">Change Display Name</button>
-  </form>
-  <p></p>
-<app-file-uploader></app-file-uploader>
-  <div *ngIf="user?.twoFactorEnabled; then thenBlock else elseBlock"></div>
-  <ng-template #thenBlock>
-      <p></p>
-    <a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
-    </ng-template>
-  <ng-template #elseBlock>
-  <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a>
- </ng-template>
- <p></p>
+<div id="modify-profile-body">
 
+	<!-- HEADER -->
+	<div class="param-header">
+		<img id="close-settings" src="../../../assets/svg/return.svg" alt="return" (click)="close()">
+		<h2>Paramètres de mon profil</h2>
+		<button id="action" matTooltip="Cette action est irréversible">
+			Se déconnecter
+			<img src="../../../../assets/svg/quit.svg" alt="">
+		</button>
+	</div>
+
+	<!-- EDITER LE PROFILE -->
+	<div id="edit">
+
+		<div id="title-n-button">
+			<h3>Éditer mon profil</h3>
+			<!-- <button matTooltip="Enregister les mofifications">
+				Sauvegarder
+				<img src="../../../../assets/svg/checked.svg" alt="save" >
+			</button> -->
+		</div>
+
+		<div id="edit-name">
+			<form class="form" [formGroup]="ChangeDisplaynameForm" (ngSubmit)="ChangeDisplayName()">
+				<div id="input-box">
+					<p id="input-title">Nom</p>
+					<textarea id="input-text" maxlength="10" placeholder="Displayname" formControlName="displayname"> </textarea>
+				</div>
+				<!-- <input maxlength="10" matInput placeholder="Displayname" formControlName="displayname"> -->
+				<button [disabled]="!ChangeDisplaynameForm.valid" type="submit" id="change-button">
+					Sauvegarder
+					<img src="../../../../assets/svg/checked.svg" alt="save">
+				</button>
+			</form>
+		</div>
+
+		<!-- UPLOAD PHOTO DE PROFILE -->
+		<app-file-uploader></app-file-uploader>
+	</div>
+
+
+	<!-- UTILISATEURS BLOQUEÉS -->
+	<div *ngIf="user?.twoFactorEnabled; then thenBlock else elseBlock"></div>
+	<ng-template #thenBlock>
+		<p></p>
+		<a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
+    </ng-template>
+	<ng-template #elseBlock>
+		<p *ngIf="!show"><a href="javascript:void(0);" (click)="showActivate2Fa()">Activate authentification with google authentificator</a></p>
+		<p *ngIf="show"><a href="javascript:void(0);" (click)="hideActivate2Fa()">Cacher la barre</a>
+			<app-activate2-fa></app-activate2-fa></p>
+			<!-- <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a> -->
+			
+		</ng-template>
+		<p></p>
+		<app-list-user-blocked [user]="user"></app-list-user-blocked>
+</div>
+
+
+
+<!-- <div id="modify-profile-body">
+
+	HEADER
+	<div class="param-header">
+		<img id="close-settings" src="../../../assets/svg/return.svg" alt="return" (click)="close()">
+		<h2>Paramètres de {{room.name}}</h2>
+		<button id="action" matTooltip="Cette action est irréversible">
+			Quitter le groupe
+			<img src="../../../../assets/svg/quit.svg" alt="">
+		</button>
+	</div>
+
+	EDITER LE PROFILE
+	<div *ngIf="room.ownerId == user.id" id="edit">
+
+		<div id="title-n-button">
+			<h3>Éditer le groupe</h3>
+			<button matTooltip="Enregister les mofifications" (click)="edit()" >
+				Sauvegarder
+				<img src="../../../../assets/svg/checked.svg" alt="save" >
+			</button>
+		</div>
+		<form [formGroup]="editform" (ngSubmit)="edit()">
+			<div class="lol">
+				<div class="demi-left">
+				Nom du groupe
+				<div id="input-box">
+				<p id="input-title">Nom du groupe</p>
+
+				<textarea id="input-text" placeholder="{{ room.name }}" [value]="room.name" formControlName="name"> </textarea>
+				</div>
+
+				<div id="public-left">
+				Public
+				<mat-checkbox id="public-check-box" matCheckBox formControlName="public"> Public</mat-checkbox>
+				<div id="input-box">
+					<p id="input-title">Mot de passe</p>
+					<textarea id="input-text" placeholder="•••••••••••" formControlName="password"></textarea>
+				</div>
+				</div>
+			</div>
+
+			<div class="demi-right">
+				<div id="input-box">
+				<p id="input-title">Description</p>
+				<textarea id="input-text" placeholder="Super description de la mort qui tue" [value]="room.description" formControlName="description"></textarea>
+				</div>
+			</div>
+			</div>
+		</form>
+	</div>
+
+	GERER LES MEMBRES
+	<div id="gerer">
+		<div id="title-n-button">
+		<h3>Gérer les membres</h3>
+		<button matTooltip="Ajouter un membre">
+			Ajouter
+			<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+		</button>
+		</div>
+
+
+
+			<div class="buts">
+
+
+			</div>
+
+		</div>
+	</div>
+
+
+	SUPPRIMER LE GROUPE
+	<ng-container *ngIf="room.ownerId === user.id">
+		<div class="delete-room">
+			<h3>Supprimer le groupe</h3>
+			<p>Ce groupe sera supprimé definitivement. Ta vie n'aura plus aucun sens, et les membres du groupe t'en voudrons toute leur misérable vie.</p>
+			<button class="cool-button" matTooltip="Cette action est irréversible" (click)="deleteRoom()">
+				Supprimer le groupe
+			</button>
+		</div>
+  
+  </ng-container>
+
+
+</div> -->

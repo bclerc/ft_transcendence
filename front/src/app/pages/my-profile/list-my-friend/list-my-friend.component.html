@@ -23,7 +23,7 @@
 						</g>
 					</svg>
 				</button>
-				<button>
+				<button (click)="removeFriend(friend.id)">
 					<svg width="40px" height="40px" viewBox="0 0 40 40">
 						<title>icon-delete-friend</title>
 						<g id="icon-delete-friend" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -32,7 +32,7 @@
 						</g>
 					</svg>
 				</button>
-				<button>
+				<button (click)="blockUser(friend.id)">
 					<svg width="40px" height="40px" viewBox="0 0 40 40">
 						<title>icon-block</title>
 						<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -46,8 +46,12 @@
 					</svg>
 				</button>
 				<div class="status">
-					<p>En ligne</p>
-					<img src="../../../assets/svg/online.svg" alt="online">
+					<p *ngIf="friend.state === 'ONLINE'" id="user-status">En ligne
+						<img src="../../../assets/svg/online.svg" alt="online">
+					</p>
+					<p *ngIf="friend.state === 'INGAME'" id="user-status">En train de jouer</p>
+					<p *ngIf="friend.state === 'WAITING'" id="user-status">Dans la file d'attente</p>
+					<p *ngIf="friend.state === 'OFFLINE'" id="user-status">Hors ligne</p>
 				</div>
 			</div>
 		</div> 

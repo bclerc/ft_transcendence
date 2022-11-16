@@ -9,6 +9,7 @@ import { ChatRoomI, DmChatRoomI, MessageI, newChatRoomI } from './interfaces/cha
 import { PenaltiesService } from './services/penalties/penalties.service';
 import { PasswordUtils } from './utils/chat-utils';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CreateChatDto } from './dto/create-chat.dto';
 
 
 
@@ -71,11 +72,17 @@ export class ChatService {
             user: {
               id: userId,
             },
-            endTime: {
-              gte: new Date(),
-            },
+            OR: [
+              {
+                endTime: {
+                  gte: new Date(),
+                },
+              },
+              {
+                timetype: 'PERM',
+              } 
+            ]
           }
-
         },
         users: {
           some: {
@@ -263,8 +270,6 @@ export class ChatService {
 
 
   async getMessagesFromRoom(userId: number, room: ChatRoomI): Promise<Message[]> {
-
-
     const messages = await this.prisma.message.findMany({
       where: {
         room: {
@@ -382,10 +387,11 @@ export class ChatService {
 
 
 
-  async createRoom(owner: BasicUserI, newRoom: newChatRoomI): Promise<ChatRoom> {
+  async createRoom(owner: BasicUserI, newRoom: CreateChatDto): Promise<ChatRoom> {
     let hashedPassword = null;
 
-    if (newRoom.password)
+    console.log(newRoom);
+    if (newRoom.password != null)
       hashedPassword = await this.passUtils.hashPass(newRoom.password);
 
     const ret = this.prisma.chatRoom.create({
@@ -463,6 +469,7 @@ export class ChatService {
           },
         },
     });
+
 
     await this.prisma.chatRoom.deleteMany({
       where: {
@@ -648,6 +655,12 @@ export class ChatService {
       },
     });
   
+    await this.prisma.chatRoom.delete({
+      where: {
+        id: roomId,
+      },
+    });
+
     await this.prisma.chatRoom.delete({
       where: {
         id: roomId,

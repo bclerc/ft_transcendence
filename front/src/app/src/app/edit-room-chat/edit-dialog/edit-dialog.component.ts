@@ -7,7 +7,7 @@ import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatService } from 'src/app/services/chat/chat.service';
-import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
+import { ChatRoom, ChatRoomI, EditRoomI } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -29,17 +29,25 @@ export class EditDialogComponent implements OnInit {
     users: new FormArray([], [Validators.required])
   });
   
-  user!: UserI;
-  
+  user: UserI;
+  room: ChatRoomI;
+  userIsAdmin: boolean = false;
+
   constructor(private chatService: ChatService,
-    @Inject(MAT_DIALOG_DATA) public room: ChatRoomI,
+    @Inject(MAT_DIALOG_DATA) public data:  EditRoomI,
     public dialogRef: MatDialogRef<EditDialogComponent>,
     private userService: UserService,
     private currentUser: CurrentUserService,
     private snack: MatSnackBar,
     private socket: Socket,
     public dialog: MatDialog) { 
-    this.currentUser.user.subscribe(user => this.user = user);
+        this.user = data.user;
+        this.room = data.room;
+        this.room.users.find((user) => {
+          if (user.id == this.user.id) {
+            this.userIsAdmin = true
+          }
+        });
     }
               
              
@@ -54,7 +62,7 @@ export class EditDialogComponent implements OnInit {
   }
         
   
-  ngOnInit(): void {
+  async ngOnInit() {
     this.editform.setValue({
       name: this.room.name,
       description: this.room.description,
@@ -62,6 +70,7 @@ export class EditDialogComponent implements OnInit {
       password: null,
       users: this.room.users,
     });
+
   }
 
   sendRequest(userId: number | undefined)

@@ -45,11 +45,13 @@ export class UserController {
   * 
   */
 
-  @Get()
+  @Post("good")
   @UseGuards(Jwt2faAuthGuard)
-  async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+  async good(@Request() req: any) {
+    return {message: "User found", state: 'success', user: req.user };
   }
+    
+
 
   @Get("me")
   @UseGuards(Jwt2faAuthGuard)

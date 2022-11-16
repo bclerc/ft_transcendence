@@ -69,7 +69,7 @@ hr.clear{
 	list-style-type: none;
 }
 
-.match-list li{
+.match-list #match{
 	display: flex;
 	flex-direction: row;
 	background-color: #2b2a28;
@@ -114,11 +114,11 @@ hr.clear{
 }
 .VS #my-profile{
 	justify-content: flex-end;
-	
 }
 
 .VS #my-profile img, #my-enemy img{
 	width: 50px; /* TODO: pb en responsive */
+	min-width: 50px;
 	height: 50px;
 	object-fit: cover;
 	border-radius: 40px;
@@ -126,7 +126,11 @@ hr.clear{
 	box-shadow: -2px 2px #ee481e;
 	margin-right: 10px;
 }
-.VS #my-enemy a:hover{
+.VS #my-profile a, #my-enemy a{
+	display: flex;
+	align-items: center;
+}
+.VS #my-profile a:hover, #my-enemy a:hover{
 	color: #ee481e;
 	cursor: pointer;
 }
@@ -165,7 +169,7 @@ hr.clear{
 @media only screen and (max-width: 950px) {
 
 
-	.match-list li{
+	.match-list #match{
 		display: flex;
 		flex-direction: column;
 		/* padding: 20px;
@@ -186,6 +190,7 @@ hr.clear{
 	}
 	
 	.VS #my-profile img, #my-enemy img{
+		width: 35px;
 		min-width: 35px;
 		height: 35px;
 	}
@@ -216,6 +221,7 @@ hr.clear{
 		font-size: 12px;
 	}
 	.VS #my-profile img, #my-enemy img{
+		width: 30px;
 		min-width: 30px;
 		height: 30px;
 	}
@@ -239,7 +245,7 @@ hr.clear{
 
 @media only screen and (max-width: 553px) {
 
-	.match-list li{
+	.match-list #match{
 		display:flex;
 		flex-direction: column;
 		align-items: center;

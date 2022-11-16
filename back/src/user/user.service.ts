@@ -91,7 +91,7 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<UserInfoI> {
-    const user = await this.prisma.user.findUnique({
+    const user: UserInfoI = await this.prisma.user.findUnique({
       where: {
         id: Number(id),
       },
@@ -114,6 +114,9 @@ export class UserService {
         },
         friendOf: true,
         games: {
+          orderBy: {
+            createdAt: 'desc',
+          },
           select: {
             id: true,
             users: {
@@ -139,14 +142,23 @@ export class UserService {
             },
             winnerScore: true,
             loserScore: true,
-          }
+          },
         },
         blockedUsers: true,
         twoFactorEnabled: true,
         createdAt: true,
         updatedAt: true,
+        score: true,
+        _count: {
+          select: {
+            games_win: true,
+            games_lose: true,
+            games: true,
+          }
+        }
       }
     });
+    user.position_in_leaderboard = await this.getLeaderboardPosition(user.id);
     return user;
   }
 
@@ -191,6 +203,14 @@ export class UserService {
         displayname: true,
         email: true,
         avatar_url: true,
+        score: true,
+        _count: {
+          select: {
+            games_win: true,
+            games_lose: true,
+            games: true,
+          }
+        }
       },
     });
     if (user === undefined)
@@ -257,7 +277,10 @@ export class UserService {
         where: {
           id: Number(id),
         },
-        data: update
+        data: {
+          displayname: update.displayname,
+          avatar_url: update.avatar_url,
+        }
       });
       return {
         message: "User was been updated",
@@ -271,14 +294,73 @@ export class UserService {
   }
 
   async setState(userId: number, status: UserState) {
-    await this.prisma.user.update({
+    if (userId && status) {
+      await this.prisma.user.update({
+        where: {
+          id: Number(userId),
+        },
+        data: {
+          state: status,
+        },
+      });
+    }
+  }
+
+  async setStates(users: BasicUserI[], status: UserState) {
+    if (users && status) {
+      for (const user of users) {
+        const loggedUser: boolean = this.onlineUserService.getUser(null, user.id) !== undefined;
+        await this.prisma.user.update({
+          where: {
+            id: Number(user.id),
+          },
+          data: {
+            state: loggedUser ? status : UserState.OFFLINE,
+          },
+        });
+      }
+    }
+  }
+
+  async getFriends(userId: number): Promise<BasicUserI[]> {
+    const user = await this.prisma.user.findUnique({
       where: {
         id: Number(userId),
       },
-      data: {
-        state: status,
+      select: {
+        friends: {
+          select: {
+            id: true,
+            state: true,
+            displayname: true,
+            intra_name: true,
+            email: true,
+            avatar_url: true,
+            score: true,
+            _count: {
+              select: {
+                games_win: true,
+                games_lose: true,
+                games: true,
+              }
+            }
+          },
+        },
       },
     });
+    return user.friends;
+  }
+
+  async getLeaderboardPosition(userId: number): Promise<number> {
+    const leaderboard = await this.prisma.user.findMany({
+      orderBy: {
+        score: 'desc',
+      },
+      select: {
+        id: true,
+      },
+    });
+    return leaderboard.findIndex((user) => user.id === userId) + 1;
   }
 
   /**

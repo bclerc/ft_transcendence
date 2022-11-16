@@ -56,7 +56,6 @@ a{
 .center-profile{
 	margin: auto;
 	max-width: 1290px;
-	color: #1f1f1f;
 	clear: both;
 }
 hr.clear{
@@ -84,6 +83,7 @@ hr.clear{
 	padding: 60px;
 }
 .profil-left img{
+	width: 140px;
 	min-width: 140px;
 	height: 140px;
 	object-fit: cover;
@@ -95,6 +95,7 @@ hr.clear{
 	width: 100%;
 	padding-left: 30px;
 	align-self: center;
+	/* background-color: cadetblue; */
 }
 
 .status{
@@ -134,10 +135,18 @@ hr.clear{
 	font-size: 14px;
 	color:#FEEFCF;
 }
-.profil-right{
-	min-width: fit-content;
+.profil-info #name-n-param{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	/* background-color: blue; */
 }
-.profil-right button{
+.profil-info #name-n-param img{
+	margin-left: 20px;
+	padding-bottom: 16px;
+}
+
+/* .profil-right button{
 	background-color: transparent;
 	padding: 10px 25px 10px 30px;
 	font-family: ReadexPro-SemiBold;
@@ -160,7 +169,7 @@ hr.clear{
 .profil-right button:hover{
 	border: 2px solid #ee481e;
 	color: #ee481e;
-}
+} */
 
 #stats{
 	width: 50%;
@@ -182,7 +191,7 @@ hr.clear{
 	margin-bottom: 10px;
 }
 #red {
-	color: #EE481E;
+	color: #43ee1e;
 }
 #orange {
 	color: #EF7E00;
@@ -237,132 +246,12 @@ hr.clear{
 	margin-bottom: 100px;
 }
 
-/* Gerer mes amis ------------------------------------------------------------------------------------------ */
-
-.mes-amis{
-	/* margin-top: 30px; */
-	margin-bottom: 100px;
-}
-
 #friend-n-match h2{
 	font-family: Titan One;
 	font-size: 35px;
 	margin-top: 30px;
 	margin-bottom: 30px;
 	color: #feefcf;
-}
-.ami{
-	float: left;
-	margin-right: 30px;
-	width: calc(25% - 22.5px);
-	margin-bottom: 30px;
-	padding: 40px 20px 40px 20px;
-	background-color: #343330;
-	border-radius: 10px;
-	color: #feefcf;
-	text-align: center;
-}
-.ami:nth-child(4n){
-	margin-right: 0px;
-}
-.ami .status{
-	margin: auto;
-}
-
-
-.ami #lien{
-	/* background-color: #43ee1e; */
-	width:100%;
-}
-
-.ami #photo-profile{
-	width: 150px;
-	height: 150px;
-	margin: auto;
-	margin-bottom: 30px;
-	object-fit: cover;
-	border-radius: 6px;
-	border: 3px solid #ee481e;
-	box-shadow: -3px 3px #ee481e;
-}
-.ami .friend-pseudo{
-	width: 100%;
-	/* background-color: #EE481E; */
-	font-family: Titan One;
-	font-size: 18px;
-	margin-bottom: 15px;
-}
-.ami .rank{
-	font-family: Titan One;
-	font-size: 14px;
-	color: #efc10a;
-	margin-bottom: 30px;
-}
-
-.ami .tri-action button{
-	background-color: transparent;
-	border: none;
-	margin-right: 8px;
-	margin-bottom: 20px;
-}
-.ami .tri-action button:last-child{
-	margin-right: 0px;
-}
-
-
-#icon-invite-game:hover #icon{
-	fill: #ee481e;
-}
-#icon-invite-game:hover #BG{
-	fill: #ee481e;
-	opacity: 20%;
-}
-
-#icon-ask-friend:hover #icon{
-	fill: #ef5f00;
-}
-#icon-ask-friend:hover #BG{
-	fill: #ef5f00;
-	opacity: 20%;
-}
-#icon-delete-friend:hover #icon{
-	fill: #ef5f00;
-}
-#icon-delete-friend:hover #BG{
-	fill: #ef5f00;
-	opacity: 20%;
-}
-
-#icon-mute:hover #icon{
-	fill: #f1a726;
-}
-#icon-mute:hover #BG{
-	fill: #f1a726;
-	opacity: 20%;
-}
-
-#icon-block:hover #icon{
-	fill: #ef7e00;
-}
-#icon-block:hover #BG{
-	fill: #ef7e00;
-	opacity: 20%;
-}
-
-#icon-exclure:hover #icon{
-	fill: #efc10a;
-}
-#icon-exclure:hover #BG{
-	fill: #efc10a;
-	opacity: 20%;
-}
-
-#icon-bannir:hover #icon{
-	fill: #f9e131;
-}
-#icon-bannir:hover #BG{
-	fill: #f9e131;
-	opacity: 20%;
 }
 
 
@@ -416,17 +305,20 @@ hr.clear{
 		display:block;
 		padding-left: 0px;
 	}
-	
+	.profil-info #name-n-param{
+		justify-content: center;
+	}
+
 	.status{
 		margin:auto;
 	}
-	.profil-right{
+	/* .profil-right{
 		min-width: fit-content;
 		margin-top: 10px;
 	}
 	.profil-right button{
 		margin-left: 0px;
-	}
+	} */
 
 	#scores{
 		margin: 0px 20px 0px 20px;
@@ -441,8 +333,9 @@ hr.clear{
 }
 
 @media only screen and (max-width: 553px) {
-
+	
 	.profil-left img{
+		width: 100px;
 		min-width: 100px;
 		height: 100px;
 		border: 4px solid #ee481e;
@@ -451,23 +344,17 @@ hr.clear{
 	.profil-info #name{
 		font-size: 40px;
 	}
+	.profil-info #name-n-param img{
+		width: 35px;
+		height: 35px;
+		padding-top: 5px;
+		padding-bottom: 0px;
+		margin-left: 15px;
+	}
 
 }
 
 @media only screen and (max-width: 490px) {
-
-	.ami{
-		width: 100%;
-		float: none;
-		margin-right: 0px;
-	}
-	.ami .tri-action button svg{
-		width: 40px;
-		height: 40px;
-	}
-	.ami .tri-action button{
-		margin-right: 5px;
-	}
 
 	/* Styles for tab labels */
 	#friend-n-match .mat-tab-label {

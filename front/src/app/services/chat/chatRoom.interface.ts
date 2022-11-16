@@ -18,6 +18,14 @@ export interface ChatRoom {
   updatedAt?: Date;
 }
 
+export interface newRoom {
+  name: string;
+  description: string;
+  users: UserI[];
+  public: boolean;
+  password?: string;
+}
+
 export interface ChatRoomI {
   id: number;
   name: string;
@@ -32,6 +40,11 @@ export interface ChatRoomI {
   password?: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface EditRoomI {
+  user: UserI;
+  room: ChatRoomI;
 }
 
 export enum ChatRoomType {

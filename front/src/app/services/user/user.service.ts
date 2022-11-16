@@ -1,5 +1,6 @@
+import { isPlatformServer, } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import {Injectable } from '@angular/core';
+import {Injectable, Inject, PLATFORM_ID, Optional } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
@@ -18,7 +19,14 @@ export class UserService {
 
   private backUrl = 'http://'+ environment.host +':3000/api/v1/';
 
-  constructor(private route: ActivatedRoute ,private http : HttpClient, private token : TokenStorageService, private jwtService : JwtHelperService, private router : Router)
+  constructor ( private route: ActivatedRoute,
+                private http : HttpClient,
+                private token : TokenStorageService,
+                private jwtService : JwtHelperService,
+                private router : Router,
+                @Inject(PLATFORM_ID) private platformId: any,
+                @Optional() @Inject(Request) private request: any
+              )
   {}
 
   ngOnInit(): void 
@@ -156,9 +164,14 @@ export class UserService {
     return this.http.post(this.backUrl + "user/block/" + Id,  null, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
-  unBlockUser(Id: number)
+  unBlockUser(Id: any)
   {
     return this.http.post(this.backUrl + "user/unblock/" + Id, null ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+  isUserAuthentificated() : Observable<boolean>
+  {
+    return this.http.get<boolean>(this.backUrl + "user/good" , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
 }

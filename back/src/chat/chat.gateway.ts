@@ -18,6 +18,7 @@ import { Socket } from 'socket.io';
 import { OnEvent } from '@nestjs/event-emitter';
 import { PusnishI } from './interfaces/punish.interface';
 import { BlockedUser } from './interfaces/blocked.interface';
+import { CreateChatDto } from './dto/create-chat.dto';
 
 @WebSocketGateway(8181, { cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
@@ -127,8 +128,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     if (event.success)
     {
       this.updateRoomForUsersInRoom(event.room.id);
-      this.sendToUser(event.user, 'notification', "Vous avez été pardonné de la room " + event.room.name + " par " + event.pardoner.intra_name);
-      this.sendToUser(event.pardoner, 'notification', "Vous avez pardonné " + event.user.intra_name + " de la room " + event.room.name);
+      this.sendToUser(event.user, 'notification', "Vous avez été pardonné de la room " + event.room.name + " par " + event.pardonner.intra_name);
+      this.sendToUser(event.pardonner, 'notification', "Vous avez pardonné " + event.user.intra_name + " de la room " + event.room.name);
     }
   }
 
@@ -207,7 +208,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @SubscribeMessage('createRoom')
-  async onCreateRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() newRoom: newChatRoomI) {
+  async onCreateRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() newRoom: CreateChatDto) {
     this.wschatService.newRoom(client.id, newRoom);
   }
 
