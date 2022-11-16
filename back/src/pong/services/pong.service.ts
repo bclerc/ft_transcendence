@@ -5,6 +5,7 @@ import { PointI } from '../interfaces/point.interface';
 import { GameI } from '../interfaces/game.interface';
 import { Socket } from 'socket.io';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
+import { GameService } from 'src/game/game.service';
 
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 80;
@@ -75,10 +76,10 @@ export class PongService {
 
     constructor(
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
-        // private variables: VariablePong
-    )
+      @Inject(GameService) private gameService: GameService)
+        // private variables: VariablePong )
     {
-    };
+    }
 
     async drawInit(game: GameI)
     {

@@ -109,7 +109,6 @@ export class PlayPongPagesComponent implements OnInit {
     this.ratiox = 1;
     this.ratioy = 1;
   }
-  subscription!: Subscription;
 
   ngOnInit(): void 
   {
