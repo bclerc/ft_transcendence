@@ -79,14 +79,36 @@
 								Mes amis
 							</div>
 						</ng-template>
-
+						<ng-container *ngIf = pandingFriends>
 						<h2>Mes demandes d'ami</h2>
+						</ng-container>
 						<div class="mes-demandes-damis">
 							<!-- <app-friends-page></app-friends-page> -->
+							<ul class="demandes">
+								<li *ngFor="let request of (pandingFriends | async)">
+									<div class="info-demande">
+										<img [src]="request.from.avatar_url" [alt]="request.from.intra_name">
+										<div class="name-n-email">
+											<a href="le profil du gars">{{request.from.intra_name}}</a>
+											<!-- <span>{{pandingFriends.email}}</span> -->
+										</div>
+									</div>
+									<div class="buttts">
+										<button id="accept"(click)="respond(request.id, true)">
+											Accepter
+											<img src="../../../../assets/svg/checked.svg" alt="save" >
+										</button>
+										<button id="refuse" (click)="respond(request.id, false)">
+											Refuser
+											<img src="../../../../assets/svg/quit.svg" alt="">
+										</button>
+									</div>
+								</li>
+							</ul>
 						</div>
 						<!-- LISTE D'AMIS -->
 						<!-- <h2>Mes amis</h2> -->
-						<app-list-my-friend [user]="user"></app-list-my-friend>
+						<app-list-my-friend [user]="user" [friends]="friends"></app-list-my-friend>
 					</mat-tab>
 					<hr class="clear">
 

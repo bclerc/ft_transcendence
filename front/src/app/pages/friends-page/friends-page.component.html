@@ -1,6 +1,6 @@
 
 <div class="container">
-	<mat-card>
+	<!-- <mat-card>
 	<mat-card-title>
 		Amis
 	</mat-card-title>
@@ -21,14 +21,14 @@
 			</mat-list-item>
 		</mat-list>
 		</mat-card-content>
-	</mat-card>
+	</mat-card> -->
 	<ul class="demandes">
 		<li *ngFor="let request of (pandingFriends | async)">
 			<div class="info-demande">
 				<img [src]="request.from.avatar_url" [alt]="request.from.intra_name">
 				<div class="name-n-email">
 					<a href="le profil du gars">{{request.from.intra_name}}</a>
-					<span>vserra@student.42.fr</span>
+					<!-- <span>{{pandingFriends.email}}</span> -->
 				</div>
 			</div>
 			<div class="buttts">
@@ -44,12 +44,12 @@
 		</li>
 	</ul>
 
-	<mat-card>
+	<!-- <mat-card>
 		<mat-card-title>
 			Inviter un utilisateur
 		</mat-card-title>
 		<mat-card-content>
 		<app-userselect (addUser)="addFriend($event)"></app-userselect>
 		</mat-card-content>
-	</mat-card>
+	</mat-card> -->
 </div>

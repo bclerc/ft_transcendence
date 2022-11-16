@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Subscription } from 'rxjs';
+import { FriendsRequestAction } from 'src/app/models/friends/friendsrequest.enum';
 
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
@@ -19,6 +20,7 @@ import { ModifyMyProfileComponent } from '../modify-my-profile/modify-my-profile
 })
 export class MyProfileComponent implements OnInit {
   @Output() user! : UserI;
+  @Output() friends! : UserI[];
 
   constructor ( public userService : UserService,
                 private router : Router,
@@ -28,23 +30,30 @@ export class MyProfileComponent implements OnInit {
               ) {}
   
   // user? : UserI;
-  friends! : UserI[];
+  // friends! : UserI[];
   subscription!: Subscription;
   subscriptionFriend!: Subscription;
+  subscriptionPandingFriend!: Subscription;
+  pandingFriends = this.userService.getFriendRequests() ;
+  anyFriendsRequest! : boolean ;
+
 
   async ngOnInit(){
         this.subscription = this.currentUser.getCurrentUser().subscribe(
         (data : any) => {
-          console.log("data =", data)
+          // console.log("data =", data)
           this.user = data;
         },
         );
   
       this.subscriptionFriend =  this.userService.getFriends().subscribe(
         (data : any) => {
+          // console.log("data =", data)
           this.friends = data;
         }
-      );
+      )
+      
+
     }
 
     ngOnDestroy() : void
@@ -52,6 +61,8 @@ export class MyProfileComponent implements OnInit {
       this.subscription.unsubscribe;
       if (this.subscriptionFriend != undefined)
         this.subscriptionFriend.unsubscribe;
+        if (this.subscriptionPandingFriend != undefined)
+        this.subscriptionPandingFriend.unsubscribe;
     }
 
     openDialogEditMyProfile() {
@@ -67,4 +78,31 @@ export class MyProfileComponent implements OnInit {
   
       this.dialog.open(ModifyMyProfileComponent, dialogConfig);
   }
+
+  async respond(requestId: number, response: boolean) {
+    this.userService.respondFriendRequest(requestId,
+          response ? FriendsRequestAction.ACCEPTED : FriendsRequestAction.DECLINED).subscribe(
+            (res: any) => {
+              // console.log(res);
+              this.updateInfo();
+            }
+          )
+
+
+          ;
+  }
+
+  async updateInfo() {
+    // this.friends = this.userService.getFriends();
+    this.pandingFriends = this.userService.getFriendRequests();
+    if (this.subscriptionFriend != undefined)
+    this.subscriptionFriend.unsubscribe;
+    this.subscriptionFriend =  this.userService.getFriends().subscribe(
+      (data : any) => {
+
+        this.friends = data;
+      }
+    )
+  }
+
 }
