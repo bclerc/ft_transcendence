@@ -38,6 +38,7 @@ export class FileUploaderComponent implements OnInit {
   }
 
   public OnUploadFile(): void {
+    console.log("coucou");
     const formData = new FormData();
     formData.append("image", this.selectedFile);
     this.subscription = this.userService.uploadAvatar(formData).subscribe(

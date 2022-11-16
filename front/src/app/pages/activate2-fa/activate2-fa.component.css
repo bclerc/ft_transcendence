@@ -1,0 +1,134 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1f1f1f;
+}
+a{
+	color: inherit;
+}
+
+#activate2-fa img{
+	width: 300px;
+	border-radius: 6px;
+	margin-bottom: 30px;
+}
+
+#change-button{
+	/* width: 35px; */
+	height: 35px;
+	margin-left: 25px;
+	font-family: ReadexPro-Medium;
+	color: #feefcf;
+	background-color: transparent;
+	border-radius: 6px;
+	border: 2px solid #1f1f1f;
+	padding: 4px 10px 4px 10px;
+	margin-top: -5px;
+}
+#change-button:focus{
+	outline: none;
+}
+#change-button:hover{
+	color: #43EE1E;
+	cursor: pointer;
+	border: 2px solid #43EE1E;
+}
+#change-button:disabled{
+	color: #9c9381;
+	border: 2px solid #9c9381;
+	cursor: auto;
+}
+
+#change-button img{
+	margin-left: 4px;
+}
+
+
+
+/* #input-box{
+	display: flex;
+	flex-direction: column;
+	font-family: ReadexPro-Medium;
+	margin-bottom: 20px;
+}
+#input-title, h4{
+	font-size: 11px;
+	margin-left: 4px;
+	margin-bottom: 4px;
+	font-family: ReadexPro-Regular;
+	color: #9c9381;
+} */
+#input-error{
+	margin-top: 4px;
+	font-size: 11px;
+	margin-left: 4px;
+	font-family: ReadexPro-Regular;
+	color: #ee481e;
+}
+#activate2-fa input{
+	height: fit-content;
+	line-height: fit-content;
+}
+#activate2-fa input{
+	border-radius: 6px;
+	padding: 10px 15px 10px 15px;
+	background: #343330;
+	border: none;
+	resize: none;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	font-size: 14px;
+	overflow: hidden;
+}
+#activate2-fa input::placeholder{
+	color: #9c9381;
+}
+#activate2-fa input:focus {
+	outline: none;
+}
