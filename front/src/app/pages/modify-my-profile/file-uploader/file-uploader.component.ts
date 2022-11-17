@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserI } from '../models/user.models';
-import { UserService } from '../services/user/user.service';
+import { UserI } from '../../../models/user.models';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-file-uploader',
@@ -22,6 +22,7 @@ export class FileUploaderComponent implements OnInit {
   }
 
   ngOnDestroy(): void{
+    if (this.subscription != undefined)
     this.subscription?.unsubscribe();
   }
 
