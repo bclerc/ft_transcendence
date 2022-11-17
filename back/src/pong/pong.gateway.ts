@@ -13,8 +13,6 @@ import { PongService } from "./services/pong.service";
 const NORMALGAME = 0;
 const MAX_MAP = 3;
 
-
-
 @WebSocketGateway(8181, {
 	cors: {
 		origin: "*"
@@ -29,13 +27,12 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	gamesMap: Map<number, GameI>;
 	connectedUsers: Map<number, string> = new Map<number, string>();
 
-
 	constructor(
 		private pongService: PongService,
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
       @Inject(GameService) private gameService: GameService,
 	){
-		console.log("constructor gate");
+		// console.log("constructor gate");
 		
 		this.state = {
 			obstacle: {
@@ -88,7 +85,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       client.emit('enableButtonS');
     }
 	}
-
 
 	//////
 	//SOCKET.ON MESSAGES
@@ -156,8 +152,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let game: GameI = this.searchGameMapAwaiting(normalOrNot);
 		if (game)
 		{
-      console.log(game);
-			console.log("Match found " + client.id + " joined game " + game.id);
+      (game);
+			// console.log("Match found " + client.id + " joined game " + game.id);
 			this.pongService.joinGame(client, game);
 			// client.emit('drawName', 0);
 
@@ -169,7 +165,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			// console.log(game.id_searchinterval1, game.id_searchinterval2);
 			game.id_searchinterval1 = 0;
 			game.id_searchinterval2 = 0;
-      console.log("Before init seconde:" + new Date().getTime().toLocaleString());
+    //   console.log("Before init seconde:" + new Date().getTime().toLocaleString());
 			await this.pongService.drawInit(game);
 
 			//le front ne sauvegarde pas l'id de la map bordel de mierde de la madre de dia
@@ -256,7 +252,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     if (game && dbGame)
     {
 
-      console.log("No match found, creating new game with id:", dbGame.id);
+    //   console.log("No match found, creating new game with id:", dbGame.id);
       game = {
 			id: dbGame.id,
 			player1: {
@@ -267,6 +263,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			player2: undefined,
 			mapId: mapId,
 			ball: game.ball,
+			spectators: [],
 			obstacle: game.obstacle,
       dbGame: dbGame
 		}
@@ -297,7 +294,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @OnEvent('game.init')
   async gameInit(game: GameI) {
     if (game && game.dbGame) {
-      console.log("drawInit");
+    //   console.log("drawInit");
       this.sendToGame(game, 'redirectGame', game.id);
       this.sendToGame(game, 'drawInit', null);
       this.sendToGame(game, 'drawText', "3");
@@ -321,7 +318,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @OnEvent('game.users.matched')
   async matchedUsersEvent(data: any){
-    console.log(data);
+    // console.log(data);
     this.sendToPlayers(data.player1.user, 'notification', "Vous avez matché avec " + data.player2.user.displayname);
     this.sendToPlayers(data.player2.user, 'notification', "Vous avez matché avec " + data.player1.user.displayname);
 
@@ -354,6 +351,12 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
     }
   }
+  
+	@OnEvent('deleteGame')
+	deleteGame(game: GameI) {
+		console.log("deleteGame");
+		this.gamesMap.delete(game.id);
+	}
 
   sendToGame(game: GameI, event: string, data: any) {
     for (const user of [game.player1.user, game.player2.user]) {

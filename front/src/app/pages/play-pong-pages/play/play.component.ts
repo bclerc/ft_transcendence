@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { GameI } from 'src/app/models/PongInterfaces/pong.interface';
@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 
 
 const PLAYER_RADIUS = 3.5;
-const CANVAS_RADIUS = 0;
+const CANVAS_RADIUS = 6;
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 80;
 const PLAYER_WIDTH = 8;
@@ -64,12 +64,6 @@ export const MAP3_OBSTACLE2_POSY = (HEIGHTCANVAS / 2) + (( HEIGHTCANVAS / 2 - MA
 export const MAP3_OBSTACLE2_SPEED = 1;
 export const MAP3_OBSTACLE2_RADIUS = 2;
 //
-//
-
-export const MAX_SCORE = 50;
-export const MAX_SPEED = 10; //ball
-export const defaultSpeed = 5; //speed de la balle par default
-export const SPEED_PLAYER = 8 //
 
 @Component({
   selector: 'app-play',
@@ -84,34 +78,27 @@ export class PlayComponent implements OnInit {
   game: any;
   state!: number;
   user: UserI = {};
-  ratiox: number;
-  ratioy: number;
-  private var_interval: number;
 
   constructor(
     private router: Router,
     private socket: Socket,
     private http: HttpClient,
     private storage: TokenStorageService
-  ) {
-    this.var_interval = 0;
-    this.ratiox = 1;
-    this.ratioy = 1;
+  )
+  {
     this.gameId = parseInt(this.router.url.split('/')[2]);
     this.socket.on('drawNormalMap', this.drawNormalMap);
     this.socket.on('drawMap1', this.drawMap1);
     this.socket.on('drawMap2', this.drawMap2);
     this.socket.on('drawMap3', this.drawMap3);
     this.socket.on('score', this.updateScore);
-    
+
     this.socket.on('win', this.win);
     this.socket.on('lose', this.lose);
  
     this.socket.on('drawInit', this.drawInit);
     this.socket.on('drawText', this.drawText);
     this.socket.on('drawName', this.drawName);
-    
-    
   }
   
   ngOnInit(): void {
@@ -129,7 +116,6 @@ export class PlayComponent implements OnInit {
         }
       }
     });
-    
   }
 
   @HostListener('document:keydown',['$event'])  //$event is the event object
@@ -224,16 +210,19 @@ export class PlayComponent implements OnInit {
     const left = document.getElementById('leftName');
     const right = document.getElementById('rightName');
   }
+
   drawNormalMap(state: GameI){
+
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
+    // const canvas = this.canvas;
     var ratiox = canvas!.width / WIDTHCANVAS;
     var ratioy = canvas!.height / HEIGHTCANVAS;
     var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
-    console.log(ratiox, ratioy);
     if (canvas)
     {
-      console.log(canvas.height);
-      console.log(canvas.width);
+      // console.log("drawNormalMap");
+      // console.log(canvas.height);
+      // console.log(canvas.width);
         var context = canvas.getContext('2d');
         if (context)
         {
@@ -621,34 +610,20 @@ export class PlayComponent implements OnInit {
   return state;
   }
 
-  // toResponsive(game: GameI): GameI
-  // {
-  //   var canvas = <HTMLCanvasElement | undefined> document.getElementById('pong');
-  //   var ratiox = 1;
-  //   var ratioy = 1;
-  //   if (canvas)
-  //   {
-  //     ratiox = canvas.width / WIDTHCANVAS;
-  //     ratioy = canvas.height / HEIGHTCANVAS;
-  //   }
-
-  //   game.player1!.paddle.x = 0;
-  //   game.player1!.paddle.y = game.player1!.paddle.y * ratioy;
-  //   game.player2!.paddle.x = canvas!.width - PLAYER_WIDTH * ratiox;
-  //   game.player2!.paddle.y = game.player2!.paddle.y * ratioy;
-  //   return game;
-  // }
-
-
   drawInit() {
-    // var canvas = <HTMLCanvasElement | undefined> document.getElementById('pong');
-    // var ratiox = 1;
-    // var ratioy = 1;
     var canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    var ratiox = canvas!.width / WIDTHCANVAS;
-    var ratioy = canvas!.height / HEIGHTCANVAS;
-    var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
-
+    if (canvas)
+    {
+      var ratiox = canvas!.width / WIDTHCANVAS;
+      var ratioy = canvas!.height / HEIGHTCANVAS;
+      var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
+    }
+    else
+    {
+      var ratiox = 1;
+      var ratioy = 1;
+      var ratio = 1;
+    }
     if (canvas)
     {
       console.log("drawInit555");
