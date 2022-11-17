@@ -181,7 +181,6 @@ export class WschatService {
     
     if (user && target && roomToDemote) {
       if (roomToDemote.ownerId == user.id && roomToDemote.ownerId != target.id) {
-        console.log(event);
         this.chatService.removeAdminsFromRoom(roomToDemote.id, target.id);
         this.eventEmitter.emit('room.admin.update', {
           isPromote: false,

@@ -93,7 +93,6 @@ export class GameService {
 
   async startGame(id: number): Promise<Game> {
     const game = await this.getGameById(id);
-    console.log("game", game);
     if (game.state != GameState.STARTED) {
         await this.userService.setStates(game.users, UserState.INGAME);
         return await this.prisma.game.update({
