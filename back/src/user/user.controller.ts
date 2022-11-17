@@ -84,6 +84,11 @@ export class UserController {
   async findOne(@Request() req, @Param('id') id: number): Promise<BasicUserI> {
       return this.userService.getBasicUser(Number(id));
   }
+  @Get('/profile/:id')
+  @UseGuards(Jwt2faAuthGuard)
+  async getProfile(@Request() req, @Param('id') id: number): Promise<any> {
+      return this.userService.getProfileUser(Number(id));
+  }
 
   /**
    * @api {post} /user/ Creer un nouvel utilisateur

@@ -562,7 +562,6 @@ export class PongService {
         ////
         //MOUVEMENTS DES JOUEURS
         ////
-        // console.log(this.variables);
         game.player1.paddle.y += game.player1.paddle.dy;
         game.player2.paddle.y += game.player2.paddle.dy;
     
@@ -603,7 +602,6 @@ export class PongService {
                 game.ball.y <= game.obstacle.y + game.ball.radius
         )
         {
-            console.log("North");
             game.ball.y = game.obstacle.y - game.ball.radius;
             game.ball.dy *= -1;
         }
@@ -615,7 +613,6 @@ export class PongService {
                 game.ball.y <= game.obstacle.y + game.obstacle.height + game.ball.radius
         )
         {
-            console.log("South");
             game.ball.y = game.obstacle.y + game.obstacle.height + game.ball.radius;
             game.ball.dy *= -1;
         }
@@ -626,7 +623,6 @@ export class PongService {
             game.ball.y <= game.obstacle.y + game.obstacle.height
         )
         {
-            console.log("Est");
             game.ball.x = game.obstacle.x + game.obstacle.width + game.ball.radius;
             game.ball.dx *= -1;
         }
@@ -637,7 +633,6 @@ export class PongService {
             game.ball.y <= game.obstacle.y + game.obstacle.height
         )
         {
-            console.log("West coast negzz ");
             game.ball.x = game.obstacle.x - game.ball.radius;
             game.ball.dx *= -1;
         }
@@ -799,7 +794,6 @@ export class PongService {
             game.ball.y <= MAP3_OBSTACLE2_POSY + MAP3_OBSTACLE2_H
         )
         {
-            // console.log("West coast negzz 2");
             game.ball.x = MAP3_OBSTACLE2_POSX - game.ball.radius;
             game.ball.dx *= -1;
         }

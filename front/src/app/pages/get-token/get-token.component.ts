@@ -39,7 +39,6 @@ export class GetTokenComponent implements OnInit {
       this.navbar.show();
       this.router.navigate(['/game']);
    } catch(Error) {
-     //console.log("error");
     this.snackBar.open("Merci de vous reconnectez", 'X', {
       duration: 3000,
     });

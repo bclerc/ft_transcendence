@@ -15,10 +15,10 @@
 
 		<div id="title-n-button">
 			<h3>Éditer mon profil</h3>
-			<button matTooltip="Enregister les mofifications">
+			<!-- <button matTooltip="Enregister les mofifications">
 				Sauvegarder
 				<img src="../../../../assets/svg/checked.svg" alt="save" >
-			</button>
+			</button> -->
 		</div>
 
 		<div id="edit-name">
@@ -39,9 +39,7 @@
 
 		<!-- UPLOAD PHOTO DE PROFILE -->
 
-		<div id="title-n-button">
-			<h4>Photo de profil</h4>
-		</div>
+		<h4>Photo de profil</h4>
 		<app-file-uploader [user]="user"></app-file-uploader>
 	</section>
 
@@ -55,9 +53,25 @@
 			<a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
 		</ng-template>
 		<ng-template #elseBlock>
-			<div *ngIf="!show" class="button-activate"><a href="javascript:void(0);" (click)="showActivate2Fa()">S'autentifier avec google ✌️</a></div>
-			<p *ngIf="show"><a href="javascript:void(0);" (click)="hideActivate2Fa()">Cacher la barre</a>
-			<app-activate2-fa></app-activate2-fa></p>
+			<div *ngIf="!show" class="button-activate">
+				<a id="text" href="javascript:void(0);" (click)="showActivate2Fa()">
+					S'autentifier avec google
+				</a>
+				<a href="javascript:void(0);" (click)="showActivate2Fa()">
+					<img src="../../../assets/svg/down-arrow.svg" alt="">
+				</a>
+			</div>
+			<div *ngIf="show" class="button-activate2">
+				<div id="two2">
+					<a id="text" href="javascript:void(0);" (click)="hideActivate2Fa()">
+						Fermer
+					</a>
+					<a href="javascript:void(0);" (click)="hideActivate2Fa()">
+						<img src="../../../assets/svg/little-close.svg" alt="">
+					</a>
+				</div>
+				<app-activate2-fa></app-activate2-fa>
+			</div>
 			<!-- <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a> -->
 		</ng-template>
 	</section>

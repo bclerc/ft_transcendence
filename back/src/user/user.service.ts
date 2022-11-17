@@ -117,6 +117,14 @@ export class UserService {
           orderBy: {
             createdAt: 'desc',
           },
+          where: {
+            winnerId: {
+              not: null,
+            },
+            loserId: {
+              not: null,
+            },
+          },
           select: {
             id: true,
             users: {
@@ -187,6 +195,64 @@ export class UserService {
       },
     });
     return users;
+  }
+
+  async getProfileUser(userId: number): Promise<any> {
+    if (!userId)
+      return null;
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        state: true,
+        intra_name: true,
+        displayname: true,
+        email: true,
+        avatar_url: true,
+        score: true,
+        games: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          where: {
+            winnerId: {
+              not: null,
+            },
+            loserId: {
+              not: null,
+            },
+          },
+          include: {
+            winner: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+            loser: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            games_win: true,
+            games_lose: true,
+            games: true,
+          }
+        }
+      },
+    });
+    if (user === undefined)
+      return null;
+    return user;
   }
 
   async getBasicUser(userId: number): Promise<BasicUserI> {

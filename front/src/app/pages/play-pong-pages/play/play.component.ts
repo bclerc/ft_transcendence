@@ -220,9 +220,6 @@ export class PlayComponent implements OnInit {
     var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
     if (canvas)
     {
-      // console.log("drawNormalMap");
-      // console.log(canvas.height);
-      // console.log(canvas.width);
         var context = canvas.getContext('2d');
         if (context)
         {
@@ -626,7 +623,6 @@ export class PlayComponent implements OnInit {
     }
     if (canvas)
     {
-      console.log("drawInit555");
       ratiox = canvas.width / WIDTHCANVAS;
       ratioy = canvas.height / HEIGHTCANVAS;
     }

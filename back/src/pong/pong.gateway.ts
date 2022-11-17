@@ -32,7 +32,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
       @Inject(GameService) private gameService: GameService,
 	){
-		// console.log("constructor gate");
 		
 		this.state = {
 			obstacle: {
@@ -152,8 +151,9 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let game: GameI = this.searchGameMapAwaiting(normalOrNot);
 		if (game)
 		{
-      (game);
-			// console.log("Match found " + client.id + " joined game " + game.id);
+
+			console.log("Match found " + client.id + " joined game " + game.id);
+
 			this.pongService.joinGame(client, game);
 			// client.emit('drawName', 0);
 
@@ -162,10 +162,9 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       this.sendToPlayers(game.player1.user, 'stopSearchLoop', game.id_searchinterval1);
       this.sendToPlayers(game.player2.user, 'stopSearchLoop', game.id_searchinterval2);
 
-			// console.log(game.id_searchinterval1, game.id_searchinterval2);
 			game.id_searchinterval1 = 0;
 			game.id_searchinterval2 = 0;
-    //   console.log("Before init seconde:" + new Date().getTime().toLocaleString());
+
 			await this.pongService.drawInit(game);
 
 			//le front ne sauvegarde pas l'id de la map bordel de mierde de la madre de dia
@@ -174,7 +173,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			// game.player2.socket.emit('getId', game.id);
 
 
-			// console.log("bordel de merde");
 			// this.gamesMap.delete(game.id);
 		}
 		else
@@ -197,7 +195,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	// 		if (value.player1.socket === client || (value.player2 && value.player2.socket === client))
 	// 		{
 	// 			client.emit('state', value.id);
-	// 			console.log("getidbackfrero");
 	// 			return ;
 	// 		}	
 	// 	}
@@ -251,8 +248,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
     if (game && dbGame)
     {
+      console.log("No match found, creating new game with id:", dbGame.id);
 
-    //   console.log("No match found, creating new game with id:", dbGame.id);
       game = {
 			id: dbGame.id,
 			player1: {
@@ -265,7 +262,9 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			ball: game.ball,
 			spectators: [],
 			obstacle: game.obstacle,
+      spectators: [],
       dbGame: dbGame
+
 		}
   }
     
@@ -318,7 +317,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   @OnEvent('game.users.matched')
   async matchedUsersEvent(data: any){
-    // console.log(data);
+
     this.sendToPlayers(data.player1.user, 'notification', "Vous avez matché avec " + data.player2.user.displayname);
     this.sendToPlayers(data.player2.user, 'notification', "Vous avez matché avec " + data.player1.user.displayname);
 
