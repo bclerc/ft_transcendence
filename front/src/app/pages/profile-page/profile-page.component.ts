@@ -30,10 +30,8 @@ export class ProfilePageComponent implements OnInit {
     this.id= Number( this.router.url.split('/')[2]);
     
       this.searchFriend();
-      //this.searchBlockedUser();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
-           console.log("data =",data);
           this.user = data;
         }
         );

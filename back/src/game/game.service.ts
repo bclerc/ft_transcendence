@@ -39,23 +39,42 @@ export class GameService {
         loser: true,
       }
     });
+
   }
 
-  async createGame(users: BasicUserI[]): Promise<Game>{
-    if (users.length < 2 || users.length > 2)
-      throw new Error("Invalid number of users");
+  async createGame(user: BasicUserI): Promise<Game>{
+    if (user) {
       return this.prisma.game.create({
         data: {
           users: {
-            connect: users.map(user => {
-              return {id: user.id}
-            })
+            connect: {
+              id: user.id
+            },
           },
         },
       })
+    }
   }
 
-  
+  async addPlayerToGame(gameId: number, userId: number): Promise<Game> {
+    const game = await this.getGameById(gameId);
+    if (game && game.users) {
+      if (game.users.length < 2) {
+        return this.prisma.game.update({
+          where: {
+            id: gameId
+          },
+          data: {
+            users: {
+              connect: {
+                id: userId
+              }
+            }
+          }
+        });
+    }
+  }
+}
   async getGameById(id: number): Promise<dbGame> {
     return await this.prisma.game.findUnique({
       where: {
@@ -74,8 +93,8 @@ export class GameService {
 
   async startGame(id: number): Promise<Game> {
     const game = await this.getGameById(id);
-
-    if (game.state != GameState.STARTED && game.users.length == 2) {
+    console.log("game", game);
+    if (game.state != GameState.STARTED) {
         await this.userService.setStates(game.users, UserState.INGAME);
         return await this.prisma.game.update({
           where: {
@@ -93,12 +112,25 @@ export class GameService {
   async stopGame(id: number, winnerId: number, loserId: number, loserScore: number, winnerScore: number): Promise<Game> {
     
     const game = await this.getGameById(id);
-
     if (game && game.users)
     {
       this.userService.setState(winnerId, UserState.ONLINE);
       this.userService.setState(loserId, UserState.ONLINE);
-      
+
+      // get leaderboard position
+
+
+      await this.prisma.user.update({
+        where: {
+          id: winnerId
+        },
+        data: {
+          score: {
+            increment: winnerScore
+          }
+        }
+      });
+
       return await this.prisma.game.update({
         where: {
           id: id
@@ -112,7 +144,10 @@ export class GameService {
         }
       })
     }
+    
+
     return null;
   }
+
 }
 

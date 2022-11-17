@@ -11,6 +11,7 @@ import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/act
 import { UnfoundPagesComponent } from './unfound-pages/unfound-pages.component';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
+import { PlayComponent } from './pages/play-pong-pages/play/play.component';
 
 
 
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'login/:id', component: GetTokenComponent},
   { path: 'code', component: SendCodeComponent},
-  { path: 'playpong', component: PlayPongPagesComponent, canActivate: [AuthGuard] }, 
+  { path: 'game', component: PlayPongPagesComponent, canActivate: [AuthGuard] }, 
+  { path: 'game/:id', component: PlayComponent, canActivate: [AuthGuard] }, 
   { path: 'chat', component: ChatPageComponent, canActivate: [AuthGuard]  },
   { path: 'friends', component: FriendsPageComponent, canActivate: [AuthGuard]  },
   { path: 'myprofile', component: MyProfileComponent, canActivate: [AuthGuard]/*, resolve: { userList: UserResolver } */},

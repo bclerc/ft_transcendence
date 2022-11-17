@@ -390,7 +390,6 @@ export class ChatService {
   async createRoom(owner: BasicUserI, newRoom: CreateChatDto): Promise<ChatRoom> {
     let hashedPassword = null;
 
-    console.log(newRoom);
     if (newRoom.password != null)
       hashedPassword = await this.passUtils.hashPass(newRoom.password);
 
@@ -469,6 +468,7 @@ export class ChatService {
           },
         },
     });
+
 
     await this.prisma.chatRoom.deleteMany({
       where: {
@@ -654,6 +654,12 @@ export class ChatService {
       },
     });
   
+    await this.prisma.chatRoom.delete({
+      where: {
+        id: roomId,
+      },
+    });
+
     await this.prisma.chatRoom.delete({
       where: {
         id: roomId,

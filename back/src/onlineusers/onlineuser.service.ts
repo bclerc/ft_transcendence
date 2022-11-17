@@ -35,8 +35,8 @@ export class OnlineUserService {
     this.userService.setState(user.id, UserState.ONLINE);
   }
 
-  async newConnect(socket: Socket)
-  {
+  async newConnect(socket: Socket): Promise<BasicUserI> {
+  
     try {
       const token = socket.handshake.query['token'] as string;
       const res = this.jwtService.verify(token, {
@@ -45,11 +45,16 @@ export class OnlineUserService {
       });
       const user = await this.userService.findOne(res.sub);
       if (!user)
-        return socket.disconnect();
+      {
+        socket.disconnect();
+        return null;
+      }
       this.initUser(socket.id, user);
       socket.data.user = user;
+      return user;
     } catch (error) {
-      return socket.disconnect();
+      socket.disconnect();
+      return null; 
     }
   }
 

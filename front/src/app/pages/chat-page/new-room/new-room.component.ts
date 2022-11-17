@@ -34,7 +34,7 @@ export class NewRoomComponent implements OnInit {
 	users: new FormArray([], [Validators.required])
 	});
 
-	constructor(private chatService: ChatService,
+	constructor(private chatService: ChatService, 
 	private userService: UserService) { }
 	
 	async ngOnInit() {

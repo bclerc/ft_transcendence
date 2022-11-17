@@ -7,6 +7,8 @@ import { Socket } from 'socket.io';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { GameService } from 'src/game/game.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+
 
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 80;
@@ -65,64 +67,55 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 
 ////
 
-export const MAX_SCORE = 5;
+export const MAX_SCORE = 10;
 
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
 export const SPEED_PLAYER = 8
 
+
+
 @Injectable()
 export class PongService {
-	// variables: VariablePong;
-
-    constructor(
-	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
-	    @Inject(GameService) private gameService: GameService,
-
-        // private variables: VariablePong
-    )
-    {
-    };
-
-    async drawInit(game: GameI)
-    {
-        game.player1.socket.emit('drawInit');
-        game.player2.socket.emit('drawInit');
-        game.player1.socket.emit('drawText', "3");
-        game.player2.socket.emit('drawText', "3");
-        await this.delay(1000);
-        game.player1.socket.emit('drawInit');
-        game.player2.socket.emit('drawInit');
-        game.player1.socket.emit('drawText', "2");
-        game.player2.socket.emit('drawText', "2");
-        await this.delay(1000);
-        game.player1.socket.emit('drawInit');
-        game.player2.socket.emit('drawInit');
-        game.player1.socket.emit('drawText', "1");
-        game.player2.socket.emit('drawText', "1");
-        await this.delay(1000);
-        game.player1.socket.emit('drawInit');
-        game.player2.socket.emit('drawInit');
-        game.player1.socket.emit('drawText', "Start !");
-        game.player2.socket.emit('drawText', "Start !");
-        await this.delay(200);
-        if (game.dbGame)
-          this.gameService.startGame(game.dbGame.id);
-    }
-
-	delay(ms: number) {
-		return new Promise( resolve => setTimeout(resolve, ms) );
-    }
-
-    private colision(ball: BallI, paddle: PointI): boolean {
-        if (ball.x + ball.radius < (WIDTHCANVAS - paddle.width) && ball.x - ball.radius > (0 + paddle.width))
-            return false;
-        if (ball.y >= paddle.y && ball.y <= paddle.y + paddle.height)
+  // variables: VariablePong;
+  
+  constructor(
+    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
+    @Inject(GameService) private gameService: GameService,
+                        private eventEmitter: EventEmitter2)
+        // private variables: VariablePong )
+        {
+        }
+        
+  public delay(ms: number) {
+      return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+  
+  async drawInit(game: GameI)
+  {
+    if (game)
+      this.eventEmitter.emit('game.init', game);
+  }
+  
+  userIsInGame(user: BasicUserI, gameMap: Map<number, GameI>): boolean {
+    let isInGame = false;
+    
+    gameMap.forEach((game: GameI) => {
+    if (game.player1.user.id === user.id || (game.player2 && game.player2.user.id === user.id)) {
+      isInGame = true;
+    }});
+    return isInGame;
+  } 
+  
+  private colision(ball: BallI, paddle: PointI): boolean {
+    if (ball.x + ball.radius < (WIDTHCANVAS - paddle.width) && ball.x - ball.radius > (0 + paddle.width))
+    return false;
+    if (ball.y >= paddle.y && ball.y <= paddle.y + paddle.height)
         return true;
         return false;
-    }
-
-    private reinitBall(ball: BallI, dir: number): void {
+      }
+      
+      private reinitBall(ball: BallI, dir: number): void {
         ball.x = WIDTHCANVAS /2;
         ball.y = HEIGHTCANVAS /2;
         if (dir > 0)
@@ -193,7 +186,7 @@ export class PongService {
 		};
         
 		var state: GameI = {
-            id: "1",
+            id: 1,
 			player1: p1,
 			player2: p2,
             type: 0,
@@ -219,73 +212,75 @@ export class PongService {
 		return state;
 	}
 
-    keydown(game: GameI, client: Socket, key: string)
+    keydown(game: GameI, client: BasicUserI, key: string)
     {
         if (key === 'z' || key === 'w')
         {
-            if (game && game.player1 && game.player1.socket === client)
+            if (game && game.player1 && game.player1.user.id === client.id)
             {
                 game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
                 if (game.player1.paddle.dy < -SPEED_PLAYER)
-                    game.player1.paddle.dy = -SPEED_PLAYER;
+                game.player1.paddle.dy = -SPEED_PLAYER;
             }
-            else if (game && game.player2 && game.player2.socket === client)
+            else if (game && game.player2 && game.player2.user.id === client.id)
             {
                 game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
                 if (game.player2.paddle.dy < - SPEED_PLAYER)
-                    game.player2.paddle.dy = -SPEED_PLAYER;
+                game.player2.paddle.dy = -SPEED_PLAYER;
             }
         }
         else if (key === 's')
         {
-            if (game && game.player1 && game.player1.socket === client)
+            if (game && game.player1 && game.player1.user.id === client.id)
             {
                 game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
                 if (game.player1.paddle.dy > SPEED_PLAYER)
-                    game.player1.paddle.dy = SPEED_PLAYER;
+                game.player1.paddle.dy = SPEED_PLAYER;
             }
-            else if (game && game.player2 && game.player2.socket === client)
+            else if (game && game.player2 && game.player2.user.id === client.id)
             {
                 game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
                 if (game.player2.paddle.dy > SPEED_PLAYER)
                    game.player2.paddle.dy = SPEED_PLAYER;
-                }
+            }
         }
     }
 
-    keyup(game: GameI, client: Socket,  key: string)
+    keyup(game: GameI, client: BasicUserI,  key: string)
     {
-        console.log("keyup");
         if (key === 'z' || key === 'w')
         {
-            if (game.player1.socket === client)
+            if (game.player1.user.id === client.id)
                 game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
             else
-                game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
+            game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
         }
         else if (key === 's')
         {
-            if (game.player1.socket === client)
+            if (game.player1.user.id === client.id)
                 game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
             else
                 game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
             }
     }
 
-    joinGame(client: Socket, game: GameI){
-		game.player2 = {
-        user: this.onlineUserService.getUser(client.id),
-        socket: client,
-			paddle: {
-				x: WIDTHCANVAS - PLAYER_WIDTH,
-				y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-				dx: 0,
-				dy: 0,
-				width: PLAYER_WIDTH,
-				height: PLAYER_HEIGHT
-			},
-    		points: 0,
-		}
+    async joinGame(client: Socket, game: GameI){
+      const player = await this.onlineUserService.getUser(client.id);
+
+     await this.gameService.addPlayerToGame(game.id, player.id);
+      game.player2 = {
+          user: player,
+        paddle: {
+          x: WIDTHCANVAS - PLAYER_WIDTH,
+          y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
+          dx: 0,
+          dy: 0,
+          width: PLAYER_WIDTH,
+          height: PLAYER_HEIGHT
+        },
+          points: 0,
+      }
+      this.eventEmitter.emit('game.users.matched', game);
 	}
 
     deleteGame(g: GameI, allGames: GameI[]){
@@ -295,58 +290,22 @@ export class PongService {
     
     private drawForAll(map: string, game: GameI)
     {
-        var i = 0;
-        var copy = JSON.parse(JSON.stringify(game, (key, value) => {
-            if (key === 'socket')
-                return undefined;
-            return value;
-        }));
-        
-        game.player1.socket.emit(map, copy);
-        game.player2.socket.emit(map, copy);
-        if (game.spectators)
-        {
-            while (game.spectators[i])
-            {
-                // game.spectators[i].socket.emit(map, copy);
-                i++;
-            }
-        }
+      if (map && game) {
+        this.eventEmitter.emit('game.draw', map, game);
+      }
     }
 
-    private scoreForAll(game: GameI)
-    {
-        var i = 0;
-        var score = {
-            score1: game.player1.points,
-            score2: game.player2.points
-        }
-        console.log("score for alll")
-    
 
-        game.player1.socket.emit('score', score);
-        game.player2.socket.emit('score', score);
-        if (game.spectators)
-        {
-            while (game.spectators[i])
-            {
-                // game.spectators[i].socket.emit('score', score);
-                i++;
-            }
-        }
-    }
 
     private finalForAll(game: GameI)
     {
         var i = 0;
 
         let winnerId, looserId, winnerScore, looserScore;
-
+        console.log("Game finished");
 
         if (game.player1.points === MAX_SCORE)
         {
-            game.player1.socket.emit('win');
-            game.player2.socket.emit('lose');
             winnerId = game.player1.user.id;
             looserId = game.player2.user.id;
             winnerScore = game.player1.points;
@@ -354,8 +313,6 @@ export class PongService {
         }
         else
         {
-            game.player1.socket.emit('lose');
-            game.player2.socket.emit('win');
             winnerId = game.player2.user.id;
             looserId = game.player1.user.id;
             winnerScore = game.player2.points;
@@ -364,12 +321,11 @@ export class PongService {
         //Draw le final dune autre maniere pour les spectators !!!
         // game.spectators[].socket.emit('');
         this.gameService.stopGame(game.dbGame.id, winnerId, looserId, looserScore, winnerScore);
+        
     }
 
 	async startGame(game: GameI, mapid: number)
     {
-        game.player1.socket.emit('state', game.id);
-        game.player2.socket.emit('state', game.id);
         if (mapid === 0)
         {
             game.id_interval = setInterval(() => {
@@ -457,7 +413,6 @@ export class PongService {
                 game.player1.points++;
                 this.reinitBall(game.ball, 1);
             }
-            this.scoreForAll(game);
             if (game.player1.points === MAX_SCORE || game.player2.points === MAX_SCORE) ///Si Max SCORE atteint
             {
                 clearInterval(game.id_interval);
@@ -532,7 +487,6 @@ export class PongService {
                 game.player1.points++;
                 this.reinitBall(game.ball, 1);
             }
-            this.scoreForAll(game);
             if (game.player1.points === MAX_SCORE || game.player2.points === MAX_SCORE) ///Si Max SCORE atteint
             {
                 clearInterval(game.id_interval);
@@ -695,7 +649,6 @@ export class PongService {
                 game.player1.points++;
                 this.reinitBall(game.ball, 1);
             }
-            this.scoreForAll(game);
             if (game.player1.points === MAX_SCORE || game.player2.points === MAX_SCORE) ///Si Max SCORE atteint
             {
                 clearInterval(game.id_interval);
@@ -859,7 +812,6 @@ export class PongService {
                 game.player1.points++;
                 this.reinitBall(game.ball, 1);
             }
-            this.scoreForAll(game);
             if (game.player1.points === MAX_SCORE || game.player2.points === MAX_SCORE) ///Si Max SCORE atteint
             {
                 clearInterval(game.id_interval);
@@ -887,4 +839,10 @@ export class PongService {
         }
         this.drawForAll("drawMap3", game);
     }
+
+   async usersMatched(users: BasicUserI[], game: GameI): Promise<void> {
+    if (game && game.dbGame) {
+      this.eventEmitter.emit('game.users.matched', { users, game });
+    }
+   }
 }
