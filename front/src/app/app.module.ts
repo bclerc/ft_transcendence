@@ -59,6 +59,7 @@ import { ListMatchHistoryComponent } from './pages/my-profile/list-match-history
 import { MatMenuModule } from '@angular/material/menu';
 import { HttpErrorInterceptor } from './httpErrorHandler';
 import { BurgerMenuService } from './services/burger-menu.service';
+import { LeaderbordComponent } from './pages/leaderbord/leaderbord.component';
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
@@ -98,6 +99,7 @@ export function tokenGetter() {
     ListUserBlockedComponent,
     ListMyFriendComponent,
     ListMatchHistoryComponent,
+    LeaderbordComponent,
   ],
   imports: [
     BrowserModule,
