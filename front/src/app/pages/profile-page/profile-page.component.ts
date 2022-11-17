@@ -13,9 +13,9 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./profile-page.component.css']
 })
 export class ProfilePageComponent implements OnInit {
-  @Output() user! : UserI;
-  // user? : UserI;
-  currentUser?: UserI;
+  @Output() games! : any;
+  user! : UserI;
+  currentUser!: UserI;
   id! : number;
   subscription! : Subscription;
   subscription2! : Subscription;
@@ -33,11 +33,17 @@ export class ProfilePageComponent implements OnInit {
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
           this.user = data;
-          console.log("yolo = ", data);
+          // console.log("yolo = ", data);
         }
         );
       if (this.id === this.token.getId() )
         this.router.navigate(['/myprofile']);
+      this.subscription3 =  this.userService.GetUserHistory(this.id).subscribe(
+        (data : any) => {
+          this.games = data;
+          console.log("games = ", data);
+        }
+        );
   }
 
   searchFriend(): void {
