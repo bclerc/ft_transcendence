@@ -54,6 +54,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { HttpErrorInterceptor } from './httpErrorHandler';
 import { BurgerMenuService } from './services/burger-menu.service';
 import { PlayComponent } from './pages/play-pong-pages/play/play.component';
+import { AddFriendListComponent } from './pages/my-profile/add-friend-list/add-friend-list.component';
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
@@ -92,6 +93,7 @@ export function tokenGetter() {
     ListMyFriendComponent,
     ListMatchHistoryComponent,
     PlayComponent,
+    AddFriendListComponent,
   ],
   imports: [
     BrowserModule,
