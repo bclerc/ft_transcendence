@@ -1,29 +1,5 @@
-  <div class="names">
-    <div class="playerNameLeft" id="leftName">
-      {{player1.displayname | async}}
-    </div>
-    <div class="playerNameRight" id="rightName">
-      {{player2.intra_name | async }}
-    </div>
-</div>
 
 <div align="center">
-  <!-- <canvas id="pong" height=400 width=600 #canvasPong></canvas> -->
-  <canvas id="pong" class="pongCanvas" (window:resize)="onResizeWin($event)"></canvas>
-  <div id="idGame"></div>
-</div>
-
-<!-- <div id="log">
-  <div id="canvasWidth"></div>
-  <div id="canvasHeight"></div>
-  <div id="ballX"></div>
-  <div id="ballY"></div>
-  <div id="middleLineX"></div>
-  <div id="middleLineY"></div>
-</div> -->
-
-<div class="score_c" id="score">0 : 0</div>
-<div align="center">
-      <button id="buttonStart" (click)="newGame(true)" class="myButton">Start</button>
-      <button id="buttonStartRandom" (click)="newGame(false)" class="myButton">StartRandom</button>
+      <button matButton (click)="newGame(true)" >Partie</button>
+      <button matButton (click)="newGame(false)" >Partie aléatoire</button>
 </div>

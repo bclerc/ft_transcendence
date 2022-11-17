@@ -9,5 +9,5 @@ export enum PenaltyType {
 export interface newPenalty {
    target: UserI;
    room: ChatRoom;
-   penalty: PenaltyType;  
+   penalty: PenaltyType;
 }

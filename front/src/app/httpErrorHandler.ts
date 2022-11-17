@@ -56,7 +56,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             else
             {
               errorMessage = "An error occured";
-              this.router.navigate([''])
+              this.router.navigate(['error'])
             }
                     
             // console.log(errorMessage);:

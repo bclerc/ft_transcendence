@@ -63,7 +63,9 @@
 		<!-- MEMBRE -->
 		<div id="membre" *ngFor="let member of (room.users) ">
 			<div class="info">
-				<img id="photo" [src]="member.avatar_url" [alt]="member.displayname">
+				<a [routerLink]="['/profile/' + member.id ]">
+				<img id="photo" [src]="member.avatar_url"  [alt]="member.displayname">
+			</a>
 				<div class="name-status">
 					<div class="name-admin">
 						<div id="user-name">{{member.displayname}}</div>

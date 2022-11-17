@@ -1,29 +1,33 @@
 import { Inject } from "@nestjs/common";
+import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketServer, SubscribeMessage, WebSocketGateway, ConnectedSocket, OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect } from "@nestjs/websockets";
 import { Game } from "@prisma/client";
 import { identity } from "rxjs";
 import { Server, Socket } from "socket.io";
 import { GameService } from "src/game/game.service";
 import { OnlineUserService } from "src/onlineusers/onlineuser.service";
+import { BasicUserI } from "src/user/interface/basicUser.interface";
 import { GameI } from "./interfaces/game.interface";
-import { UserI } from "./interfaces/user.interface";
 import { PongService } from "./services/pong.service";
 
 const NORMALGAME = 0;
 const MAX_MAP = 3;
+
+
 
 @WebSocketGateway(8181, {
 	cors: {
 		origin: "*"
 	}
 })
+
 export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 	
 	@WebSocketServer()
 	server: Server;
 	state: GameI;
-	gamesMap: Map<string, GameI>;
-	connectedUsers: UserI[];
+	gamesMap: Map<number, GameI>;
+	connectedUsers: Map<number, string> = new Map<number, string>();
 
 
 	constructor(
@@ -32,7 +36,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       @Inject(GameService) private gameService: GameService,
 	){
 		console.log("constructor gate");
-		this.connectedUsers = [];
+		
 		this.state = {
 			obstacle: {
 				x:0,
@@ -45,7 +49,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		};
 		// this.allGames = [];
 		// this.allRandomGames = [];
-		this.gamesMap = new Map<string, GameI>;
+		this.gamesMap = new Map<number, GameI>;
 	};
 
 	//////
@@ -56,6 +60,11 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	handleDisconnect(client: Socket) {
+
+    const user = this.onlineUserService.getUser(client.id);
+    if (user && user.id)
+      this.connectedUsers.delete(user.id);
+
 		// this.connectedUsers = this.connectedUsers.filter((user) => user.id != client.id);
 
 		// var g = this.allGames.find(game => (game.player1.socket === client));
@@ -67,11 +76,17 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		// 	if (g)
 		// 		this.pongService.deleteGame(g, this.allRandomGames);
 		// }
+
 	}
 	  
-	handleConnection(client: Socket, ...args: any[]) {
-	    this.onlineUserService.newConnect(client);
-		this.addNewUser(client); //ajoute le nouveau socket utilisateur au tableau des utilisateurs
+	async handleConnection(client: Socket) {
+	  const user: BasicUserI = await this.onlineUserService.newConnect(client);
+    
+    if (user && user.id)
+    {
+      this.connectedUsers.set(user.id, client.id);
+      client.emit('enableButtonS');
+    }
 	}
 
 
@@ -91,26 +106,33 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 
 	@SubscribeMessage('keydown')
-	keydown(client: Socket, keydown: string){
-		// console.log("ici", id);
-		// let game = this.gamesMap.get(id);
-		// this.pongService.keydown(game, client, keydown);
-		for (let game of this.gamesMap.values())
-		{
-			if (game.player1 && client === game.player1.socket || game.player2 && client === game.player2.socket)
-				this.pongService.keydown(game, client, keydown);
-		}
+	keydown(client: Socket, keydown: string) {
+    const user = this.onlineUserService.getUser(client.id);
+
+    this.gamesMap.forEach((game, id) => {
+      if (game.player1.user.id === user.id || game.player2.user.id === user.id)
+      {
+        this.pongService.keydown(game, user, keydown);
+        return ;
+      }
+		});
 	}
 
 
 	@SubscribeMessage('keyup')
-	keyup(client: Socket, keyup: string)
-	{
-		for (let game of this.gamesMap.values())
-		{
-			if (game.player1 && client === game.player1.socket || game.player2 && client === game.player2.socket)
-				this.pongService.keyup(game, client, keyup);
-		}
+	keyup(client: Socket, keyup: string) {
+    const user = this.onlineUserService.getUser(client.id);
+    if (!user)
+      return ;
+    this.gamesMap.forEach((game, id) => {
+      if (!game.player1.user || !game.player2.user)
+        return ; 
+      if (game.player1.user.id === user.id || game.player2.user.id === user.id)
+      {
+        this.pongService.keyup(game, user, keyup);
+        return ;
+      }
+		});
 	}
 
 	////////
@@ -120,36 +142,42 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@SubscribeMessage('newGame')
 	async newGame(client: Socket, normalOrNot: boolean)
 	{
+    let user = this.onlineUserService.getUser(client.id);
+    if (user)
+    {
+      if (this.pongService.userIsInGame(user, this.gamesMap))
+      {
+        client.emit('notification', "Vous êtes déjà dans une partie");
+         return ;
+      }
+    }
+
 		// var game: GameI = this.searchGameAwaiting();
-    let dbGame: Game;
 		let game: GameI = this.searchGameMapAwaiting(normalOrNot);
 		if (game)
 		{
-			console.log(game);
+      console.log(game);
+			console.log("Match found " + client.id + " joined game " + game.id);
 			this.pongService.joinGame(client, game);
 			// client.emit('drawName', 0);
-      game.dbGame = await this.gameService.createGame([game.player1.user, game.player2.user]);
+
 			await this.pongService.delay(1500);
-			if (game.player1.socket)
-				game.player1.socket.emit('stopSearchLoop', game.id_searchinterval1);
-			if (game.player2.socket)
-				game.player2.socket.emit('stopSearchLoop', game.id_searchinterval2);
+
+      this.sendToPlayers(game.player1.user, 'stopSearchLoop', game.id_searchinterval1);
+      this.sendToPlayers(game.player2.user, 'stopSearchLoop', game.id_searchinterval2);
+
 			// console.log(game.id_searchinterval1, game.id_searchinterval2);
 			game.id_searchinterval1 = 0;
 			game.id_searchinterval2 = 0;
+      console.log("Before init seconde:" + new Date().getTime().toLocaleString());
 			await this.pongService.drawInit(game);
-			console.log("game started");
-			game.player1.socket.emit('user1',game.player1.user);
-			game.player1.socket.emit('user2',game.player2.user);
-			game.player2.socket.emit('user1',game.player1.user);
-			game.player2.socket.emit('user2',game.player2.user);
 
 			//le front ne sauvegarde pas l'id de la map bordel de mierde de la madre de dia
 			//obliger de boucler a chaque keyboardEvent
 			// game.player1.socket.emit('getId', game.id); 
 			// game.player2.socket.emit('getId', game.id);
 
-			await this.pongService.startGame(game, game.mapId);
+
 			// console.log("bordel de merde");
 			// this.gamesMap.delete(game.id);
 		}
@@ -185,12 +213,15 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage('id_intervalmap')
 	varSearchLoopMap(client: Socket, id: number){
-		for (let value of this.gamesMap.values()) {
-			if (value.player1.socket === client)
+    const user = this.onlineUserService.getUser(client.id);
+    if (user) {
+      for (let value of this.gamesMap.values()) {
+        if (value.player1.user.id === user.id)
 				value.id_searchinterval1 = id;
-			else if (value.player2 && value.player2.socket === client)
+        else if (value.player2 && value.player2.user.id === user.id)
 				value.id_searchinterval2 = id;
-		}
+      }
+    }
 		return undefined;
 	}
 
@@ -216,35 +247,35 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		return undefined;
 	}
 
-	private addNewUser(client: Socket)
-	{
-		var user: UserI = {
-			id: client.id
-		}
-		this.connectedUsers.push(user);
-	}
 
-	private creatNewGameMap(client: Socket, mapId: number) {
+	private async creatNewGameMap(client: Socket, mapId: number) {
+    const user = this.onlineUserService.getUser(client.id);
 		var game: GameI = this.pongService.initState();
-		game = {
-			id: client.id,
+    var dbGame: Game = await this.gameService.createGame(user);
+
+    if (game && dbGame)
+    {
+
+      console.log("No match found, creating new game with id:", dbGame.id);
+      game = {
+			id: dbGame.id,
 			player1: {
-        user: this.onlineUserService.getUser(client.id),
-				socket: client,
+        user: user,
 				paddle: game.player1.paddle,
 				points: game.player1.points,
 			},
 			player2: undefined,
 			mapId: mapId,
 			ball: game.ball,
-			obstacle: game.obstacle
+			obstacle: game.obstacle,
+      dbGame: dbGame
 		}
-
+  }
+    
 		//Random uniqId:
 
-
+    
 		this.gamesMap.set(game.id, game);
-		console.log(game);
 		// client.emit("getId", game.id);
 		// this.allGames.push(game);
 	}
@@ -256,9 +287,86 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		{
 			if (game.player1 && game.player1.user.intra_name === toWatch || game.player2 && game.player2.user.intra_name === toWatch)
 			{
-				game.spectators.push(spectator);
+        const newSpec = this.onlineUserService.getUser(spectator.id);
+				game.spectators.push(newSpec);
 				return ;
 			}
 		}
 	}
+
+  @OnEvent('game.init')
+  async gameInit(game: GameI) {
+    if (game && game.dbGame) {
+      console.log("drawInit");
+      this.sendToGame(game, 'redirectGame', game.id);
+      this.sendToGame(game, 'drawInit', null);
+      this.sendToGame(game, 'drawText', "3");
+      await this.pongService.delay(1000);
+      this.sendToGame(game, 'drawInit', null);
+      this.sendToGame(game, 'drawText', "2");
+      await this.pongService.delay(1000);
+      this.sendToGame(game, 'drawInit', null);
+      this.sendToGame(game, 'drawText', "1");
+      await this.pongService.delay(1000);
+      this.sendToGame(game, 'drawInit', null);
+      this.sendToGame(game, 'drawText', "Start");
+      await this.pongService.delay(200);
+      if (game.dbGame)
+      {
+        this.gameService.startGame(game.dbGame.id);
+        await this.pongService.startGame(game, game.mapId);
+      }
+    }
+  }
+
+  @OnEvent('game.users.matched')
+  async matchedUsersEvent(data: any){
+    console.log(data);
+    this.sendToPlayers(data.player1.user, 'notification', "Vous avez matché avec " + data.player2.user.displayname);
+    this.sendToPlayers(data.player2.user, 'notification', "Vous avez matché avec " + data.player1.user.displayname);
+
+  }
+
+  @OnEvent('game.draw')
+  async updateGameEvent(map: string, game: GameI) {
+    if (game && game.dbGame) {
+        const score = {
+          score1: game.player1.points,
+          score2: game.player2.points
+      }
+      for (const user of [game.player1.user, game.player2.user, ...game.spectators]) {
+         const userSocket = this.connectedUsers.get(user.id);
+        if (user && user && user.id) {
+          this.server.to(userSocket).emit(map, game);
+          this.server.to(userSocket).emit('score', score);
+        }
+      }
+    }
+  }
+
+  @OnEvent('game.end')
+  async endGameEvent(game: GameI, winnerId: number, loserId: number) {
+    const winnerSocket = this.connectedUsers.get(winnerId);
+    const loserSocket = this.connectedUsers.get(loserId);
+    if (game && game.dbGame) {
+      this.server.to(winnerSocket).emit('win');
+      this.server.to(loserSocket).emit('lose');
+
+    }
+  }
+
+  sendToGame(game: GameI, event: string, data: any) {
+    for (const user of [game.player1.user, game.player2.user]) {
+      if (user) {
+        this.sendToPlayers(user, event, data);
+      }
+    }
+  }
+
+  sendToPlayers(user: BasicUserI, event: string, data: any) {
+    const userSocket = this.connectedUsers.get(user.id);
+    if (event && userSocket)
+        this.server.to(userSocket).emit(event, data);
+      //spectators
+  }
 }

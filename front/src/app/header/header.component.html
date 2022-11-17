@@ -45,7 +45,7 @@
 
 				<!-- Nav -->
 				<ul>
-					<li><a routerLink="/playpong" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Le
+					<li><a routerLink="/game" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Le
 							jeu</a></li>
 					<li><a routerLink="/chat" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Le chat
 						<!-- Bubble Notif -->
@@ -60,7 +60,7 @@
 					<li><a routerLink="/friends" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Le classement</a></li>
 					<!-- <li><a routerLink="/friends" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Amis</a></li> -->
 					<li><a routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Mon profil</a></li>
-					<li><a href="javascript:void(0);" (click)="logOut()">Déconnexion</a></li>
+					<li><a href="javascript:void(0);" (click)="logOut()">Dégage</a></li>
 				</ul>
 			</nav>
 		</div><!-- .right -->
@@ -72,7 +72,7 @@
 			<div class="nav-mobile">
 				<nav>
 					<ul>
-						<li><a routerLink="/playpong" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="burgerMenuShow()">Le jeu</a></li>
+						<li><a routerLink="/game" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="burgerMenuShow()">Le jeu</a></li>
 						<li><a routerLink="/chat" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="burgerMenuShow()">Le chat
 							<!-- Bubble Notif -->
 							<ng-container *ngIf="(newMessage | async )">

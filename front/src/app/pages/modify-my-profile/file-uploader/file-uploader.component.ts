@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserService } from '../services/user/user.service';
+import { UserI } from '../../../models/user.models';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-file-uploader',
@@ -8,19 +9,24 @@ import { UserService } from '../services/user/user.service';
   styleUrls: ['./file-uploader.component.css']
 })
 export class FileUploaderComponent implements OnInit {
+  @Input() user! : UserI;
+
+  selectedFile! : File ;
+  imagePreview?: string | ArrayBuffer | null ;
+  subscription? : Subscription;
 
   constructor(private userService : UserService) { }
 
   ngOnInit(): void {
+    this.imagePreview = this.user.avatar_url;
   }
 
   ngOnDestroy(): void{
+    if (this.subscription != undefined)
     this.subscription?.unsubscribe();
   }
 
-  selectedFile! : File ;
-  imagePreview?: string | ArrayBuffer | null;
-  subscription? : Subscription;
+
   onFileUpload(event: any) : void
   {
     this.selectedFile = event.target.files[0]
