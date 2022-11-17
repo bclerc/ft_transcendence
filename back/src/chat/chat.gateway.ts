@@ -182,7 +182,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     try {
       this.wschatService.newMessage(client.id, message);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 

@@ -88,7 +88,6 @@ export class GameService {
         users: true,
       }
     });
-
   }
 
   async startGame(id: number): Promise<Game> {
