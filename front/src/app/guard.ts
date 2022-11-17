@@ -22,7 +22,6 @@ export class AuthGuard implements CanActivate {
     const token = this.token.getToken();
     this.userService.isUserAuthentificated().subscribe(
       (data : any) =>{
-        //console.log("guard = ", data);
       }
     )
     if (token)
@@ -54,7 +53,6 @@ export class AuthGuard implements CanActivate {
     // const decodedToken = this.jwt.decodeToken(token);
     // this.userService.isUserAuthentificated().subscribe(
       // (data : any) =>{
-      //   console.log("guard = ", data);
       // }
     // )
 

@@ -14,6 +14,14 @@ mat-dialog-container {
 
 .custom-modalbox mat-dialog-container{
   background-color: #1f1f1f !important;
+  box-shadow: none;
   /* background-color: #feefcf !important; */
-  border: 12px solid #ee481e;
+  /* border:8px solid #ee481e; */
+}
+
+.backdropBackground {
+  /* background-color: rgba(22,22,22, 0.2); */
+  box-shadow: none;
+  /* opacity: 10%; */
+  backdrop-filter: blur(25px);
 }

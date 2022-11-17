@@ -39,11 +39,11 @@ export class FileUploaderComponent implements OnInit {
   }
 
   public OnUploadFile(): void {
+    console.log("coucou");
     const formData = new FormData();
     formData.append("image", this.selectedFile);
     this.subscription = this.userService.uploadAvatar(formData).subscribe(
       (data : any) => {
-        console.log("data =",data);
       }
     );
     /*return await request(
@@ -56,11 +56,9 @@ export class FileUploaderComponent implements OnInit {
   }
 
   /*OnUploadFile(): void {
-    console.log(this.selectedFile);
     if (this.selectedFile)
       this.userService.uploadAvatar(this.selectedFile).subscribe(
         (data : any) => {
-          console.log("data =",data);
         }
       );
     }*/

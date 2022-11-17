@@ -35,14 +35,12 @@ export class MyProfileComponent implements OnInit {
   async ngOnInit(){
         this.subscription = this.currentUser.getCurrentUser().subscribe(
         (data : any) => {
-           console.log("currentUser =", data)
           this.user = data;
         },
         );
   
       this.subscriptionFriend =  this.userService.getFriends().subscribe(
         (data : any) => {
-          console.log("Friends =", data)
           this.friends = data;
         }
       )

@@ -7,7 +7,6 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { MyProfileComponent } from './pages/my-profile/my-profile.component';
 import { PlayPongPagesComponent } from './pages/play-pong-pages/play-pong-pages.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
-import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/activate2-fa.component';
 import { UnfoundPagesComponent } from './unfound-pages/unfound-pages.component';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
@@ -26,7 +25,6 @@ const routes: Routes = [
   { path: 'friends', component: FriendsPageComponent, canActivate: [AuthGuard]  },
   { path: 'myprofile', component: MyProfileComponent, canActivate: [AuthGuard]/*, resolve: { userList: UserResolver } */},
   // { path: 'modifymyprofile', component: ModifyMyProfileComponent, canActivate: [AuthGuard], resolve: { userList : UserResolver } },
-  { path: 'modifymyprofile/activate2fa', component: Activate2FaComponent, canActivate: [AuthGuard]/*, resolve: { userList : UserResolver } */},
   { path: 'profile/:id', component: ProfilePageComponent, canActivate: [AuthGuard]/*, resolve: { userList : UserResolver } */},
   { path: '**', component: UnfoundPagesComponent },
 

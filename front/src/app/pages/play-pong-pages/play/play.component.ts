@@ -229,11 +229,8 @@ export class PlayComponent implements OnInit {
     var ratiox = canvas!.width / WIDTHCANVAS;
     var ratioy = canvas!.height / HEIGHTCANVAS;
     var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
-    console.log(ratiox, ratioy);
     if (canvas)
     {
-      console.log(canvas.height);
-      console.log(canvas.width);
         var context = canvas.getContext('2d');
         if (context)
         {
@@ -651,7 +648,6 @@ export class PlayComponent implements OnInit {
 
     if (canvas)
     {
-      console.log("drawInit555");
       ratiox = canvas.width / WIDTHCANVAS;
       ratioy = canvas.height / HEIGHTCANVAS;
     }
