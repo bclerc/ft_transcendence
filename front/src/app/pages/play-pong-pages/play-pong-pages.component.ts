@@ -13,19 +13,18 @@ import { UserI } from '../../models/PongInterfaces/user.interface';
   templateUrl: './play-pong-pages.component.html',
   styleUrls: ['./play-pong-pages.component.css']
 })
-
 @Injectable(
   {providedIn: 'root'}
 )
-export class PlayPongPagesComponent implements OnInit {
+export class PlayPongPagesComponent implements OnInit
+{
   user: UserI = {};
   ratiox: number;
   ratioy: number;
   id!: string;
   private var_interval: number;
 
-  constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService
-  )
+  constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService)
   {
     this.var_interval = 0;
     this.ratiox = 1;
@@ -34,16 +33,12 @@ export class PlayPongPagesComponent implements OnInit {
 
   ngOnInit(): void 
   {
-
-    this.socket.on('id', this.idMessage);
+    // this.socket.on('id', this.idMessage);
     this.socket.on('enableButtonS', this.enableButtonS);
     this.socket.on('stopSearchLoop', this.stopSearchLoop);
-
     this.socket.on('getId', this.getId);
-
     this.enableButtonS();
     // this.socket.emit('init');
-
   }
   
   ngAfterInit(): void {
@@ -53,8 +48,6 @@ export class PlayPongPagesComponent implements OnInit {
     this.stopSearchLoop(this.var_interval);
     // this.socket.emit('stopGame');
   }
-
-
 
   getId(id: string){
     // this.id = id; //doesnt work
@@ -77,13 +70,13 @@ export class PlayPongPagesComponent implements OnInit {
     this.socket.emit('newGame', normalOrNot);
   }
 
-  idMessage(socket: Socket, id: {
-    id: string
-  })
-  {
-    if (id)
-      this.user.id = id.id;
-  }
+  // idMessage(socket: Socket, id: {
+  //   id: string
+  // })
+  // {
+  //   if (id)
+  //     this.user.id = id.id;
+  // }
 
   disableElement(elemName: string)
   {
@@ -127,6 +120,4 @@ export class PlayPongPagesComponent implements OnInit {
     const left = document.getElementById('leftName');
     const right = document.getElementById('rightName');
   }
-
-  
-  };
+};

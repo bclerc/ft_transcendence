@@ -67,7 +67,7 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 
 ////
 
-export const MAX_SCORE = 10;
+export const MAX_SCORE = 2;
 
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
@@ -100,12 +100,14 @@ export class PongService {
   userIsInGame(user: BasicUserI, gameMap: Map<number, GameI>): boolean {
     let isInGame = false;
     
-    gameMap.forEach((game: GameI) => {
-    if (game.player1.user.id === user.id || (game.player2 && game.player2.user.id === user.id)) {
-      isInGame = true;
-    }});
-    return isInGame;
-  } 
+    gameMap.forEach((game: GameI) => 
+    {
+        if ((game.player1 && game.player1.user && game.player1.user.id) === user.id || (game.player2 && game.player2.user && game.player2.user.id === user.id))
+        {
+            isInGame = true;
+        }});
+        return isInGame;
+    } 
   
   private colision(ball: BallI, paddle: PointI): boolean {
     if (ball.x + ball.radius < (WIDTHCANVAS - paddle.width) && ball.x - ball.radius > (0 + paddle.width))
@@ -125,10 +127,10 @@ export class PongService {
         ball.dy = Math.floor(Math.random() * (defaultSpeed - -defaultSpeed + 1) + -defaultSpeed);
     }
 
-    private reinitPlayers(player1: PlayerI, player2: PlayerI): void {
-        player1.paddle.y = HEIGHTCANVAS / 2 - player1.paddle.height / 2;
-        player2.paddle.y = HEIGHTCANVAS / 2 - player2.paddle.height / 2;
-    }
+    // private reinitPlayers(player1: PlayerI, player2: PlayerI): void {
+    //     player1.paddle.y = HEIGHTCANVAS / 2 - player1.paddle.height / 2;
+    //     player2.paddle.y = HEIGHTCANVAS / 2 - player2.paddle.height / 2;
+    // }
 
     private reinitObstacle(obstacle: PointI): void
     {
@@ -139,6 +141,8 @@ export class PongService {
         obstacle.height = MAP2_OBSTACLE_H;
         obstacle.width = MAP2_OBSTACLE_W;
     }
+    
+
     
     private rebond(ball: BallI, paddle: PointI): void {
         var impact = ball.y - paddle.y - paddle.height / 2;
@@ -321,16 +325,33 @@ export class PongService {
         //Draw le final dune autre maniere pour les spectators !!!
         // game.spectators[].socket.emit('');
         this.gameService.stopGame(game.dbGame.id, winnerId, looserId, looserScore, winnerScore);
-        
+        this.eventEmitter.emit('deleteGame', game);
     }
+
+
+    // async function waitUntil(condition) {
+    //     return await new Promise(resolve => {
+    //       const interval = setInterval(() => {
+    //         if (condition) {
+    //           resolve('foo');
+    //           clearInterval(interval);
+    //         };
+    //       }, 1000);
+    //     });
+    //   }
 
 	async startGame(game: GameI, mapid: number)
     {
         if (mapid === 0)
         {
-            game.id_interval = setInterval(() => {
-                this.loopGameNormal(game);
-            }, 1000/60);
+            await new Promise(resolve => 
+            {
+                console.log("final startgame");
+                game.id_interval = setInterval(() => 
+                {
+                    this.loopGameNormal(game);
+                }, 1000/60);
+            });
         }
         else if (mapid === 1)
         {
@@ -350,6 +371,8 @@ export class PongService {
                 this.loopGameMap3(game);
             }, 1000/60);
         }
+        console.log("final startgame");
+        this.eventEmitter.emit('deleteGame', game);
     }
 
     //
@@ -419,7 +442,7 @@ export class PongService {
                 this.finalForAll(game);
                 return ;
             }
-            this.reinitPlayers(game.player1, game.player2);
+            // this.reinitPlayers(game.player1, game.player2);
         }
         this.drawForAll("drawNormalMap", game);
     }
@@ -493,7 +516,7 @@ export class PongService {
                 this.finalForAll(game);
                 return ;
             }
-            this.reinitPlayers(game.player1, game.player2);
+            // this.reinitPlayers(game.player1, game.player2);
             this.drawForAll("drawMap1", game);
             return ;
         }
@@ -650,7 +673,7 @@ export class PongService {
                 this.finalForAll(game);
                 return ;
             }
-            this.reinitPlayers(game.player1, game.player2);
+            // this.reinitPlayers(game.player1, game.player2);
             this.reinitObstacle(game.obstacle);
             this.drawForAll("drawMap2", game);
             return ;
@@ -812,7 +835,7 @@ export class PongService {
                 this.finalForAll(game);
                 return ;
             }
-            this.reinitPlayers(game.player1, game.player2);
+            // this.reinitPlayers(game.player1, game.player2);
             this.drawForAll("drawMap3", game);
             return ;
         }
