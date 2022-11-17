@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserI } from '../models/user.models';
-import { UserService } from '../services/user/user.service';
+import { UserI } from '../../../models/user.models';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-file-uploader',
@@ -22,6 +22,7 @@ export class FileUploaderComponent implements OnInit {
   }
 
   ngOnDestroy(): void{
+    if (this.subscription != undefined)
     this.subscription?.unsubscribe();
   }
 
@@ -43,7 +44,6 @@ export class FileUploaderComponent implements OnInit {
     formData.append("image", this.selectedFile);
     this.subscription = this.userService.uploadAvatar(formData).subscribe(
       (data : any) => {
-        console.log("data =",data);
       }
     );
     /*return await request(
@@ -56,11 +56,9 @@ export class FileUploaderComponent implements OnInit {
   }
 
   /*OnUploadFile(): void {
-    console.log(this.selectedFile);
     if (this.selectedFile)
       this.userService.uploadAvatar(this.selectedFile).subscribe(
         (data : any) => {
-          console.log("data =",data);
         }
       );
     }*/

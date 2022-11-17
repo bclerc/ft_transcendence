@@ -1,13 +1,10 @@
 import { Component, ViewEncapsulation, OnInit, Output } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FriendsRequestAction } from 'src/app/models/friends/friendsrequest.enum';
-
 import { UserI } from 'src/app/models/user.models';
-import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { ModifyMyProfileComponent } from '../modify-my-profile/modify-my-profile.component';
@@ -29,26 +26,20 @@ export class MyProfileComponent implements OnInit {
                 private dialog: MatDialog,
               ) {}
   
-  // user? : UserI;
-  // friends! : UserI[];
   subscription!: Subscription;
   subscriptionFriend!: Subscription;
-  subscriptionPandingFriend!: Subscription;
   pandingFriends = this.userService.getFriendRequests() ;
-  anyFriendsRequest! : boolean ;
 
 
   async ngOnInit(){
         this.subscription = this.currentUser.getCurrentUser().subscribe(
         (data : any) => {
-          // console.log("data =", data)
           this.user = data;
         },
         );
   
       this.subscriptionFriend =  this.userService.getFriends().subscribe(
         (data : any) => {
-          // console.log("data =", data)
           this.friends = data;
         }
       )
@@ -61,8 +52,6 @@ export class MyProfileComponent implements OnInit {
       this.subscription.unsubscribe;
       if (this.subscriptionFriend != undefined)
         this.subscriptionFriend.unsubscribe;
-        if (this.subscriptionPandingFriend != undefined)
-        this.subscriptionPandingFriend.unsubscribe;
     }
 
     openDialogEditMyProfile() {

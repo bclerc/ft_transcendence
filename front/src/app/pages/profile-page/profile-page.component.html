@@ -1,10 +1,10 @@
 <div>
-<p>{{user?.state}}</p>
-<p>{{user?.displayname}}</p>
-<p>{{user?.email}}</p>
-<p>{{user?.createdAt | date}}</p>
-<img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/>
+<p>{{user.state}}</p>
+<p>{{user.displayname}}</p>
+<p>{{user.email}}</p>
+<img [src]="user.avatar_url" [alt]="user.intra_name"/>
 <p>statistique :</p>
+<!-- <app-list-match-history [user]="user"></app-list-match-history> -->
 <p>historique des matchs :</p>
     <div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
     <ng-template #thenBlock>

@@ -37,11 +37,10 @@ export class GetTokenComponent implements OnInit {
       this.socket.ioSocket.io.opts.query = 'token=' + this.token.getToken();
       this.socket.connect();
       this.navbar.show();
-      this.router.navigate(['/chat']);
+      this.router.navigate(['/game']);
    } catch(Error) {
-     //console.log("error");
-    this.snackBar.open("Le token est invalide", 'Undo', {
-      duration: 3000
+    this.snackBar.open("Merci de vous reconnectez", 'X', {
+      duration: 3000,
     });
     this.router.navigate(['/']);
    }

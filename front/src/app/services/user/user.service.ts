@@ -160,7 +160,6 @@ export class UserService {
 
   blockUser(Id: any)
   {
-    console.log(this.backUrl + "user/block/" + Id ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     return this.http.post(this.backUrl + "user/block/" + Id,  null, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
