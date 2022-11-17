@@ -59,6 +59,7 @@ export class HeaderComponent implements OnInit {
   logOut() : void {
     this.token.removeToken();
     this.navbar.hide();
+    this.burgerMenu.show();
     this.router.navigate(['']);
     this.socket.emit('logout');
   }

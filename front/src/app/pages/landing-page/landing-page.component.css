@@ -51,7 +51,7 @@ img{
 }
  
 body{
-	background-color: #121212;
+	background-color: #121212 !important ;
 	height:100%;
 }
 a{
@@ -107,10 +107,18 @@ a{
 	background-color: #1F1F1F;
 	color: #ee481e;
 }
+.button-log2{
+	font-family: Titan One;
+	font-size: 16px;
+	color: #feefcf;
+	text-decoration: 2px underline #feefcf;
+	width: fit-content;
+	display: block;
+	margin-top: 40px;
+}
 
 h1{
 	font-family: Titan One;
-	/* width: 70%; */
 	font-size: 35px;
 	color: #feefcf;
 	margin: 66px 0px 50px 0px;

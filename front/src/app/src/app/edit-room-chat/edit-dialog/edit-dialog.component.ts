@@ -12,7 +12,7 @@ import { Message } from 'src/app/services/chat/message.interface';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { PenaltyDialogComponent } from '../penalty-dialog/penalty-dialog.component';
-import { newPenalty } from '../penalty-dialog/penalty.interface';
+
 
 @Component({
   selector: 'app-edit-dialog',
@@ -53,9 +53,12 @@ export class EditDialogComponent implements OnInit {
              
   openDialog(target: UserI, penalty: string): void {
     this.dialog.open(PenaltyDialogComponent, {
+      panelClass: 'custom-modalbox',
+      backdropClass: 'backdropBackground',
       data: {target: target, room: this.room, penalty: penalty}
     });
   }
+
 
   closeDialog() {
     this.dialogRef.close();

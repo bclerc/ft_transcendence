@@ -325,6 +325,118 @@ hr.clear{
 	}
 }
 
+
+
+
+
+
+
+
+.demandes ul{
+	list-style-type: none;
+}
+
+.demandes li {
+	display: flex;
+	flex-direction: row;
+	background-color: #2b2a28;
+	/* background-color: #feefcf; */
+	padding: 20px;
+	border-radius: 6px;
+	color: #feefcf;
+	margin-bottom: 30px;
+}
+
+.info-demande {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+	/* background-color: blue; */
+}
+.info-demande img{
+	width: 50px;
+	height: 50px;
+	object-fit: cover;
+	border-radius: 40px;
+	border: 2px solid #ee481e;
+	box-shadow: -2px 2px #ee481e;
+	/* margin-right: 10px; */
+}
+.info-demande .name-n-email{
+	display: flex;
+	flex-direction: column;
+	margin-left: 15px;
+	text-align: left;
+}
+.info-demande .name-n-email a{
+	font-family: Titan One;
+	font-size: 16px;
+	margin-bottom: 4px;
+}
+.info-demande .name-n-email span{
+	font-family: ReadexPro-Light;
+	font-size: 12px;
+
+}
+
+.demandes .buttts{
+	/* background-color: blueviolet; */
+	display: flex;
+	align-items: center;
+	min-width: fit-content;
+}
+
+.demandes .buttts button{
+	height: 35px;
+    margin-left: 25px;
+	font-family: ReadexPro-Medium;
+	color: #feefcf;
+	background-color: transparent;
+	border-radius: 6px;
+	border: 2px solid #343330;
+	padding: 4px 10px 4px 10px;
+}
+.demandes .buttts button:focus{
+	outline: none;
+}
+.demandes .buttts button img{
+	margin-left: 4px;
+}
+#refuse:hover{
+	color: #ee481e;
+	cursor: pointer;
+	border: 2px solid #ee481e;
+}
+#accept:hover{
+	color: #43EE1E;
+	cursor: pointer;
+	border: 2px solid #43EE1E;
+}
+
+@media only screen and (max-width: 610px) {
+
+	.demandes li {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.info-demande {
+		margin-bottom: 25px;
+		justify-content: center;
+	}
+
+	.demandes .buttts{
+		min-width: none;
+		width: 100%;
+		justify-content: center;
+		/* background-color: aqua; */
+	}
+	.demandes .buttts button:first-child{
+		margin-left: 0px;
+	}
+}
+
 @media only screen and (max-width: 610px) {
 
 	#friend-n-match h2{
@@ -395,3 +507,4 @@ hr.clear{
 		font-size: 12px;
 	}
 }
+
