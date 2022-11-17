@@ -20,13 +20,18 @@ export interface GameI {
 	
 	mapId?: number;
 
-	spectators?: UserI[]; //tableau des utilisateurs qui regardent le match
+	spectators?: BasicUserI[]; //tableau des utilisateurs qui regardent le match
 
 	id_interval?: NodeJS.Timer; //id pour arreter la loop du game
 	id_searchinterval1?: number; //id pour arreter la loop du game pour le player 1
 	id_searchinterval2?: number; //id pour arreter la loop du game pour le player 2
 	type?: number;			//type de la partie; normal/random
   dbGame?: Game
+}
+
+export class GameUpdateEvent {
+  game: GameI;
+  map: string;
 }
 
 export interface dbGame {

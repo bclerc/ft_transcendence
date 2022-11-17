@@ -82,6 +82,7 @@ export class PlayComponent implements OnInit {
 
   gameId: number;
   game: any;
+  state!: number;
   user: UserI = {};
   ratiox: number;
   ratioy: number;
@@ -109,19 +110,26 @@ export class PlayComponent implements OnInit {
     this.socket.on('drawInit', this.drawInit);
     this.socket.on('drawText', this.drawText);
     this.socket.on('drawName', this.drawName);
-    this.http.get<boolean>("http://" + environment.host + ":3000/api/v1/game/" + this.gameId , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.storage.getToken()})}).subscribe({
-      next: (data) => {
-        console.log(data);
-        this.game = data;
-      }
-    });
-
+    
     
   }
-
+  
   ngOnInit(): void {
     this.gameId = parseInt(this.router.url.split('/')[2]);
-
+    this.http.get<boolean>("http://" + environment.host + ":3000/api/v1/game/" + this.gameId , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.storage.getToken()})}).subscribe({
+      next: (data) => {
+        if (!data) {
+          this.router.navigate(['/game']);
+        }
+        this.game = data;
+        if (this.game.state == "ENDED"){
+          this.state = 2;
+        } else {
+          this.state = 1; 
+        }
+      }
+    });
+    
   }
 
   @HostListener('document:keydown',['$event'])  //$event is the event object
@@ -783,6 +791,10 @@ export class PlayComponent implements OnInit {
             context.fill();
           }
         }
+    }
+
+    goToGame() {
+      this.router.navigate(['/game']);
     }
 
 }

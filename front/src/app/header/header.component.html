@@ -45,7 +45,7 @@
 
 				<!-- Nav -->
 				<ul>
-					<li><a routerLink="/playpong" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Le
+					<li><a routerLink="/game" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Le
 							jeu</a></li>
 					<li><a routerLink="/chat" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Le chat
 						<!-- Bubble Notif -->
@@ -72,7 +72,7 @@
 			<div class="nav-mobile">
 				<nav>
 					<ul>
-						<li><a routerLink="/playpong" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="burgerMenuShow()">Le jeu</a></li>
+						<li><a routerLink="/game" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="burgerMenuShow()">Le jeu</a></li>
 						<li><a routerLink="/chat" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="burgerMenuShow()">Le chat
 							<!-- Bubble Notif -->
 							<ng-container *ngIf="(newMessage | async )">

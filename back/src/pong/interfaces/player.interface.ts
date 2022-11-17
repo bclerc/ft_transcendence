@@ -5,7 +5,6 @@ import { UserI } from "./user.interface";
 
 export interface PlayerI {
     user?: BasicUserI;
-    socket?: Socket;
     paddle: PointI;
     points: number;
 }
