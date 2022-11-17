@@ -263,6 +263,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			obstacle: game.obstacle,
       spectators: [],
       dbGame: dbGame
+
 		}
   }
     
