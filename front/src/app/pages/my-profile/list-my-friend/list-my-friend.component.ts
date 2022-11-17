@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -8,6 +9,7 @@ import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { AddFriendListComponent } from '../add-friend-list/add-friend-list.component';
 
 @Component({
   selector: 'app-list-my-friend',
@@ -20,6 +22,7 @@ export class ListMyFriendComponent implements OnInit {
 
   constructor (  
                 public userService : UserService,
+                private dialog: MatDialog,
               ) {}
 
   
@@ -80,5 +83,19 @@ export class ListMyFriendComponent implements OnInit {
       }
       )
     }
+
+    openDialogAddFriend() {
+      const dialogConfig = new MatDialogConfig();
+  
+      dialogConfig.autoFocus = true;
+      dialogConfig.height = '30%';
+      dialogConfig.width = '90%';
+  
+      dialogConfig.data = {
+          user : this.user,
+      };
+  
+      this.dialog.open(AddFriendListComponent, dialogConfig);
+  }
 
 }

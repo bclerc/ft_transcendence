@@ -33,6 +33,7 @@ export class ProfilePageComponent implements OnInit {
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
           this.user = data;
+          console.log("yolo = ", data);
         }
         );
       if (this.id === this.token.getId() )

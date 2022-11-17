@@ -20,7 +20,8 @@ export class MyProfileComponent implements OnInit {
   @Output() user! : UserI;
   @Output() friends! : UserI[];
 
-  constructor ( public userService : UserService,
+  constructor ( 
+                public userService : UserService,
                 private router : Router,
                 private snackBar : MatSnackBar,
                 public currentUser : CurrentUserService,
@@ -69,19 +70,7 @@ export class MyProfileComponent implements OnInit {
       this.dialog.open(ModifyMyProfileComponent, dialogConfig);
   }
 
-  openDialogAddFriend() {
-    const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.autoFocus = true;
-    dialogConfig.height = '30%';
-    dialogConfig.width = '90%';
-
-    dialogConfig.data = {
-        user : this.user,
-    };
-
-    this.dialog.open(AddFriendListComponent, dialogConfig);
-}
 
   async respond(requestId: number, response: boolean) {
     this.userService.respondFriendRequest(requestId,

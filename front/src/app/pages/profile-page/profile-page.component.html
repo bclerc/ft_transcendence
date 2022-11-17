@@ -1,4 +1,6 @@
 <div>
+    <ng-container *ngIf =  user> 
+
 <p>{{user.state}}</p>
 <p>{{user.displayname}}</p>
 <p>{{user.email}}</p>
@@ -21,7 +23,7 @@
     <ng-template #elseBloc>
         <a href="javascript:void(0);" (click)="blockUser()">Bloquer l'utilisateur</a>
     </ng-template>
-
+</ng-container>
 <!-- <div *ngIf="alreadyBlocked; then thenBlock else elseBlock"></div> -->
 <!-- <ng-template #thenBlock> </ng-template> -->
 <!-- <ng-template #elseBlock> </ng-template> -->
