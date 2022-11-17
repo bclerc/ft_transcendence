@@ -117,6 +117,14 @@ export class UserService {
           orderBy: {
             createdAt: 'desc',
           },
+          where: {
+            winnerId: {
+              not: null,
+            },
+            loserId: {
+              not: null,
+            },
+          },
           select: {
             id: true,
             users: {
