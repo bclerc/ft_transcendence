@@ -43,7 +43,6 @@ export class FileUploaderComponent implements OnInit {
     formData.append("image", this.selectedFile);
     this.subscription = this.userService.uploadAvatar(formData).subscribe(
       (data : any) => {
-        console.log("data =",data);
       }
     );
     /*return await request(
@@ -56,11 +55,9 @@ export class FileUploaderComponent implements OnInit {
   }
 
   /*OnUploadFile(): void {
-    console.log(this.selectedFile);
     if (this.selectedFile)
       this.userService.uploadAvatar(this.selectedFile).subscribe(
         (data : any) => {
-          console.log("data =",data);
         }
       );
     }*/
