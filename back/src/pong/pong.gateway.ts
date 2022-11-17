@@ -255,7 +255,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
     if (game && dbGame)
     {
-
       console.log("No match found, creating new game with id:", dbGame.id);
       game = {
 			id: dbGame.id,
@@ -268,6 +267,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			mapId: mapId,
 			ball: game.ball,
 			obstacle: game.obstacle,
+      spectators: [],
       dbGame: dbGame
 		}
   }
