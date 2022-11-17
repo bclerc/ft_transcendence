@@ -74,7 +74,6 @@ export class PlayPongPagesComponent implements OnInit {
     this.disableElement('buttonStart');
     this.disableElement('buttonStartRandom');
 
-    console.log("newGame");
     this.socket.emit('newGame', normalOrNot);
   }
 

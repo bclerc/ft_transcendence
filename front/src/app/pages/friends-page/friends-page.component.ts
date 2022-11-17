@@ -34,7 +34,6 @@ export class FriendsPageComponent implements OnInit {
  async addFriend(friendId: any) {
     await this.userService.sendRequest(friendId.id).subscribe(
       (res: any) => {
-        // console.log(res);
         this.updateInfo();
       }
     );
@@ -52,7 +51,6 @@ export class FriendsPageComponent implements OnInit {
     this.userService.respondFriendRequest(requestId,
           response ? FriendsRequestAction.ACCEPTED : FriendsRequestAction.DECLINED).subscribe(
             (res: any) => {
-              // console.log(res);
               this.updateInfo();
             }
           );
