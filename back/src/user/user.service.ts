@@ -224,6 +224,22 @@ export class UserService {
               not: null,
             },
           },
+          include: {
+            winner: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+            loser: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+          },
         },
         _count: {
           select: {
