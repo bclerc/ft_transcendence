@@ -77,7 +77,6 @@ a{
 	min-width:fit-content;
 	height: 35px;
     margin-left: 25px;
-	/* margin-top: 5px; */
 	font-family: ReadexPro-Medium;
 	color: #feefcf;
 	background-color: transparent;
@@ -108,7 +107,7 @@ a{
 	color: #feefcf;
 }
 #edit, #activate, #blocked{
-    margin-bottom: 60px;
+    margin-bottom: 90px;
 }
 
 #title-n-button{
@@ -123,8 +122,8 @@ a{
 	align-items: center;
 }
 #edit button{
-    /* width: 35px; */
     height: 35px;
+	min-width: fit-content;
     margin-left: 25px;
 	font-family: ReadexPro-Medium;
 	color: #feefcf;
@@ -159,7 +158,7 @@ a{
 	font-family: ReadexPro-Medium;
 	margin-bottom: 20px;
 }
-#input-title{
+#input-title, h4{
 	font-size: 11px;
 	margin-left: 4px;
 	margin-bottom: 4px;
@@ -180,7 +179,7 @@ textarea{
 #input-text {
 	border-radius: 10px;
 	padding: 15px 15px 0px 15px;
-	/* width: 100%; */
+	width: 500px;
 	background: #343330;
 	border: none;
 	resize: none;
@@ -201,4 +200,74 @@ textarea{
 	color:#feefcf;
 }
 
+/* ACTIVATE ---------------------------------------------- */
 
+.button-activate{
+	background-color: #2B2A28;
+	/* border: 2px solid #343330; */
+	padding: 20px 30px 20px 30px;
+	width: 400px;
+	border-radius: 6px;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	font-size: 14px;
+	display: flex;
+	flex-direction: row;
+}
+.button-activate #text{
+	width: 100%;
+}
+
+#two2{
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 30px;
+}
+.button-activate2{
+	background-color: #2B2A28;
+	/* border: 2px solid #343330; */
+	padding: 20px 30px 20px 30px;
+	width: 400px;
+	border-radius: 6px;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	font-size: 14px;
+	display: flex;
+	flex-direction: column;
+}
+.button-activate2 #text{
+	width: 100%;
+	/* background-color: #43EE1E; */
+}
+
+.button-activate img{
+	margin-left: 5px;
+	width: fit-content;
+}
+.button-activate2 img{
+	margin-left: 5px;
+	width: fit-content;
+}
+
+
+@media only screen and (max-width: 920px) {
+	.param-header h2 {
+		font-size: 18px;
+	}
+
+	#modify-profile-body h3 {
+		font-size: 25px;
+	}
+
+	.input-n-button{
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+	}
+	#input-text{
+		margin-bottom: 20px;
+	}
+	#edit button{
+		margin-left: 0px;
+	}
+}

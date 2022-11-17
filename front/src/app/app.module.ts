@@ -36,7 +36,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBadgeModule } from '@angular/material/badge';
 import { EditRoomChatComponent } from './edit-room-chat/edit-room-chat.component';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
-import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/activate2-fa.component';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
 import { environment } from 'src/environments/environment';
 import { HeaderService } from './services/user/header.service';
@@ -54,6 +53,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { HttpErrorInterceptor } from './httpErrorHandler';
 import { BurgerMenuService } from './services/burger-menu.service';
 import { PlayComponent } from './pages/play-pong-pages/play/play.component';
+import { LeaderbordComponent } from './pages/leaderbord/leaderbord.component';
+import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/activate2-fa.component';
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
@@ -92,6 +93,7 @@ export function tokenGetter() {
     ListMyFriendComponent,
     ListMatchHistoryComponent,
     PlayComponent,
+    LeaderbordComponent,
   ],
   imports: [
     BrowserModule,
