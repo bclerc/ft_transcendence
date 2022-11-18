@@ -3,9 +3,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Socket } from 'ngx-socket-io';
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
+import { BurgerMenuService } from 'src/app/services/burger-menu.service';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
+import { HeaderService } from 'src/app/services/user/header.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -31,6 +34,9 @@ export class ModifyMyProfileComponent implements OnInit {
                 private route : ActivatedRoute,
                 private router: Router, 
                 public currentUser : CurrentUserService,
+                public navbar : HeaderService,
+                public burgerMenu : BurgerMenuService,
+                public socket: Socket,
                 private snackBar : MatSnackBar,
                 private dialogRef: MatDialogRef<ModifyMyProfileComponent>,
                 @Inject(MAT_DIALOG_DATA) data : any
@@ -95,5 +101,14 @@ showActivate2Fa(): void{
 
 hideActivate2Fa(): void {
   this.show = false;
+}
+
+logOut() : void {
+  this.token.removeToken();
+  this.navbar.hide();
+  this.burgerMenu.show();
+  this.router.navigate(['']);
+  this.socket.emit('logout');
+  this.close();
 }
 }

@@ -15,6 +15,7 @@ export class ListUserBlockedComponent implements OnInit {
               ) { }
 
   ngOnInit(): void {
+    console.log(this.user);
   }
 
   unblock(id : number | undefined): void{

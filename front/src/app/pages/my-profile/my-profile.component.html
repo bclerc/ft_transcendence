@@ -80,7 +80,7 @@
 						</ng-template>
 
 						<!-- <h2>Mes matchs</h2> -->
-						<app-list-match-history [user]="user"></app-list-match-history>
+						<app-list-match-history [user]="user" [id]="user.id"></app-list-match-history>
 					</mat-tab>
 
 					<!-- GERER MES AMIS -->
@@ -125,7 +125,7 @@
 
 						<!-- LISTE D'AMIS -->
 						<!-- <h2>Mes amis</h2> -->
-						<img src="../../../../assets/svg/settings.svg" alt="settings" (click)="openDialogAddFriend()">
+						<!-- <img src="../../../../assets/svg/settings.svg" alt="settings" (click)="openDialogAddFriend()"> -->
 						<!-- <app-add-friend-list></app-add-friend-list> -->
 						<app-list-my-friend [user]="user" [friends]="friends"></app-list-my-friend>
 					</mat-tab>
