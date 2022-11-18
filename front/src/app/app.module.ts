@@ -55,6 +55,7 @@ import { BurgerMenuService } from './services/burger-menu.service';
 import { PlayComponent } from './pages/play-pong-pages/play/play.component';
 import { LeaderbordComponent } from './pages/leaderbord/leaderbord.component';
 import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/activate2-fa.component';
+import { FooterComponent } from './footer/footer.component';
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
@@ -94,6 +95,7 @@ export function tokenGetter() {
     ListMatchHistoryComponent,
     PlayComponent,
     LeaderbordComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
