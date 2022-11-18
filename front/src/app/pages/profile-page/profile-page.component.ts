@@ -14,9 +14,11 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class ProfilePageComponent implements OnInit {
   @Output() games! : any;
+  @Output() id! : number;
+
   user! : UserI;
   currentUser!: UserI;
-  id! : number;
+  // id! : number;
   subscription! : Subscription;
   subscription2! : Subscription;
   subscription3! : Subscription;

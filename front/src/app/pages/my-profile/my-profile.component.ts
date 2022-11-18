@@ -17,8 +17,9 @@ import { AddFriendListComponent } from './add-friend-list/add-friend-list.compon
   encapsulation: ViewEncapsulation.None
 })
 export class MyProfileComponent implements OnInit {
-  @Output() user! : UserI;
+  @Output() user! : any;
   @Output() friends! : UserI[];
+  @Output() id! : number;
 
   constructor ( 
                 public userService : UserService,
