@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { BallI } from '../interfaces/ball.interface';
-import { PlayerI } from '../interfaces/player.interface';
+import { dataPlayerI, PlayerI } from '../interfaces/player.interface';
 import { PointI } from '../interfaces/point.interface';
 import { GameI } from '../interfaces/game.interface';
 import { Socket } from 'socket.io';
@@ -67,7 +67,7 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 
 ////
 
-export const MAX_SCORE = 2;
+export const MAX_SCORE = 5;
 
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
@@ -269,7 +269,7 @@ export class PongService {
     }
 
     async joinGame(client: Socket, game: GameI){
-      const player = await this.onlineUserService.getUser(client.id);
+      const player: dataPlayerI = await this.onlineUserService.getDataPlayer(client.id);
 
      await this.gameService.addPlayerToGame(game.id, player.id);
       game.player2 = {
@@ -325,6 +325,7 @@ export class PongService {
         //Draw le final dune autre maniere pour les spectators !!!
         // game.spectators[].socket.emit('');
         this.gameService.stopGame(game.dbGame.id, winnerId, looserId, looserScore, winnerScore);
+        this.eventEmitter.emit('game.end', game, winnerId, looserId);
         this.eventEmitter.emit('deleteGame', game);
     }
 

@@ -2,6 +2,7 @@ import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nest
 import { FriendRequest, Prisma, User, UserState } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
+import { dataPlayerI } from 'src/pong/interfaces/player.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { newIntraUserDto } from './dto/newIntraUser.dto';
 import { updateUserDto } from './dto/updateUser.dto';
@@ -176,6 +177,21 @@ export class UserService {
         email: String(iemail),
       },
     });
+  }
+
+  async getDataPlayer(id: number): Promise<dataPlayerI>
+  {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+      select: {
+        id: true,
+        displayname: true,
+        intra_name: true,
+      },
+    });
+    return user;
   }
 
   async findByName(name: string): Promise<any> {
