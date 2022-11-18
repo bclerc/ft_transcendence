@@ -98,6 +98,7 @@ export function tokenGetter() {
     PlayComponent,
     FooterComponent,
     AddFriendListComponent,
+    LeaderbordComponent,
   ],
   imports: [
     BrowserModule,
