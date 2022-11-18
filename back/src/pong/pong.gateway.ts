@@ -120,7 +120,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     if (!user)
       return ;
     this.gamesMap.forEach((game, id) => {
-      if (!game.player1.user || !game.player2.user)
+      if ((game.player1 && !game.player1.user) || (game.player2 && !game.player2.user))
         return ; 
       if (game.player1.user.id === user.id || game.player2.user.id === user.id)
       {
@@ -262,9 +262,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			ball: game.ball,
 			spectators: [],
 			obstacle: game.obstacle,
-      spectators: [],
-      dbGame: dbGame
-
+	      	dbGame: dbGame
 		}
   }
     
@@ -276,15 +274,29 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		// this.allGames.push(game);
 	}
 
-	@SubscribeMessage('spectacle')
-	addSpectatorByIntraName(spectator: Socket, toWatch: string, /* idGame: string ??? pour eviter de chercher dans la map*/)
+	@SubscribeMessage('spectate')
+	addSpectator(spectator: Socket, idGame: number)
 	{
 		for (let game of this.gamesMap.values())
 		{
-			if (game.player1 && game.player1.user.intra_name === toWatch || game.player2 && game.player2.user.intra_name === toWatch)
+			if (game.id === idGame)
 			{
-        const newSpec = this.onlineUserService.getUser(spectator.id);
+				const newSpec = this.onlineUserService.getUser(spectator.id);
 				game.spectators.push(newSpec);
+				return ;
+			}
+		}
+	}
+
+	@SubscribeMessage('deleteSpectate')
+	dellSpectator(spectator: Socket, idGame: number)
+	{
+		for (let game of this.gamesMap.values())
+		{
+			if (game.id === idGame)
+			{
+				const newSpec = this.onlineUserService.getUser(spectator.id);
+				game.spectators.splice(game.spectators.indexOf(newSpec), 1);
 				return ;
 			}
 		}
@@ -350,7 +362,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
     }
   }
-  
+
 	@OnEvent('deleteGame')
 	deleteGame(game: GameI) {
 		console.log("deleteGame");

@@ -67,7 +67,7 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 
 ////
 
-export const MAX_SCORE = 2;
+export const MAX_SCORE = 20;
 
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
@@ -268,20 +268,21 @@ export class PongService {
             }
     }
 
-    async joinGame(client: Socket, game: GameI){
-      const player = await this.onlineUserService.getUser(client.id);
-
-     await this.gameService.addPlayerToGame(game.id, player.id);
-      game.player2 = {
+    async joinGame(client: Socket, game: GameI)
+    {
+        const player = await this.onlineUserService.getUser(client.id);
+        await this.gameService.addPlayerToGame(game.id, player.id);
+        game.player2 = {
           user: player,
-        paddle: {
-          x: WIDTHCANVAS - PLAYER_WIDTH,
-          y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-          dx: 0,
-          dy: 0,
-          width: PLAYER_WIDTH,
-          height: PLAYER_HEIGHT
-        },
+          paddle:
+          {
+            x: WIDTHCANVAS - PLAYER_WIDTH,
+            y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
+            dx: 0,
+            dy: 0,
+            width: PLAYER_WIDTH,
+            height: PLAYER_HEIGHT
+          },
           points: 0,
       }
       this.eventEmitter.emit('game.users.matched', game);
@@ -298,8 +299,6 @@ export class PongService {
         this.eventEmitter.emit('game.draw', map, game);
       }
     }
-
-
 
     private finalForAll(game: GameI)
     {
@@ -322,8 +321,10 @@ export class PongService {
             winnerScore = game.player2.points;
             looserScore = game.player1.points;
         }
+
         //Draw le final dune autre maniere pour les spectators !!!
         // game.spectators[].socket.emit('');
+
         this.gameService.stopGame(game.dbGame.id, winnerId, looserId, looserScore, winnerScore);
         this.eventEmitter.emit('deleteGame', game);
     }
@@ -340,18 +341,15 @@ export class PongService {
     //     });
     //   }
 
+
 	async startGame(game: GameI, mapid: number)
     {
         if (mapid === 0)
         {
-            await new Promise(resolve => 
+            game.id_interval = setInterval(() => 
             {
-                console.log("final startgame");
-                game.id_interval = setInterval(() => 
-                {
-                    this.loopGameNormal(game);
-                }, 1000/60);
-            });
+                this.loopGameNormal(game);
+            }, 1000/60);
         }
         else if (mapid === 1)
         {
@@ -371,8 +369,8 @@ export class PongService {
                 this.loopGameMap3(game);
             }, 1000/60);
         }
-        console.log("final startgame");
-        this.eventEmitter.emit('deleteGame', game);
+        // console.log("final startgame");
+        // this.eventEmitter.emit('deleteGame', game);
     }
 
     //
