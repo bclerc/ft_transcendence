@@ -57,6 +57,7 @@ import { LeaderbordComponent } from './pages/leaderbord/leaderbord.component';
 import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/activate2-fa.component'
 import { FooterComponent } from './footer/footer.component';
 import { AddFriendListComponent } from './pages/my-profile/add-friend-list/add-friend-list.component';
+import { ChatMobileService } from './services/chat-mobile.service';
 
 
 const config: SocketIoConfig = {
@@ -98,6 +99,7 @@ export function tokenGetter() {
     PlayComponent,
     FooterComponent,
     AddFriendListComponent,
+    LeaderbordComponent
   ],
   imports: [
     BrowserModule,
@@ -142,6 +144,7 @@ export function tokenGetter() {
     HeaderService,
     BurgerMenuService,
     CurrentUserService,
+    ChatMobileService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,

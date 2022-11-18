@@ -11,6 +11,7 @@ import { UnfoundPagesComponent } from './unfound-pages/unfound-pages.component';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
 import { FriendsPageComponent } from './pages/friends-page/friends-page.component';
 import { PlayComponent } from './pages/play-pong-pages/play/play.component';
+import { LeaderbordComponent } from './pages/leaderbord/leaderbord.component';
 
 
 
@@ -22,7 +23,7 @@ const routes: Routes = [
   { path: 'game', component: PlayPongPagesComponent, canActivate: [AuthGuard] }, 
   { path: 'game/:id', component: PlayComponent, canActivate: [AuthGuard] }, 
   { path: 'chat', component: ChatPageComponent, canActivate: [AuthGuard]  },
-  { path: 'friends', component: FriendsPageComponent, canActivate: [AuthGuard]  },
+  { path: 'leaderbord', component: LeaderbordComponent, canActivate: [AuthGuard]  },
   { path: 'myprofile', component: MyProfileComponent, canActivate: [AuthGuard]/*, resolve: { userList: UserResolver } */},
   // { path: 'modifymyprofile', component: ModifyMyProfileComponent, canActivate: [AuthGuard], resolve: { userList : UserResolver } },
   { path: 'profile/:id', component: ProfilePageComponent, canActivate: [AuthGuard]/*, resolve: { userList : UserResolver } */},

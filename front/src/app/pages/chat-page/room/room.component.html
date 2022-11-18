@@ -1,60 +1,50 @@
 <div *ngIf="room.id else no_room">
-		<div class="flexbox">
-			<div #scroll id="chat_box" class="chat-box">
+	<div class="flexbox">
+		<div #scroll id="chat_box" class="chat-box">
 	
-				<!-- CLASS chat-box-header -->
-        <section class="chat-box-header">
-          <div class="chat-box-info">
-            <div *ngIf="room.type === 'DM'"  style="display: flex">
-              <img src="{{friend.avatar_url}}" alt="{{friend.displayname}}" class="user-dm-avatar" >
-              <h2  style="display: flex; flex-direction: row;" >{{ friend.displayname }}</h2>
-            </div>
-            <h2 *ngIf="room.type === 'GROUP'" >{{ room.name }}</h2>
-            <p id="head-description">{{room.description}}</p>
-            <ng-container *ngIf="room.type === 'GROUP'">
+			<!-- CLASS chat-box-header -->
+			<section class="chat-box-header">
+				<div class="chat-box-info">
+					<div *ngIf="room.type === 'DM'" style="display: flex">
+						<img src="{{friend.avatar_url}}" alt="{{friend.displayname}}" class="user-dm-avatar" >
+						<h2  style="display: flex; flex-direction: row;" >{{ friend.displayname }}</h2>
+					</div>
+					<div>
+						<img (click)="closeRoom()" src="../../../../assets/svg/return.svg" alt="retour">
+						<h2 *ngIf="room.type === 'GROUP'" >{{ room.name }}</h2>
+					</div>
+					<p id="head-description">{{room.description}}</p>
+					<ng-container *ngIf="room.type === 'GROUP'">
 
+						<!--- MatChip list with avatar. chip id is #membres -->
+						<mat-chip-list #membres>
+							<mat-chip id="membres" *ngFor="let member of room.users" >
+								<img matChipAvatar class="chip_avatar"  src="{{member. avatar_url}}" alt="User avatar">
+								{{member.displayname}}
 
+								<svg *ngIf="member.state ==='ONLINE'" style="margin-left: 10px;" width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+									<title>Oval</title>
+									<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+										<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="yellowgreen">
+											<g id="Group-2" transform="translate(863.000000, 180.000000)">
+												<g id="Group-3" transform="translate(28.000000, 368.000000)">
+													<circle id="Oval" cx="80" cy="16" r="6"></circle>
+												</g>
+											</g>
+										</g>
+									</g>
+								</svg>
+							</mat-chip>
+						</mat-chip-list>
 
+					</ng-container>
+				</div>
 
-
-
-
-              <!--- MatChip list with avatar. chip id is #membres -->
-              <mat-chip-list #membres>
-                <mat-chip id="membres" *ngFor="let member of room.users" >
-					<!-- <a [routerLink]="['/profile/' + member.id ]"> -->
-                  <img matChipAvatar class="chip_avatar"  src="{{member. avatar_url}}" alt="User avatar"  >
-                  {{member.displayname}} 
-				<!-- </a> -->
-
-                  <svg  *ngIf="member.state ==='ONLINE'" style="margin-left: 10px;" width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <title>Oval</title>
-                    <g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="yellowgreen">
-                            <g id="Group-2" transform="translate(863.000000, 180.000000)">
-                                <g id="Group-3" transform="translate(28.000000, 368.000000)">
-                                    <circle id="Oval" cx="80" cy="16" r="6"></circle>
-                                </g>
-                            </g>
-                        </g>
-                    </g>
-                </svg> 
-
-                </mat-chip> 
-              </mat-chip-list>
-
-
-              
-              <!-- <p id="membres" *ngFor="let user of room.users">{{user.displayname}}</p> -->
-            </ng-container>
-          </div>
-
-          
-          <!-- Settings -->
-          <div class="chat-box-settings">
-              <img *ngIf="room.type === 'GROUP'" src="../../../../assets/svg/settings.svg" alt="settings" (click)="showParam()">
-          </div>
-        </section>
+				<!-- Settings -->
+				<div class="chat-box-settings">
+					<img *ngIf="room.type === 'GROUP'" src="../../../../assets/svg/settings.svg" alt="settings" (click)="showParam()">
+				</div>
+			</section>
 	
 				<!-- CLASS chat-box-body -->
 				<div id="chat_box_body" class="chat-box-body">

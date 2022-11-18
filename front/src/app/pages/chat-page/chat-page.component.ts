@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
+import { ChatMobileService } from 'src/app/services/chat-mobile.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
@@ -45,15 +46,16 @@ export class ChatPageComponent implements OnInit {
 
 	constructor(private chatService: ChatService,
 	private userService: UserService,
-  private socket: Socket,
-  private router: Router,
-  private snackBar : MatSnackBar
-  ) { }
-	
+	private socket: Socket,
+	private router: Router,
+	private snackBar : MatSnackBar,
+	public chatMobileService : ChatMobileService
+	) { }
+
 	async ngOnInit() {
-    this.chatService.needRooms();
-    this.chatService.needPublicRooms();
-    this.chatService.needDmRooms();
+	this.chatService.needRooms();
+	this.chatService.needPublicRooms();
+	this.chatService.needDmRooms();
 		this.userService.getLoggedUser().subscribe(
 			(data : any) => {
 			  this.actualUser = data;
@@ -174,16 +176,23 @@ export class ChatPageComponent implements OnInit {
 	selectRoom(room: ChatRoom) {
 		this.selectedRoom=room;
 		this.newRoom = false;
+		this.chatMobileService.showRoom();
+		console.log("newroom ", this.chatMobileService.newroom);
+		console.log("room ", this.chatMobileService.room);
 	}
 
 	newRoom: boolean = true;
 	async NewRoom() {
       if (this.newRoom) {
-        this.newRoom = false;
+        this.newRoom = true;
       } else {
         this.chatService.needPublicRooms();
         this.newRoom = true;
       }
+
+		this.chatMobileService.showNewRoom();
+		console.log("newroom ", this.chatMobileService.newroom);
+		console.log("room ", this.chatMobileService.room);
     }
 
   friend(chatRoom: ChatRoom): UserI {
