@@ -41,17 +41,28 @@
 
 				<!-- STATISTIQUES -->
 				<div id="stats">
-					<div class="data">
-						<span id="red">{{ user._count?.games_win }}</span>
-						<p>Parties gagnées</p>
-					</div>
-					<div class="data">
-						<span id="orange">{{ user._count?.games_lose }}</span>
-						<p>Parties perdues</p>
-					</div>
-					<div class="data">
+					<div class="classement">
 						<span id="yellow">#{{ user.position_in_leaderboard }}</span>
-						<p>Au classement</p>
+						<p>Classement</p>
+					</div>
+					<div id="all-data">
+						<!-- le rank en responsive -->
+						<div class="data-classement">
+							<span id="yellow">#{{ user.position_in_leaderboard }}</span>
+							<p>Classement</p>
+						</div>
+						<div class="data">
+							<span>12345</span>
+							<p>Score</p>
+						</div>
+						<div class="data">
+							<span>{{ user._count?.games_win }}</span>
+							<p>Victoires</p>
+						</div>
+						<div class="data">
+							<span>{{ user._count?.games_lose }}</span>
+							<p>Défaites</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -79,6 +90,8 @@
 								Mes amis
 							</div>
 						</ng-template>
+
+						<!-- DEMANDES D"AMIS -->
 						<!-- <ng-template *ngIf =  "let request of (pandingFriends | async)"> -->
 						<ng-container *ngIf="pandingFriends | async as request">
 							<ng-container *ngIf =  request[0]>
@@ -109,27 +122,13 @@
 								</li>
 							</ul>
 						</div>
+
 						<!-- LISTE D'AMIS -->
 						<!-- <h2>Mes amis</h2> -->
 						<!-- <img src="../../../../assets/svg/settings.svg" alt="settings" (click)="openDialogAddFriend()"> -->
 						<!-- <app-add-friend-list></app-add-friend-list> -->
 						<app-list-my-friend [user]="user" [friends]="friends"></app-list-my-friend>
 					</mat-tab>
-					<hr class="clear">
-
-					<!-- UTILISATEURS BLOQUÉS -->
-					<!-- <mat-tab id="gerer-mes-amis">
-
-						<ng-template mat-tab-label>
-							<div class="label">
-								Utilisateurs bloqués
-							</div>
-						</ng-template>
-						<h2>Utilisateurs bloqués</h2>
-						<div class="blocked-user">
-							<app-list-user-blocked></app-list-user-blocked>
-						</div>
-					</mat-tab> -->
 					<hr class="clear">
 				</mat-tab-group>
 			</div>

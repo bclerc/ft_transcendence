@@ -54,7 +54,8 @@ import { HttpErrorInterceptor } from './httpErrorHandler';
 import { BurgerMenuService } from './services/burger-menu.service';
 import { PlayComponent } from './pages/play-pong-pages/play/play.component';
 import { LeaderbordComponent } from './pages/leaderbord/leaderbord.component';
-import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/activate2-fa.component';
+import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/activate2-fa.component'
+import { FooterComponent } from './footer/footer.component';
 import { AddFriendListComponent } from './pages/my-profile/add-friend-list/add-friend-list.component';
 
 
@@ -95,7 +96,7 @@ export function tokenGetter() {
     ListMyFriendComponent,
     ListMatchHistoryComponent,
     PlayComponent,
-    LeaderbordComponent,
+    FooterComponent,
     AddFriendListComponent,
   ],
   imports: [
