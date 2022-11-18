@@ -173,4 +173,10 @@ export class UserService {
     return this.http.get<boolean>(this.backUrl + "user/good" , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
+  GetUserHistory(id : number)
+  {
+    return this.http.get(this.backUrl + "user/profile/" + id , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+
 }

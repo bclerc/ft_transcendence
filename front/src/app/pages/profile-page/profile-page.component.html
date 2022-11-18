@@ -1,12 +1,15 @@
-<div>
+<!-- <div>
+    <ng-container *ngIf =  user> 
+
 <p>{{user.state}}</p>
 <p>{{user.displayname}}</p>
 <p>{{user.email}}</p>
 <img [src]="user.avatar_url" [alt]="user.intra_name"/>
 <p>statistique :</p>
+<app-list-match-history [user]="games" [id]="id"></app-list-match-history> -->
 <!-- <app-list-match-history [user]="user"></app-list-match-history> -->
-<p>historique des matchs :</p>
-    <div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
+<!-- <p>historique des matchs :</p> -->
+    <!-- <div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
     <ng-template #thenBlock>
         <a href="javascript:void(0);" (click)="removeFriend()">Enlever des amis</a>
     </ng-template>
@@ -21,8 +24,126 @@
     <ng-template #elseBloc>
         <a href="javascript:void(0);" (click)="blockUser()">Bloquer l'utilisateur</a>
     </ng-template>
-
+</ng-container> -->
 <!-- <div *ngIf="alreadyBlocked; then thenBlock else elseBlock"></div> -->
 <!-- <ng-template #thenBlock> </ng-template> -->
 <!-- <ng-template #elseBlock> </ng-template> -->
-</div>
+<!-- </div> -->
+
+<!--<div *ngIf="filtersLoaded | async">!-->
+    <html>
+        <head>
+            <title>Pong - the chat page</title>
+            <meta charset="utf-8" />
+            <meta name="description" content="Mon super profil" />
+            <meta name="author" content="Team transcendance 42" />
+            <meta name="copyright" content="© CC BY-NC-SA 4.0" />
+        </head>
+        <body>
+            <ng-container *ngIf = user>
+            <div class="center-profile">
+                <!-- HEAD -->
+                <div id="head">
+    
+                    <!-- USER INFO -->
+                    <div id="user-info-profile">
+                        <div class="profil-left">
+                            <img [src]="user.avatar_url" [alt]="user.intra_name"/>
+                        </div>
+                        <div class="profil-info">
+                            <div id="name-n-param">
+                                <p id="name">{{user.displayname}}</p>
+    
+                                <!-- BUTTON PARAMETRES -->
+                                <div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
+                                <ng-template #thenBlock>
+                                    <a href="javascript:void(0);" (click)="removeFriend()">Enlever des amis</a>
+                                </ng-template>
+                                <ng-template #elseBlock>
+                                    <a href="javascript:void(0);" (click)="addFriend()">Ajouter en amis</a>
+                                </ng-template>
+                                <p></p>
+                                <div *ngIf="alreadyBlocked; then thenBloc else elseBloc"></div>
+                                <ng-template #thenBloc>
+                                    <a href="javascript:void(0);" (click)="unblockUser()">Debloquer l'utilisateur</a>
+                                </ng-template>
+                                <ng-template #elseBloc>
+                                    <a href="javascript:void(0);" (click)="blockUser()">Bloquer l'utilisateur</a>
+                                </ng-template>
+                                <img src="../../../../assets/svg/settings.svg" alt="settings" >
+                            </div>
+                            <p id="email">{{user.email}}</p>
+                            <div class="status">
+                                <p>En ligne</p>
+                                <img src="../../../assets/svg/online.svg" alt="online">
+                            </div>
+                        </div>
+    
+                        <!-- <div class="profil-right"> -->
+                            <!-- <button (click)="openDialogEditMyProfile()"> -->
+                                <!-- <img src="../../../../assets/svg/settings.svg" alt="settings" (click)="openDialogEditMyProfile()"> -->
+                            <!-- </button> -->
+                        <!-- </div> -->
+                    </div>
+    
+                    <!-- STATISTIQUES -->
+                    <div id="stats">
+                        <div class="data">
+                            <span id="red">{{ user._count?.games_win }}</span>
+                            <p>Parties gagnées</p>
+                        </div>
+                        <div class="data">
+                            <span id="orange">{{ user._count?.games_lose }}</span>
+                            <p>Parties perdues</p>
+                        </div>
+                        <div class="data">
+                            <span id="yellow">#{{ user.score }}</span>
+                            <p>Au classement</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- CONTENT -->
+                <div class="my-profile-content">
+                    <mat-tab-group id="friend-n-match">
+    
+                        <!-- HISTORIQUE DES MATCH -->
+                        <mat-tab id="historique">
+                            <ng-template mat-tab-label>
+                                <div class="label">
+                                    Historique des matchs
+                                </div>
+                            </ng-template>
+    
+                            <!-- <h2>Mes matchs</h2> -->
+                            <app-list-match-history [user]="games" [id]="id"></app-list-match-history>
+
+                            <!-- <app-list-match-history [user]="user" [id]="user.id"></app-list-match-history> -->
+                        </mat-tab>
+
+    
+                        <hr class="clear">
+    
+                        <!-- UTILISATEURS BLOQUÉS -->
+                        <!-- <mat-tab id="gerer-mes-amis">
+    
+                            <ng-template mat-tab-label>
+                                <div class="label">
+                                    Utilisateurs bloqués
+                                </div>
+                            </ng-template>
+                            <h2>Utilisateurs bloqués</h2>
+                            <div class="blocked-user">
+                                <app-list-user-blocked></app-list-user-blocked>
+                            </div>
+                        </mat-tab> -->
+                        <hr class="clear">
+                    </mat-tab-group>
+                </div>
+            </div>
+        </ng-container>
+
+        </body>
+    </html>
+    
+    
