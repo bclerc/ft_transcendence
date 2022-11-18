@@ -42,13 +42,13 @@ export class GameService {
 
   }
 
-  async createGame(user: BasicUserI): Promise<Game>{
-    if (user) {
+  async createGame(userId: number): Promise<Game>{
+    if (userId) {
       return this.prisma.game.create({
         data: {
           users: {
             connect: {
-              id: user.id
+              id: userId
             },
           },
         },

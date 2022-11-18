@@ -7,6 +7,7 @@ import { UserInfo } from 'os';
 import { Socket } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { jwtConstants } from 'src/auth/constants';
+import { dataPlayerI } from 'src/pong/interfaces/player.interface';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 
@@ -77,6 +78,18 @@ export class OnlineUserService {
     }
   }
 
+
+  getDataPlayer(clientId: string): dataPlayerI {
+    let user = this.getUser(clientId);
+    if (user) {
+      return {
+        id: user.id,
+        displayname: user.displayname,
+        intra_name: user.intra_name,
+      }
+    }
+    return null;
+  }
 
   sendToUser(user: BasicUserI | number, event: string, data: any) {
     let userId = typeof user == 'number' ? user : user.id;
