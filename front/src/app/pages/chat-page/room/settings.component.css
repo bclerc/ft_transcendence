@@ -247,10 +247,10 @@ textarea{
 }
 
 #icon-exclure:hover #icon{
-	fill: #efc10a;
+	fill: #ffcc00;
 }
 #icon-exclure:hover #BG{
-	fill: #efc10a;
+	fill: #ffcc00;
 	opacity: 20%;
 }
 
