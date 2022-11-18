@@ -8,6 +8,7 @@ import { UserI } from 'src/app/models/user.models';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { ModifyMyProfileComponent } from '../modify-my-profile/modify-my-profile.component';
+import { AddFriendListComponent } from './add-friend-list/add-friend-list.component';
 
 @Component({
   selector: 'app-my-profile',
@@ -67,6 +68,20 @@ export class MyProfileComponent implements OnInit {
   
       this.dialog.open(ModifyMyProfileComponent, dialogConfig);
   }
+
+  openDialogAddFriend() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;
+    dialogConfig.height = '30%';
+    dialogConfig.width = '90%';
+
+    dialogConfig.data = {
+        user : this.user,
+    };
+
+    this.dialog.open(AddFriendListComponent, dialogConfig);
+}
 
   async respond(requestId: number, response: boolean) {
     this.userService.respondFriendRequest(requestId,

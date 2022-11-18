@@ -48,10 +48,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             else if (error.status === 401)
             {
               errorMessage = error.error.message;
-              this.snackBar.open("Invalid 2FA code", 'Undo', 
+              this.snackBar.open("Vous devez connectez", 'Undo', 
               {
                 duration: 3000
               })
+              this.router.navigate([''])
             }
             else
             {
