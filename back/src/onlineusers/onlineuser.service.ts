@@ -29,7 +29,7 @@ export class OnlineUserService {
   async initUser(socketId: string, user: BasicUserI) {
     this.onlineUsers.forEach((value, key) => {
       if (value.id == user.id) {
-        this.onlineUsers.delete(key);
+       this.onlineUsers.delete(key);
       }
     });
     this.onlineUsers.set(socketId, user);
