@@ -4,15 +4,23 @@
 	
 			<!-- CLASS chat-box-header -->
 			<section class="chat-box-header">
-				<div class="chat-box-info">
+				<!-- <div class="chat-box-info"> -->
 					<div *ngIf="room.type === 'DM'" style="display: flex">
 						<img src="{{friend.avatar_url}}" alt="{{friend.displayname}}" class="user-dm-avatar" >
 						<h2  style="display: flex; flex-direction: row;" >{{ friend.displayname }}</h2>
 					</div>
-					<div>
-						<img (click)="closeRoom()" src="../../../../assets/svg/return.svg" alt="retour">
-						<h2 *ngIf="room.type === 'GROUP'" >{{ room.name }}</h2>
+
+					<div class="line-one">
+						<div class="title-n-return">
+							<img id="mobile-return" (click)="closeRoom()" src="../../../../assets/svg/return.svg" alt="retour">
+							<h2 *ngIf="room.type === 'GROUP'" >{{ room.name }}</h2>
+						</div>
+						<!-- Settings -->
+						<div class="chat-box-settings">
+							<img *ngIf="room.type === 'GROUP'" src="../../../../assets/svg/settings.svg" alt="settings" (click)="showParam()">
+						</div>
 					</div>
+					<!-- <h2 *ngIf="room.type === 'GROUP'" >{{ room.name }}</h2> -->
 					<p id="head-description">{{room.description}}</p>
 					<ng-container *ngIf="room.type === 'GROUP'">
 
@@ -36,37 +44,31 @@
 								</svg>
 							</mat-chip>
 						</mat-chip-list>
-
 					</ng-container>
-				</div>
-
-				<!-- Settings -->
-				<div class="chat-box-settings">
-					<img *ngIf="room.type === 'GROUP'" src="../../../../assets/svg/settings.svg" alt="settings" (click)="showParam()">
-				</div>
+				<!-- </div> -->
 			</section>
 	
-				<!-- CLASS chat-box-body -->
-				<div id="chat_box_body" class="chat-box-body">
-					<div id="chat_messages">
-						<ng-container *ngFor="let message of (messages$ | async)">
-							<ng-container *ngIf="message.user.id === user.id">
-								<!-- <div class="profile my-profile">
-									<span> Moi </span>
-									<img src="{{ message.user.avatar_url }}"/>
-								</div> -->
-								<div class="message my-message">{{ message.content }}</div>
-							</ng-container>
-							<ng-container *ngIf="message.user.id !== user.id">
-								<div class="profile other-profile">
-									<p> {{ message.user.displayname }} </p>
-									<div id="{{message.id}}" class="message other-message">{{ message.content }}</div>
-									<span class="date">Envoyé le {{ message.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</span>
-								</div>
-							</ng-container>
+			<!-- CLASS chat-box-body -->
+			<div id="chat_box_body" class="chat-box-body">
+				<div id="chat_messages">
+					<ng-container *ngFor="let message of (messages$ | async)">
+						<ng-container *ngIf="message.user.id === user.id">
+							<!-- <div class="profile my-profile">
+								<span> Moi </span>
+								<img src="{{ message.user.avatar_url }}"/>
+							</div> -->
+							<div class="message my-message">{{ message.content }}</div>
 						</ng-container>
-					</div>
+						<ng-container *ngIf="message.user.id !== user.id">
+							<div class="profile other-profile">
+								<p> {{ message.user.displayname }} </p>
+								<div id="{{message.id}}" class="message other-message">{{ message.content }}</div>
+								<span class="date">Envoyé le {{ message.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</span>
+							</div>
+						</ng-container>
+					</ng-container>
 				</div>
+			</div>
 	
 				<!-- CLASS chat-box-footer -->
 				<form [formGroup]="form" (ngSubmit)="sendMessage()" class="chat-box-footer">

@@ -8,6 +8,8 @@
 	</head>
 	<body>
 		<div class="center">
+
+			<!-- DESKTOP -->
 			<div class="main-container">
 
 				<!-- SIDEBAR -->
@@ -26,7 +28,7 @@
 					<mat-tab-group class="switch-groupes-amis" [selectedIndex]="selected.value">
 
 						<!-- MES GROUPES -->
-						<mat-tab>
+						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewMessage">
 									<svg  style="margin-right: 5px;" width="12px" height="12px">
@@ -67,7 +69,7 @@
 						</mat-tab>
 
 						<!-- MES AMIS -->
-						<mat-tab>
+						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewDm">
 									<svg  style="margin-right: 5px;" width="12px" height="12px">
@@ -127,6 +129,8 @@
 				</main>
 			</div>
 
+
+			<!-- MOBILE -->
 			<div class="main-container-mobile">
 
 				<!-- SIDEBAR -->
@@ -145,7 +149,7 @@
 					<mat-tab-group class="switch-groupes-amis" [selectedIndex]="selected.value">
 
 						<!-- MES GROUPES -->
-						<mat-tab>
+						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewMessage">
 									<svg  style="margin-right: 5px;" width="12px" height="12px">
@@ -186,7 +190,7 @@
 						</mat-tab>
 
 						<!-- MES AMIS -->
-						<mat-tab>
+						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewDm">
 									<svg  style="margin-right: 5px;" width="12px" height="12px">

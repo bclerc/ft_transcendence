@@ -1,12 +1,18 @@
 <main class="new-room-container">
-
+	
 	<!-- LISTE GROUPES PUBLICS -->
-
-	<div>
-		<img (click)="closeNewRoom()" src="../../../../assets/svg/return.svg" alt="">
-	</div>
+	
+	
 	<div class="demi-public">
-		<h2 id="tt-h2">Groupes publics</h2>
+		<div id="title-n-button">
+			<img id="return" (click)="closeNewRoom()" src="../../../../assets/svg/return.svg" alt="">
+			<h2 id="tt-h2">Groupes publics</h2>
+			<!-- (click)="openDialogAddFriend()" -->
+			<button matTooltip="Créer un groupe">
+				Créer
+				<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
+			</button>
+		</div>
 		<ul>
 			<li *ngFor="let room of (publicrooms | async)">
 				<div class="info-list">
@@ -87,5 +93,4 @@
 			</div>
 		</form>
 	</div>
-
 </main>
