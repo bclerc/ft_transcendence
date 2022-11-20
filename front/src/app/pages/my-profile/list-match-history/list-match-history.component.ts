@@ -8,6 +8,8 @@ import { UserI } from 'src/app/models/user.models';
 })
 export class ListMatchHistoryComponent implements OnInit {
   @Input() user! : UserI;
+  @Input() id! : number;
+  
 
   constructor() { }
 
@@ -15,7 +17,7 @@ export class ListMatchHistoryComponent implements OnInit {
   }
 
   whoWin(id : number): boolean{
-      if (id === this.user.id)
+      if (id === this.id)
         return true;
       return false;
   }

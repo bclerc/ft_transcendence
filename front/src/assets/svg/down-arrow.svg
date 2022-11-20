@@ -2,6 +2,6 @@
 <svg width="17px" height="8px" viewBox="0 0 17 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>down-arrow</title>
     <g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <polyline id="down-arrow" stroke="#FEEFCF" stroke-width="3" transform="translate(8.257359, 1.500000) rotate(-315.000000) translate(-8.257359, -1.500000) " points="12.7573593 -3 11.7438762 4.98651694 3.75735931 6"></polyline>
+        <polyline id="down-arrow" stroke="#feefcf" stroke-width="3" transform="translate(8.257359, 1.500000) rotate(-315.000000) translate(-8.257359, -1.500000) " points="12.7573593 -3 11.7438762 4.98651694 3.75735931 6"></polyline>
     </g>
 </svg>

@@ -1,13 +1,14 @@
-import { Inject } from "@nestjs/common";
-import { OnEvent } from "@nestjs/event-emitter";
+import { ConsoleLogger, Inject } from "@nestjs/common";
+import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import { WebSocketServer, SubscribeMessage, WebSocketGateway, ConnectedSocket, OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect } from "@nestjs/websockets";
-import { Game } from "@prisma/client";
+import { Game, GameState } from "@prisma/client";
 import { identity } from "rxjs";
 import { Server, Socket } from "socket.io";
 import { GameService } from "src/game/game.service";
 import { OnlineUserService } from "src/onlineusers/onlineuser.service";
 import { BasicUserI } from "src/user/interface/basicUser.interface";
-import { GameI } from "./interfaces/game.interface";
+import { GameI, InviteGameI, responseInvite } from "./interfaces/game.interface";
+import { dataPlayerI } from "./interfaces/player.interface";
 import { PongService } from "./services/pong.service";
 
 const NORMALGAME = 0;
@@ -31,6 +32,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		private pongService: PongService,
 	    @Inject(OnlineUserService) private onlineUserService: OnlineUserService,
       @Inject(GameService) private gameService: GameService,
+      private eventEmitter: EventEmitter2,                        // a delete
 	){
 		
 		this.state = {
@@ -103,14 +105,16 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@SubscribeMessage('keydown')
 	keydown(client: Socket, keydown: string) {
     const user = this.onlineUserService.getUser(client.id);
+    
 
-    this.gamesMap.forEach((game, id) => {
-      if (game.player1.user.id === user.id || game.player2.user.id === user.id)
+    for (let game of this.gamesMap.values())
+    {
+      if (game.player1.user && game.player1.user.id === user.id || game.player2.user && game.player2.user.id === user.id)
       {
         this.pongService.keydown(game, user, keydown);
         return ;
       }
-		});
+    }
 	}
 
 
@@ -128,6 +132,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         return ;
       }
 		});
+
 	}
 
 	////////
@@ -218,6 +223,23 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		return undefined;
 	}
 
+  @SubscribeMessage('inviteUser')
+  inviteUser(client: Socket, id: number) {
+    this.invitePlayUser(client, id, this.gamesMap);
+  }
+
+
+  @SubscribeMessage('responseInvite')
+  async responseInvite(client: Socket, response: responseInvite){
+    const user = this.onlineUserService.getUser(client.id);
+    this.sendToPlayers(user, 'notification', "vous avez accepté l'invitation");
+    let game = this.gamesMap.get(response.gameId);
+    if (game) {
+      this.eventEmitter.emit('game.init', game);
+    }
+
+  }
+
 	///////
 	//OTHER
 	//////
@@ -241,15 +263,18 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 
-	private async creatNewGameMap(client: Socket, mapId: number) {
-    const user = this.onlineUserService.getUser(client.id);
+	public async creatNewGameMap(client: Socket, mapId: number): Promise<GameI> {
+    const user: dataPlayerI = this.onlineUserService.getDataPlayer(client.id);
+    console.log(user);
+    if (!user)
+      return ;
+
 		var game: GameI = this.pongService.initState();
-    var dbGame: Game = await this.gameService.createGame(user);
+    var dbGame: Game = await this.gameService.createGame(user.id);
 
     if (game && dbGame)
     {
-      console.log("No match found, creating new game with id:", dbGame.id);
-
+      console.log("creating new game with id:", dbGame.id);
       game = {
 			id: dbGame.id,
 			player1: {
@@ -262,15 +287,16 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			ball: game.ball,
 			spectators: [],
 			obstacle: game.obstacle,
-	      	dbGame: dbGame
+	    dbGame: dbGame
 		}
   }
-    
-		//Random uniqId:
+  
+  console.log("Size of gamesMap before: ", this.gamesMap.size);
+  this.gamesMap.set(game.id, game);
+  console.log("Size of gamesMap after: ", this.gamesMap.values(), this.gamesMap.get(game.id));
 
-    
-		this.gamesMap.set(game.id, game);
-		// client.emit("getId", game.id);
+  return this.gamesMap.get(game.id);
+  // client.emit("getId", game.id);
 		// this.allGames.push(game);
 	}
 
@@ -305,8 +331,9 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @OnEvent('game.init')
   async gameInit(game: GameI) {
     if (game && game.dbGame) {
-    //   console.log("drawInit");
-      this.sendToGame(game, 'redirectGame', game.id);
+       console.log("drawInit");
+      console.log(game);
+       this.sendToGame(game, 'redirectGame', game.id);
       this.sendToGame(game, 'drawInit', null);
       this.sendToGame(game, 'drawText', "3");
       await this.pongService.delay(1000);
@@ -321,7 +348,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       await this.pongService.delay(200);
       if (game.dbGame)
       {
-        this.gameService.startGame(game.dbGame.id);
+        await this.gameService.startGame(game.dbGame.id);
         await this.pongService.startGame(game, game.mapId);
       }
     }
@@ -352,6 +379,17 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
   }
 
+  @OnEvent('game.invite')
+  async inviteGameEvent(data: InviteGameI) {
+    if (data.user && data.target) {
+      this.sendToPlayers(data.user, 'notification', "Vous avez invité " + data.target.displayname + " à jouer");
+      this.sendToPlayers(data.target, 'invited', {
+        gameId: data.gameId,
+        inviter_name: data.user.displayname,
+      })
+    }
+  }
+
   @OnEvent('game.end')
   async endGameEvent(game: GameI, winnerId: number, loserId: number) {
     const winnerSocket = this.connectedUsers.get(winnerId);
@@ -369,6 +407,47 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.gamesMap.delete(game.id);
 	}
 
+
+
+
+  async invitePlayUser(client: Socket, id: number, games: Map<number, GameI>): Promise<void> {
+
+      const inviter = this.onlineUserService.getUser(client.id);
+      const target = this.onlineUserService.getUser(null, id);
+      let game: GameI;
+  
+      // check if user && inviter is not in game 
+      if (this.pongService.userIsInGame(inviter, games) || this.pongService.userIsInGame(target, games)) {
+        console.log("Invitation fail");
+      }
+      // create game in waiting with two players
+        game = await this.creatNewGameMap(client, 0);
+        console.log(game);
+        return ;
+        let targetSocket = this.connectedUsers.get(target.id);
+        await this.pongService.forceJoinGame(targetSocket, game);
+      console.log("USSERE 2 JOINEED ================================", game);
+      // send invite to target
+  
+      if (inviter && target && inviter.id !== target.id && game) {
+        
+        this.eventEmitter.emit('game.invite', {
+          gameId: game.id,
+          user: inviter,
+          target: target,
+        })
+      
+      }
+    }
+
+
+
+
+
+
+
+
+
   sendToGame(game: GameI, event: string, data: any) {
     for (const user of [game.player1.user, game.player2.user]) {
       if (user) {
@@ -377,7 +456,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
   }
 
-  sendToPlayers(user: BasicUserI, event: string, data: any) {
+  sendToPlayers(user: dataPlayerI, event: string, data: any) {
     const userSocket = this.connectedUsers.get(user.id);
     if (event && userSocket)
         this.server.to(userSocket).emit(event, data);
