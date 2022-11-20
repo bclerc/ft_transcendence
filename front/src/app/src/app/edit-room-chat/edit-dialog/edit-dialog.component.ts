@@ -90,6 +90,10 @@ export class EditDialogComponent implements OnInit {
     }
   }
   
+  inviteToPlay(userId: number | undefined) {
+    this.socket.emit("inviteUser", userId);
+  }
+
   blockUser(userId: number | undefined, block: boolean)
   {
     if (userId)

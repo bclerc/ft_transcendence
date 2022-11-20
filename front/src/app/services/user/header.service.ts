@@ -11,7 +11,7 @@ export interface InvitedGameI {
 }
 
 @Injectable()
-export class HeaderService {
+export class HeaderService  {
   visible: boolean;
 
   
@@ -43,6 +43,4 @@ export class HeaderService {
   redirectToGame(gameId: number) {
     this.router.navigate(['/game/', gameId]);
   }
-
-
 }

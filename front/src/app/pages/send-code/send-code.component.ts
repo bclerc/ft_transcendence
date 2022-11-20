@@ -26,7 +26,6 @@ export class SendCodeComponent implements OnInit {
     {
       await this.user.ValidateFaCode(this.FaForm.controls['Code'].getRawValue()).subscribe(
         (data : any) => {
-          console.log("data =",data);
           this.token.saveToken(data.access_token);
           //location.reload();
           //this.tokenString = data;
