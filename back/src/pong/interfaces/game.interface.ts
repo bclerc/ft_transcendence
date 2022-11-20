@@ -1,5 +1,6 @@
 import { Game, GameState, User } from "@prisma/client";
 import { BasicUserI } from "src/user/interface/basicUser.interface";
+import { UserInfoI } from "src/user/interface/userInfo.interface";
 import { BallI } from "./ball.interface";
 import { PlayerI } from "./player.interface";
 import { PointI } from "./point.interface";
@@ -42,4 +43,15 @@ export interface dbGame {
   loser?: BasicUserI;
   winnerScore?: number;
   loserScore?: number;
+}
+
+export interface responseInvite {
+  accepted: boolean;
+  gameId: number;
+}
+
+export interface InviteGameI {
+  gameId: any,               // Create interface for this
+  user: BasicUserI,
+  target: BasicUserI,
 }

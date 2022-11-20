@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { targetModulesByContainer } from '@nestjs/core/router/router-module';
 import { Game, GameState, UserState } from '@prisma/client';
+import { connect } from 'http2';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
-import { dbGame } from 'src/pong/interfaces/game.interface';
+import { dbGame, GameI } from 'src/pong/interfaces/game.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
@@ -42,18 +43,21 @@ export class GameService {
 
   }
 
-  async createGame(userId: number): Promise<Game>{
+  async createGame(userId: number, user2Id?: number): Promise<Game>{
     if (userId) {
-      return this.prisma.game.create({
+      let game = await this.prisma.game.create({
         data: {
           users: {
             connect: {
               id: userId
-            },
+            }
           },
         },
-      })
-    }
+      });
+     if (user2Id)
+      game = await this.addPlayerToGame(game.id, user2Id);
+    return game;
+  }
   }
 
   async addPlayerToGame(gameId: number, userId: number): Promise<Game> {

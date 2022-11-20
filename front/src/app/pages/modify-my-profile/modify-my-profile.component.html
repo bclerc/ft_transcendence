@@ -4,7 +4,7 @@
 	<div class="param-header">
 		<img id="close-settings" src="../../../assets/svg/return.svg" alt="return" (click)="close()">
 		<h2>Paramètres de mon profil</h2>
-		<button id="action" matTooltip="Cette action est irréversible">
+		<button id="action" matTooltip="Cette action est irréversible" (click)="logOut()">
 			Se déconnecter
 			<img src="../../../../assets/svg/quit.svg" alt="">
 		</button>
@@ -79,7 +79,16 @@
 	<!-- UTILISATEURS BLOQUEÉS -->
 	<section id="blocked">
 		<div id="title-n-button">
-			<h3>Utilisateurs bloqués</h3>
+			<!-- <ng-container *ngIf="pandingFriends | async as request"> -->
+				<ng-container *ngIf =  user.blockedUsers>
+					<ng-container *ngIf =  user.blockedUsers[0]>
+
+						<h3>Utilisateurs bloqués</h3>
+					</ng-container>
+
+				</ng-container>
+			<!-- </ng-container> -->
+			
 		</div>
 		<app-list-user-blocked [user]="user"></app-list-user-blocked>
 	</section>
