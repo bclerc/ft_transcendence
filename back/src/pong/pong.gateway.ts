@@ -283,7 +283,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @OnEvent('game.end')
   async endGameEvent(game: GameI, winnerId: number, loserId: number) {
-    const winnerSocket = this.connectedUsers.get(winnerId);
+  const winnerSocket = this.connectedUsers.get(winnerId);
     const loserSocket = this.connectedUsers.get(loserId);
     if (game && game.dbGame) {
       this.server.to(winnerSocket).emit('win');
@@ -323,7 +323,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const target = this.onlineUserService.getDataPlayerById(id);
     let game: GameI;
 
-    if (!inviter || !target)
+
+    if ((!inviter || !target) || (inviter.id == target.id))
       return ;
     if (this.pongService.userIsInGame(inviter, games) || this.pongService.userIsInGame(target, games)) {
       this.sendToPlayers(inviter, 'notification', target.displayname + " est déjà en partie");
