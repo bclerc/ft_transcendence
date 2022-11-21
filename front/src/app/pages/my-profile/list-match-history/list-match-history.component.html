@@ -22,7 +22,9 @@
 				<!-- Moi -->
 				<div id="my-profile">
 					<!-- <img src="../../../../assets/img/default_profile_picture.webp" alt=""> -->
-					<a [routerLink]="['/profile/' + games.winner.id ]">
+					<a [routerLink] = "['/profile/' + games.winner.id ]"  routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+					<!-- <a routerLink='/profile/' + games.winner.id  routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> -->
+					<!-- <a [routerLink]="['/profile/' + games.winner.id ] "> -->
 						<img [src]="games.winner.avatar_url" [alt]="games.winner.displayname"/>
 						{{games.winner.displayname}}
 					</a>
@@ -37,7 +39,8 @@
 				<!-- Adversaire -->
 				<div id="my-enemy">
 					<!-- <img src="games.loser.avatar_url" alt=""> -->
-					<a [routerLink]="['/profile/' + games.loser.id ]">
+					<a [routerLink] = "['/profile/' + games.loser.id]"  routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+					<!-- <a [routerLink]="['/profile/' + games.loser.id ]"> -->
 						<img [src]="games.loser.avatar_url" [alt]="games.loser.displayname"/>
 						{{games.loser.displayname}}
 					</a>
