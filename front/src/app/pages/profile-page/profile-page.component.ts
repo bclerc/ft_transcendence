@@ -25,11 +25,20 @@ export class ProfilePageComponent implements OnInit {
   alreadyFriend : boolean = false;
   alreadyBlocked : boolean = false;
   
-  constructor(private userService: UserService, private router: Router, private route : ActivatedRoute, private token : TokenStorageService
-    ,public currentUserService : CurrentUserService, private snackBar : MatSnackBar) { }
+  constructor ( 
+                private userService: UserService,
+                private router: Router,
+                private route : ActivatedRoute,
+                private token : TokenStorageService,
+                public currentUserService : CurrentUserService,
+                private snackBar : MatSnackBar,
+              ) { }
 
   ngOnInit(): void {
-    this.id= Number( this.router.url.split('/')[2]);
+    this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
+    this.id = this.route.snapshot.params['id'];
+
+
     
       this.searchFriend();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
@@ -38,14 +47,19 @@ export class ProfilePageComponent implements OnInit {
           // console.log("yolo = ", data);
         }
         );
-      if (this.id === this.token.getId() )
-        this.router.navigate(['/myprofile']);
+
       this.subscription3 =  this.userService.GetUserHistory(this.id).subscribe(
         (data : any) => {
           this.games = data;
           console.log("games = ", data);
         }
         );
+
+      if (this.id == this.token.getId() )
+      {
+        this.router.navigate(['/myprofile']);
+      }
+
   }
 
   searchFriend(): void {

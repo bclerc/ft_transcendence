@@ -57,6 +57,7 @@ import { LeaderbordComponent } from './pages/leaderbord/leaderbord.component';
 import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/activate2-fa.component'
 import { FooterComponent } from './footer/footer.component';
 import { AddFriendListComponent } from './pages/my-profile/add-friend-list/add-friend-list.component';
+import { AddUserOnRoomComponent } from './add-user-on-room/add-user-on-room.component';
 
 
 const config: SocketIoConfig = {
@@ -99,6 +100,7 @@ export function tokenGetter() {
     FooterComponent,
     AddFriendListComponent,
     LeaderbordComponent,
+    AddUserOnRoomComponent,
   ],
   imports: [
     BrowserModule,

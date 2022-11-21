@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router} from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { TokenStorageService } from '../../services/auth/token.storage';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { HeaderService } from 'src/app/services/user/header.service';
@@ -22,13 +22,16 @@ export class GetTokenComponent implements OnInit {
                 private navbar: HeaderService,
                 @Inject(Socket) private socket: Socket,
                 private snackBar : MatSnackBar,
+                private route : ActivatedRoute,
               ) {}
 
   tokenString! : string;
   
   ngOnInit(): void {  
+    this.tokenString  = this.route.snapshot.params['id'];
+
     
-    this.tokenString = this.router.url.split('/')[2];
+    // this.tokenString = this.router.url.split('/')[2];
 
     try {
       this.jwtHelper.decodeToken(this.tokenString);
