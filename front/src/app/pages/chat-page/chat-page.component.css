@@ -138,7 +138,7 @@ a{
 	display: none;
 }
 
-.mat-tab-group ul{
+.switch-groupes-amis ul{
 	flex-direction: column;
 	margin-top: 30px;
 	list-style-type: none;
@@ -147,13 +147,13 @@ a{
 }
 
 /* Styles for group list / friend list */
-.mat-tab-group ul li{
+.switch-groupes-amis ul li{
 	font-family: ReadexPro-Bold;
 	color: #feefcf;
 	font-size: 14px;
 	margin-top: 20px;
 }
-.mat-tab-group ul li:hover{
+.switch-groupes-amis ul li:hover{
 
 	transition: all ease 0.00001s;
 	font-size: 18px;
@@ -200,6 +200,10 @@ a{
 	display: flex;
 }
 
+.main-container-mobile{
+	display: none;
+}
+
 .sidebar,
 .content-chat-page{
 	/* float: left; */
@@ -220,7 +224,7 @@ a{
 }
 .content-chat-page{
 	flex-grow: 1;
-	display:flex;
+	display: flex;
 	/* max-width */
 	/* box-sizing:  */
 	/* max-width: 70%; */
@@ -235,7 +239,32 @@ a{
 	margin-right: 0px;
 }
 
-/* Moblie Protrait size to Mobile Landscape size (devices and browsers) */
-@media only screen and (max-width: 479px) {
 
+@media only screen and (max-width: 1292px) {
+
+	.center{
+		margin: 0px 30px 0px 30px;
+	}
+}
+
+/* Moblie Protrait size to Mobile Landscape size (devices and browsers) */
+@media only screen and (max-width: 780px) {
+
+
+	.main-container{
+		display: none;
+	}
+	
+	.main-container-mobile{
+		display: flex;
+	}
+	
+	.sidebar{
+		/* background-color: violet; */
+		margin-right: 0px;
+		width: 100%;
+	}
+	/* .content-chat-page{
+		display: none;
+	} */
 }
