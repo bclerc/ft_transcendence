@@ -3,6 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Socket } from 'ngx-socket-io';
 import { Subscription } from 'rxjs';
 
 import { UserI } from 'src/app/models/user.models';
@@ -23,6 +24,8 @@ export class ListMyFriendComponent implements OnInit {
   constructor (  
                 public userService : UserService,
                 private dialog: MatDialog,
+                private snackBar: MatSnackBar,
+                private socket: Socket
               ) {}
 
   
@@ -97,5 +100,26 @@ export class ListMyFriendComponent implements OnInit {
   
       this.dialog.open(AddFriendListComponent, dialogConfig);
   }
+
+  async inviteToPlay(user: UserI)
+  {
+    if (user)
+    {
+      switch (user.state) {
+        case "OFFLINE":
+          this.snackBar.open(user.displayname + " n'est pas en ligne!", "X", {
+            duration: 2000,
+          });
+        break;
+        case "INGAME":
+          this.snackBar.open(user.displayname + " est déjà en partie !", "X", {
+          duration: 2000,
+        });
+        break;
+        default:
+          this.socket.emit('inviteUser', user.id);
+    }
+  }
+}
 
 }

@@ -54,11 +54,12 @@ export class ChatPageComponent implements OnInit {
     this.chatService.needRooms();
     this.chatService.needPublicRooms();
     this.chatService.needDmRooms();
-		this.userService.getLoggedUser().subscribe(
+		await this.userService.getLoggedUser().subscribe(
 			(data : any) => {
 			  this.actualUser = data;
 			},
 			);
+      
 		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
       let roomChanged, roomSeen: boolean = false;
 				for (const room of rooms) {
