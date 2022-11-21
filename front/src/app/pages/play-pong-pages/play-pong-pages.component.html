@@ -1,6 +1,123 @@
+<html>
+	<head>
+		<title>Pong - the chat page</title>
+		<meta charset="utf-8" />
+		<meta name="description" content="Mon super profil" />
+		<meta name="author" content="Team transcendance 42" />
+		<meta name="copyright" content="© CC BY-NC-SA 4.0" />
+	</head>
+	<body>
+		<div class="center-pong">
+			<h1>Affrontes les tous</h1>
+			<div class="tuto">
+				<p>Appuis sur les touches de ton clavier W pour monter et S pour descendre.</p>
+				<div class="up-down">
 
-<div align="center">
-      <button matButton (click)="newGame(true)" >Partie</button>
-      <button matButton (click)="newGame(false)" >Partie aléatoire</button>
-</div>
-<app-footer></app-footer>
+
+					<div class="demi">
+						<div id="key">
+							W
+						</div>
+						<img id="up" src="../../../assets/svg/pong-up-arrow.svg" alt="up">
+					</div>
+					<div class="demi">
+						<div id="key">
+							S
+						</div>
+						<img id="down" src="../../../assets/svg/pong-down-arrow.svg" alt="down">
+					</div>
+				</div>
+			</div>
+
+			<!-- BOUTONS PLAY PONG -->
+			<div class="buttons">
+				<button id="regular" matButton (click)="newGame(true)" >Lancer une partie</button>
+				<button id="random"  matTooltip="Lancer une partie aléatoire" matButton (click)="newGame(false)" >
+					<svg width="34px" height="29px" viewBox="0 0 34 29">
+						<title>random</title>
+						<g id="random" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M2,6.00673596 C8.16627646,6.00673596 12.574842,8.79727819 15.2256965,14.3783627 C17.8765511,19.9594471 22.9395729,22.8281307 30.414762,22.9844134" id="icon-random" stroke="#FEEFCF" stroke-width="3" transform="translate(16.207381, 14.495575) scale(1, -1) translate(-16.207381, -14.495575) "></path>
+							<polyline id="icon-random" stroke="#FEEFCF" stroke-width="3" transform="translate(29.244620, 6.285714) rotate(-270.000000) translate(-29.244620, -6.285714) " points="33.5303343 9.04109397 29.24462 3.5303346 24.9589057 9.04109397"></polyline>
+							<path d="M2,6.00673596 C8.16627646,6.00673596 12.574842,8.79727819 15.2256965,14.3783627 C17.8765511,19.9594471 22.9395729,22.8281307 30.414762,22.9844134" id="icon-random" stroke="#FEEFCF" stroke-width="3"></path>
+							<polyline id="icon-random" stroke="#FEEFCF" stroke-width="3" transform="translate(29.244620, 22.714286) rotate(-270.000000) translate(-29.244620, -22.714286) " points="33.5303343 25.4696654 29.24462 19.958906 24.9589057 25.4696654"></polyline>
+						</g>
+					</svg>
+				</button>
+			</div>
+
+			<!-- MATCHS EN COURS -->
+			<h2>Matchs en cours</h2>
+			<div class="les-matchs">
+
+				<!-- MATCH -->
+				<div class="match">
+					<div class="info">
+						<a class="profil" href="">
+							<img src="../../../assets/img/default_profile_picture.webp" alt="">
+							vserra1234
+						</a>
+						<div class="vs">
+							VS
+						</div>
+						<a class="profil" href="">
+							<img src="../../../assets/img/default_profile_picture.webp" alt="">
+							vserra1234
+						</a>
+					</div>
+					<div class="but">
+						<button>
+							Voir le match
+							<img src="../../../assets/svg/invite-game.svg" alt="">
+						</button>
+					</div>
+				</div>
+
+				<!-- MATCH -->
+				<div class="match">
+					<div class="info">
+						<a class="profil" href="">
+							<img src="../../../assets/img/default_profile_picture.webp" alt="">
+							vserra1234
+						</a>
+						<div class="vs">
+							VS
+						</div>
+						<a class="profil" href="">
+							<img src="../../../assets/img/default_profile_picture.webp" alt="">
+							vserra1234
+						</a>
+					</div>
+					<div class="but">
+						<button>
+							Voir le match
+							<img src="../../../assets/svg/invite-game.svg" alt="">
+						</button>
+					</div>
+				</div>
+
+				<!-- MATCH -->
+				<div class="match">
+					<div class="info">
+						<a class="profil" href="">
+							<img src="../../../assets/img/default_profile_picture.webp" alt="">
+							vserra1234
+						</a>
+						<div class="vs">
+							VS
+						</div>
+						<a class="profil" href="">
+							<img src="../../../assets/img/default_profile_picture.webp" alt="">
+							vserra1234
+						</a>
+					</div>
+					<div class="but">
+						<button>
+							Voir le match
+							<img src="../../../assets/svg/invite-game.svg" alt="">
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
