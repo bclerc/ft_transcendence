@@ -121,10 +121,10 @@
 				<!-- MAIN CONTENT -->
 				<main class="content-chat-page">
 					<ng-container *ngIf="!newRoom">
-						<app-room [friend] = "friend(selectedRoom)" [room]="selectedRoom" [user]="actualUser"></app-room>
+						<app-room [friend] = "friend(selectedRoom)" [room]="selectedRoom" [user]="actualUser" [chatMobileService]="chatMobileService"></app-room>
 					</ng-container>
 					<ng-container *ngIf="newRoom">
-						<app-new-room></app-new-room>
+						<app-new-room [chatMobileService]="chatMobileService"></app-new-room>
 					</ng-container>
 				</main>
 			</div>

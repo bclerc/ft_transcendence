@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="34px" height="29px" viewBox="0 0 34 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>random</title>
+    <g id="random" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2,6.00673596 C8.16627646,6.00673596 12.574842,8.79727819 15.2256965,14.3783627 C17.8765511,19.9594471 22.9395729,22.8281307 30.414762,22.9844134" id="Path-9" stroke="#FEEFCF" stroke-width="3" transform="translate(16.207381, 14.495575) scale(1, -1) translate(-16.207381, -14.495575) "></path>
+        <polyline id="Rectangle" stroke="#FEEFCF" stroke-width="3" transform="translate(29.244620, 6.285714) rotate(-270.000000) translate(-29.244620, -6.285714) " points="33.5303343 9.04109397 29.24462 3.5303346 24.9589057 9.04109397"></polyline>
+        <path d="M2,6.00673596 C8.16627646,6.00673596 12.574842,8.79727819 15.2256965,14.3783627 C17.8765511,19.9594471 22.9395729,22.8281307 30.414762,22.9844134" id="Path-9" stroke="#FEEFCF" stroke-width="3"></path>
+        <polyline id="Rectangle-Copy" stroke="#FEEFCF" stroke-width="3" transform="translate(29.244620, 22.714286) rotate(-270.000000) translate(-29.244620, -22.714286) " points="33.5303343 25.4696654 29.24462 19.958906 24.9589057 25.4696654"></polyline>
+    </g>
+</svg>
