@@ -1,5 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, tap } from 'rxjs';
 import { User, UserI } from 'src/app/models/user.models';

@@ -4,7 +4,7 @@ import { TokenStorageService } from '../../services/auth/token.storage';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { HeaderService } from 'src/app/services/user/header.service';
 import { Socket } from 'ngx-socket-io';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 
 

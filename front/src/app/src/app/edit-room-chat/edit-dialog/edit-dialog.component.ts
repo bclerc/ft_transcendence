@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, Inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
