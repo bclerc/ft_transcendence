@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { targetModulesByContainer } from '@nestjs/core/router/router-module';
 import { Game, GameState, UserState } from '@prisma/client';
+import { connect } from 'http2';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
-import { dbGame } from 'src/pong/interfaces/game.interface';
+import { dbGame, GameI } from 'src/pong/interfaces/game.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
@@ -11,11 +12,10 @@ import { UserService } from 'src/user/user.service';
 export class GameService {
 
 
-  constructor( 
-     private prisma: PrismaService,
-     private userService: UserService
-  ) {}
-
+  constructor(
+    private prisma: PrismaService,
+    private userService: UserService
+  ) { }
 
   async getAllGam(): Promise<Game[]> {
     return await this.prisma.game.findMany({
@@ -42,17 +42,20 @@ export class GameService {
 
   }
 
-  async createGame(userId: number): Promise<Game>{
+  async createGame(userId: number, user2Id?: number): Promise<Game> {
     if (userId) {
-      return this.prisma.game.create({
+      let game = await this.prisma.game.create({
         data: {
           users: {
             connect: {
               id: userId
-            },
+            }
           },
         },
-      })
+      });
+      if (user2Id)
+        game = await this.addPlayerToGame(game.id, user2Id);
+      return game;
     }
   }
 
@@ -72,9 +75,9 @@ export class GameService {
             }
           }
         });
+      }
     }
   }
-}
   async getGameById(id: number): Promise<dbGame> {
     return await this.prisma.game.findUnique({
       where: {
@@ -93,29 +96,26 @@ export class GameService {
   async startGame(id: number): Promise<Game> {
     const game = await this.getGameById(id);
     if (game.state != GameState.STARTED) {
-        await this.userService.setStates(game.users, UserState.INGAME);
-        return await this.prisma.game.update({
-          where: {
-            id: id
-          },
-          data: {
-            state: GameState.STARTED
-          }
-        })
-      }
-      return null;
+      await this.userService.setStates(game.users, UserState.INGAME);
+      return await this.prisma.game.update({
+        where: {
+          id: id
+        },
+        data: {
+          state: GameState.STARTED
+        }
+      })
     }
+    return null;
+  }
 
 
   async stopGame(id: number, winnerId: number, loserId: number, loserScore: number, winnerScore: number): Promise<Game> {
-    
+
     const game = await this.getGameById(id);
-    if (game && game.users)
-    {
+    if (game && game.users) {
       this.userService.setState(winnerId, UserState.ONLINE);
       this.userService.setState(loserId, UserState.ONLINE);
-
-      // get leaderboard position
 
 
       await this.prisma.user.update({
@@ -142,10 +142,31 @@ export class GameService {
         }
       })
     }
-    
-
     return null;
   }
 
-}
+  async getLeaderboard(): Promise<BasicUserI[]> {
+    return await this.prisma.user.findMany({
+      orderBy: {
+        score: 'desc'
+      },
+      select: {
+        id: true,
+        state: true,
+        displayname: true,
+        intra_name: true,
+        email: true,
+        avatar_url: true,
+        score: true,
+        _count: {
+          select: {
+            games_win: true,
+            games_lose: true,
+            games: true,
+          }
+        }
+      }
+    });
+  }
 
+}

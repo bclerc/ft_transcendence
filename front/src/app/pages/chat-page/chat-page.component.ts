@@ -2,8 +2,8 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSelectionListChange } from '@angular/material/list';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySelectionListChange as MatSelectionListChange } from '@angular/material/legacy-list';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
@@ -54,11 +54,12 @@ export class ChatPageComponent implements OnInit {
     this.chatService.needRooms();
     this.chatService.needPublicRooms();
     this.chatService.needDmRooms();
-		this.userService.getLoggedUser().subscribe(
+		await this.userService.getLoggedUser().subscribe(
 			(data : any) => {
 			  this.actualUser = data;
 			},
 			);
+      
 		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
       let roomChanged, roomSeen: boolean = false;
 				for (const room of rooms) {

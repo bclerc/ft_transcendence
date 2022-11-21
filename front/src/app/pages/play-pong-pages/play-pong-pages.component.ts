@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Injectable } from '@angular/core';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
@@ -24,13 +25,17 @@ export class PlayPongPagesComponent implements OnInit
   id!: string;
   private var_interval: number;
 
-  constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService)
+  constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService, private dialog: MatDialog)
   {
     this.var_interval = 0;
     this.ratiox = 1;
     this.ratioy = 1;
   }
 
+  
+  testInviteUser() {
+    this.socket.emit('inviteUser', 2);
+  }
   ngOnInit(): void 
   {
     // this.socket.on('id', this.idMessage);
@@ -112,7 +117,6 @@ export class PlayPongPagesComponent implements OnInit
   }
 
   /// JEEU 
-
 
 
   drawName(side: number)

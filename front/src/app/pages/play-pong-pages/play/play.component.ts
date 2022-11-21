@@ -116,7 +116,14 @@ export class PlayComponent implements OnInit {
         }
       }
     });
+    //check if player or not is necessary ??
+    this.socket.emit('spectate', this.gameId);
   }
+
+  ngOnDestroy(): void {
+    this.socket.emit('deleteSpectate', this.gameId);
+  }
+
 
   @HostListener('document:keydown',['$event'])  //$event is the event object
   handleKeyboardDown(event: KeyboardEvent) {
@@ -215,11 +222,11 @@ export class PlayComponent implements OnInit {
 
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     // const canvas = this.canvas;
-    var ratiox = canvas!.width / WIDTHCANVAS;
-    var ratioy = canvas!.height / HEIGHTCANVAS;
-    var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
     if (canvas)
     {
+      var ratiox = canvas.width / WIDTHCANVAS;
+      var ratioy = canvas.height / HEIGHTCANVAS;
+      var ratio = canvas.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
         var context = canvas.getContext('2d');
         if (context)
         {
@@ -282,11 +289,11 @@ export class PlayComponent implements OnInit {
 
   drawMap1(state: GameI){
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    var ratiox = canvas!.width / WIDTHCANVAS;
-    var ratioy = canvas!.height / HEIGHTCANVAS;
-    var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
     if (canvas)
     {
+      var ratiox = canvas.width / WIDTHCANVAS;
+      var ratioy = canvas.height / HEIGHTCANVAS;
+      var ratio = canvas.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
         var context = canvas.getContext('2d');
         if (context)
         {
@@ -375,11 +382,11 @@ export class PlayComponent implements OnInit {
 
   drawMap2(state: GameI){
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    var ratiox = canvas!.width / WIDTHCANVAS;
-    var ratioy = canvas!.height / HEIGHTCANVAS;
-    var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
     if (canvas)
     {
+      var ratiox = canvas.width / WIDTHCANVAS;
+      var ratioy = canvas.height / HEIGHTCANVAS;
+      var ratio = canvas.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
         var context = canvas.getContext('2d');
         if (context)
         {
@@ -458,11 +465,11 @@ export class PlayComponent implements OnInit {
 
   drawMap3(state: GameI){
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    var ratiox = canvas!.width / WIDTHCANVAS;
-    var ratioy = canvas!.height / HEIGHTCANVAS;
-    var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
     if (canvas)
     {
+      var ratiox = canvas.width / WIDTHCANVAS;
+      var ratioy = canvas.height / HEIGHTCANVAS;
+      var ratio = canvas.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
         var context = canvas.getContext('2d');
         if (context)
         {
@@ -608,24 +615,21 @@ export class PlayComponent implements OnInit {
   }
 
   drawInit() {
+    var ratiox = 1;
+    var ratioy = 1;
+    var ratio = 1;
     var canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     if (canvas)
     {
-      var ratiox = canvas!.width / WIDTHCANVAS;
-      var ratioy = canvas!.height / HEIGHTCANVAS;
-      var ratio = canvas!.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
+      var ratiox = canvas.width / WIDTHCANVAS;
+      var ratioy = canvas.height / HEIGHTCANVAS;
+      var ratio = canvas.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
     }
-    else
-    {
-      var ratiox = 1;
-      var ratioy = 1;
-      var ratio = 1;
-    }
-    if (canvas)
-    {
-      ratiox = canvas.width / WIDTHCANVAS;
-      ratioy = canvas.height / HEIGHTCANVAS;
-    }
+    // if (canvas)
+    // {
+    //   ratiox = canvas.width / WIDTHCANVAS;
+    //   ratioy = canvas.height / HEIGHTCANVAS;
+    // }
     var p1 = {
           // user: UserI;
           // socket: Socket,

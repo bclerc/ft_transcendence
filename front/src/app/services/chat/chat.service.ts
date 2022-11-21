@@ -2,7 +2,7 @@
 import { C } from '@angular/cdk/keycodes';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ElementRef, Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';

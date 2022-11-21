@@ -6,8 +6,8 @@ COPY package.json ./
 COPY tsconfig.json ./
 COPY tsconfig.build.json ./
 
+RUN npm install -g npm@latest
 RUN npm install
-
 RUN npm install prisma --save-dev
 
 COPY prisma ./prisma
