@@ -14,25 +14,25 @@ import { UserService } from './services/user/user.service';
 import { UserResolver } from './resolver';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatCardModule } from '@angular/material/card';
-import { MatListModule } from '@angular/material/list';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
+import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserselectComponent } from './userselect/userselect.component';
 import { CommonModule } from '@angular/common';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
 import { RoomComponent } from './pages/chat-page/room/room.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { ChatInfoComponent } from './chat-info/chat-info.component';
-import { MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
+import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
 import { MatBadgeModule } from '@angular/material/badge';
 import { EditRoomChatComponent } from './edit-room-chat/edit-room-chat.component';
 import { SendCodeComponent } from './pages/send-code/send-code.component';
@@ -42,14 +42,14 @@ import { HeaderService } from './services/user/header.service';
 import { CurrentUserService } from './services/user/current_user.service';
 import { FileUploaderComponent } from './pages/modify-my-profile/file-uploader/file-uploader.component';
 import { NewRoomComponent } from './pages/chat-page/new-room/new-room.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { PenaltyDialogComponent } from './src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
-import { MatSelectModule } from '@angular/material/select';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-dialog.component';
 import { ListUserBlockedComponent } from './pages/modify-my-profile/list-user-blocked/list-user-blocked.component';
 import { ListMyFriendComponent } from './pages/my-profile/list-my-friend/list-my-friend.component';
 import { ListMatchHistoryComponent } from './pages/my-profile/list-match-history/list-match-history.component'; 
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { HttpErrorInterceptor } from './httpErrorHandler';
 import { BurgerMenuService } from './services/burger-menu.service';
 import { PlayComponent } from './pages/play-pong-pages/play/play.component';
@@ -57,6 +57,8 @@ import { LeaderbordComponent } from './pages/leaderbord/leaderbord.component';
 import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/activate2-fa.component'
 import { FooterComponent } from './footer/footer.component';
 import { AddFriendListComponent } from './pages/my-profile/add-friend-list/add-friend-list.component';
+import { InviteDialogComponent } from './pages/play-pong-pages/invite-dialog/invite-dialog.component';
+import { AddUserOnRoomComponent } from './add-user-on-room/add-user-on-room.component';
 import { ChatMobileService } from './services/chat-mobile.service';
 
 
@@ -98,7 +100,11 @@ export function tokenGetter() {
     ListMatchHistoryComponent,
     PlayComponent,
     FooterComponent,
+    LeaderbordComponent,
     AddFriendListComponent,
+    InviteDialogComponent,
+    LeaderbordComponent,
+    AddUserOnRoomComponent,
     LeaderbordComponent
   ],
   imports: [

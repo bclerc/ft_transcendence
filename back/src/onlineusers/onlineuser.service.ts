@@ -29,7 +29,7 @@ export class OnlineUserService {
   async initUser(socketId: string, user: BasicUserI) {
     this.onlineUsers.forEach((value, key) => {
       if (value.id == user.id) {
-        this.onlineUsers.delete(key);
+       this.onlineUsers.delete(key);
       }
     });
     this.onlineUsers.set(socketId, user);
@@ -90,6 +90,19 @@ export class OnlineUserService {
     }
     return null;
   }
+
+  getDataPlayerById(id: number): dataPlayerI {
+    let user = this.getUser(null, id);
+    if (user) {
+      return {
+        id: user.id,
+        displayname: user.displayname,
+        intra_name: user.intra_name,
+      }
+    }
+    return null;
+  }
+
 
   sendToUser(user: BasicUserI | number, event: string, data: any) {
     let userId = typeof user == 'number' ? user : user.id;

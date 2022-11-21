@@ -5,7 +5,7 @@ import { ConnectableObservable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { User, UserI } from '../models/user.models';
 import { UserService } from '../services/user/user.service';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
 
 @Component({
   selector: 'app-userselect',
