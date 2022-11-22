@@ -1,14 +1,9 @@
 import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { Subscription } from 'rxjs';
-
 import { UserI } from 'src/app/models/user.models';
-import { TokenStorageService } from 'src/app/services/auth/token.storage';
-import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { AddFriendListComponent } from '../add-friend-list/add-friend-list.component';
 

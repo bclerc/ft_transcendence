@@ -1,8 +1,8 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, tap } from 'rxjs';
-import { User, UserI } from 'src/app/models/user.models';
+import { Subscription } from 'rxjs';
+import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -43,6 +43,7 @@ export class ProfilePageComponent implements OnInit {
       this.searchFriend();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
+          console.log(data);
           this.user = data;
           // console.log("yolo = ", data);
         }

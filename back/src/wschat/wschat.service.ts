@@ -192,6 +192,20 @@ export class WschatService {
     }
   }
 
+  async addUsersToRoom(socketId: string, event: {roomId: number, userId: number}) {
+    const user = this.onlineUserService.getUser(socketId);
+    const target = await this.userService.findOne(event.userId);
+    const room = await this.chatService.getRoomById(event.roomId);
+
+    if (user && target && room) {
+      if (user.id == room.ownerId) {
+        this.chatService.addUsersToRoom(room.id, target.id);
+        this.eventEmitter.emit('room.user.invited',
+         { room: room, user: target, inviter: user });
+      }
+    }
+  }
+
   async deleteRoom(socketId: string, roomId: number) {
     const user = this.onlineUserService.getUser(socketId);
     const room = await this.chatService.getRoomById(roomId);
