@@ -22,26 +22,31 @@ export class PlayPongPagesComponent implements OnInit
   user: UserI = {};
   games: GameListInfo[] = [];
   id!: string;
+  isDisabled = true;
 
   private var_interval: number;
 
-  constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService, private dialog: MatDialog)
+  constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService)
   {
     this.var_interval = 0;
+    this.socket.on('stopedSearch', this.stopedSearch);
     this.socket.on('onGoingGames', (data: GameListInfo[]) => {
       this.games = data;
     });
   }
 
-  
   testInviteUser() {
     this.socket.emit('inviteUser', 2);
   }
+
   ngOnInit(): void 
   {
+    var button = document.getElementById("stop") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
     this.socket.emit("needOnGoingGames");
   }
-  
+
   ngAfterInit(): void {
   }
 
@@ -57,7 +62,22 @@ export class PlayPongPagesComponent implements OnInit
 
   newGame(normalOrNot: boolean)
   {
+    var button = document.getElementById("stop") as HTMLElement;
+    if (button)
+      button.removeAttribute("hidden");
+    button = document.getElementById("regular") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
+    button = document.getElementById("random") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
     this.socket.emit('newGame', normalOrNot);
+  }
+
+  stopGame()
+  {
+    console.log("stopbutton");
+    this.socket.emit('stopSearch');
   }
 
   stopSearchLoop(id: number)
@@ -73,6 +93,18 @@ export class PlayPongPagesComponent implements OnInit
   joinGame(id: number)
   {
     this.router.navigate(['/game/', id]);
+  }
+
+  stopedSearch() {
+    var button = document.getElementById("stop") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
+    button = document.getElementById("regular") as HTMLElement;
+    if (button)
+      button.removeAttribute("hidden");
+    button = document.getElementById("random") as HTMLElement;
+    if (button)
+      button.removeAttribute("hidden");
   }
 
 };
