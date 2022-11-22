@@ -265,12 +265,8 @@ export class UserService {
           }
         }
       },
-     // position_in_leaderboard : true,
-
     });
     user.position_in_leaderboard = await this.getLeaderboardPosition(user.id);
-   // console.log(user.position_in_leaderboard );
-
     if (user === undefined)
       return null;
     console.log(user);
@@ -301,7 +297,6 @@ export class UserService {
         }
       },
     });
-    
     if (user === undefined)
       return null;
     return user;
