@@ -255,9 +255,11 @@ html, body, .flexbox {
 
 #but-send{
 	background-color: #ee481e;
-	border-radius: 10px;;
+	border-radius: 10px;
 	outline: none;
-	width: 40px;
+	width: 45px;
+	min-width: 45px;
+	height: 45px;
 	box-shadow: none;
 	margin: 10px;
 }
@@ -283,14 +285,19 @@ html, body, .flexbox {
 	color: $color-cream;
 	border: 2px solid $color-darkgrey;
 
-  #chip_avatar {
-    width: 32px;
-    height: 32px;
+  .chip_avatar {
+    width: 22px;
+    height: 22px;
+	object-fit: cover;
     border-radius: 50%;
     margin-left: -2px;
     margin-bottom: 0px;
-  
   }
+
+}
+#text{
+  color: $color-cream !important;
+  font-family: ReadexPro-Regular !important;
 }
 
 

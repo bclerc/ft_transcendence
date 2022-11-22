@@ -152,11 +152,15 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     return undefined;
   }
 
+  ////////
+  ///INVITE HANDLER
+  ///////
+
+
   @SubscribeMessage('inviteUser')
   inviteUser(client: Socket, id: number) {
     this.invitePlayUser(client, id, this.gamesMap);
   }
-
 
   @SubscribeMessage('responseInvite')
   async responseInvite(client: Socket, response: responseInvite) {
@@ -284,7 +288,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
       })
     }
   }
-
+  
   @OnEvent('game.end')
   async endGameEvent(game: GameI, winnerId: number, loserId: number) {
   const winnerSocket = this.connectedUsers.get(winnerId);
@@ -376,29 +380,35 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('stopSearch')
   stopSearch(client: Socket)
   {
-    console.log("stopSearch");
     const user = this.onlineUserService.getUser(client.id);
     for (const [key, value] of this.gamesMap)
     {
       if (value.player1.user.id == user.id || value.player2.user.id == user.id)
-      {
-        console.log("stopSearch if found");
         this.gamesMap.delete(key);
-      }
-      client.emit("stopedSearch");
     }
   }
 
+  @SubscribeMessage('inGame')
+  inGame(client: Socket, idGame: number) {
+    const user: dataPlayerI = this.onlineUserService.getDataPlayer(client.id);
+    for (let game of this.gamesMap.values())
+      if (game.player1.user.id == user.id || game.player2.user.id == user.id){
+        console.log("inGame yes");
+        client.emit('inGame', true);
+        return true;
+      }
+    console.log("inGame no");
+    client.emit('inGame', false);
+        return false;
+  }
 
   public async creatNewGameMap(client: Socket, mapId: number): Promise<GameI> {
     const user: dataPlayerI = this.onlineUserService.getDataPlayer(client.id);
     console.log(user);
     if (!user)
       return;
-
     var game: GameI = this.pongService.initState();
     var dbGame: Game = await this.gameService.createGame(user.id);
-
     if (game && dbGame) {
       console.log("creating new game with id:", dbGame.id);
       game = {
@@ -417,10 +427,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
     }
     this.gamesMap.set(game.id, game);
-
     return this.gamesMap.get(game.id);
-    // client.emit("getId", game.id);
-    // this.allGames.push(game);
   }
 
 

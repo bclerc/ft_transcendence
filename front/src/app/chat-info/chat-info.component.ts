@@ -70,7 +70,7 @@ export class ChatInfoComponent implements OnInit {
 
   async ngOnInit() {
   
-    await this.userService.getLoggedUser().subscribe((user: UserI) => {
+    await this.userService.getLoggedUser().subscribe((user: UserI) =>{
       this.actualUser = user;
     });
   }

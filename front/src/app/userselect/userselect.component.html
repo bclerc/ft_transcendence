@@ -1,22 +1,22 @@
 <div id="input-box">
 	<p id="input-title">Ajouter des membres</p>
-		<textarea id="input-text" placeholder="Chercher par un pseudo" [matAutocomplete]="auto" [formControl]="searchUsername"></textarea>
-		<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setSelectedUser($event.option.value)">
-			<ng-container>
-					<mat-option *ngFor="let user of filteredUsers" [value]="user">
-						<div id="img-n-name">
-							<img src="{{user.avatar_url}}" alt="avatar">
-							<p id="user-name">{{user.intra_name}}</p>
-						</div>
-					</mat-option>
-			</ng-container>
-		</mat-autocomplete>
+	<textarea id="input-text" placeholder="Chercher par un pseudo" [matAutocomplete]="auto" [formControl]="searchUsername"></textarea>
+	<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setSelectedUser($event.option.value)">
+		<ng-container>
+				<mat-option *ngFor="let user of filteredUsers" [value]="user">
+					<div id="img-n-name">
+						<img src="{{user.avatar_url}}" alt="avatar">
+						<p id="user-name">{{user.intra_name}}</p>
+					</div>
+				</mat-option>
+		</ng-container>
+	</mat-autocomplete>
 </div>
 
 <mat-chip-listbox *ngIf="users[0]; else no_users">
 	<mat-chip id="mat-chip" *ngFor="let user of users " (removed)="removeUserFromForm(user)">
 		<img matChipAvatar [src]="user.avatar_url" [alt]="user.intra_name">
-		{{user.intra_name}}
+		<div id="text">{{user.intra_name}}</div>
 		<!-- <mat-icon matChipRemove>cancel</mat-icon> -->
 		<img id="cancel" matChipRemove src="../../assets/svg/cancel.svg" alt="cancel">
 	</mat-chip>
