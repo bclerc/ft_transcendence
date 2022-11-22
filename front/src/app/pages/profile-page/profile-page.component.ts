@@ -43,6 +43,7 @@ export class ProfilePageComponent implements OnInit {
       this.searchFriend();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
+          console.log(data);
           this.user = data;
           // console.log("yolo = ", data);
         }

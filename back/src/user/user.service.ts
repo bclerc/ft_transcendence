@@ -269,6 +269,7 @@ export class UserService {
     user.position_in_leaderboard = await this.getLeaderboardPosition(user.id);
     if (user === undefined)
       return null;
+    console.log(user);
     return user;
   }
 

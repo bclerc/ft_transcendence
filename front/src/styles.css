@@ -50,6 +50,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 }
 
+mat-dialog-container {
+  background-color: #1f1f1f !important;
+  border-radius: 20px !important;
+}
+
 .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label {
   color: #feefcf !important;
   font-family: ReadexPro-Medium !important;
