@@ -10,7 +10,8 @@ import { UserService } from './services/user/user.service';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor (  private token: TokenStorageService,
+  constructor ( 
+                private token: TokenStorageService,
                 private router: Router,
                 private snackBar: MatSnackBar,
                 private userService : UserService,
@@ -18,7 +19,6 @@ export class AuthGuard implements CanActivate {
               ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    
     const token = this.token.getToken();
     this.userService.isUserAuthentificated().subscribe(
       (data : any) =>{
@@ -33,14 +33,6 @@ export class AuthGuard implements CanActivate {
         })
           return false;
         }
-        /*if (!decodedToken.isTwoFactorAuthenticate)
-        {
-          this.snackBar.open("2fa is required", 'Undo', {
-            duration: 3000
-          })
-          this.router.navigate(['code']);
-          return false
-        }*/
         return  true
     }
     else
@@ -50,12 +42,7 @@ export class AuthGuard implements CanActivate {
       })
       return false;
     }
-    // const decodedToken = this.jwt.decodeToken(token);
-    // this.userService.isUserAuthentificated().subscribe(
-      // (data : any) =>{
-      // }
-    // )
-
-    
   }
+
 }
+

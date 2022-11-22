@@ -393,7 +393,9 @@ export class ChatService {
     if (newRoom.password != null)
       hashedPassword = await this.passUtils.hashPass(newRoom.password);
 
-    const ret = this.prisma.chatRoom.create({
+    if (newRoom.users.length < 1 || newRoom.users.length > 10)
+        return ;
+     const ret = this.prisma.chatRoom.create({
       data: {
         name: newRoom.name || owner.intra_name + '\'s room',
         description: newRoom.description || 'Another room created by ' + owner.intra_name,
