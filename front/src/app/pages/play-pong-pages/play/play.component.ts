@@ -621,7 +621,6 @@ export class PlayComponent implements OnInit {
       }
       if (canvas)
       {
-        console.log("canvas ", canvas);
           var context = canvas.getContext('2d');
           if (context)
           {
