@@ -632,13 +632,6 @@ export class ChatService {
         description: newRoom.description,
         public: newRoom.public,
         password: hashedPassword,
-        users: {
-          connect: newRoom.users.map((user: User) => {
-            return {
-              id: user.id
-            };
-          })
-        }
       },
     });
     return ret;
