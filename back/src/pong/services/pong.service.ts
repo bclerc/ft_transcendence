@@ -9,12 +9,15 @@ import { GameService } from 'src/game/game.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 80;
 const PLAYER_WIDTH = 8;
-const HEIGHTCANVAS = 400;
-const WIDTHCANVAS = 600;
+const WIDTHCANVAS = 850;
+const HEIGHTCANVAS = 638;
+const BACKSPACE = 40;
+const PLAYER1X = 0 + BACKSPACE;
+const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
+
 
 /////
 //obstacls configs
@@ -67,9 +70,7 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 
 ////
 
-
 export const MAX_SCORE = 5;
-
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
 export const SPEED_PLAYER = 8
@@ -111,9 +112,9 @@ export class PongService {
   }
 
   private colision(ball: BallI, paddle: PointI): boolean {
-    if (ball.x + ball.radius < (WIDTHCANVAS - paddle.width) && ball.x - ball.radius > (0 + paddle.width))
+    if (ball.x + ball.radius < PLAYER2X && ball.x - ball.radius > (PLAYER1X + paddle.width))
       return false;
-    if (ball.y >= paddle.y && ball.y <= paddle.y + paddle.height)
+    if (ball.y >= paddle.y && ball.y <= paddle.y + paddle.height && ball.x >= paddle.x && ball.x <= paddle.x + paddle.width)
       return true;
     return false;
   }
@@ -128,11 +129,6 @@ export class PongService {
     ball.dy = Math.floor(Math.random() * (defaultSpeed - -defaultSpeed + 1) + -defaultSpeed);
   }
 
-  // private reinitPlayers(player1: PlayerI, player2: PlayerI): void {
-  //     player1.paddle.y = HEIGHTCANVAS / 2 - player1.paddle.height / 2;
-  //     player2.paddle.y = HEIGHTCANVAS / 2 - player2.paddle.height / 2;
-  // }
-
   private reinitObstacle(obstacle: PointI): void {
     obstacle.x = WIDTHCANVAS / 2 - MAP2_OBSTACLE_W / 2;
     obstacle.y = MAP2_OBSTACLE_POSY;
@@ -141,8 +137,6 @@ export class PongService {
     obstacle.height = MAP2_OBSTACLE_H;
     obstacle.width = MAP2_OBSTACLE_W;
   }
-
-
 
   private rebond(ball: BallI, paddle: PointI): void {
     var impact = ball.y - paddle.y - paddle.height / 2;
@@ -167,7 +161,7 @@ export class PongService {
   initState(): GameI {
     var p1: PlayerI = {
       paddle: {
-        x: 0,
+        x: PLAYER1X,
         y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
         dx: 0,
         dy: 0,
@@ -179,7 +173,7 @@ export class PongService {
 
     var p2: PlayerI = {
       paddle: {
-        x: WIDTHCANVAS - PLAYER_WIDTH,
+        x: PLAYER2X,
         y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
         dx: 0,
         dy: 0,
@@ -265,7 +259,7 @@ export class PongService {
     game.player2 = {
       user: player,
       paddle: {
-        x: WIDTHCANVAS - PLAYER_WIDTH,
+        x: PLAYER2X,
         y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
         dx: 0,
         dy: 0,
@@ -274,6 +268,7 @@ export class PongService {
       },
       points: 0,
     }
+    console.log("game = ", game);
     this.eventEmitter.emit('game.users.matched', game);
   }
 
@@ -419,11 +414,11 @@ export class PongService {
     if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) //sil y a rebond entre balle et paddle
     {
       this.rebond(game.ball, game.player1.paddle);
-      game.ball.x = 0 + PLAYER_WIDTH + game.ball.radius;
+      game.ball.x = PLAYER1X + PLAYER_WIDTH + game.ball.radius;
     }
     else if ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle)) {
       this.rebond(game.ball, game.player2.paddle);
-      game.ball.x = WIDTHCANVAS - PLAYER_WIDTH - game.ball.radius;
+      game.ball.x = PLAYER2X - game.ball.radius;
     }
 
     if (game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
@@ -626,11 +621,11 @@ export class PongService {
     game.ball.x += game.ball.dx;
     if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) {
       this.rebond(game.ball, game.player1.paddle);
-      game.ball.x = 0 + PLAYER_WIDTH + game.ball.radius;
+      game.ball.x = PLAYER1X + PLAYER_WIDTH + game.ball.radius;
     }
     else if ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle)) {
       this.rebond(game.ball, game.player2.paddle);
-      game.ball.x = WIDTHCANVAS - PLAYER_WIDTH - game.ball.radius;
+      game.ball.x = PLAYER2X - game.ball.radius;
     }
     if (game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
     {

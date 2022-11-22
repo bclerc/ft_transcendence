@@ -64,10 +64,10 @@
 .pongCanvas {
   display: flex;
   width: 80%;
+  height: 70%;
   margin: auto;
   align-self: center;
   /* border-radius: 2rem; */
-  /* height: 70%; */
   /* border-radius: 0.5em; */
   /* padding: 10px; */
   /* display: flex; */
