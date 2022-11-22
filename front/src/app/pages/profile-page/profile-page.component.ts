@@ -1,8 +1,8 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { UserI } from 'src/app/models/user.models';
+import { Subscription, tap } from 'rxjs';
+import {  UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -37,22 +37,21 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
     this.id = this.route.snapshot.params['id'];
-
-
-    
+    // console.log("id = ", this.id);
       this.searchFriend();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
           console.log(data);
           this.user = data;
-          // console.log("yolo = ", data);
-        }
+          if ( this.user == null)
+            this.router.navigate(["error"]);
+
+        },
         );
 
       this.subscription3 =  this.userService.GetUserHistory(this.id).subscribe(
         (data : any) => {
           this.games = data;
-          console.log("games = ", data);
         }
         );
 
@@ -69,7 +68,7 @@ export class ProfilePageComponent implements OnInit {
         // console.log("current user" , data)
         for (var i = 0; data.friendOf[i];i++)
         {
-          if (this.id === data.friendOf[i].id)
+          if (this.id == data.friendOf[i].id)
           {
             this.alreadyFriend = true;
             break;
@@ -77,25 +76,11 @@ export class ProfilePageComponent implements OnInit {
         }
         for (var i = 0; data.blockedUsers[i];i++)
         {
-          if (this.id === data.blockedUsers[i].id)
+          if (this.id == data.blockedUsers[i].id)
           {
             this.alreadyBlocked = true;
             break;
           }
-        }
-      },
-      (error : any) => 
-      {
-        if (error.status === 401 && error.error.message === "2FA_REQUIRED")
-        {
-          this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
-            duration: 3000
-          })
-          this.router.navigate(['code'])
-        }
-        else
-        {
-          this.router.navigate([''])
         }
       }
     )
@@ -113,8 +98,8 @@ export class ProfilePageComponent implements OnInit {
   {
     this.userService.sendRequest(this.id).subscribe(
       (data : any) =>{
-        this.alreadyFriend = true
-        //  console.log("friend request" , data)
+        this.alreadyFriend = true;
+        // console.log("friend request" , data)
       }
     );
   }
@@ -143,7 +128,7 @@ export class ProfilePageComponent implements OnInit {
   {
     this.userService.unBlockUser(this.id).subscribe(
       (data : any) =>{ 
-        this.alreadyBlocked= false
+        this.alreadyBlocked= false;
         // console.log("unblock = " , data)
       }
     )
