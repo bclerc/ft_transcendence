@@ -8,7 +8,7 @@ import { FriendsRequestAction } from 'src/app/models/friends/friendsrequest.enum
 import { Secret } from 'src/app/models/secret.models';
 import { environment } from 'src/environments/environment';
 import { __values } from 'tslib';
-import { User, UserI } from '../../models/user.models';
+import { UserI } from '../../models/user.models';
 import { TokenStorageService } from '../auth/token.storage';
 
 @Injectable(/*{
@@ -72,14 +72,14 @@ export class UserService {
   }
 
   
-  getUserIdFromBack(id: number): Observable<UserI | undefined>
+  getUserIdFromBack(id: number): Observable<any>
   {
-    return this.http.get<UserI | undefined>(this.backUrl + "user/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<UserI>(this.backUrl + "user/profile/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   getDataUserListFromBack(): Observable<UserI[]>
   {
-    return this.http.get<User[]>(this.backUrl + "user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<UserI[]>(this.backUrl + "user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ChangeDbInformation(user : UserI): Observable<any>

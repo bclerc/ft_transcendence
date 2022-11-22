@@ -5,11 +5,10 @@ import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { Subscription } from 'rxjs';
 import { FriendsRequestAction } from 'src/app/models/friends/friendsrequest.enum';
-import { User, UserI } from 'src/app/models/user.models';
+import { UserI } from 'src/app/models/user.models';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { ModifyMyProfileComponent } from '../modify-my-profile/modify-my-profile.component';
-import { AddFriendListComponent } from './add-friend-list/add-friend-list.component';
 
 @Component({
   selector: 'app-my-profile',

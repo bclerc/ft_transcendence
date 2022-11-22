@@ -2,7 +2,7 @@ import { Component, OnInit, Output } from '@angular/core';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, tap } from 'rxjs';
-import { User, UserI } from 'src/app/models/user.models';
+import {  UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -24,7 +24,6 @@ export class ProfilePageComponent implements OnInit {
   subscription3! : Subscription;
   alreadyFriend : boolean = false;
   alreadyBlocked : boolean = false;
-  yolo! : number;
   
   constructor ( 
                 private userService: UserService,
@@ -38,12 +37,13 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
     this.id = this.route.snapshot.params['id'];
-    this.yolo = this.id;
     // console.log("id = ", this.id);
       this.searchFriend();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
           this.user = data;
+          console.log("toyolo =", data);
+          console.log("toyolo2 =", data.position_in_leaderboard)
           if ( this.user == null)
             this.router.navigate(["error"]);
 
@@ -130,7 +130,7 @@ export class ProfilePageComponent implements OnInit {
   {
     this.userService.unBlockUser(this.id).subscribe(
       (data : any) =>{ 
-        this.alreadyBlocked= false
+        this.alreadyBlocked= false;
         // console.log("unblock = " , data)
       }
     )
