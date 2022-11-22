@@ -128,7 +128,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
       if (normalOrNot == true)
         this.creatNewGameMap(client, NORMALGAME);
       else {
-        var x = this.pongService.between(0, MAX_MAP)
+        // var x = this.pongService.between(1, MAX_MAP)
+        var x = Math.floor(Math.random() * (MAX_MAP - 1) + 1);
         this.creatNewGameMap(client, x);
       }
     }
@@ -383,7 +384,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const user = this.onlineUserService.getUser(client.id);
     for (const [key, value] of this.gamesMap)
     {
-      if (value.player1.user.id == user.id || value.player2.user.id == user.id)
+      if (value.player1.user.id == user.id || (value.player2 && value.player2.user && value.player2.user.id == user.id))
         this.gamesMap.delete(key);
     }
   }
@@ -392,14 +393,11 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
   inGame(client: Socket, idGame: number) {
     const user: dataPlayerI = this.onlineUserService.getDataPlayer(client.id);
     for (let game of this.gamesMap.values())
-      if (game.player1.user.id == user.id || game.player2.user.id == user.id){
-        console.log("inGame yes");
+      if (game.player1.user.id == user.id || (game.player2 && game.player2.user && game.player2.user.id == user.id)){
         client.emit('inGame', true);
-        return true;
-      }
-    console.log("inGame no");
+        return;
+    }
     client.emit('inGame', false);
-        return false;
   }
 
   public async creatNewGameMap(client: Socket, mapId: number): Promise<GameI> {
