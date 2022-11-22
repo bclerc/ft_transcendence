@@ -5,7 +5,7 @@ import {
     HttpErrorResponse,
     HttpInterceptor
 } from '@angular/common/http';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import {Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';

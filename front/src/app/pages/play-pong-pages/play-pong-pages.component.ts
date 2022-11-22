@@ -1,11 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Injectable } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
-import { GameI } from '../../models/PongInterfaces/pong.interface';
-import { ScoreI } from '../../models/PongInterfaces/score.interface';
 import { UserI } from '../../models/PongInterfaces/user.interface';
 
 

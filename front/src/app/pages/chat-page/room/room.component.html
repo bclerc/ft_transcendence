@@ -25,7 +25,7 @@
 					<ng-container *ngIf="room.type === 'GROUP'">
 
 						<!--- MatChip list with avatar. chip id is #membres -->
-						<mat-chip-list #membres>
+						<mat-chip-listbox #membres>
 							<mat-chip id="membres" *ngFor="let member of room.users" >
 								<img matChipAvatar class="chip_avatar"  src="{{member. avatar_url}}" alt="User avatar">
 								{{member.displayname}}
@@ -43,7 +43,7 @@
 									</g>
 								</svg>
 							</mat-chip>
-						</mat-chip-list>
+						</mat-chip-listbox>
 					</ng-container>
 				<!-- </div> -->
 			</section>

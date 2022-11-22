@@ -1,14 +1,11 @@
-import { AfterViewInit, Component, Inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
-import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { ChatRoom, ChatRoomI, EditRoomI } from 'src/app/services/chat/chatRoom.interface';
-import { Message } from 'src/app/services/chat/message.interface';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { PenaltyDialogComponent } from '../penalty-dialog/penalty-dialog.component';

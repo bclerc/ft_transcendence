@@ -13,14 +13,14 @@
 		</mat-autocomplete>
 </div>
 
-<mat-chip-list *ngIf="users[0]; else no_users">
+<mat-chip-listbox *ngIf="users[0]; else no_users">
 	<mat-chip id="mat-chip" *ngFor="let user of users " (removed)="removeUserFromForm(user)">
 		<img matChipAvatar [src]="user.avatar_url" [alt]="user.intra_name">
 		{{user.intra_name}}
 		<!-- <mat-icon matChipRemove>cancel</mat-icon> -->
 		<img id="cancel" matChipRemove src="../../assets/svg/cancel.svg" alt="cancel">
 	</mat-chip>
-</mat-chip-list>
+</mat-chip-listbox>
 
 <ng-template #no_users>
   <p id="input-error">Il faut que tu ajoutes des membres pour creer le groupe</p>
