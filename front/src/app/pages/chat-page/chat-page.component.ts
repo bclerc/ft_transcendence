@@ -203,6 +203,9 @@ export class ChatPageComponent implements OnInit {
     return this.actualUser;
   }
 
+  async haveFriends(): Promise<boolean> {
+      return false;
+  }
 
 
 }
