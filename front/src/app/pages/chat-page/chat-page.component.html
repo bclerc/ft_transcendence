@@ -8,6 +8,8 @@
 	</head>
 	<body>
 		<div class="center">
+
+			<!-- DESKTOP -->
 			<div class="main-container">
 
 				<!-- SIDEBAR -->
@@ -26,7 +28,7 @@
 					<mat-tab-group class="switch-groupes-amis" [selectedIndex]="selected.value">
 
 						<!-- MES GROUPES -->
-						<mat-tab>
+						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewMessage">
 									<svg  style="margin-right: 5px;" width="12px" height="12px">
@@ -67,7 +69,7 @@
 						</mat-tab>
 
 						<!-- MES AMIS -->
-						<mat-tab>
+						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewDm">
 									<svg  style="margin-right: 5px;" width="12px" height="12px">
@@ -85,9 +87,9 @@
 								</ng-container>
 								Mes amis
 							</ng-template>
-              <ng-container *ngIf="(dmRooms$ | async )">
-                 <img src="../../../assets/img/illu-aucun-ami.png"  alt="empty">
-              </ng-container>
+							<ng-container *ngIf="(dmRooms$ | async )">
+								<img src="../../../assets/img/illu-aucun-ami.png"  alt="empty">
+							</ng-container>
 							<ul>
 								<li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
 									<p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).displayname }}
@@ -119,10 +121,135 @@
 				<!-- MAIN CONTENT -->
 				<main class="content-chat-page">
 					<ng-container *ngIf="!newRoom">
-						<app-room [friend] = "friend(selectedRoom)" [room]="selectedRoom" [user]="actualUser"></app-room>
+						<app-room [friend] = "friend(selectedRoom)" [room]="selectedRoom" [user]="actualUser" [chatMobileService]="chatMobileService"></app-room>
 					</ng-container>
 					<ng-container *ngIf="newRoom">
-						<app-new-room></app-new-room>
+						<app-new-room [chatMobileService]="chatMobileService"></app-new-room>
+					</ng-container>
+				</main>
+			</div>
+
+
+			<!-- MOBILE -->
+			<div class="main-container-mobile">
+
+				<!-- SIDEBAR -->
+				<aside *ngIf="!chatMobileService.toggle()" class="sidebar">
+
+					<!-- USER -->
+					<div class="user-bloc">
+						<img src="{{ actualUser.avatar_url }}" alt="ma belle gueule">
+						<div id="user-info">
+							<a class="intraName" routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ actualUser.displayname }}</a>
+							<span class="intraEmail">{{actualUser.email}}</span>
+						</div>
+					</div>
+
+					<!-- SWITCH -->
+					<mat-tab-group class="switch-groupes-amis" [selectedIndex]="selected.value">
+
+						<!-- MES GROUPES -->
+						<mat-tab id="chat-page-mat-tab">
+							<ng-template mat-tab-label>
+								<ng-container *ngIf="haveNewMessage">
+									<svg  style="margin-right: 5px;" width="12px" height="12px">
+										<title>Oval</title>
+										<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+											<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
+												<g id="Group-2" transform="translate(863.000000, 180.000000)">
+													<g id="Group-3" transform="translate(28.000000, 368.000000)">
+															<circle id="Oval" cx="80" cy="16" r="6"></circle>
+													</g>
+												</g>
+											</g>
+										</g>
+									</svg>
+								</ng-container>
+								Mes groupes
+							</ng-template>
+							<ul>
+								<li *ngFor="let room of (rooms$ | async)" [value]="room">
+									<p class="roomName" (click)="selectRoom(room)">{{room.name}}
+										<ng-container *ngIf="!room.seen">
+											<svg width="12px" height="12px">
+												<title>Oval</title>
+												<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
+														<g id="Group-2" transform="translate(863.000000, 180.000000)">
+															<g id="Group-3" transform="translate(28.000000, 368.000000)">
+																<circle id="Oval" cx="80" cy="16" r="6"></circle>
+															</g>
+														</g>
+													</g>
+												</g>
+											</svg>
+										</ng-container>
+									</p>
+								</li>
+							</ul>
+						</mat-tab>
+
+						<!-- MES AMIS -->
+						<mat-tab id="chat-page-mat-tab">
+							<ng-template mat-tab-label>
+								<ng-container *ngIf="haveNewDm">
+									<svg  style="margin-right: 5px;" width="12px" height="12px">
+										<title>Oval</title>
+										<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+											<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
+												<g id="Group-2" transform="translate(863.000000, 180.000000)">
+													<g id="Group-3" transform="translate(28.000000, 368.000000)">
+														<circle id="Oval" cx="80" cy="16" r="6"></circle>
+													</g>
+												</g>
+											</g>
+										</g>
+									</svg>
+								</ng-container>
+								Mes amis
+							</ng-template>
+							<ng-container *ngIf="(dmRooms$ | async )">
+								<img src="../../../assets/img/illu-aucun-ami.png"  alt="empty">
+							</ng-container>
+							<ul>
+								<li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
+									<p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).displayname }}
+										<ng-container *ngIf="!dm.seen">
+											<svg width="12px" height="12px">
+											<title>Oval</title>
+											<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
+													<g id="Group-2" transform="translate(863.000000, 180.000000)">
+														<g id="Group-3" transform="translate(28.000000, 368.000000)">
+															<circle id="Oval" cx="80" cy="16" r="6"></circle>
+														</g>
+													</g>
+												</g>
+											</g>
+											</svg>
+										</ng-container>
+									</p>
+								</li>
+							</ul>
+						</mat-tab>
+					</mat-tab-group>
+
+					<!-- BOUTON NOUVEAU GROUPE -->
+					<a class="button-new-room" (click)="NewRoom()">+ Nouveau groupe</a>
+
+				</aside> <!-- Sidebar -->
+
+				<!-- MAIN CONTENT -->
+				<main *ngIf="chatMobileService.toggle()" class="content-chat-page">
+					<ng-container *ngIf="!newRoom">
+						<!-- <ng-container *ngIf="chatMobileService.room"> -->
+							<app-room [friend] = "friend(selectedRoom)" [room]="selectedRoom" [user]="actualUser" [chatMobileService]="chatMobileService"></app-room>
+						<!-- </ng-container> -->
+					</ng-container>
+					<ng-container *ngIf="newRoom">
+						<!-- <ng-container *ngIf="chatMobileService.newroom"> -->
+							<app-new-room [chatMobileService]="chatMobileService"></app-new-room>
+						<!-- </ng-container> -->
 					</ng-container>
 				</main>
 			</div>

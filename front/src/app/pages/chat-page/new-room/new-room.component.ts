@@ -1,9 +1,10 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatLegacySelectionListChange as MatSelectionListChange } from '@angular/material/legacy-list';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
+import { ChatMobileService } from 'src/app/services/chat-mobile.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
@@ -16,6 +17,7 @@ styleUrls: ['./new-room.component.css']
 })
 
 export class NewRoomComponent implements OnInit {
+	@Input() chatMobileService! : ChatMobileService ;
 
 	selectedRoom: ChatRoom = {};
 	isAdmin: boolean = false;
@@ -35,6 +37,7 @@ export class NewRoomComponent implements OnInit {
 	});
 
 	constructor(private chatService: ChatService, 
+		// public chatMobileService : ChatMobileService,
 	private userService: UserService) { }
 	
 	async ngOnInit() {
@@ -113,6 +116,10 @@ export class NewRoomComponent implements OnInit {
 		return this.form.get('password') as FormControl;
 	}
 
-	
+	closeNewRoom() : void{
+		console.log("cjscj", this.chatMobileService.newroom);
+		this.chatMobileService.hideNewRoom();
+		console.log("cjscj", this.chatMobileService.newroom);
+	}
 
 }

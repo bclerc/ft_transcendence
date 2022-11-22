@@ -58,6 +58,8 @@ import { Activate2FaComponent } from './pages/modify-my-profile/activate2-fa/act
 import { FooterComponent } from './footer/footer.component';
 import { AddFriendListComponent } from './pages/my-profile/add-friend-list/add-friend-list.component';
 import { InviteDialogComponent } from './pages/play-pong-pages/invite-dialog/invite-dialog.component';
+import { ChatMobileService } from './services/chat-mobile.service';
+
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
@@ -145,6 +147,7 @@ export function tokenGetter() {
     HeaderService,
     BurgerMenuService,
     CurrentUserService,
+    ChatMobileService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,

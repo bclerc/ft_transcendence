@@ -70,9 +70,17 @@ hr.clear{
 
 .new-room-container{
 	padding: 22px;
+	width: 100%;
 }
-#create-module{
-	height: calc(720px - 44px);
+/* #return-mobile{
+	display:flex;
+	flex-direction: row;
+} */
+#title-n-button #return{
+	display: none;
+}
+#title-n-button button{
+	display: none;
 }
 
 .demi-public ul{
@@ -157,7 +165,7 @@ hr.clear{
 	font-family: Titan One;
 	font-size: 32px;
 	color: #feefcf;
-	margin-bottom: 25px;
+	/* margin-bottom: 25px; */
 }
 /* .demi-public h2{
 	margin-left: 20px;
@@ -172,6 +180,36 @@ hr.clear{
 	font-family: ReadexPro-Regular;
 	font-size: 12px;
 	margin-bottom: 15px;
+}
+
+#title-n-button{
+	display: flex;
+    flex-direction: row;
+	/* margin-top: 30px; */
+	margin-bottom: 25px;
+}
+#title-n-button button{
+    /* width: 35px; */
+    height: 35px;
+    margin-left: 25px;
+	font-family: ReadexPro-Medium;
+	color: #feefcf;
+	background-color: transparent;
+	border-radius: 6px;
+	border: 2px solid #343330;
+	padding: 4px 10px 4px 10px;
+	/* margin-top: 30px; */
+}
+#title-n-button button:hover{
+	color: #ee481e;
+	cursor: pointer;
+	border: 2px solid #ee481e;
+}
+#title-n-button button:focus{
+	outline: none;
+}
+#title-n-button button img{
+	margin-left: 4px;
 }
 
 /* champs de text ------------------------------------------------------------------------- */
@@ -230,10 +268,9 @@ textarea{
 	padding: 48px 0px 48px 0px;
 	/* background-color: blue; */
 	height: calc(720px - 44px);
-}
-.demi-public{
 	width: calc(50% - 10px);
 }
+
 .demi-publilc:nth-child(2n){
 	margin-right: 0px;
 }
@@ -243,8 +280,6 @@ textarea{
 	background-color: #161616;
 	border-radius: 10px;
 	height: calc(720px - 44px);
-}
-.demi-create{
 	width: calc(50% - 10px);
 }
 
@@ -270,5 +305,32 @@ textarea{
 	width: 30px;
 	height: 30px;
 	border: 2px solid #ee481e;
+}
+
+
+@media only screen and (max-width: 1145px) {
+
+	.demi-create{
+		float: none;
+		display: none;
+	}
+	#title-n-button #return{
+		display: flex;
+		width: 35px;
+		height: 35px;
+		margin-right: 20px;
+	}
+	#title-n-button button{
+		display: block;
+	}
+	.demi-public{
+		float: none;
+		/* margin-right: 20px;
+		padding: 48px 0px 48px 0px;
+		background-color: blue;
+		height: calc(720px - 44px); */
+		width: 100%;
+	}
+
 }
 

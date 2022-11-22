@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { ConnectableObservable, Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
+import { ChatMobileService } from 'src/app/services/chat-mobile.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
 import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
@@ -24,6 +25,8 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   @Input() room: ChatRoom = {};
   @Input() user: UserI = {};
   @Input() friend: UserI = {};
+  @Input() chatMobileService! : ChatMobileService ;
+
 
 
   messages$: Observable<Message[]> = this.chatService.getMessages(this.room);
@@ -38,6 +41,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
     private userService: UserService,
     private socket: Socket,
     public dialog: MatDialog,
+    // public chatMobileService : ChatMobileService,
     private router : Router) { }
               
              
@@ -103,6 +107,11 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  closeRoom() : void{
+		console.log("cjscj", this.chatMobileService.room);
+		this.chatMobileService.hideRoom();
+		console.log("cjscj", this.chatMobileService.room);
+	}
   // ejectUser(user: UserI) {
   //   this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
   // }
