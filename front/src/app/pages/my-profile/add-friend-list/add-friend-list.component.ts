@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/services/user/user.service';
@@ -20,8 +21,10 @@ export class AddFriendListComponent implements OnInit {
   async addFriend(friendId: any) {
     await this.userService.sendRequest(friendId.id).subscribe(
       (res: any) => {
-        this.snackBar.open("Votre demande d'amis as été envoyée", 'Undo', {
-          duration: 3000
+        this.snackBar.open("Votre demande d'amis as été envoyée", 'X', {
+          duration: 3000,
+          verticalPosition: 'top',
+          horizontalPosition: 'right',
         })
         // console.log(res);
         //this.updateInfo();

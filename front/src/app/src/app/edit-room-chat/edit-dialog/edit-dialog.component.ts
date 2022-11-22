@@ -9,6 +9,7 @@ import { ChatRoom, ChatRoomI, EditRoomI } from 'src/app/services/chat/chatRoom.i
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { PenaltyDialogComponent } from '../penalty-dialog/penalty-dialog.component';
+import { AddUserComponent } from './add-user/add-user.component';
 
 
 @Component({
@@ -207,6 +208,12 @@ export class EditDialogComponent implements OnInit {
       return this.room.admins.find(admin => admin.id === user.id);
     }
     return false;
+  }
+
+  inviteUser() {
+    this.dialog.open(AddUserComponent, {
+      data: this.room,
+    })
   }
 
 

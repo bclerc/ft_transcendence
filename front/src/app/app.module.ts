@@ -61,6 +61,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
+import { AddUserComponent } from './src/app/edit-room-chat/edit-dialog/add-user/add-user.component';
 
 
 const config: SocketIoConfig = {
@@ -104,6 +105,7 @@ export function tokenGetter() {
     LeaderbordComponent,
     AddFriendListComponent,
     InviteDialogComponent,
+    AddUserComponent,
   ],
   imports: [
     BrowserModule,
