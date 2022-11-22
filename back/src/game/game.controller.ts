@@ -5,11 +5,8 @@ import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { GameService } from './game.service';
 
 @Controller('game')
-
 export class GameController {
   constructor(private readonly gameService: GameService) {
-
-
   }
   
   @UseGuards(Jwt2faAuthGuard)
@@ -25,10 +22,10 @@ export class GameController {
     return await this.gameService.getGameById(Number(id));
   }
   
-  @UseGuards(Jwt2faAuthGuard)
-  @Post('leaderboard')
-  async getLeaderboard(): Promise<BasicUserI[]> {
-    return await this.gameService.getLeaderboard();
-  }
+  // @UseGuards(Jwt2faAuthGuard)
+  // @Post('leaderboard')
+  // async getLeaderboard(): Promise<BasicUserI[]> {
+  //   return await this.gameService.getLeaderboard();
+  // }
 
 }
