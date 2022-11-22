@@ -59,8 +59,7 @@ export class EditDialogComponent implements OnInit {
   closeDialog() {
     this.dialogRef.close();
   }
-        
-  
+
   async ngOnInit() {
 
     setTimeout(() => {
