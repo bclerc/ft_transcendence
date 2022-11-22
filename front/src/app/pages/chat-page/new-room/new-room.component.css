@@ -91,7 +91,7 @@ hr.clear{
 }
 
 .demi-public ul li{
-	border: 2px solid #343330;
+	background-color: #2B2A28;
 	border-radius: 10px;
 	list-style-type: none;
 	margin-bottom: 12px;
@@ -112,8 +112,9 @@ hr.clear{
 }
 
 .demi-public li button{
-	background-color: #343330;
-	border: none;
+	background-color: transparent;
+	border: 2px solid #44433f;
+	/* border: none; */
 	border-radius: 4px;
 	width: 30px;
 	height: 30px;
@@ -124,7 +125,7 @@ hr.clear{
 	padding-top: 3px;
 }
 .demi-public li button:hover{
-	background-color: #feefcf;
+	border: 2px solid #ee481e;
 }
 /* .avatars li img{
 	width:11px;
@@ -141,7 +142,7 @@ hr.clear{
 	border-radius: 6px;
 	border: 3px solid #feefcf;
 	box-shadow: -3px 3px #feefcf;
-	padding: 10px 25px 10px 25px;
+	padding: 25px 30px 25px 30px;
 	margin-top: 20px;
 	cursor: pointer;
 }
@@ -161,15 +162,18 @@ hr.clear{
 
 /* typo -------------------------------------------------------------------------------- */
 
-.new-room-container #tt-h2{
+.new-room-container .demi-create #tt-h2{
 	font-family: Titan One;
 	font-size: 32px;
 	color: #feefcf;
-	/* margin-bottom: 25px; */
+	margin-bottom: 25px;
 }
-/* .demi-public h2{
-	margin-left: 20px;
-} */
+.new-room-container .demi-public #tt-h2{
+	font-family: Titan One;
+	font-size: 32px;
+	color: #feefcf;
+}
+
 .demi-public #tt-h3{
 	font-family: ReadexPro-Bold;
 	font-size: 16px;
