@@ -78,3 +78,9 @@ export class DeleteRoomEvent {
   success: boolean;
   message?: string;
 }
+
+export interface UserInvitedEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  inviter: BasicUserI;
+}

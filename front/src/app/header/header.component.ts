@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   connect: boolean = false;
   crash: boolean = false;
   newMessage: Observable<number> = this.socket.fromEvent<number>('newMessage');
+  newFriendRequest: Observable<number> = this.socket.fromEvent<number>('newFriendRequest');
 
   constructor(private token : TokenStorageService,
               private router : Router,

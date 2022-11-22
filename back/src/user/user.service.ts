@@ -216,7 +216,7 @@ export class UserService {
   async getProfileUser(userId: number): Promise<any> {
     if (!userId)
       return null;
-    const user = await this.prisma.user.findUnique({
+    const user:any = await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -266,8 +266,10 @@ export class UserService {
         }
       },
     });
+    user.position_in_leaderboard = await this.getLeaderboardPosition(user.id);
     if (user === undefined)
       return null;
+    console.log(user);
     return user;
   }
 

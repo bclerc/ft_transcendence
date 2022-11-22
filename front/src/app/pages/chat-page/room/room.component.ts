@@ -1,19 +1,16 @@
-import { Component, ElementRef, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatLegacyDialog as MatDialog, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
-import { ConnectableObservable, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatMobileService } from 'src/app/services/chat-mobile.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
-import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
+import { ChatRoom } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
 import { UserService } from 'src/app/services/user/user.service';
 import { EditDialogComponent } from 'src/app/src/app/edit-room-chat/edit-dialog/edit-dialog.component';
-import { PenaltyDialogComponent } from 'src/app/src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
-import { PenaltyType } from 'src/app/src/app/edit-room-chat/penalty-dialog/penalty.interface';
-
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',

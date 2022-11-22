@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
-import { UserI } from 'src/app/models/user.models';
 import { InviteDialogComponent } from 'src/app/pages/play-pong-pages/invite-dialog/invite-dialog.component';
 
 export interface InvitedGameI {
@@ -23,6 +22,7 @@ export class HeaderService  {
   
     this.socket.on('redirectGame', (gameId: number) => {
       this.redirectToGame(gameId);
+      this.dialog.closeAll();
     });
     
     this.socket.on('invited', (data: InvitedGameI) => {
