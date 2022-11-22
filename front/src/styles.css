@@ -17,9 +17,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border-radius: 20px !important;
 }
 
-mdc-dialog-open {
+/* mdc-dialog-open { */
   /* background-color: #1f1f1f !important; */
-}
+/* } */
 
 .custom-modalbox {
   /* background-color: #1f1f1f !important;
