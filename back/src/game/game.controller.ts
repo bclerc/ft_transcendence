@@ -5,7 +5,6 @@ import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { GameService } from './game.service';
 
 @Controller('game')
-
 export class GameController {
   constructor(private readonly gameService: GameService) {
   }
@@ -23,4 +22,5 @@ export class GameController {
   {
     return await this.gameService.getGameById(Number(id));
   }
+
 }

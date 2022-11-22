@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div class="center-pong">
-			<h1>Affrontes les tous</h1>
+			<h1>Affronte les tous</h1>
 			<div class="tuto">
 				<p>Appuis sur les touches de ton clavier W pour monter et S pour descendre.</p>
 				<div class="up-down">
@@ -31,6 +31,7 @@
 
 			<!-- BOUTONS PLAY PONG -->
 			<div class="buttons">
+				<button id="stop" matButton (click)="stopGame()">Stopper la recherche, Bolos !</button>
 				<button id="regular" matButton (click)="newGame(true)" >Lancer une partie</button>
 				<button id="random"  matTooltip="Lancer une partie aléatoire" matButton (click)="newGame(false)" >
 					<svg width="34px" height="29px" viewBox="0 0 34 29">
