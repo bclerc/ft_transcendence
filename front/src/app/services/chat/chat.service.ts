@@ -41,12 +41,7 @@ export class ChatService {
     }
 
     createRoom(room: newRoom) {
-      this.http.post('http://'+ environment.host +':3000/api/v1/chat/create', room).subscribe(
-        (data : any) => {
-          this.snackBar.open(data.message, 'OK', {
-            duration: 2000,
-          });
-        });
+      this.http.post('http://'+ environment.host +':3000/api/v1/chat/create', room).subscribe();
     }
 
     editRoom(room: ChatRoom) {

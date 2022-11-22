@@ -412,7 +412,7 @@ export class UserService {
   }
 
   async getFriends(userId: number): Promise<BasicUserI[]> {
-    const user = await this.prisma.user.findUnique({
+    const user: any = await this.prisma.user.findUnique({
       where: {
         id: Number(userId),
       },
@@ -440,6 +440,10 @@ export class UserService {
         },
       },
     });
+
+    for (const friend of user.friends) {
+      friend.position_in_leaderboard = await this.getLeaderboardPosition(friend.id);
+    }
     return user.friends;
   }
 

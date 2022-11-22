@@ -446,7 +446,7 @@ export class ChatService {
   }
 
   async deleteDm(user1Id: number, user2Id: number) {
-    // delete message befores
+    
     await this.prisma.message.deleteMany({
       where: {
         room: {
@@ -649,12 +649,6 @@ export class ChatService {
       },
     });
   
-    await this.prisma.chatRoom.delete({
-      where: {
-        id: roomId,
-      },
-    });
-
     await this.prisma.chatRoom.delete({
       where: {
         id: roomId,
