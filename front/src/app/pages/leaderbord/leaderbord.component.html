@@ -33,7 +33,7 @@
 		<ng-template #elseBlock>
 			<div class="tiers">
 				<div class="profil" id="s2">
-					<a id="profil-down" href="">
+					<a id="profil-down" routerLink="/leaderbord">
 						<img src="assets/img/default_profile_picture.webp" alt="UNE BELLE GUEULE">
 						<span></span>
 					</a>
@@ -43,7 +43,6 @@
 				</div>
 			</div>
 		</ng-template>
-	<!-- </ng-template> -->
 		<div class="tiers">
 			<div class="profil" id="s3">
 				<a id="profil-down" [routerLink]="['/profile/' + member[0].id ]">
@@ -72,7 +71,7 @@
 		<ng-template #elseBlocki>
 			<div class="tiers">
 				<div class="profil" id="s1">
-					<a id="profil-down" href="">
+					<a id="profil-down" routerLink="/leaderbord" >
 						<img src="assets/img/default_profile_picture.webp" alt="UNE BELLE GUEULE">
 						<span></span>
 					</a>
@@ -82,25 +81,18 @@
 				</div>
 			</div>
 		</ng-template>
-		
-
-	<!-- </ng-container> -->
 	</section>
-	
 </ng-container>
 </ng-container>
 
 
 <section class="classement">
-	<!-- leaderbord | async as member -->
-	<ng-container *ngFor="let member of leaderbord | async">
+	<ng-container *ngFor="let member of leaderbord | async ;let indexOfelement=index;">
 
-	<!-- membre -->
 	<div class="member">
 		<div id="classement-content">
 			<div class="rank">
-				#356
-				<!-- {{member.rank}} -->
+				#{{indexOfelement + 1}}
 			</div>
 			<a class="user" [routerLink]="['/profile/' + member.id ]">
 				<img [src]="member.avatar_url" alt="belle gueule">
@@ -126,5 +118,3 @@
 </body>
 </html>
 <app-footer></app-footer>
-<!-- <ng-container *ngIf = user>
-	<ng-container *ngFor="let games of user.games"> -->

@@ -57,20 +57,20 @@
                                 <!-- BUTTON PARAMETRES -->
                                 <div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
                                 <ng-template #thenBlock>
-                                    <a href="javascript:void(0);" (click)="removeFriend()">Enlever des amis</a>
+                                    <button (click)="removeFriend()">Enlever des amis</button>
                                 </ng-template>
                                 <ng-template #elseBlock>
-                                    <a href="javascript:void(0);" (click)="addFriend()">Ajouter en amis</a>
+                                    <button (click)="addFriend()">Ajouter en amis</button>
                                 </ng-template>
                                 <p></p>
                                 <div *ngIf="alreadyBlocked; then thenBloc else elseBloc"></div>
                                 <ng-template #thenBloc>
-                                    <a href="javascript:void(0);" (click)="unblockUser()">Debloquer l'utilisateur</a>
+                                    <button (click)="unblockUser()">Debloquer l'utilisateur</button>
                                 </ng-template>
                                 <ng-template #elseBloc>
-                                    <a href="javascript:void(0);" (click)="blockUser()">Bloquer l'utilisateur</a>
+                                    <button (click)="blockUser()">Bloquer l'utilisateur</button>
                                 </ng-template>
-                                <img src="../../../../assets/svg/settings.svg" alt="settings" >
+                                <!-- <img src="../../../../assets/svg/settings.svg" alt="settings" > -->
                             </div>
                             <p id="email">{{user.email}}</p>
                             <div class="status">

@@ -23,5 +23,4 @@ export class GameController {
   {
     return await this.gameService.getGameById(Number(id));
   }
-  
 }
