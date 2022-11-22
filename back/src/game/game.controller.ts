@@ -24,6 +24,11 @@ export class GameController {
   async getGameById(@Param('id') id: number): Promise<dbGame> {
     return await this.gameService.getGameById(Number(id));
   }
-
+  
+  @UseGuards(Jwt2faAuthGuard)
+  @Post('leaderboard')
+  async getLeaderboard(): Promise<BasicUserI[]> {
+    return await this.gameService.getLeaderboard();
+  }
 
 }

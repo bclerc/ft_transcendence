@@ -427,6 +427,9 @@ export class UserService {
               }
             }
           },
+          orderBy: {
+            state: 'desc',
+          },
         },
       },
     });

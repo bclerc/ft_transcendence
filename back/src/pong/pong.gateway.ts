@@ -180,6 +180,11 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+  @SubscribeMessage('needOnGoingGames')
+  async needOnGoingGames(client: Socket) {
+    client.emit('onGoingGames', await this.gameService.getStartedGames());
+  }
+
   ///////
   //OTHER
   //////
@@ -243,6 +248,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
       if (game.dbGame) {
         await this.gameService.startGame(game.dbGame.id);
         await this.pongService.startGame(game, game.mapId);
+        this.sendToGame(game, 'onGoingGames', await this.gameService.getStartedGames());
       }
     }
   }
@@ -288,14 +294,13 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (game && game.dbGame) {
       this.server.to(winnerSocket).emit('win');
       this.server.to(loserSocket).emit('lose');
-
     }
   }
 
   @OnEvent('deleteGame')
-  deleteGame(game: GameI) {
-    console.log("deleteGame");
+  async deleteGame(game: GameI) {
     this.gamesMap.delete(game.id);
+    this.sendToGame(game, 'onGoingGames', await this.gameService.getStartedGames());
   }
 
   sendToGame(game: GameI, event: string, data: any) {

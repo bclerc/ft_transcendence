@@ -16,3 +16,9 @@ export interface GameI {
 	id_interval?:any;
 	mapId?: number;			//type de la partie; normal/classé 
 }
+
+export interface GameListInfo{
+  id: number;
+  users: UserI[];
+  state: any;
+}
