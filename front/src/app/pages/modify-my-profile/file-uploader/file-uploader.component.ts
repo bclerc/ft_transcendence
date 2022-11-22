@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserI } from '../../../models/user.models';
 import { UserService } from '../../../services/user/user.service';
 
@@ -15,7 +16,10 @@ export class FileUploaderComponent implements OnInit {
   imagePreview?: string | ArrayBuffer | null ;
   subscription? : Subscription;
 
-  constructor(private userService : UserService) { }
+  constructor (
+                private userService : UserService,
+                private currentUser : CurrentUserService,
+              ) { }
 
   ngOnInit(): void {
     this.imagePreview = this.user.avatar_url;
@@ -44,8 +48,15 @@ export class FileUploaderComponent implements OnInit {
     formData.append("image", this.selectedFile);
     this.subscription = this.userService.uploadAvatar(formData).subscribe(
       (data : any) => {
+        this.currentUser.getCurrentUser().subscribe(
+        (data : any) =>
+        {
+          this.user.avatar_url = data.avatar_url;
+        }
+      );
       }
     );
+
     /*return await request(
       `${API_URL}/document`,
       {
