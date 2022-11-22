@@ -3,7 +3,7 @@ import { targetModulesByContainer } from '@nestjs/core/router/router-module';
 import { Game, GameState, UserState } from '@prisma/client';
 import { connect } from 'http2';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
-import { dbGame, GameI } from 'src/pong/interfaces/game.interface';
+import { dbGame, GameI, GameListI } from 'src/pong/interfaces/game.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
@@ -143,6 +143,28 @@ export class GameService {
       })
     }
     return null;
+  }
+
+  async getStartedGames(): Promise<GameListI[]> {
+    return await this.prisma.game.findMany({
+      where: {
+        state: GameState.STARTED
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      select: {
+        id: true,
+        state: true,
+        users: {
+          select: {
+            id: true,
+            displayname: true,
+            avatar_url: true,
+          }
+        },
+      }
+    });
   }
 
   async getLeaderboard(): Promise<BasicUserI[]> {

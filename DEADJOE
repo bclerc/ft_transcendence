@@ -1,35 +1,0 @@
-
-*** These modified files were found in JOE when it aborted on Sun Nov 20 16:51:54 2022
-*** JOE was aborted because the terminal closed
-
-*** File '/home/debian/ft_transcendence/.git/MERGE_MSG'
-Merge branch 'bclerc' of github.com:bclerc/ft_transcendence into bclerc
-
-# Please enter a commit message to explain why this merge is necessary,
-# especially if it merges an updated upstream into a topic branch.
-#
-# Lines starting with '#' will be ignored, and an empty message aborts
-# the commit.
-q
-
-*** File '(Unnamed)'
-dd
-
-*** File '(Unnamed)'
-* Startup Log *
-* Shell 1 *
-* Startup Log *
-* Shell 1 *
-* Startup Log *
-* Shell 1 *
-/home/debian/
-/home/debian/ft_transcendence/
-/home/debian/ft_transcendence/.git/MERGE_MSG
-/home/debian/ft_transcendence/.git/MERGE_MSG
-/home/debian/ft_transcendence/.git/MERGE_MSG
-
-*** File '* Startup Log *'
-Processing '/etc/joe/editorrc'...
-Processing '/etc/joe/ftyperc'...
-Finished processing /etc/joe/ftyperc
-Finished processing /etc/joe/editorrc

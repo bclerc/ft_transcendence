@@ -1,5 +1,6 @@
 import { UserState } from "@prisma/client";
 
+
 export class BasicUserI {
     id: number;
     state: UserState
@@ -16,4 +17,10 @@ export class BasicUserI {
     }
     inRoomId?: number;
     inGameId?: number; 
+}
+
+export interface GameUser {
+  id: number;
+  displayname: string;
+  avatar_url: string;
 }
