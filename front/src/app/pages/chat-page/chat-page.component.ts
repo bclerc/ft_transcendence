@@ -1,17 +1,14 @@
-// import { I } from '@angular/cdk/keycodes';
-import { Component, ViewEncapsulation, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatMobileService } from 'src/app/services/chat-mobile.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
-import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
-import { Message } from 'src/app/services/chat/message.interface';
+import { ChatRoom } from 'src/app/services/chat/chatRoom.interface';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -171,8 +168,6 @@ export class ChatPageComponent implements OnInit {
 		this.selectedRoom=room;
 		this.newRoom = false;
 		this.chatMobileService.showRoom();
-		console.log("newroom ", this.chatMobileService.newroom);
-		console.log("room ", this.chatMobileService.room);
 	}
 
 	newRoom: boolean = true;
@@ -185,8 +180,6 @@ export class ChatPageComponent implements OnInit {
       }
 
 		this.chatMobileService.showNewRoom();
-		console.log("newroom ", this.chatMobileService.newroom);
-		console.log("room ", this.chatMobileService.room);
     }
 
   friend(chatRoom: ChatRoom): UserI {

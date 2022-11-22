@@ -31,7 +31,8 @@
 						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewMessage">
-									<svg  style="margin-right: 5px;" width="12px" height="12px">
+									<img style="margin-right: 5px;" src="../../../assets/svg/oval-cream.svg" alt="">
+									<!-- <svg  style="margin-right: 5px;" width="12px" height="12px">
 										<title>Oval</title>
 										<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
 											<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
@@ -42,7 +43,7 @@
 												</g>
 											</g>
 										</g>
-									</svg>
+									</svg> -->
 								</ng-container>
 									Mes groupes
 							</ng-template>
@@ -50,18 +51,7 @@
 								<li *ngFor="let room of (rooms$ | async)" [value]="room">
 									<p class="roomName" (click)="selectRoom(room)">{{room.name}}
 										<ng-container *ngIf="!room.seen">
-											<svg width="12px" height="12px">
-												<title>Oval</title>
-												<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
-														<g id="Group-2" transform="translate(863.000000, 180.000000)">
-															<g id="Group-3" transform="translate(28.000000, 368.000000)">
-																<circle id="Oval" cx="80" cy="16" r="6"></circle>
-															</g>
-														</g>
-													</g>
-												</g>
-											</svg>
+											<img style="margin-left: 2px; margin-bottom: -1px;" src="../../../assets/svg/oval-red.svg" alt="">
 										</ng-container>
 									</p>
 								</li>

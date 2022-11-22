@@ -644,8 +644,6 @@ export class PlayComponent implements OnInit {
             // Draw middle line
             context.strokeStyle = 'white';
             context.beginPath();
-            // console.log("canvas.width: " + canvas.width);
-            // console.log("canvas.height: " + canvas.height);
             context.moveTo(canvas.width / 2, 0);
             context.lineTo(canvas.width / 2, canvas.height );
             context.stroke();

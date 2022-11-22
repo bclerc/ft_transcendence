@@ -10,68 +10,48 @@ import { UserService } from '../../../services/user/user.service';
   styleUrls: ['./file-uploader.component.css']
 })
 export class FileUploaderComponent implements OnInit {
-  @Input() user! : UserI;
+  @Input() user!: UserI;
 
-  selectedFile! : File ;
-  imagePreview?: string | ArrayBuffer | null ;
-  subscription? : Subscription;
+  selectedFile!: File;
+  imagePreview?: string | ArrayBuffer | null;
+  subscription?: Subscription;
 
-  constructor (
-                private userService : UserService,
-                private currentUser : CurrentUserService,
-              ) { }
+  constructor(
+    private userService: UserService,
+    private currentUser: CurrentUserService,
+  ) { }
 
   ngOnInit(): void {
     this.imagePreview = this.user.avatar_url;
   }
 
-  ngOnDestroy(): void{
+  ngOnDestroy(): void {
     if (this.subscription != undefined)
-    this.subscription?.unsubscribe();
+      this.subscription?.unsubscribe();
   }
 
 
-  onFileUpload(event: any) : void
-  {
+  onFileUpload(event: any): void {
     this.selectedFile = event.target.files[0]
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result;
     };
-     reader.readAsDataURL(this.selectedFile);
+    reader.readAsDataURL(this.selectedFile);
 
   }
 
   public OnUploadFile(): void {
-    // console.log("coucou");
     const formData = new FormData();
     formData.append("image", this.selectedFile);
     this.subscription = this.userService.uploadAvatar(formData).subscribe(
-      (data : any) => {
+      (data: any) => {
         this.currentUser.getCurrentUser().subscribe(
-        (data : any) =>
-        {
-          this.user.avatar_url = data.avatar_url;
-        }
-      );
+          (data: any) => {
+            this.user.avatar_url = data.avatar_url;
+          }
+        );
       }
     );
-
-    /*return await request(
-      `${API_URL}/document`,
-      {
-        method: "POST",
-        body: formData,
-      },
-    );*/
   }
-
-  /*OnUploadFile(): void {
-    if (this.selectedFile)
-      this.userService.uploadAvatar(this.selectedFile).subscribe(
-        (data : any) => {
-        }
-      );
-    }*/
-
 }

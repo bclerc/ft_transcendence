@@ -25,17 +25,14 @@ async function bootstrap() {
   }));
 
   app.enableCors({
-    origin: '*',
+    origin: 'http://localhost:4200',
+    credentials: true,
     methods: 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
   })
 
   app.useGlobalFilters(new HttpExceptionFilter())
   app.use(passport.initialize());
   app.use(passport.session())
-
-  app.enableCors({
-    origin: "*"
-  });
 
   await app.listen(3000);
 }
