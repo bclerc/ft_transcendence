@@ -25,10 +25,10 @@ export class GameController {
     return await this.gameService.getGameById(Number(id));
   }
   
-  @UseGuards(Jwt2faAuthGuard)
-  @Post('leaderboard')
-  async getLeaderboard(): Promise<BasicUserI[]> {
-    return await this.gameService.getLeaderboard();
-  }
+  // @UseGuards(Jwt2faAuthGuard)
+  // @Post('leaderboard')
+  // async getLeaderboard(): Promise<BasicUserI[]> {
+  //   return await this.gameService.getLeaderboard();
+  // }
 
 }
