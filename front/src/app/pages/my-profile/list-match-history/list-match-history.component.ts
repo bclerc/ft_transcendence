@@ -14,10 +14,12 @@ export class ListMatchHistoryComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.id)
+
   }
 
   whoWin(id : number): boolean{
-      if (id === this.id)
+      if (id == this.id)
         return true;
       return false;
   }

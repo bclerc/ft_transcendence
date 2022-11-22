@@ -53,7 +53,7 @@ export class ProfilePageComponent implements OnInit {
       this.subscription3 =  this.userService.GetUserHistory(this.id).subscribe(
         (data : any) => {
           this.games = data;
-          // console.log("games = ", data);
+           console.log("games = ", data);
         }
         );
 
