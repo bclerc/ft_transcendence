@@ -284,8 +284,6 @@ export class PongService {
     }
   }
 
-
-
   private finalForAll(game: GameI) {
     var i = 0;
 
@@ -409,7 +407,6 @@ export class PongService {
       game.ball.dy *= -1;
       game.ball.y = HEIGHTCANVAS - game.ball.height;
     }
-
     game.ball.x += game.ball.dx;
     if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) //sil y a rebond entre balle et paddle
     {
@@ -420,7 +417,6 @@ export class PongService {
       this.rebond(game.ball, game.player2.paddle);
       game.ball.x = PLAYER2X - game.ball.radius;
     }
-
     if (game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
     {
       if (game.ball.x <= (0 + game.ball.width)) {

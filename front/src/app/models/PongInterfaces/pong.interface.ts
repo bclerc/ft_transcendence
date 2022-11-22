@@ -11,7 +11,6 @@ export interface GameI {
 	obstacle:PointI;
 	// acceleration?: number;	//option de partie
 	// direction?: PointI;		//option de partie
-
 	spectators?: UserI[]; //tableau des utilisateurs qui regardent le match
 	id_interval?:any;
 	mapId?: number;			//type de la partie; normal/classé 
