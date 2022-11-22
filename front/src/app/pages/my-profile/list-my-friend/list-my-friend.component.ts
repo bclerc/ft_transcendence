@@ -27,6 +27,7 @@ export class ListMyFriendComponent implements OnInit {
   subscriptionFriend!: Subscription;
 
   ngOnInit(): void {
+    // console.log("yakoi", this.friends);
     // this.subscriptionFriend =  this.userService.getFriends().subscribe(
     //   (data : any) => {
     //     this.friends = data;

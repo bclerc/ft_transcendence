@@ -1,5 +1,5 @@
 // import { I } from '@angular/cdk/keycodes';
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, AfterViewInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
@@ -52,9 +52,6 @@ export class ChatPageComponent implements OnInit {
 	) { }
 
 	async ngOnInit() {
-    this.chatService.needRooms();
-    this.chatService.needPublicRooms();
-    this.chatService.needDmRooms();
 		await this.userService.getLoggedUser().subscribe(
 			(data : any) => {
 			  this.actualUser = data;
@@ -93,6 +90,9 @@ export class ChatPageComponent implements OnInit {
        this.haveNewDm = roomSeen;
     });
 
+    this.chatService.needRooms();
+    this.chatService.needPublicRooms();
+    this.chatService.needDmRooms();
 	}
 
 
