@@ -5,18 +5,27 @@ body {
 }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.mat-mdc-dialog-container {
+  background-color: #1F1F1F !important;
+  --mdc-dialog-container-color: #1F1F1F;
+  --mdc-dialog-container-radius: 20px;
+  /* border-radius: 100px !important; */
 
+}
+#mat-mdc-dialog-0{
 
-mat-dialog-container {
-  background-color: #1f1f1f !important;
   border-radius: 20px !important;
 }
 
-.custom-modalbox mat-dialog-container{
-  background-color: #1f1f1f !important;
+/* mdc-dialog-open { */
+  /* background-color: #1f1f1f !important; */
+/* } */
+
+.custom-modalbox {
+  /* background-color: #1f1f1f !important;
+  --mdc-dialog-container-color: #1F1F1F; */
   box-shadow: none;
-  /* background-color: #feefcf !important; */
-  /* border:8px solid #ee481e; */
+  border-radius: 20px !important;
 }
 
 .backdropBackground {

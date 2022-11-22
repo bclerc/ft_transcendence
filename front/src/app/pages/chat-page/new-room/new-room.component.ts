@@ -1,7 +1,5 @@
-import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
-
+import { Component, OnInit, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatLegacySelectionListChange as MatSelectionListChange } from '@angular/material/legacy-list';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatMobileService } from 'src/app/services/chat-mobile.service';

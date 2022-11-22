@@ -25,7 +25,7 @@
 					</div>
 
 					<!-- SWITCH -->
-					<mat-tab-group class="switch-groupes-amis" [selectedIndex]="selected.value">
+					<mat-tab-group class="switch-groupes-amis" [selectedIndex]="selected.value" style="width: 100%;">
 
 						<!-- MES GROUPES -->
 						<mat-tab id="chat-page-mat-tab">
@@ -44,7 +44,7 @@
 										</g>
 									</svg>
 								</ng-container>
-								Mes groupes
+									Mes groupes
 							</ng-template>
 							<ul>
 								<li *ngFor="let room of (rooms$ | async)" [value]="room">
