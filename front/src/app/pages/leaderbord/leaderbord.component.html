@@ -88,6 +88,8 @@
 
 <section class="classement">
 	<ng-container *ngFor="let member of leaderbord | async ;let indexOfelement=index;">
+		<div *ngIf =  "indexOfelement > 2" > 
+
 
 	<div class="member">
 		<div id="classement-content">
@@ -112,6 +114,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 </ng-container>
 </section>
 </div>

@@ -17,7 +17,7 @@ export class LeaderbordComponent implements OnInit {
     this.userService.GetLeaderBord().subscribe(
       (data : any) =>
       {
-        console.log(data);
+        // console.log(data);
       }
     )
   }

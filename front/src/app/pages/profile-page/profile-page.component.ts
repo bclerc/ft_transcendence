@@ -38,12 +38,13 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
     this.id = this.route.snapshot.params['id'];
+    this.yolo = this.id;
     // console.log("id = ", this.id);
       this.searchFriend();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
           this.user = data;
-          // console.log("yolo = ", data);
+          //  console.log("yolo = ", data);
         }
         );
 
