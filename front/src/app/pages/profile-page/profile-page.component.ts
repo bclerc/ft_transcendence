@@ -24,6 +24,7 @@ export class ProfilePageComponent implements OnInit {
   subscription3! : Subscription;
   alreadyFriend : boolean = false;
   alreadyBlocked : boolean = false;
+  yolo! : number;
   
   constructor ( 
                 private userService: UserService,
@@ -37,9 +38,7 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
     this.id = this.route.snapshot.params['id'];
-
-
-    
+    // console.log("id = ", this.id);
       this.searchFriend();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
@@ -68,7 +67,7 @@ export class ProfilePageComponent implements OnInit {
         // console.log("current user" , data)
         for (var i = 0; data.friendOf[i];i++)
         {
-          if (this.id === data.friendOf[i].id)
+          if (this.id == data.friendOf[i].id)
           {
             this.alreadyFriend = true;
             break;
@@ -76,25 +75,11 @@ export class ProfilePageComponent implements OnInit {
         }
         for (var i = 0; data.blockedUsers[i];i++)
         {
-          if (this.id === data.blockedUsers[i].id)
+          if (this.id == data.blockedUsers[i].id)
           {
             this.alreadyBlocked = true;
             break;
           }
-        }
-      },
-      (error : any) => 
-      {
-        if (error.status === 401 && error.error.message === "2FA_REQUIRED")
-        {
-          this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
-            duration: 3000
-          })
-          this.router.navigate(['code'])
-        }
-        else
-        {
-          this.router.navigate([''])
         }
       }
     )
@@ -112,8 +97,8 @@ export class ProfilePageComponent implements OnInit {
   {
     this.userService.sendRequest(this.id).subscribe(
       (data : any) =>{
-        this.alreadyFriend = true
-        //  console.log("friend request" , data)
+        this.alreadyFriend = true;
+        // console.log("friend request" , data)
       }
     );
   }
