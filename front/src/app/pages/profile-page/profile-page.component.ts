@@ -44,14 +44,16 @@ export class ProfilePageComponent implements OnInit {
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
           this.user = data;
-          //  console.log("yolo = ", data);
-        }
+          if ( this.user == null)
+            this.router.navigate(["error"]);
+
+        },
         );
 
       this.subscription3 =  this.userService.GetUserHistory(this.id).subscribe(
         (data : any) => {
           this.games = data;
-          console.log("games = ", data);
+          // console.log("games = ", data);
         }
         );
 
