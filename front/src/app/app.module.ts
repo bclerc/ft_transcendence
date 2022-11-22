@@ -63,7 +63,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { AddUserComponent } from './src/app/edit-room-chat/edit-dialog/add-user/add-user.component';
 
-
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
     query: {
