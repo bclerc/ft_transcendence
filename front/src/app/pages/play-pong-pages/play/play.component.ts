@@ -14,8 +14,11 @@ const CANVAS_RADIUS = 6;
 const BALL_RADIUS = 4;
 const PLAYER_HEIGHT = 80;
 const PLAYER_WIDTH = 8;
-const HEIGHTCANVAS = 400;
-const WIDTHCANVAS = 600;
+const WIDTHCANVAS = 850;
+const HEIGHTCANVAS = 638;
+const BACKSPACE = 40;
+const PLAYER1X = 0 + BACKSPACE;
+const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
 const FONT = 33;
 
 ///
@@ -92,10 +95,8 @@ export class PlayComponent implements OnInit {
     this.socket.on('drawMap2', this.drawMap2);
     this.socket.on('drawMap3', this.drawMap3);
     this.socket.on('score', this.updateScore);
-
     this.socket.on('win', this.win);
     this.socket.on('lose', this.lose);
- 
     this.socket.on('drawInit', this.drawInit);
     this.socket.on('drawText', this.drawText);
     this.socket.on('drawName', this.drawName);
@@ -116,12 +117,15 @@ export class PlayComponent implements OnInit {
         }
       }
     });
-    //check if player or not is necessary ??
     this.socket.emit('spectate', this.gameId);
   }
 
   ngOnDestroy(): void {
     this.socket.emit('deleteSpectate', this.gameId);
+  }
+
+  ngViewAfterInit()
+  {
   }
 
 
@@ -190,9 +194,9 @@ export class PlayComponent implements OnInit {
         context.fillStyle = 'white';
         context.font = FONT + 'px streetartfont';
         if (text == "Start !")
-          context.fillText(text, (canvas.width) / 2 - FONT - 20, (canvas.height) / 2 - 10);
+          context.fillText(text, (canvas.width) / 2, (canvas.height) / 2);
         else
-          context.fillText(text, (canvas.width) / 2 - 10, (canvas.height) / 2 - 10);
+          context.fillText(text, (canvas.width) / 2, (canvas.height) / 2);
       }
     }
   }
@@ -634,7 +638,7 @@ export class PlayComponent implements OnInit {
           // user: UserI;
           // socket: Socket,
           paddle: {
-          x: 0,
+          x: PLAYER1X * ratiox,
           y: (HEIGHTCANVAS * ratioy) / 2 - (PLAYER_HEIGHT * ratioy) / 2,
           dx: 0,
           dy: 0,
@@ -648,7 +652,8 @@ export class PlayComponent implements OnInit {
           // user: UserI;
           // socket: Socket;
           paddle: {
-          x: (WIDTHCANVAS * ratiox) - (PLAYER_WIDTH * ratiox),
+          // x: (WIDTHCANVAS * ratiox) - (PLAYER_WIDTH * ratiox),
+          x: PLAYER2X * ratiox,
           y: (HEIGHTCANVAS * ratioy) / 2 - (PLAYER_HEIGHT * ratioy) / 2,
           dx: 0,
           dy: 0,

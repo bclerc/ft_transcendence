@@ -266,11 +266,22 @@ html, body, .flexbox {
 #but-send:hover{
 	background-color: tomato;
 }
-
-.chat-box-header h2 {
+.friend-room{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	// background-color: #9c9381;
+	// margin-bottom: -20px;
+}
+.chat-box-header #friend-name {
 	font-family: Titan One;
 	font-size: 54px;
-	// margin-bottom: 25px;
+	color: $color-red;
+
+}
+.chat-box-header #room-name {
+	font-family: Titan One;
+	font-size: 54px;
 	color: $color-red;
 }
 .chat-box-header #head-description{

@@ -47,29 +47,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: #1F1F1F !important;
   --mdc-dialog-container-color: #1F1F1F;
   --mdc-dialog-container-radius: 20px !important;
-  /* border-radius: 100px !important; */
 
-}
-
-mat-dialog-container {
-  background-color: #1f1f1f !important;
-  border-radius: 20px !important;
 }
 
 .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label {
-  /* color: var(--mdc-chip-label-text-color, currentColor); */
   color: #feefcf !important;
   font-family: ReadexPro-Medium !important;
-
 }
 
-/* mdc-dialog-open { */
-  /* background-color: #1f1f1f !important; */
-/* } */
+.mat-mdc-checkbox label {
+  cursor: pointer;
+  color: #feefcf !important;
+  font-family: ReadexPro-Medium !important;
+}
 
 .custom-modalbox {
-  /* background-color: #1f1f1f !important;
-  --mdc-dialog-container-color: #1F1F1F; */
   box-shadow: none;
   border-radius: 20px !important;
 }
