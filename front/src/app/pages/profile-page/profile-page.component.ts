@@ -1,5 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, tap } from 'rxjs';
 import {  UserI } from 'src/app/models/user.models';
@@ -41,6 +41,7 @@ export class ProfilePageComponent implements OnInit {
       this.searchFriend();
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
+          console.log(data);
           this.user = data;
           if ( this.user == null)
             this.router.navigate(["error"]);

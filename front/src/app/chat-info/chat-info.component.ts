@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { UserI } from '../models/user.models';
 
@@ -70,7 +70,7 @@ export class ChatInfoComponent implements OnInit {
 
   async ngOnInit() {
   
-    await this.userService.getLoggedUser().subscribe((user: UserI) => {
+    await this.userService.getLoggedUser().subscribe((user: UserI) =>{
       this.actualUser = user;
     });
   }

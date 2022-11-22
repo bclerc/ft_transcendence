@@ -1,7 +1,5 @@
-import { Component, ViewEncapsulation, OnInit, Input } from '@angular/core';
-
+import { Component, OnInit, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatLegacySelectionListChange as MatSelectionListChange } from '@angular/material/legacy-list';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
 import { ChatMobileService } from 'src/app/services/chat-mobile.service';
@@ -28,13 +26,7 @@ export class NewRoomComponent implements OnInit {
 	selected = new FormControl(0);
 	actualUser: UserI = {};
 
-	form: FormGroup = new FormGroup({
-	name: new FormControl(null, [Validators.required]),
-	description: new FormControl(null),
-	public: new FormControl(false),
-	password: new FormControl(null),
-	users: new FormArray([], [Validators.required])
-	});
+	form: FormGroup = this.initFormGroup();
 
 	constructor(private chatService: ChatService, 
 		// public chatMobileService : ChatMobileService,
@@ -50,19 +42,17 @@ export class NewRoomComponent implements OnInit {
 	create() {
 		if (this.form.valid) {
 			this.chatService.createRoom(this.form.value);
-			this.form.setValue({
-        name: null,
-        description: null,
-        public: false,
-        password: null,
-        users: []
-        // BUGGEEEEEEEEEEEEEEEEE
-      });
+      this.form.reset();
+      this.form = this.initFormGroup();
 		}
 	}
 
 	addUser(user: any) {
-		this.users.push(new FormControl({
+
+    if (this.users.value.find((u: any) => u.id === user.id))
+      return ;
+    
+    this.users.push(new FormControl({
 			id: user.id,
 			intra_name: user.intra_name,
 			avatar_url: user.avatar_url,
@@ -99,6 +89,10 @@ export class NewRoomComponent implements OnInit {
 		return this.form.get('users') as FormArray;
 	}
 
+  set users(users: FormArray) {
+    this.form.setControl('users', users);
+  }
+
 	get public(): FormControl {
 		return this.form.get('public') as FormControl;
 	}
@@ -106,6 +100,16 @@ export class NewRoomComponent implements OnInit {
 	get password(): FormControl {
 		return this.form.get('password') as FormControl;
 	}
+
+  initFormGroup(): FormGroup {
+    return new FormGroup({
+      name: new FormControl(null, [Validators.required]),
+      description: new FormControl(null),
+      public: new FormControl(false),
+      password: new FormControl(null),
+      users: new FormArray([], [Validators.required])
+      });
+  }
 
 	closeNewRoom() : void{
 		this.chatMobileService.hideNewRoom();

@@ -1,13 +1,12 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Injectable } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
-import { GameI, GameListInfo } from '../../models/PongInterfaces/pong.interface';
-import { ScoreI } from '../../models/PongInterfaces/score.interface';
+import {  GameListInfo } from '../../models/PongInterfaces/pong.interface';
 import { UserI } from '../../models/PongInterfaces/user.interface';
-
 
 @Component({
   selector: 'app-root',
@@ -17,36 +16,36 @@ import { UserI } from '../../models/PongInterfaces/user.interface';
 @Injectable(
   {providedIn: 'root'}
 )
-export class PlayPongPagesComponent implements OnInit
+export class PlayPongPagesComponent implements AfterViewInit
 {
-  user: UserI = {};
-  games: GameListInfo[] = [];
-  id!: string;
-  isDisabled = true;
-
   private var_interval: number;
+  id!:                  string;
+  user:                 UserI = {};
+  games:                GameListInfo[] = [];
+	inGame$:              Observable<boolean> = this.socket.fromEvent<boolean>('inGame');
 
   constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService)
   {
     this.var_interval = 0;
-    this.socket.on('stopedSearch', this.stopedSearch);
     this.socket.on('onGoingGames', (data: GameListInfo[]) => {
       this.games = data;
     });
+    this.socket.emit('inGame');
   }
 
-  testInviteUser() {
-    this.socket.emit('inviteUser', 2);
-  }
-
-  ngOnInit(): void 
+  ngAfterViewInit(): void
   {
-    var button = document.getElementById("stop") as HTMLElement;
-    if (button)
-      button.setAttribute("hidden", "true");
-    this.socket.emit("needOnGoingGames");
+    this.socket.emit('needOnGoingGames');
+    this.inGame$.subscribe(
+      (inGameOrNot: boolean) => {
+        if (inGameOrNot)
+          this.stopMode();
+        else
+          this.launchMode();
+      }
+    );
   }
-
+  
   ngAfterInit(): void {
   }
 
@@ -54,37 +53,23 @@ export class PlayPongPagesComponent implements OnInit
     this.stopSearchLoop(this.var_interval);
   }
 
-  getId(id: string){
-    const divId = document.getElementById('idGame');
-
-    divId!.innerHTML = id;
-  }
-
   newGame(normalOrNot: boolean)
   {
-    var button = document.getElementById("stop") as HTMLElement;
-    if (button)
-      button.removeAttribute("hidden");
-    button = document.getElementById("regular") as HTMLElement;
-    if (button)
-      button.setAttribute("hidden", "true");
-    button = document.getElementById("random") as HTMLElement;
-    if (button)
-      button.setAttribute("hidden", "true");
+    this.stopMode();
     this.socket.emit('newGame', normalOrNot);
   }
 
   stopGame()
   {
-    console.log("stopbutton");
     this.socket.emit('stopSearch');
+    this.launchMode();
   }
 
   stopSearchLoop(id: number)
   {
     if (id && id != 0)
     {
-      // console.log("stopSearchLoop");
+      console.log("stopSearchLoop");
       window.clearInterval(id);
       this.var_interval = 0;
     }
@@ -95,7 +80,7 @@ export class PlayPongPagesComponent implements OnInit
     this.router.navigate(['/game/', id]);
   }
 
-  stopedSearch() {
+  private launchMode() {
     var button = document.getElementById("stop") as HTMLElement;
     if (button)
       button.setAttribute("hidden", "true");
@@ -105,6 +90,18 @@ export class PlayPongPagesComponent implements OnInit
     button = document.getElementById("random") as HTMLElement;
     if (button)
       button.removeAttribute("hidden");
+  }
+
+  private stopMode() {
+    var button = document.getElementById("stop") as HTMLElement;
+    if (button)
+      button.removeAttribute("hidden");
+    button = document.getElementById("regular") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
+    button = document.getElementById("random") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
   }
 
 };
