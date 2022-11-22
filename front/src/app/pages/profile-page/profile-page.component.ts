@@ -42,8 +42,6 @@ export class ProfilePageComponent implements OnInit {
       this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
         (data : any) => {
           this.user = data;
-          console.log("toyolo =", data);
-          console.log("toyolo2 =", data.position_in_leaderboard)
           if ( this.user == null)
             this.router.navigate(["error"]);
 
@@ -53,7 +51,6 @@ export class ProfilePageComponent implements OnInit {
       this.subscription3 =  this.userService.GetUserHistory(this.id).subscribe(
         (data : any) => {
           this.games = data;
-           console.log("games = ", data);
         }
         );
 
