@@ -174,11 +174,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   }
 
   @OnEvent('room.user.invited')
-  handleUserInvitedEvent(event: UserInvitedEvent) {
+  async handleUserInvitedEvent(event: UserInvitedEvent) {
     if (event.room && event.user && event.inviter) {
       this.sendToUser(event.user, 'notification', "Vous avez été invité à rejoindre la room " + event.room.name + " par " + event.inviter.displayname);
       this.sendToUser(event.inviter, 'notification', "Vous avez invité " + event.user.intra_name + " à rejoindre la room " + event.room.name);
-      this.updateRoomForUsersInRoom(event.room.id);
+      await this.updateRoomForUsersInRoom(event.room.id);
       if (event.room.public)
         this.updatePublicRooms();
     }
@@ -337,7 +337,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   async updateRoomForUsersInRoom(roomId: number) {
     let room = await this.chatService.getRoomById(roomId);
     for (let user of room.users) {
-        this.updateUserRooms(user);
+        await this.updateUserRooms(user);
     }
   }
 

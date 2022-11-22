@@ -35,6 +35,7 @@ export class PlayPongPagesComponent implements AfterViewInit
 
   ngAfterViewInit(): void
   {
+    this.socket.emit('needOnGoingGames');
     this.inGame$.subscribe(
       (inGameOrNot: boolean) => {
         if (inGameOrNot)

@@ -82,9 +82,10 @@ export class ModifyMyProfileComponent implements OnInit {
   DesactivateFa(): void {
     this.userService.DesactivateFacode().subscribe(
       (data : any) => {
-        this.snackBar.open("2FA desactivé", 'Undo')
+        this.snackBar.open("2FA desactivé", 'Undo');
         //  console.log("data =",data);
         //this.ob = data;
+        this.user.twoFactorEnabled = false;
       },
       //error => this.router.navigate([''])
       );

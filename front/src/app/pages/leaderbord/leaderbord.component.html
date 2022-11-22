@@ -1,120 +1,126 @@
 <html>
-	<head>
-		<title>Pong - the leaderbord</title>
-		<meta charset="utf-8" />
-		<meta name="description" content="C'est la classement des meilleeurs pongistes" />
-		<meta name="author" content="Team transcendance 42" />
-		<meta name="copyright" content="© CC BY-NC-SA 4.0" />
-	</head>
-	<body>
-<div class="center">
+
+<head>
+	<title>Pong - the leaderbord</title>
+	<meta charset="utf-8" />
+	<meta name="description" content="C'est la classement des meilleeurs pongistes" />
+	<meta name="author" content="Team transcendance 42" />
+	<meta name="copyright" content="© CC BY-NC-SA 4.0" />
+</head>
+
+<body>
+	<div class="center">
 
 
-	<!-- PODIUM -->
-	<h1 id="title-classement">Les meilleurs pongistes de la mort !</h1>
+		<!-- PODIUM -->
+		<h1 id="title-classement">Les meilleurs pongistes de la mort !</h1>
 		<ng-container *ngIf="leaderbord | async as member">
-		<ng-container *ngIf =  member[0]>
+			<ng-container *ngIf=member[0]>
 
-	<section class="podium">
-		<ng-template *ngIf =  "member[1]; then thenBlock else elseBlock"> </ng-template>
-			<ng-template #thenBlock>
-		<div class="tiers">
-			<div class="profil" id="s2">
-				<a id="profil-down" [routerLink]="['/profile/' + member[1].id ]">
-					<img [src]="member[1].avatar_url" alt="UNE BELLE GUEULE">
-					<span>{{member[1].displayname}}</span>
-				</a>
-			</div>
-			<div class="step2" id="s2">
-				2
-			</div>
-		</div>
-	</ng-template>
-		<ng-template #elseBlock>
-			<div class="tiers">
-				<div class="profil" id="s2">
-					<a id="profil-down" routerLink="/leaderbord">
-						<img src="assets/img/default_profile_picture.webp" alt="UNE BELLE GUEULE">
-						<span></span>
-					</a>
-				</div>
-				<div class="step2" id="s2">
-					2
-				</div>
-			</div>
-		</ng-template>
-		<div class="tiers">
-			<div class="profil" id="s3">
-				<a id="profil-down" [routerLink]="['/profile/' + member[0].id ]">
-					<img [src]="member[0].avatar_url" alt="UNE BELLE GUEULE">
-					<span>{{member[0].displayname}}</span>
-				</a>
-			</div>
-			<div class="step1" id="s1">
-				1
-			</div>
-		</div>
-		<ng-template *ngIf =  "member[2]; then thenBlocki else elseBlocki"> </ng-template>
-		<ng-template #thenBlocki>
-			<div class="tiers">
-				<div class="profil" id="s1">
-					<a id="profil-down" [routerLink]="['/profile/' + member[2].id ]">
-						<img [src]="member[2].avatar_url" alt="UNE BELLE GUEULE">
-						<span>{{member[2].displayname}}</span>
-					</a>
-				</div>
-				<div class="step3" id="s3">
-					3
-				</div>
-			</div>
-		</ng-template>
-		<ng-template #elseBlocki>
-			<div class="tiers">
-				<div class="profil" id="s1">
-					<a id="profil-down" routerLink="/leaderbord" >
-						<img src="assets/img/default_profile_picture.webp" alt="UNE BELLE GUEULE">
-						<span></span>
-					</a>
-				</div>
-				<div class="step3" id="s3">
-					3
-				</div>
-			</div>
-		</ng-template>
-	</section>
-</ng-container>
-</ng-container>
+				<section class="podium">
+					<ng-template *ngIf="member[1]; then thenBlock else elseBlock"> </ng-template>
+					<ng-template #thenBlock>
+						<div class="tiers">
+							<div class="profil" id="s2">
+								<a id="profil-down" [routerLink]="['/profile/' + member[1].id ]">
+									<img [src]="member[1].avatar_url" alt="UNE BELLE GUEULE">
+									<span>{{member[1].displayname}}</span>
+								</a>
+							</div>
+							<div class="step2" id="s2">
+								2
+							</div>
+						</div>
+					</ng-template>
+					<ng-template #elseBlock>
+						<div class="tiers">
+							<div class="profil" id="s2">
+								<a id="profil-down" routerLink="/leaderbord">
+									<img src="assets/img/default_profile_picture.webp" alt="UNE BELLE GUEULE">
+									<span></span>
+								</a>
+							</div>
+							<div class="step2" id="s2">
+								2
+							</div>
+						</div>
+					</ng-template>
+					<div class="tiers">
+						<div class="profil" id="s3">
+							<a id="profil-down" [routerLink]="['/profile/' + member[0].id ]">
+								<img [src]="member[0].avatar_url" alt="UNE BELLE GUEULE">
+								<span>{{member[0].displayname}}</span>
+							</a>
+						</div>
+						<div class="step1" id="s1">
+							1
+						</div>
+					</div>
+					<ng-template *ngIf="member[2]; then thenBlocki else elseBlocki"> </ng-template>
+					<ng-template #thenBlocki>
+						<div class="tiers">
+							<div class="profil" id="s1">
+								<a id="profil-down" [routerLink]="['/profile/' + member[2].id ]">
+									<img [src]="member[2].avatar_url" alt="UNE BELLE GUEULE">
+									<span>{{member[2].displayname}}</span>
+								</a>
+							</div>
+							<div class="step3" id="s3">
+								3
+							</div>
+						</div>
+					</ng-template>
+					<ng-template #elseBlocki>
+						<div class="tiers">
+							<div class="profil" id="s1">
+								<a id="profil-down" routerLink="/leaderbord">
+									<img src="assets/img/default_profile_picture.webp" alt="UNE BELLE GUEULE">
+									<span></span>
+								</a>
+							</div>
+							<div class="step3" id="s3">
+								3
+							</div>
+						</div>
+					</ng-template>
+				</section>
+			</ng-container>
+		</ng-container>
 
 
-<section class="classement">
-	<ng-container *ngFor="let member of leaderbord | async ;let indexOfelement=index;">
+		<section class="classement">
+			<ng-container *ngFor="let member of leaderbord | async ;let indexOfelement=index;">
+				<div *ngIf="indexOfelement > 2">
 
-	<div class="member">
-		<div id="classement-content">
-			<div class="rank">
-				#{{indexOfelement + 1}}
-			</div>
-			<a class="user" [routerLink]="['/profile/' + member.id ]">
-				<img [src]="member.avatar_url" alt="belle gueule">
-				<span>{{member.displayname}}</span>
-			</a>
-			<div class="data">
-				<span id="number">{{member.score}}</span>
-				<span id="data-name">Points</span>
-			</div>
-			<div class="data">
-				<span id="number">{{member._count.games_win}}</span>
-				<span id="data-name">Victoires</span>
-			</div>
-			<div class="data">
-				<span id="number">{{member._count.games_lose}}</span>
-				<span id="data-name">Défaites</span>
-			</div>
-		</div>
+
+					<div class="member">
+						<div id="classement-content">
+							<div class="rank">
+								#{{indexOfelement + 1}}
+							</div>
+							<a class="user" [routerLink]="['/profile/' + member.id ]">
+								<img [src]="member.avatar_url" alt="belle gueule">
+								<span>{{member.displayname}}</span>
+							</a>
+							<div class="data">
+								<span id="number">{{member.score}}</span>
+								<span id="data-name">Points</span>
+							</div>
+							<div class="data">
+								<span id="number">{{member._count.games_win}}</span>
+								<span id="data-name">Victoires</span>
+							</div>
+							<div class="data">
+								<span id="number">{{member._count.games_lose}}</span>
+								<span id="data-name">Défaites</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</ng-container>
+		</section>
 	</div>
-</ng-container>
-</section>
-</div>
 </body>
+
 </html>
 <app-footer></app-footer>
