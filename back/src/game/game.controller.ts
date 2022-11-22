@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { Jwt2faAuthGuard } from 'src/auth/guards/jwt2fa.guard';
 import { dbGame } from 'src/pong/interfaces/game.interface';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
@@ -11,6 +11,13 @@ export class GameController {
 
 
   }
+  
+  @UseGuards(Jwt2faAuthGuard)
+  @Get('leaderboard')
+  async getLeaderboard(): Promise<BasicUserI[]> {
+    return await this.gameService.getLeaderboard();
+  }
+
 
   @UseGuards(Jwt2faAuthGuard)
   @Get(':id')
@@ -18,10 +25,5 @@ export class GameController {
     return await this.gameService.getGameById(Number(id));
   }
 
-  @UseGuards(Jwt2faAuthGuard)
-  @Get('leaderboard')
-  async getLeaderboard(): Promise<BasicUserI[]> {
-    return await this.gameService.getLeaderboard();
-  }
 
 }

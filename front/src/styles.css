@@ -25,3 +25,5 @@ mat-dialog-container {
   /* opacity: 10%; */
   backdrop-filter: blur(25px);
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -178,5 +178,11 @@ export class UserService {
     return this.http.get(this.backUrl + "user/profile/" + id , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
+  GetLeaderBord(): Observable<any[]>
+  {
+    return this.http.get<any[]>(this.backUrl + "game/leaderboard", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+
 
 }
