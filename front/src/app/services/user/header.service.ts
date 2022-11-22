@@ -22,6 +22,7 @@ export class HeaderService  {
   
     this.socket.on('redirectGame', (gameId: number) => {
       this.redirectToGame(gameId);
+      this.dialog.closeAll();
     });
     
     this.socket.on('invited', (data: InvitedGameI) => {

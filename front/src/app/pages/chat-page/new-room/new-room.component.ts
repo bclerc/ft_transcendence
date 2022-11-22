@@ -60,7 +60,11 @@ export class NewRoomComponent implements OnInit {
 	}
 
 	addUser(user: any) {
-		this.users.push(new FormControl({
+
+    if (this.users.value.find((u: any) => u.id === user.id))
+      return ;
+    
+    this.users.push(new FormControl({
 			id: user.id,
 			intra_name: user.intra_name,
 			avatar_url: user.avatar_url,
