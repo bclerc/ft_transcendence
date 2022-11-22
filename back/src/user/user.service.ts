@@ -216,7 +216,7 @@ export class UserService {
   async getProfileUser(userId: number): Promise<any> {
     if (!userId)
       return null;
-    const user = await this.prisma.user.findUnique({
+    const user:any = await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -266,6 +266,7 @@ export class UserService {
         }
       },
     });
+    user.position_in_leaderboard = await this.getLeaderboardPosition(user.id);
     if (user === undefined)
       return null;
     return user;
@@ -427,6 +428,9 @@ export class UserService {
               }
             }
           },
+          orderBy: {
+            state: 'desc',
+          },
         },
       },
     });
@@ -452,7 +456,7 @@ export class UserService {
   async isBlocked(userId: number, targetId: number): Promise<boolean> {
     let blocked = await this.prisma.user.findFirst({
       where: {
-        id: targetId,
+        id: Number(targetId),
         blockedBy: {
           some: {
             id: userId,

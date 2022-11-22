@@ -4,9 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install -g npm@9.1.2
 RUN npm install
-
 
 RUN npm run build --prod
 

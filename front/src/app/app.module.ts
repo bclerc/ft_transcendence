@@ -104,8 +104,6 @@ export function tokenGetter() {
     LeaderbordComponent,
     AddFriendListComponent,
     InviteDialogComponent,
-    LeaderbordComponent,
-    LeaderbordComponent
   ],
   imports: [
     BrowserModule,

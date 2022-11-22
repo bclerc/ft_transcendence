@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div class="center-pong">
-			<h1>Affrontes les tous</h1>
+			<h1>Affronte les tous</h1>
 			<div class="tuto">
 				<p>Appuis sur les touches de ton clavier W pour monter et S pour descendre.</p>
 				<div class="up-down">
@@ -31,6 +31,7 @@
 
 			<!-- BOUTONS PLAY PONG -->
 			<div class="buttons">
+				<button id="stop" matButton (click)="stopGame()">Stopper la recherche, Bolos !</button>
 				<button id="regular" matButton (click)="newGame(true)" >Lancer une partie</button>
 				<button id="random"  matTooltip="Lancer une partie aléatoire" matButton (click)="newGame(false)" >
 					<svg width="34px" height="29px" viewBox="0 0 34 29">
@@ -48,75 +49,34 @@
 			<!-- MATCHS EN COURS -->
 			<h2>Matchs en cours</h2>
 			<div class="les-matchs">
-
-				<!-- MATCH -->
-				<div class="match">
+      <ng-container *ngIf="games.length < 1">
+        <p>Il n'y a pas de match en cours !</p>
+      </ng-container>
+      <ng-container *ngFor="let match of games">
+        <div class="match">
 					<div class="info">
-						<a class="profil" href="">
-							<img src="../../../assets/img/default_profile_picture.webp" alt="">
-							vserra1234
+						<a class="profil" href="/#/profile/{{ match.users[0].id }}">
+						 <img src="{{ match.users[0].avatar_url }}" alt="">
+							{{match.users[0].displayname}}
 						</a>
 						<div class="vs">
 							VS
 						</div>
-						<a class="profil" href="">
-							<img src="../../../assets/img/default_profile_picture.webp" alt="">
-							vserra1234
-						</a>
+						<a class="profil" href="/#/profile/{{ match.users[1].id }}">
+							<img src="{{ match.users[1].avatar_url }}" alt="">
+							{{match.users[1].displayname}}
+            </a>
 					</div>
 					<div class="but">
-						<button>
+            <!-- button router link to /game/{{match.id}}-->
+						<button (click)="joinGame(match.id)">
 							Voir le match
 							<img src="../../../assets/svg/invite-game.svg" alt="">
 						</button>
 					</div>
 				</div>
-
-				<!-- MATCH -->
-				<div class="match">
-					<div class="info">
-						<a class="profil" href="">
-							<img src="../../../assets/img/default_profile_picture.webp" alt="">
-							vserra1234
-						</a>
-						<div class="vs">
-							VS
-						</div>
-						<a class="profil" href="">
-							<img src="../../../assets/img/default_profile_picture.webp" alt="">
-							vserra1234
-						</a>
-					</div>
-					<div class="but">
-						<button>
-							Voir le match
-							<img src="../../../assets/svg/invite-game.svg" alt="">
-						</button>
-					</div>
-				</div>
-
-				<!-- MATCH -->
-				<div class="match">
-					<div class="info">
-						<a class="profil" href="">
-							<img src="../../../assets/img/default_profile_picture.webp" alt="">
-							vserra1234
-						</a>
-						<div class="vs">
-							VS
-						</div>
-						<a class="profil" href="">
-							<img src="../../../assets/img/default_profile_picture.webp" alt="">
-							vserra1234
-						</a>
-					</div>
-					<div class="but">
-						<button>
-							Voir le match
-							<img src="../../../assets/svg/invite-game.svg" alt="">
-						</button>
-					</div>
-				</div>
+      </ng-container>
+      
 			</div>
 		</div>
 	</body>

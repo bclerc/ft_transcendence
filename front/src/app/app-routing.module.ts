@@ -17,7 +17,7 @@ import { LeaderbordComponent } from './pages/leaderbord/leaderbord.component';
 
 
 const routes: Routes = [
-  { path: '', component: LandingPageComponent },
+  { path: '', component: LandingPageComponent},
   { path: 'login/:id', component: GetTokenComponent},
   { path: 'code', component: SendCodeComponent},
   { path: 'game', component: PlayPongPagesComponent, canActivate: [AuthGuard] }, 

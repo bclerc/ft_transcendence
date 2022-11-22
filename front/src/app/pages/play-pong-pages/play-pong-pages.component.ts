@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
+import { GameI, GameListInfo } from '../../models/PongInterfaces/pong.interface';
+import { ScoreI } from '../../models/PongInterfaces/score.interface';
 import { UserI } from '../../models/PongInterfaces/user.interface';
 
 
@@ -18,83 +20,64 @@ import { UserI } from '../../models/PongInterfaces/user.interface';
 export class PlayPongPagesComponent implements OnInit
 {
   user: UserI = {};
-  ratiox: number;
-  ratioy: number;
+  games: GameListInfo[] = [];
   id!: string;
+  isDisabled = true;
+
   private var_interval: number;
 
-  constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService, private dialog: MatDialog)
+  constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService)
   {
     this.var_interval = 0;
-    this.ratiox = 1;
-    this.ratioy = 1;
+    this.socket.on('stopedSearch', this.stopedSearch);
+    this.socket.on('onGoingGames', (data: GameListInfo[]) => {
+      this.games = data;
+    });
   }
 
-  
   testInviteUser() {
     this.socket.emit('inviteUser', 2);
   }
+
   ngOnInit(): void 
   {
-    // this.socket.on('id', this.idMessage);
-    this.socket.on('enableButtonS', this.enableButtonS);
-    this.socket.on('stopSearchLoop', this.stopSearchLoop);
-    this.socket.on('getId', this.getId);
-    this.enableButtonS();
-    // this.socket.emit('init');
+    var button = document.getElementById("stop") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
+    this.socket.emit("needOnGoingGames");
   }
-  
+
   ngAfterInit(): void {
   }
 
   ngOnDestroy(): void {
     this.stopSearchLoop(this.var_interval);
-    // this.socket.emit('stopGame');
   }
 
   getId(id: string){
-    // this.id = id; //doesnt work
     const divId = document.getElementById('idGame');
 
     divId!.innerHTML = id;
-    // console.log("getId", this.id);
   }
 
   newGame(normalOrNot: boolean)
   {
-    const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    var   arr = ["Searching opponent.", "Searching opponent..", "Searching opponent..."];
-    var   i = 1;
-
-
-    this.disableElement('buttonStart');
-    this.disableElement('buttonStartRandom');
-
+    var button = document.getElementById("stop") as HTMLElement;
+    if (button)
+      button.removeAttribute("hidden");
+    button = document.getElementById("regular") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
+    button = document.getElementById("random") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
     this.socket.emit('newGame', normalOrNot);
   }
 
-  // idMessage(socket: Socket, id: {
-  //   id: string
-  // })
-  // {
-  //   if (id)
-  //     this.user.id = id.id;
-  // }
-
-  disableElement(elemName: string)
+  stopGame()
   {
-    var element = document.getElementById(elemName);
-    if (element)
-     {
-       element.setAttribute('disabled', 'true');
-     }
-  }
-
-  enableElement(elemName: string)
-  {
-    var element = document.getElementById(elemName);
-    if (element)
-      element.removeAttribute('disabled');
+    console.log("stopbutton");
+    this.socket.emit('stopSearch');
   }
 
   stopSearchLoop(id: number)
@@ -107,19 +90,21 @@ export class PlayPongPagesComponent implements OnInit
     }
   }
 
-  enableButtonS()
+  joinGame(id: number)
   {
-    var element = document.getElementById("buttonStart");
-    if (element)
-      element.removeAttribute('disabled');
+    this.router.navigate(['/game/', id]);
   }
 
-  /// JEEU 
-
-
-  drawName(side: number)
-  {
-    const left = document.getElementById('leftName');
-    const right = document.getElementById('rightName');
+  stopedSearch() {
+    var button = document.getElementById("stop") as HTMLElement;
+    if (button)
+      button.setAttribute("hidden", "true");
+    button = document.getElementById("regular") as HTMLElement;
+    if (button)
+      button.removeAttribute("hidden");
+    button = document.getElementById("random") as HTMLElement;
+    if (button)
+      button.removeAttribute("hidden");
   }
+
 };

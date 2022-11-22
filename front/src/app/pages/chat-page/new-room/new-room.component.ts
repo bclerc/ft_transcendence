@@ -39,32 +39,23 @@ export class NewRoomComponent implements OnInit {
 	private userService: UserService) { }
 	
 	async ngOnInit() {
-		// this.publicrooms
-		// = await this.chatService.getPublicRooms();
-		// this.rooms$ = await this.chatService.getRooms();
 		this.userService.getLoggedUser().subscribe((user: UserI) => {
 			this.actualUser = user;
 		});
 
-		// await this.rooms$.subscribe((rooms: ChatRoom[]) => {
-		// 	if (this.selectedRoom.id) {
-		// 		for (const room of rooms) {
-		// 			if (room.id === this.selectedRoom.id) {
-		// 				this.haveSelectedRoom = true;
-		// 				this.selectedRoom = room;
-		// 				return ;
-		// 			}
-		// 		}
-		// 	}
-		// this.selectedRoom = {};
-		// this.haveSelectedRoom = false;
-		// });
 	}
 
 	create() {
 		if (this.form.valid) {
 			this.chatService.createRoom(this.form.value);
-			this.form.reset();
+			this.form.setValue({
+        name: null,
+        description: null,
+        public: false,
+        password: null,
+        users: []
+        // BUGGEEEEEEEEEEEEEEEEE
+      });
 		}
 	}
 
@@ -115,9 +106,7 @@ export class NewRoomComponent implements OnInit {
 	}
 
 	closeNewRoom() : void{
-		console.log("cjscj", this.chatMobileService.newroom);
 		this.chatMobileService.hideNewRoom();
-		console.log("cjscj", this.chatMobileService.newroom);
 	}
 
 }
