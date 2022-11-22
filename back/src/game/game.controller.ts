@@ -8,8 +8,6 @@ import { GameService } from './game.service';
 
 export class GameController {
   constructor(private readonly gameService: GameService) {
-
-
   }
   
   @UseGuards(Jwt2faAuthGuard)
@@ -21,9 +19,9 @@ export class GameController {
 
   @UseGuards(Jwt2faAuthGuard)
   @Get('/:id')
-  async getGameById(@Param('id') id: number): Promise<dbGame> {
+  async getGameById(@Param('id') id: number): Promise<dbGame>
+  {
     return await this.gameService.getGameById(Number(id));
   }
   
-
 }

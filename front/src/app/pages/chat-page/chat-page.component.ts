@@ -96,12 +96,6 @@ export class ChatPageComponent implements OnInit {
 
 	}
 
-	create() {
-		if (this.form.valid) {
-			this.chatService.createRoom(this.form.value);
-			this.form.reset();
-		}
-	}
 
 	initUser(user: any) {
 		return new FormControl({

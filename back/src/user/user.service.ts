@@ -455,7 +455,7 @@ export class UserService {
   async isBlocked(userId: number, targetId: number): Promise<boolean> {
     let blocked = await this.prisma.user.findFirst({
       where: {
-        id: targetId,
+        id: Number(targetId),
         blockedBy: {
           some: {
             id: userId,
