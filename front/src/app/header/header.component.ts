@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   connect: boolean = false;
   crash: boolean = false;
   newMessage: Observable<number> = this.socket.fromEvent<number>('newMessage');
+  newFriendRequest: Observable<number> = this.socket.fromEvent<number>('newFriendRequest');
 
   constructor(private token : TokenStorageService,
               private router : Router,
