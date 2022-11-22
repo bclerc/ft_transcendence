@@ -48,7 +48,6 @@ export class ChatPageComponent implements OnInit {
 	private userService: UserService,
 	private socket: Socket,
 	private router: Router,
-	private snackBar : MatSnackBar,
 	public chatMobileService : ChatMobileService
 	) { }
 

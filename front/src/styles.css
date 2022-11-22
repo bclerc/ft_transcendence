@@ -5,8 +5,6 @@ body {
 }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-
-
 mat-dialog-container {
   background-color: #1f1f1f !important;
   border-radius: 20px !important;

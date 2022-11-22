@@ -20,12 +20,10 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { HttpModule } from '@nestjs/axios';
 import { PongModule } from './pong/pong.module';
-import { OnlineUserService } from './onlineusers/onlineuser.service';
 import { OnlineuserModule } from './onlineusers/onlineuser.module';
 import { FriendsService } from './friends/friends.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { GameModule } from './game/game.module';
-import { VariablePong } from './pong/variables.pong';
 import { GlobalGateway } from './global.gateway';
 
 

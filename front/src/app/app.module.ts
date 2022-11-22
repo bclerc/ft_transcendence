@@ -60,7 +60,6 @@ import { AddFriendListComponent } from './pages/my-profile/add-friend-list/add-f
 import { InviteDialogComponent } from './pages/play-pong-pages/invite-dialog/invite-dialog.component';
 import { ChatMobileService } from './services/chat-mobile.service';
 
-
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
     query: {
