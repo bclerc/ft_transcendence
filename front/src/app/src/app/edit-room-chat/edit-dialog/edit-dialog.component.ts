@@ -1,8 +1,8 @@
-import { Component, Inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { MatMenuModule } from '@angular/material/menu';
+import { AfterViewInit, Component, Inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
@@ -26,7 +26,6 @@ export class EditDialogComponent implements OnInit {
     description: new FormControl(null, [Validators.required]),
     public: new FormControl(false),
     password: new FormControl(null),
-    users: new FormArray([], [Validators.required])
   });
   
   user: UserI;
@@ -43,7 +42,7 @@ export class EditDialogComponent implements OnInit {
     public dialog: MatDialog) { 
         this.user = data.user;
         this.room = data.room;
-        this.room.users.find((user) => {
+        this.room.admins.find((user) => {
           if (user.id == this.user.id) {
             this.userIsAdmin = true
           }
@@ -66,15 +65,17 @@ export class EditDialogComponent implements OnInit {
         
   
   async ngOnInit() {
-    this.editform.setValue({
-      name: this.room.name,
-      description: this.room.description,
-      public: this.room.public,
-      password: null,
-      users: this.room.users,
-    });
 
+    setTimeout(() => {
+      this.editform.setValue({
+        name: this.room.name,
+        description: this.room.description,
+        public: this.room.public,
+        password: null,
+      });
+    }, 500);
   }
+
 
   sendRequest(userId: number | undefined)
   {
@@ -90,6 +91,10 @@ export class EditDialogComponent implements OnInit {
     }
   }
   
+  inviteToPlay(userId: number | undefined) {
+    this.socket.emit("inviteUser", userId);
+  }
+
   blockUser(userId: number | undefined, block: boolean)
   {
     if (userId)

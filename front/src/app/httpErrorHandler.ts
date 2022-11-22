@@ -5,7 +5,7 @@ import {
     HttpErrorResponse,
     HttpInterceptor
 } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Router } from '@angular/router';
 import {Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
@@ -60,7 +60,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             else
             {
               errorMessage = "An error occured";
-              this.router.navigate(['error'])
+              //this.router.navigate(['error'])
             }
                     
             // console.log(errorMessage);:

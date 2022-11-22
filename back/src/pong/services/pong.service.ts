@@ -97,11 +97,11 @@ export class PongService {
       this.eventEmitter.emit('game.init', game);
   }
 
-  userIsInGame(user: BasicUserI, gameMap: Map<number, GameI>): boolean {
+  userIsInGame(user: BasicUserI | dataPlayerI, gameMap: Map<number, GameI>): boolean {
     let isInGame = false;
 
     if (!user || !gameMap)
-      return ;
+      return;
     gameMap.forEach((game: GameI) => {
       if ((game.player1 && game.player1.user && game.player1.user.id) === user.id || (game.player2 && game.player2.user && game.player2.user.id === user.id)) {
         isInGame = true;
@@ -277,24 +277,6 @@ export class PongService {
     this.eventEmitter.emit('game.users.matched', game);
   }
 
-  async forceJoinGame(clientId: string, game: GameI) {
-    
-    const player: dataPlayerI = await this.onlineUserService.getDataPlayer(clientId);
-    console.log("yofrero", game);
-    await this.gameService.addPlayerToGame(game.id, player.id);
-    game.player2 = {
-      user: player,
-      paddle: {
-        x: WIDTHCANVAS - PLAYER_WIDTH,
-        y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-        dx: 0,
-        dy: 0,
-        width: PLAYER_WIDTH,
-        height: PLAYER_HEIGHT
-      },
-      points: 0,
-    }
-  }
 
   deleteGame(g: GameI, allGames: GameI[]) {
     var newAllGames: GameI[] = allGames.filter(game => game != g);
@@ -346,41 +328,58 @@ export class PongService {
   //     });
   //   }
 
+
+  //
+  ////LOOPGAME
+  //
+
+
+  // async function waitUntil(condition) {
+  //     return await new Promise(resolve => {
+  //       const interval = setInterval(() => {
+  //         if (condition) {
+  //           resolve('foo');
+  //           clearInterval(interval);
+  //         };
+  //       }, 1000);
+  //     });
+  //   }
+
   async startGame(game: GameI, mapid: number) {
-    console.log("start---------------------------");
-    console.log(game.mapId);
-    console.log(mapid);
+
+    // declare pointer function to call
+
     if (mapid === 0) {
       await new Promise(resolve => {
-        console.log("final startgame");
         game.id_interval = setInterval(() => {
           this.loopGameNormal(game);
         }, 1000 / 60);
       });
     }
     else if (mapid === 1) {
-      console.log(game.id_interval, " <-------------------");
-      game.id_interval = setInterval(() => {
-        this.loopGameMap1(game);
-      }, 1000 / 60);
+      await new Promise(resolve => {
+        game.id_interval = setInterval(() => {
+          this.loopGameMap1(game);
+        }, 1000 / 60);
+      });
     }
     else if (mapid === 2) {
-      game.id_interval = setInterval(() => {
-        this.loopGameMap2(game);
-      }, 1000 / 60);
+      await new Promise(resolve => {
+        game.id_interval = setInterval(() => {
+          this.loopGameMap2(game);
+        }, 1000 / 60);
+      });
     }
     else if (mapid === 3) {
-      game.id_interval = setInterval(() => {
-        this.loopGameMap3(game);
-      }, 1000 / 60);
+      await new Promise(resolve => {
+        game.id_interval = setInterval(() => {
+          this.loopGameMap3(game);
+        }, 1000 / 60);
+      });
     }
     console.log("final startgame");
     this.eventEmitter.emit('deleteGame', game);
   }
-
-  //
-  ////LOOPGAME
-  //
 
 
   loopGameNormal(game: GameI) {
@@ -409,43 +408,12 @@ export class PongService {
       game.ball.dy *= -1;
       game.ball.y = 0 + game.ball.radius;
     }
+
     else if (game.ball.y > HEIGHTCANVAS - game.ball.height)         //rebond vertical bas
     {
-        if (key === 'z' || key === 'w')
-        {
-            if (game.player1.user.id === client.id)
-                game.player1.paddle.dy = game.player1.paddle.dy + SPEED_PLAYER;
-            else
-            game.player2.paddle.dy = game.player2.paddle.dy + SPEED_PLAYER;
-        }
-        else if (key === 's')
-        {
-            if (game.player1.user.id === client.id)
-                game.player1.paddle.dy = game.player1.paddle.dy - SPEED_PLAYER;
-            else
-                game.player2.paddle.dy = game.player2.paddle.dy - SPEED_PLAYER;
-            }
+      game.ball.dy *= -1;
+      game.ball.y = HEIGHTCANVAS - game.ball.height;
     }
-
-    async joinGame(client: Socket, game: GameI)
-    {
-        const player = await this.onlineUserService.getUser(client.id);
-        await this.gameService.addPlayerToGame(game.id, player.id);
-        game.player2 = {
-          user: player,
-          paddle:
-          {
-            x: WIDTHCANVAS - PLAYER_WIDTH,
-            y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-            dx: 0,
-            dy: 0,
-            width: PLAYER_WIDTH,
-            height: PLAYER_HEIGHT
-          },
-          points: 0,
-      }
-      this.eventEmitter.emit('game.users.matched', game);
-	}
 
     game.ball.x += game.ball.dx;
     if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) //sil y a rebond entre balle et paddle
@@ -479,77 +447,212 @@ export class PongService {
     this.drawForAll("drawNormalMap", game);
   }
 
-    private finalForAll(game: GameI)
-    {
-        var i = 0;
 
-        let winnerId, looserId, winnerScore, looserScore;
-        console.log("Game finished");
+  //////
+  //LOOP2
+  //////
 
-        if (game.player1.points === MAX_SCORE)
-        {
-            winnerId = game.player1.user.id;
-            looserId = game.player2.user.id;
-            winnerScore = game.player1.points;
-            looserScore = game.player2.points;
-        }
-        else
-        {
-            winnerId = game.player2.user.id;
-            looserId = game.player1.user.id;
-            winnerScore = game.player2.points;
-            looserScore = game.player1.points;
-        }
-
-        //Draw le final dune autre maniere pour les spectators !!!
-        // game.spectators[].socket.emit('');
-
-        this.gameService.stopGame(game.dbGame.id, winnerId, looserId, looserScore, winnerScore);
-        this.eventEmitter.emit('deleteGame', game);
+  loopGameMap1(game: GameI) {
+    ////
+    //MOUVEMENTS DES JOUEURS
+    ////
+    game.player1.paddle.y += game.player1.paddle.dy;
+    game.player2.paddle.y += game.player2.paddle.dy;
+    if (game.player1.paddle.y < 0)
+      game.player1.paddle.y = 0;
+    else if (game.player1.paddle.y > HEIGHTCANVAS - game.player1.paddle.height)
+      game.player1.paddle.y = HEIGHTCANVAS - game.player1.paddle.height;
+    if (game.player2.paddle.y < 0)
+      game.player2.paddle.y = 0;
+    else if (game.player2.paddle.y > HEIGHTCANVAS - game.player2.paddle.height)
+      game.player2.paddle.y = HEIGHTCANVAS - game.player2.paddle.height;
+    /////
+    //MOUVEMENT DE LA BALLE
+    ////        
+    ////////
+    //////HORIZONT
+    ////////
+    game.ball.x += game.ball.dx;
+    if (game.ball.y <= MAP1_OBSTACLE1_H || game.ball.y >= HEIGHTCANVAS - MAP1_OBSTACLE2_H) {
+      if (game.ball.x < WIDTHCANVAS / 2 && (game.ball.x + game.ball.radius >= (WIDTHCANVAS / 2 - (MAP1_OBSTACLE1_W / 2)))) {
+        game.ball.dx *= -1;
+        game.ball.x = (WIDTHCANVAS / 2 - (MAP1_OBSTACLE1_W / 2)) - game.ball.radius;
+      }
+      else if (game.ball.x > WIDTHCANVAS / 2 && (game.ball.x - game.ball.radius <= (WIDTHCANVAS / 2 + (MAP1_OBSTACLE2_W / 2)))) {
+        game.ball.dx *= -1;
+        game.ball.x = (WIDTHCANVAS / 2 + (MAP1_OBSTACLE1_W / 2)) + game.ball.radius;
+      }
     }
 
+    if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) {
+      this.rebond(game.ball, game.player1.paddle);
+      game.ball.x = 0 + PLAYER_WIDTH + game.ball.radius;
+    }
+    else if ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle)) {
+      this.rebond(game.ball, game.player2.paddle);
+      game.ball.x = WIDTHCANVAS - PLAYER_WIDTH - game.ball.radius;
+    }
 
-    // async function waitUntil(condition) {
-    //     return await new Promise(resolve => {
-    //       const interval = setInterval(() => {
-    //         if (condition) {
-    //           resolve('foo');
-    //           clearInterval(interval);
-    //         };
-    //       }, 1000);
-    //     });
-    //   }
-
-
-	async startGame(game: GameI, mapid: number)
+    if (game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
     {
-        if (mapid === 0)
-        {
-            game.id_interval = setInterval(() => 
-            {
-                this.loopGameNormal(game);
-            }, 1000/60);
-        }
-        else if (mapid === 1)
-        {
-            game.id_interval = setInterval(() => {
-                this.loopGameMap1(game);
-            }, 1000/60);
-        }
-        else if (mapid === 2)
-        {
-            game.id_interval = setInterval(() => {
-                this.loopGameMap2(game);
-            }, 1000/60);
-        }		
-        else if (mapid === 3)
-        {
-            game.id_interval = setInterval(() => {
-                this.loopGameMap3(game);
-            }, 1000/60);
-        }
-        // console.log("final startgame");
-        // this.eventEmitter.emit('deleteGame', game);
+      if (game.ball.x <= (0 + game.ball.width)) {
+        game.player2.points++;
+        this.reinitBall(game.ball, -1);
+      }
+      else {
+        game.player1.points++;
+        this.reinitBall(game.ball, 1);
+      }
+      if (game.player1.points === MAX_SCORE || game.player2.points === MAX_SCORE) ///Si Max SCORE atteint
+      {
+        clearInterval(game.id_interval);
+        this.finalForAll(game);
+        return;
+      }
+      // this.reinitPlayers(game.player1, game.player2);
+      this.drawForAll("drawMap1", game);
+      return;
+    }
+
+    ///////
+    ////////VERTICALEMENT
+    ///////
+    game.ball.y += game.ball.dy;
+    if ((WIDTHCANVAS / 2 - MAP1_OBSTACLE1_W / 2) <= game.ball.x - game.ball.radius &&
+      game.ball.x + game.ball.radius <= (WIDTHCANVAS - (WIDTHCANVAS / 2 - MAP1_OBSTACLE1_W / 2))
+    ) {
+      if (game.ball.y - game.ball.radius <= MAP1_OBSTACLE1_H) {
+        game.ball.dy *= -1;
+        game.ball.y = MAP1_OBSTACLE1_H + game.ball.radius;
+      }
+      else if (game.ball.y + game.ball.radius >= (HEIGHTCANVAS - MAP1_OBSTACLE2_H)) {
+        game.ball.dy *= -1;
+        game.ball.y = HEIGHTCANVAS - MAP1_OBSTACLE2_H - game.ball.radius;
+      }
+    }
+    if (game.ball.y - game.ball.radius <= 0) {
+      game.ball.dy *= -1;
+      game.ball.y = 0 + game.ball.radius;
+    }
+    else if (game.ball.y + game.ball.radius >= HEIGHTCANVAS) {
+      game.ball.dy *= -1;
+      game.ball.y = HEIGHTCANVAS - game.ball.radius;
+    }
+    this.drawForAll("drawMap1", game);
+  }
+
+  //////
+  //LOOP3
+  /////
+
+  loopGameMap2(game: GameI) {
+    ////
+    //MOUVEMENTS DES JOUEURS
+    ////
+    game.player1.paddle.y += game.player1.paddle.dy;
+    game.player2.paddle.y += game.player2.paddle.dy;
+
+    if (game.player1.paddle.y < 0)
+      game.player1.paddle.y = 0;
+    else if (game.player1.paddle.y > HEIGHTCANVAS - game.player1.paddle.height)
+      game.player1.paddle.y = HEIGHTCANVAS - game.player1.paddle.height;
+    if (game.player2.paddle.y < 0)
+      game.player2.paddle.y = 0;
+    else if (game.player2.paddle.y > HEIGHTCANVAS - game.player2.paddle.height)
+      game.player2.paddle.y = HEIGHTCANVAS - game.player2.paddle.height;
+
+
+    ///////
+    ////Mouvement object
+    ///////
+
+    game.obstacle.y += game.obstacle.dy;
+    if (game.obstacle.dy > 0 && game.obstacle.y + game.obstacle.height >= HEIGHTCANVAS) {
+      game.obstacle.y = HEIGHTCANVAS - game.obstacle.height;
+      game.obstacle.dy *= -1;
+    }
+    else if (game.obstacle.dy < 0 && game.obstacle.y <= 0) {
+      game.obstacle.y = 0;
+      game.obstacle.dy *= -1;
+    }
+    /////
+    //REBOND OBSTACLE AVANT TOUT
+    /////
+
+    if (game.ball.dy > 0 &&
+      game.ball.x >= game.obstacle.x - game.ball.radius &&
+      game.ball.x <= game.obstacle.x + game.obstacle.width + game.ball.radius &&
+      game.ball.y >= game.obstacle.y - game.ball.radius &&
+      game.ball.y <= game.obstacle.y + game.ball.radius
+    ) {
+      game.ball.y = game.obstacle.y - game.ball.radius;
+      game.ball.dy *= -1;
+    }
+
+    else if (game.ball.dy < 0 &&
+      game.ball.x >= game.obstacle.x - game.ball.radius &&
+      game.ball.x <= game.obstacle.x + game.obstacle.width + game.ball.radius &&
+      game.ball.y >= game.obstacle.y + game.obstacle.height - game.ball.radius &&
+      game.ball.y <= game.obstacle.y + game.obstacle.height + game.ball.radius
+    ) {
+      game.ball.y = game.obstacle.y + game.obstacle.height + game.ball.radius;
+      game.ball.dy *= -1;
+    }
+    else if (game.ball.dx < 0 &&
+      game.ball.x >= game.obstacle.x + game.obstacle.width - game.ball.radius &&
+      game.ball.x <= game.obstacle.x + game.obstacle.width + game.ball.radius &&
+      game.ball.y >= game.obstacle.y &&
+      game.ball.y <= game.obstacle.y + game.obstacle.height
+    ) {
+      game.ball.x = game.obstacle.x + game.obstacle.width + game.ball.radius;
+      game.ball.dx *= -1;
+    }
+    else if (game.ball.dx > 0 &&
+      game.ball.x >= game.obstacle.x - game.ball.radius &&
+      game.ball.x <= game.obstacle.x + game.ball.radius &&
+      game.ball.y >= game.obstacle.y &&
+      game.ball.y <= game.obstacle.y + game.obstacle.height
+    ) {
+      game.ball.x = game.obstacle.x - game.ball.radius;
+      game.ball.dx *= -1;
+    }
+
+    /////
+    //MOUVEMENT DE LA BALLE
+    ////        
+    ////////
+    //////HORIZONT
+    ////////
+    game.ball.x += game.ball.dx;
+    if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) {
+      this.rebond(game.ball, game.player1.paddle);
+      game.ball.x = 0 + PLAYER_WIDTH + game.ball.radius;
+    }
+    else if ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle)) {
+      this.rebond(game.ball, game.player2.paddle);
+      game.ball.x = WIDTHCANVAS - PLAYER_WIDTH - game.ball.radius;
+    }
+    if (game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
+    {
+      //mise a jour des scores
+      if (game.ball.x <= (0 + game.ball.width)) {
+        game.player2.points++;
+        this.reinitBall(game.ball, -1);
+      }
+      else {
+        game.player1.points++;
+        this.reinitBall(game.ball, 1);
+      }
+      if (game.player1.points === MAX_SCORE || game.player2.points === MAX_SCORE) ///Si Max SCORE atteint
+      {
+        clearInterval(game.id_interval);
+        this.finalForAll(game);
+        return;
+      }
+      // this.reinitPlayers(game.player1, game.player2);
+      this.reinitObstacle(game.obstacle);
+      this.drawForAll("drawMap2", game);
+      return;
     }
 
     ///////
@@ -659,6 +762,7 @@ export class PongService {
       game.ball.x = MAP3_OBSTACLE2_POSX - game.ball.radius;
       game.ball.dx *= -1;
     }
+
     /////
     //MOUVEMENT DE LA BALLE
     ////        
@@ -678,7 +782,6 @@ export class PongService {
     }
     if (game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
     {
-      //mise a jour des scores
       if (game.ball.x <= (0 + game.ball.width)) {
         game.player2.points++;
         this.reinitBall(game.ball, -1);
@@ -693,7 +796,6 @@ export class PongService {
         this.finalForAll(game);
         return;
       }
-      // this.reinitPlayers(game.player1, game.player2);
       this.drawForAll("drawMap3", game);
       return;
     }
@@ -721,5 +823,10 @@ export class PongService {
     }
   }
 
-
+  between(min: number, max: number): number {
+    return Math.floor(
+      Math.random() * (max - min) + min
+    )
+  }
 }
+

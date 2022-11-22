@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { UserI } from 'src/app/models/user.models';
@@ -11,7 +11,7 @@ export interface InvitedGameI {
 }
 
 @Injectable()
-export class HeaderService {
+export class HeaderService  {
   visible: boolean;
 
   
@@ -43,6 +43,4 @@ export class HeaderService {
   redirectToGame(gameId: number) {
     this.router.navigate(['/game/', gameId]);
   }
-
-
 }
