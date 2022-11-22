@@ -20,7 +20,7 @@ export class LandingPageComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.token.getToken())
-      this.router.navigate(["myprofile"])
+      this.router.navigate(["game"])
   }
 
 }
