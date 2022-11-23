@@ -123,17 +123,6 @@ export class PlayComponent implements OnInit {
       }
     });
     this.socket.emit('spectate', this.gameId);
-
-    var canvas = document.getElementById('pong') as HTMLCanvasElement | null;
-    if (canvas)
-    {
-      var context = canvas.getContext('2d');
-      if (context)
-      {
-        context.font = FONT;
-        context.fillText('', 0, 0);
-      }
-    }
   }
 
   ngOnDestroy(): void {
@@ -200,8 +189,8 @@ export class PlayComponent implements OnInit {
 
   drawText(text: string)
   {
-    // this.ratiox = this.getRatiox();
-    // this.ratioy = this.getRatioy();
+    document.fonts.load('visitor2');
+    document.fonts.ready.then(() => {
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     if (canvas)
     {
@@ -214,6 +203,7 @@ export class PlayComponent implements OnInit {
         context.fillText(text, (canvas.width) / 2 - m.width / 2, (canvas.height) / 2);
       }
     }
+  });
   }
 
   onResizeWin(event: any)
@@ -634,8 +624,6 @@ export class PlayComponent implements OnInit {
           if (context)
           {
             //load font car il ne se charge pas des le chargement (??????)
-            context.font = FONT;
-            context.fillText('', 0, 0);
   
             // Draw rectangle noir
             context.fillStyle = BLACKCOLOR;

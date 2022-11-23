@@ -235,7 +235,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (game && game.dbGame) {
       this.sendToGame(game, 'redirectGame', game.id);
       this.sendToGame(game, 'drawInit', null);
-      this.sendToGame(game, 'drawText', "4");
       await this.pongService.delay(1000);
       this.sendToGame(game, 'drawInit', null);
       this.sendToGame(game, 'drawText', "La partie va commencer");
