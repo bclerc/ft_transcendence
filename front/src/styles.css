@@ -43,8 +43,18 @@
 	font-style: normal;
 	font-weight: 300;
 }
-
-
+@font-face {
+	font-family: 'Visitor1';
+	src: url('../src/assets/fonts/Visitor/visitor1.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'Visitor2';
+	src: url('../src/assets/fonts/Visitor/visitor2.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
 body {
   background-color: #1F1F1F;
 }

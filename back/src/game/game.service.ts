@@ -43,6 +43,7 @@ export class GameService {
   }
 
   async createGame(userId: number, user2Id?: number): Promise<Game> {
+
     if (userId) {
       let game = await this.prisma.game.create({
         data: {
@@ -60,6 +61,8 @@ export class GameService {
   }
 
   async addPlayerToGame(gameId: number, userId: number): Promise<Game> {
+    if (isNaN(gameId) || isNaN(userId))
+    return ;
     const game = await this.getGameById(gameId);
     if (game && game.users) {
       if (game.users.length < 2) {
@@ -79,6 +82,8 @@ export class GameService {
     }
   }
   async getGameById(id: number): Promise<dbGame> {
+    if (isNaN(id))
+      return ;
     return await this.prisma.game.findUnique({
       where: {
         id: id
@@ -95,6 +100,8 @@ export class GameService {
 
   async startGame(id: number): Promise<Game> {
     const game = await this.getGameById(id);
+    if (!game)
+      return null;
     if (game.state != GameState.STARTED) {
       await this.userService.setStates(game.users, UserState.INGAME);
       return await this.prisma.game.update({
@@ -146,6 +153,8 @@ export class GameService {
   }
 
   async deleteGame(id: number): Promise<Game> {
+    if (isNaN(id))
+    return ;
     return await this.prisma.game.delete({
       where: {
         id: id
