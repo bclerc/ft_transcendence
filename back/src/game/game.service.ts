@@ -13,7 +13,7 @@ export class GameService implements OnModuleInit {
     private prisma: PrismaService,
     private userService: UserService
   ) { }
-  
+
   async onModuleInit() {
     await this.prisma.game.deleteMany({
       where: {
@@ -32,7 +32,6 @@ export class GameService implements OnModuleInit {
         }
       }
     });
-    console.log("yo frero");
   }
 
 

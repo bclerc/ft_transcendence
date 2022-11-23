@@ -18,7 +18,7 @@
 						<img src="{{ game.users[0].avatar_url }}" alt="">
 						<div class="info">
 							<p>{{ game.users[0].displayname }}</p>
-							<span>{{ game.users[0].rank }}</span>
+							<span>#{{ game.users[0].rank }}</span>
 						</div>
 					</a>
 					<div class="player">
@@ -26,7 +26,7 @@
 							<img src="{{ game.users[1].avatar_url }}" alt="">
               <div class="info">
 								<p>{{ game.users[1] ? game.users[1].displayname  : "En attente" }}</p>
-								<span>{{ game.users[1].rank }}</span>
+								<span>#{{ game.users[1].rank }}</span>
 							</div>
 						</a>
 					</div>
