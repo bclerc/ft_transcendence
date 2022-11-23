@@ -647,7 +647,6 @@ export class ChatService {
         }
       }
     });
-        
 
     await this.prisma.message.deleteMany({
       where: {
