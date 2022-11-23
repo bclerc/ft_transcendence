@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
+import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -24,6 +25,8 @@ export class SendCodeComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if (!this.token.getToken())
+      this.router.navigate(['']);
   }
 
   async onSubmit(){

@@ -33,7 +33,12 @@ export class TokenStorageService {
     if (tokenString)
       return this.jwtHelper.decodeToken(tokenString).sub;
     return null;
-    
+  }
+  public is2FaEnabled(): boolean{
+    const tokenString = this.getToken();
+    if (tokenString)
+      return this.jwtHelper.decodeToken(tokenString).twoFactorEnabled;
+    return false;
   }
   public removeToken(): void
   {
