@@ -270,6 +270,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
         score2: game.player2.points
       }
       for (const user of [game.player1.user, game.player2.user, ...game.spectators]) {
+        if (!user || !user.id)
+          continue;
         const userSocket = this.connectedUsers.get(user.id);
         if (user && user && user.id) {
           this.server.to(userSocket).emit(map, game);
@@ -412,7 +414,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     var game: GameI = this.pongService.initState();
     var dbGame: Game = await this.gameService.createGame(user.id);
     if (game && dbGame) {
-      console.log("creating new game with id:", dbGame.id);
       game = {
         id: dbGame.id,
         player1: {
