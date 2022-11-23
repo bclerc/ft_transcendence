@@ -105,7 +105,6 @@ export class PlayComponent implements OnInit {
     this.socket.on('drawText', this.drawText);
     this.http.get<boolean>("http://" + environment.host + ":3000/api/v1/game/" + this.gameId , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.storage.getToken()})}).subscribe({
       next: (data) => {
-        console.log("data", data);
         if (!data) {
           this.router.navigate(['/game']);
         }

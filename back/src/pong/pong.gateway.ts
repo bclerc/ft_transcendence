@@ -253,6 +253,9 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.sendToGame(game, 'drawText', "Start");
       await this.pongService.delay(200);
       if (game.dbGame) {
+        const newGame = await this.gameService.getGameById(game.id);
+        game.player1.user = newGame.users[0];
+        game.player2.user = newGame.users[1];    
         await this.gameService.startGame(game.dbGame.id);
         await this.pongService.startGame(game, game.mapId);
         this.server.emit('onGoingGames', await this.gameService.getStartedGames());
@@ -387,6 +390,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
         dbGame: dbGame
       }
     }
+
     this.gamesMap.set(game.id, game);
     return game;
   }
