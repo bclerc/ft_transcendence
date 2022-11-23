@@ -31,9 +31,11 @@ export class PlayPongPagesComponent implements AfterViewInit
   }
 
   ngAfterViewInit(): void
-  {
-    this.inGame$.subscribe(
-      (inGameOrNot: boolean) => {
+  {    
+    this.inGame$.subscribe
+    (
+      (inGameOrNot: boolean) =>
+      {
         if (inGameOrNot)
           this.stopMode();
         else
@@ -66,7 +68,6 @@ export class PlayPongPagesComponent implements AfterViewInit
   {
     if (id && id != 0)
     {
-      console.log("stopSearchLoop");
       window.clearInterval(id);
       this.var_interval = 0;
     }
@@ -100,5 +101,4 @@ export class PlayPongPagesComponent implements AfterViewInit
     if (button)
       button.setAttribute("hidden", "true");
   }
-
 };

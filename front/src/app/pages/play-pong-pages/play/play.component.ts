@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Input } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { GameI } from 'src/app/models/PongInterfaces/pong.interface';
@@ -7,7 +7,6 @@ import { ScoreI } from 'src/app/models/PongInterfaces/score.interface';
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { environment } from 'src/environments/environment';
-
 
 const PLAYER_RADIUS = 3.5;
 const CANVAS_RADIUS = 6;
@@ -80,11 +79,10 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
   styleUrls: ['./play.component.css']
 })
 
-
 export class PlayComponent implements OnInit {
 
   gameId: number;
-  game: any;
+  @Input() game: any;
   state!: number;
   user: UserI = {};
 
@@ -100,16 +98,12 @@ export class PlayComponent implements OnInit {
     this.socket.on('drawMap1', this.drawMap1);
     this.socket.on('drawMap2', this.drawMap2);
     this.socket.on('drawMap3', this.drawMap3);
-    this.socket.on('score', this.updateScore);
+    // this.socket.on('score', this.updateScore);
     this.socket.on('win', this.win);
     this.socket.on('lose', this.lose);
     this.socket.on('drawInit', this.drawInit);
     this.socket.on('drawText', this.drawText);
     // this.socket.on('drawName', this.drawName);
-  }
-  
-  ngOnInit(): void {
-    this.gameId = parseInt(this.router.url.split('/')[2]);
     this.http.get<boolean>("http://" + environment.host + ":3000/api/v1/game/" + this.gameId , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.storage.getToken()})}).subscribe({
       next: (data) => {
         console.log("data", data);
@@ -124,6 +118,10 @@ export class PlayComponent implements OnInit {
         }
       }
     });
+  }
+  
+  ngOnInit(): void {
+    this.gameId = parseInt(this.router.url.split('/')[2]);
     this.socket.emit('spectate', this.gameId);
   }
 
@@ -135,7 +133,6 @@ export class PlayComponent implements OnInit {
   {
   }
 
-
   @HostListener('document:keydown',['$event'])  //$event is the event object
   handleKeyboardDown(event: KeyboardEvent) {
       this.socket.emit('keydown', event.key);
@@ -145,17 +142,16 @@ export class PlayComponent implements OnInit {
   handleKeyboardUp(event: KeyboardEvent) {
       this.socket.emit('keyup', event.key);
   }
-
   
-  // Make a new score system with ws
-  updateScore(score: ScoreI){
-    var htmlScore = document.getElementById('score');
-    if (htmlScore)
-    {
-      var str = score.score1 + " : " + score.score2;
-      htmlScore.innerHTML = str;
-    }
-  }
+  // // Make a new score system with ws
+  // updateScore(score: ScoreI){
+  //   var htmlScore = document.getElementById('score');
+  //   if (htmlScore)
+  //   {
+  //     var str = score.score1 + " : " + score.score2;
+  //     htmlScore.innerHTML = str;
+  //   }
+  // }
 
   win()
   {
@@ -191,8 +187,7 @@ export class PlayComponent implements OnInit {
 
   drawText(text: string)
   {
-    document.fonts.load('visitor2');
-    document.fonts.ready.then(() => {
+    document.fonts.load(FONT).then(() => {
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     if (canvas)
     {
@@ -205,7 +200,7 @@ export class PlayComponent implements OnInit {
         context.fillText(text, (canvas.width) / 2 - m.width / 2, (canvas.height) / 2);
       }
     }
-  });
+    });
   }
 
   onResizeWin(event: any)

@@ -1,5 +1,5 @@
 <div id="input-box">
-	<p id="input-title">Ajouter des membres</p>
+	<p id="input-title">Ajouter des Utilisateurs</p>
 	<textarea id="input-text" placeholder="Chercher par un pseudo" [matAutocomplete]="auto" [formControl]="searchUsername"></textarea>
 	<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="setSelectedUser($event.option.value)">
 		<ng-container>
@@ -23,5 +23,5 @@
 </mat-chip-listbox>
 
 <ng-template #no_users>
-  <p id="input-error">Il faut que tu ajoutes des membres pour creer le groupe</p>
+  <!-- <p id="input-error">Recherche les membres via leur intra name</p> -->
 </ng-template>

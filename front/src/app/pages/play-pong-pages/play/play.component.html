@@ -15,18 +15,18 @@
 			<ng-container *ngIf="this.state == 1" >
 				<div class="players">
 					<a href="">
-						<img src="../../../../assets/img/ambroise.jpg" alt="">
+						<img src="{{ game.users[0].avatar_url }}" alt="">
 						<div class="info">
 							<p>{{ game.users[0].displayname }}</p>
-							<span>#44</span>
+							<span>{{ game.users[0].rank }}</span>
 						</div>
 					</a>
 					<div class="player">
 						<a href="">
-							<img src="../../../../assets/img/ambroise.jpg" alt="">
-							<div class="info">
+							<img src="{{ game.users[1].avatar_url }}" alt="">
+              <div class="info">
 								<p>{{ game.users[1] ? game.users[1].displayname  : "En attente" }}</p>
-								<span>#44</span>
+								<span>{{ game.users[1].rank }}</span>
 							</div>
 						</a>
 					</div>
@@ -40,11 +40,22 @@
 			<!-- Quand la partie termine -->
 			
 			<ng-container *ngIf="this.state == 2" >
-				<div style="display: flex; flex-direction: column; align-items: center">
-					<p>Cette partie est terminée</p>
-					<p>Vainqueur : {{ game.winner.displayname }}</p>
-					<img src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
-					<button mat-raised-button  (click)="goToGame()">Retour à l'accueil</button>
+				<div class="all-finish">
+				
+
+					<div class="finish">
+						<img id="desktop" src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
+						<div>
+							<div id="pouce-title">
+								<img id="pouce" src="../../../../assets/svg/illu-pouce.svg" alt="">
+								<span>Match terminé</span>
+							</div>
+							<img id="mobile" src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
+							<h1>{{ game.winner.displayname }} a gagné !</h1>
+							<button (click)="goToGame()">Retour à l'accueil</button>
+						</div>
+							
+					</div>
 				</div>
 			</ng-container>
 		</div>

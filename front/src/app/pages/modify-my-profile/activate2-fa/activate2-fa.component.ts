@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { Secret } from 'src/app/models/secret.models';
+import { UserI } from 'src/app/models/user.models';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -11,6 +12,8 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./activate2-fa.component.css']
 })
 export class Activate2FaComponent implements OnInit {
+  @Input() user!: UserI;
+  
 
   Secret!: Secret;
   FaForm: FormGroup = this.fb.group({
@@ -51,7 +54,8 @@ export class Activate2FaComponent implements OnInit {
       this.subscription2 =this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe
       (
         (data : any) => {
-          this.snackBar.open("2FA activé", 'X')
+          this.snackBar.open("2FA activé", 'X');
+          this.user.twoFactorEnabled = true;
         },
         );
     }
