@@ -22,7 +22,6 @@ const MAX_SPEED = 10; //ball
 const defaultSpeed = 5; //speed de la balle par default
 const SPEED_PLAYER = 8
 
-
 /////
 //obstacls configs
 /////

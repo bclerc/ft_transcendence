@@ -79,7 +79,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const user = this.onlineUserService.getUser(client.id);
 
     for (let game of this.gamesMap.values()) {
-      if (game.player1.user && game.player1.user.id === user.id || game.player2.user && game.player2.user.id === user.id) {
+      if (game.player1 && game.player1.user && game.player1.user.id === user.id || game.player2 && game.player2.user && game.player2.user.id === user.id) {
         this.pongService.keydown(game, user, keydown);
         return;
       }
@@ -300,7 +300,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
       })
     }
   }
-  
+
   @OnEvent('game.end')
   async endGameEvent(game: GameI, winnerId: number, loserId: number) {
   const winnerSocket = this.connectedUsers.get(winnerId);
@@ -313,6 +313,10 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @OnEvent('deleteGame')
   async deleteGame(game: GameI) {
+    console.log("delete game");
+    if (game && (!game.player1 || !game.player2))
+      return ;
+    console.log("delete game");
     this.gamesMap.delete(game.id);
     this.sendToGame(game, 'onGoingGames', await this.gameService.getStartedGames());
   }
@@ -397,7 +401,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return ;
     for (const [key, value] of this.gamesMap)
     {
-      if (value.player1.user.id == user.id || (value.player2 && value.player2.user && value.player2.user.id == user.id))
+      if (value.player1.user.id == user.id && !value.player2)
         this.gamesMap.delete(key);
     }
   }

@@ -38,6 +38,18 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 	font-style: normal;
 	font-weight: 300;
 }
+@font-face {
+	font-family: 'visitor1';
+	src: url('../../../../assets/fonts/Visitor/visitor1.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'visitor2';
+	src: url('../../../../assets/fonts/Visitor/visitor2.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
 
 *{
 	box-sizing: border-box;
