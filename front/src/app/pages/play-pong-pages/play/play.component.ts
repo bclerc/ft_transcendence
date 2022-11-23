@@ -19,10 +19,10 @@ const HEIGHTCANVAS = 638;
 const BACKSPACE = 40;
 const PLAYER1X = 0 + BACKSPACE;
 const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
-const SCOREHEIGHT = 40;
-const SCOREWIDTH = 40;
+const SCOREHEIGHT = 60;
+const SCOREWIDTH = 60;
 const FONTSIZE = 60;
-const FONT = FONTSIZE + 'px Qahiri-Regular';
+const FONT = FONTSIZE + 'px visitor1';
 
 ///
 // obstacls configs

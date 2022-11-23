@@ -7,7 +7,6 @@
 		<meta name="copyright" content="© CC BY-NC-SA 4.0" />
 	</head>
 	<body>
-		<app-header></app-header>
 		<div class="center-pong">
 			<h1>Affronte les tous</h1>
 			<div class="tuto">
@@ -48,10 +47,10 @@
 			<!-- MATCHS EN COURS -->
 			<h2>Matchs en cours</h2>
 			<div class="les-matchs">
-      <ng-container *ngIf="games.length < 1">
+      <ng-container *ngIf="!(games | async)">
         <p>Il n'y a pas de match en cours !</p>
       </ng-container>
-      <ng-container *ngFor="let match of games">
+      <ng-container *ngFor="let match of (games | async)">
         <div class="match">
 					<div class="info">
 						<a class="profil" href="/#/profile/{{ match.users[0].id }}">
