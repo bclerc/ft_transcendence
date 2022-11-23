@@ -15,7 +15,12 @@ export class SendCodeComponent implements OnInit {
     });
     tokenString! : string;
 
-  constructor(private fb: FormBuilder, private user : UserService, private token : TokenStorageService, private router : Router) { }
+  constructor ( 
+                private fb: FormBuilder,
+                private user : UserService,
+                private token : TokenStorageService,
+                private router : Router
+              ) { }
 
 
   ngOnInit(): void {
