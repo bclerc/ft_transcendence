@@ -235,6 +235,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
   @SubscribeMessage('joinRoom')
   async onJoinRoom(@ConnectedSocket() client: Socket, payload: any, @MessageBody() room: ChatRoomI) {
     const user = await this.onlineUserService.getUser(client.id);
+    if (!user)
+      return ;
     const messages = await this.chatService.getMessagesFromRoom(user.id, room);
     this.onlineUserService.setCurrentRoom(client.id, room.id);
     this.server.to(client.id).emit('messages', messages);
@@ -335,6 +337,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
   async updateRoomForUsersInRoom(roomId: number) {
     let room = await this.chatService.getRoomById(roomId);
+    if (!room)
+      return ;
     for (let user of room.users) {
         await this.updateUserRooms(user);
     }

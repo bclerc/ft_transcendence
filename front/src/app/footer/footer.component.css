@@ -96,7 +96,7 @@ footer .constructeurs{
     font-size: 12px;
 }
 
-footer .constructeurs a{
+footer .constructeurs a, footer .constructeurs-mobile a{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -106,7 +106,7 @@ footer .constructeurs a:last-child{
     margin-right: 0px;
 }
 
-footer .constructeurs img{
+footer .constructeurs img, footer .constructeurs-mobile img{
     width: 40px;
 	min-width: 40px;
 	height: 40px;
@@ -115,4 +115,57 @@ footer .constructeurs img{
 	border: 3px solid #ee481e;
 	box-shadow: -3px 3px #ee481e;
     margin-right: 15px;
+}
+footer .constructeurs-mobile{
+	display: none;
+}
+
+@media only screen and (max-width: 1292px) {
+
+	.center{
+		margin: 0px 30px 0px 30px;
+	}
+}
+
+
+@media only screen and (max-width: 900px) {
+
+	footer .constructeurs{
+		display: none;
+	}
+	footer .constructeurs-mobile #contructs{
+		display: flex;
+		flex-direction: row;
+	}
+	
+	footer .constructeurs-mobile #lol{
+		width:fit-content;
+		display: flex;
+		flex-direction: column;
+		align-self: right;
+		margin-right: 20px;
+		/* margin-top: 30px; */
+	}
+	footer .constructeurs-mobile #lol:last-child{
+		margin-right: 0px;
+	}
+
+	footer .constructeurs-mobile{
+		display: flex;
+		flex-direction: column;
+		/* align-self: right; */
+		margin-left: 30px;
+		width: 100%;
+		font-family: ReadexPro-Medium;
+		font-size: 16px;
+	}
+
+	footer .constructeurs-mobile a{
+		margin-right: 0px;
+		margin-bottom: 20px;
+	}
+
+	footer .constructeurs-mobile a:last-child{
+		margin-bottom: 0px;
+	}
 }
