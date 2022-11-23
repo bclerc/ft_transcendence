@@ -54,7 +54,7 @@
 	<div id="gerer">
 		<div id="title-n-button">
 		<h3>Gérer les membres</h3>
-		<button matTooltip="Ajouter un membre" (click)="inviteUser()">
+		<button *ngIf="room.ownerId == user.id" matTooltip="Ajouter un membre" (click)="inviteUser()">
 			Ajouter
 			<img src="../../../../assets/svg/plus-de-mort.svg" alt="add">
 		</button>
