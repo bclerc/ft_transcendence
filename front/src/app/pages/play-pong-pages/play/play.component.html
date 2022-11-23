@@ -39,11 +39,22 @@
 			<!-- Quand la partie termine -->
 			
 			<ng-container *ngIf="this.state == 2" >
-				<div style="display: flex; flex-direction: column; align-items: center">
-					<p>Cette partie est terminée</p>
-					<p>Vainqueur : {{ game.winner.displayname }}</p>
-					<img src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
-					<button mat-raised-button  (click)="goToGame()">Retour à l'accueil</button>
+				<div class="all-finish">
+				
+
+					<div class="finish">
+						<img id="desktop" src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
+						<div>
+							<div id="pouce-title">
+								<img id="pouce" src="../../../../assets/svg/illu-pouce.svg" alt="">
+								<span>Match terminé</span>
+							</div>
+							<h1>{{ game.winner.displayname }} a gagné !</h1>
+							<img id="mobile" src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
+							<button (click)="goToGame()">Retour à l'accueil</button>
+						</div>
+							
+					</div>
 				</div>
 			</ng-container>
 		</div>

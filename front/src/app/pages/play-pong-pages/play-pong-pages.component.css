@@ -154,10 +154,16 @@ hr.clear{
     cursor: pointer;
 }
 
+.center-pong .buttons #stop{
+    background-color: #feefcf;
+    border: 3px solid #ee481e;
+    box-shadow: -4px 4px #ee481e;
+    color: #ee481e;
+}
+
 .center-pong .buttons button:hover #icon-random{
     stroke: #ee481e;
 }
-
 .center-pong .buttons #random{
     width: 80px;
     min-width: 80px;

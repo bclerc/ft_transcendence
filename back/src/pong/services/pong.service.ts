@@ -70,7 +70,7 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 
 ////
 
-export const MAX_SCORE = 500;
+export const MAX_SCORE = 5;
 export const MAX_SPEED = 10; //ball
 export const defaultSpeed = 5; //speed de la balle par default
 export const SPEED_PLAYER = 8
