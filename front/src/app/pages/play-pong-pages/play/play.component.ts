@@ -110,7 +110,6 @@ export class PlayComponent implements OnInit {
           this.router.navigate(['/game']);
         }
         this.game = data;
-        console.log(this.game);
         if (this.game.state == "ENDED"){
           this.state = 2;
         } else {
