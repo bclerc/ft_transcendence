@@ -2,37 +2,37 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 @font-face {
 	font-family: 'Titan One';
-	src: url('../../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Light';
-	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Regular';
-	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Medium';
-	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-SemiBold';
-	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
 @font-face {
 	font-family: 'ReadexPro-Bold';
-	src: url('../../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
 	font-style: normal;
 	font-weight: 300;
 }
@@ -354,10 +354,10 @@ textarea{
 	font-family: ReadexPro-Regular;
 	color: #feefcf;
 	font-size: 14px;
+	margin-top: 30px;
 	width: 65%;
 }
 .cool-button{
-
 	font-family: Titan One;
 	font-size: 14px;
 	color: #feefcf;
