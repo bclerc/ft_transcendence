@@ -83,8 +83,8 @@ export class GameService {
   }
   async getGameById(id: number): Promise<dbGame> {
     if (isNaN(id))
-      return ;
-    return await this.prisma.game.findUnique({
+      return ;  
+    let game: any = await this.prisma.game.findUnique({
       where: {
         id: id
       },
@@ -102,6 +102,12 @@ export class GameService {
         },
       }
     });
+    if (game){
+      for (let user of game.users){
+        user.rank = await this.userService.getLeaderboardPosition(user.id);
+      }
+    }
+    return game;
   }
 
   async startGame(id: number): Promise<Game> {

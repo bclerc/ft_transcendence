@@ -437,7 +437,7 @@ export class UserService {
       },
     });
 
-    for (const friend of user.friends) {
+    for (let friend of user.friends) {
       friend.position_in_leaderboard = await this.getLeaderboardPosition(friend.id);
     }
     return user.friends;
