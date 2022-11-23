@@ -310,6 +310,13 @@ export class PlayComponent implements OnInit {
           context.arc(CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
         
+          //draw score
+          context.fillStyle = WHITECOLOR;
+          context.font = FONT;
+          const m = context.measureText(state.player1!.points.toString());
+          context.fillText(state.player1!.points.toString(), (canvas.width) / 2 - SCOREWIDTH - m.width, SCOREHEIGHT);
+          context.fillText(state.player2!.points.toString(), (canvas.width) / 2 + SCOREWIDTH, SCOREHEIGHT);
+
           // Draw middle line
           context.strokeStyle = WHITECOLOR;
           context.beginPath();
@@ -391,6 +398,7 @@ export class PlayComponent implements OnInit {
         var context = canvas.getContext('2d');
         if (context)
         {
+          
           // Draw rectangle noir
           context.fillStyle = BLACKCOLOR;
           context.beginPath();
@@ -403,6 +411,12 @@ export class PlayComponent implements OnInit {
           context.arc(CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
+          //draw score
+          context.fillStyle = WHITECOLOR;
+          context.font = FONT;
+          const m = context.measureText(state.player1!.points.toString());
+          context.fillText(state.player1!.points.toString(), (canvas.width) / 2 - SCOREWIDTH - m.width, SCOREHEIGHT);
+          context.fillText(state.player2!.points.toString(), (canvas.width) / 2 + SCOREWIDTH, SCOREHEIGHT);
         
           // Draw middle line
           context.strokeStyle = WHITECOLOR;
@@ -486,6 +500,12 @@ export class PlayComponent implements OnInit {
           context.arc(CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
+          //draw score
+          context.fillStyle = WHITECOLOR;
+          context.font = FONT;
+          const m = context.measureText(state.player1!.points.toString());
+          context.fillText(state.player1!.points.toString(), (canvas.width) / 2 - SCOREWIDTH - m.width, SCOREHEIGHT);
+          context.fillText(state.player2!.points.toString(), (canvas.width) / 2 + SCOREWIDTH, SCOREHEIGHT);
         
           // Draw middle line
           context.strokeStyle = WHITECOLOR;
