@@ -28,16 +28,24 @@
 								<div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
 								<ng-template #thenBlock>
 									<!-- <a href="javascript:void(0);" (click)="removeFriend()"> -->
-										<button id="action" matTooltip="Retirer des amis" (click)="removeFriend()">
-											<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-												<title>icon-delete-friend</title>
-												<g id="icon-delete-friend" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
-													<path d="M11.4884626,18 L28.8084626,18 C29.2226762,18 29.5584626,18.3357864 29.5584626,18.75 L29.5584626,21.25 C29.5584626,21.6642136 29.2226762,22 28.8084626,22 L11.4884626,22 C11.0742491,22 10.7384626,21.6642136 10.7384626,21.25 L10.7384626,18.75 C10.7384626,18.3357864 11.0742491,18 11.4884626,18 Z" id="Rectangle" fill="#feefcf" transform="translate(20.148463, 20.000000) rotate(-180.000000) translate(-20.148463, -20.000000) "></path>
-												</g>
-											</svg>
-										</button>
-										<!-- Enlever des amis -->
+									<button id="action" matTooltip="Retirer des amis" (click)="removeFriend()">
+										<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1"
+											xmlns="http://www.w3.org/2000/svg"
+											xmlns:xlink="http://www.w3.org/1999/xlink">
+											<title>icon-delete-friend</title>
+											<g id="icon-delete-friend" stroke="none" stroke-width="1" fill="none"
+												fill-rule="evenodd">
+												<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6">
+												</rect>
+												<path
+													d="M11.4884626,18 L28.8084626,18 C29.2226762,18 29.5584626,18.3357864 29.5584626,18.75 L29.5584626,21.25 C29.5584626,21.6642136 29.2226762,22 28.8084626,22 L11.4884626,22 C11.0742491,22 10.7384626,21.6642136 10.7384626,21.25 L10.7384626,18.75 C10.7384626,18.3357864 11.0742491,18 11.4884626,18 Z"
+													id="Rectangle" fill="#feefcf"
+													transform="translate(20.148463, 20.000000) rotate(-180.000000) translate(-20.148463, -20.000000) ">
+												</path>
+											</g>
+										</svg>
+									</button>
+									<!-- Enlever des amis -->
 									<!-- </a> -->
 								</ng-template>
 								<ng-template #elseBlock>
@@ -91,8 +99,18 @@
 						</div>
 						<p id="email">{{user.email}}</p>
 						<div class="status">
-							<p>En ligne</p>
-							<img src="../../../assets/svg/online.svg" alt="online">
+							<div *ngIf="user.state ==='ONLINE'">
+								En ligne
+								<img style="margin-left: 5px;" src="../../../../assets/svg/oval-green.svg" alt="online">
+							</div>
+							<div *ngIf="user.state ==='OFFLINE'">
+								Hors ligne
+								<img style="margin-left: 5px;" src="../../../assets/svg/oval-red.svg" alt="offline">
+							</div>
+							<div *ngIf="user.state ==='INGAME'">
+								En jeu
+								<img style="margin-left: 5px;" src="../../../assets/svg/oval-orange.svg" alt="ingame">
+							</div>
 						</div>
 					</div>
 				</div>
