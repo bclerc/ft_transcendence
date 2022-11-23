@@ -136,6 +136,7 @@ hr.clear{
 .button-creer button{
 	font-family: Titan One;
 	font-size: 14px;
+	letter-spacing: normal;
 	color: #feefcf;
 	text-decoration: none;
 	background-color: #ee481e;

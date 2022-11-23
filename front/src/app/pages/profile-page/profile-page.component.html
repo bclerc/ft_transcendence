@@ -27,19 +27,18 @@
 							<div class="butttts">
 								<div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
 								<ng-template #thenBlock>
-									<button id="action" matTooltip="Retirer des amis" (click)="removeFriend()">
-										<svg width="40px" height="40px" viewBox="0 0 40 40">
-											<title>icon-ask-friend</title>
-											<g id="icon-ask-friend" stroke="none" stroke-width="1" fill="none"
-												fill-rule="evenodd">
-												<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1"
-													y="1" width="38" height="38" rx="6"></rect>
-												<path
-													d="M29.3488433,17.8945175 C29.3901095,17.9687965 29.4117647,18.0523668 29.4117647,18.1373389 L29.4117647,25.745098 C29.4117647,26.8496675 28.5163342,27.745098 27.4117647,27.745098 L12.5882353,27.745098 C11.4836658,27.745098 10.5882353,26.8496675 10.5882353,25.745098 L10.5882353,18.1373389 C10.5882353,17.8611966 10.8120929,17.6373389 11.0882353,17.6373389 C11.1732074,17.6373389 11.2567778,17.6589942 11.3310568,17.7002603 L19.5143571,22.2465382 C19.8163796,22.4143285 20.1836204,22.4143285 20.4856429,22.2465382 L28.6689432,17.7002603 C28.9103351,17.5661537 29.2147368,17.6531256 29.3488433,17.8945175 Z M27.8431373,12.3529412 C28.7094663,12.3529412 29.4117647,13.0552396 29.4117647,13.9215686 L29.4117647,15.1927872 C29.4117647,15.3760732 29.3114812,15.5446686 29.1504218,15.6321535 L20.4773141,20.3432526 C20.1796443,20.5049423 19.8203557,20.5049423 19.5226859,20.3432526 L10.8495782,15.6321535 C10.6885188,15.5446686 10.5882353,15.3760732 10.5882353,15.1927872 L10.5882353,13.9215686 C10.5882353,13.0552396 11.2905337,12.3529412 12.1568627,12.3529412 L27.8431373,12.3529412 Z"
-													id="icon" fill="#feefcf"></path>
-											</g>
-										</svg>
-									</button>
+									<!-- <a href="javascript:void(0);" (click)="removeFriend()"> -->
+										<button id="action" matTooltip="Retirer des amis" (click)="removeFriend()">
+											<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+												<title>icon-delete-friend</title>
+												<g id="icon-delete-friend" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+													<path d="M11.4884626,18 L28.8084626,18 C29.2226762,18 29.5584626,18.3357864 29.5584626,18.75 L29.5584626,21.25 C29.5584626,21.6642136 29.2226762,22 28.8084626,22 L11.4884626,22 C11.0742491,22 10.7384626,21.6642136 10.7384626,21.25 L10.7384626,18.75 C10.7384626,18.3357864 11.0742491,18 11.4884626,18 Z" id="Rectangle" fill="#feefcf" transform="translate(20.148463, 20.000000) rotate(-180.000000) translate(-20.148463, -20.000000) "></path>
+												</g>
+											</svg>
+										</button>
+										<!-- Enlever des amis -->
+									<!-- </a> -->
 								</ng-template>
 								<ng-template #elseBlock>
 									<button id="action" matTooltip="Ajouter en ami" (click)="addFriend()">
@@ -97,7 +96,7 @@
 						</div>
 					</div>
 				</div>
-
+				<!-- STATISTIQUES -->
 				<div id="stats">
 					<div class="classement">
 						<span id="yellow">#{{ user.score }}</span>

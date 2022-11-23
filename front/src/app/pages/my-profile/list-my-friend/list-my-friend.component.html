@@ -15,9 +15,9 @@
 					<div class="friend-pseudo">{{friend.displayname}}</div>
 				</a>
 			</div>
-				<p class="rank">#50</p>
+			<p class="rank">#50</p>
 			<div class="tri-action">
-				<button (click)="inviteToPlay(friend)">
+				<button matTooltip="Inviter a jouer" (click)="inviteToPlay(friend)">
 					<svg width="40px" height="40px" viewBox="0 0 40 40">
 						<title>icon-invite-game</title>
 						<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -30,7 +30,7 @@
 						</g>
 					</svg>
 				</button>
-				<button (click)="removeFriend(friend.id)">
+				<button matTooltip="Retirer de mes amis" (click)="removeFriend(friend.id)">
 					<svg width="40px" height="40px" viewBox="0 0 40 40">
 						<title>icon-delete-friend</title>
 						<g id="icon-delete-friend" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -39,7 +39,7 @@
 						</g>
 					</svg>
 				</button>
-				<button (click)="blockUser(friend.id)">
+				<button matTooltip="Bloquer" (click)="blockUser(friend.id)">
 					<svg width="40px" height="40px" viewBox="0 0 40 40">
 						<title>icon-block</title>
 						<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
