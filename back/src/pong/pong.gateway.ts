@@ -108,11 +108,12 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('newGame')
   async newGame(client: Socket, normalOrNot: boolean) {
     let user = this.onlineUserService.getUser(client.id);
-    if (user) {
+    if (user)
+    {
       if (this.pongService.userIsInGame(user, this.gamesMap)) {
         client.emit('notification', "Vous êtes déjà dans une partie");
         return;
-      }
+    }
     }
     let game: GameI = this.searchGameMapAwaiting(normalOrNot, user);
     if (game) {
