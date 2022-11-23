@@ -93,7 +93,13 @@ export class GameService {
         state: true,
         winner: true,
         loser: true,
-        users: true,
+        users: {
+          select: {
+            id: true,
+            displayname: true,
+            avatar_url: true,
+          }
+        },
       }
     });
   }

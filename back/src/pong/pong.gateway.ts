@@ -256,7 +256,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
       if (game.dbGame) {
         await this.gameService.startGame(game.dbGame.id);
         await this.pongService.startGame(game, game.mapId);
-        this.sendToGame(game, 'onGoingGames', await this.gameService.getStartedGames());
+        this.server.emit('onGoingGames', await this.gameService.getStartedGames());
       }
     }
   }
@@ -314,7 +314,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @OnEvent('deleteGame')
   async deleteGame(game: GameI) {
     this.gamesMap.delete(game.id);
-    this.sendToGame(game, 'onGoingGames', await this.gameService.getStartedGames());
+    this.server.emit('onGoingGames', await this.gameService.getStartedGames());
   }
 
   sendToGame(game: GameI, event: string, data: any) {
