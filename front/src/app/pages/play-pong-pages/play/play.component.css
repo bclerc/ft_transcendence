@@ -1,3 +1,16 @@
+@font-face {
+	font-family: 'Visitor1';
+	src: url('../../../../assets/fonts/Visitor/visitor1.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'Visitor2';
+	src: url('../../../../assets/fonts/Visitor/visitor2.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
 .myButton {
   box-shadow: 0px 1px 0px 0px #1c1b18;
   background: linear-gradient(to bottom, #f9f4e6 5%, #636260 100%);
