@@ -6,7 +6,7 @@
             <!-- <img [src]="request.from.avatar_url" [alt]="request.from.intra_name"> -->
             <img src={{blocked.avatar_url}}>
             <div class="name-n-email">
-                <a href="le profil du gars">{{blocked.displayname}}</a>
+                <a [routerLink] = "['/profile/' + blocked.id ]">{{blocked.displayname}}</a>
                 <span>{{blocked.email}}</span>
             </div>
         </div>
