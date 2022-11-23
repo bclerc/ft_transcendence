@@ -18,7 +18,6 @@ const BACKSPACE = 40;
 const PLAYER1X = 0 + BACKSPACE;
 const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
 
-
 /////
 //obstacls configs
 /////
