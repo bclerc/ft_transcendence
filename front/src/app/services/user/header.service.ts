@@ -41,6 +41,8 @@ export class HeaderService  {
   toggle() { this.visible = !this.visible; }
 
   redirectToGame(gameId: number) {
+    // if user is spectator when he is invited, he will be redirected to the game
+    this.router.navigate(['/game/']);
     this.router.navigate(['/game/', gameId]);
   }
 }
