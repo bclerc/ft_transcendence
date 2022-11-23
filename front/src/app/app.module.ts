@@ -64,13 +64,13 @@ import { PenaltyDialogComponent } from './pages/chat-page/penalty-dialog/penalty
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {
     query: {
-      token: localStorage.getItem('auth-token')
+      token: sessionStorage.getItem('auth-token')
     }
   },
 };
 
 export function tokenGetter() {
-  return localStorage.getItem("auth-token");
+  return sessionStorage.getItem("auth-token");
 }
 
 
