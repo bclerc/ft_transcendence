@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Input } from '@angular/core';
-import { Params, Router } from '@angular/router';
+import { Component, HostListener, OnInit, Input, Inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
 import { GameI } from 'src/app/models/PongInterfaces/pong.interface';
-import { ScoreI } from 'src/app/models/PongInterfaces/score.interface';
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { environment } from 'src/environments/environment';
@@ -87,7 +87,7 @@ export class PlayComponent implements OnInit {
   user: UserI = {};
 
   constructor(
-    private router: Router,
+    @Inject(Router) private router: Router,
     private socket: Socket,
     private http: HttpClient,
     private storage: TokenStorageService
@@ -103,7 +103,6 @@ export class PlayComponent implements OnInit {
     this.socket.on('lose', this.lose);
     this.socket.on('drawInit', this.drawInit);
     this.socket.on('drawText', this.drawText);
-    // this.socket.on('drawName', this.drawName);
     this.http.get<boolean>("http://" + environment.host + ":3000/api/v1/game/" + this.gameId , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.storage.getToken()})}).subscribe({
       next: (data) => {
         if (!data) {
@@ -142,15 +141,6 @@ export class PlayComponent implements OnInit {
       this.socket.emit('keyup', event.key);
   }
   
-  // // Make a new score system with ws
-  // updateScore(score: ScoreI){
-  //   var htmlScore = document.getElementById('score');
-  //   if (htmlScore)
-  //   {
-  //     var str = score.score1 + " : " + score.score2;
-  //     htmlScore.innerHTML = str;
-  //   }
-  // }
 
   win()
   {
@@ -166,6 +156,7 @@ export class PlayComponent implements OnInit {
         context.fillText("YOU WIN", canvas.width / 2 - (m.width / 2), canvas.height / 2);
       }
     }
+    this.stateValue = 2;
   }
 
   lose()
@@ -703,5 +694,13 @@ export class PlayComponent implements OnInit {
     goToGame() {
       this.router.navigate(['/game']);
     }
+
+  get stateValue(): number {
+    return this.state;
+  }
+
+  set stateValue(value: number) {
+    this.state = value;
+  }
 
 }

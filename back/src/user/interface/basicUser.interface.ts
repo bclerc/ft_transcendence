@@ -19,8 +19,9 @@ export class BasicUserI {
     inGameId?: number; 
 }
 
-export interface GameUser {
+export interface  GameUser {
   id: number;
   displayname: string;
   avatar_url: string;
+  rank?: number;
 }

@@ -39,7 +39,7 @@ export class GameUpdateEvent {
 export interface dbGame {
   id: number;
   state: GameState;
-  users: BasicUserI[];
+  users: GameUser[];
   winner?: BasicUserI;
   loser?: BasicUserI;
   winnerScore?: number;

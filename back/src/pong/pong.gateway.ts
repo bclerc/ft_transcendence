@@ -253,9 +253,12 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.sendToGame(game, 'drawText', "Start");
       await this.pongService.delay(200);
       if (game.dbGame) {
+        const newGame = await this.gameService.getGameById(game.id);
+        game.player1.user = newGame.users[0];
+        game.player2.user = newGame.users[1];    
         await this.gameService.startGame(game.dbGame.id);
         await this.pongService.startGame(game, game.mapId);
-        this.sendToGame(game, 'onGoingGames', await this.gameService.getStartedGames());
+        this.server.emit('onGoingGames', await this.gameService.getStartedGames());
       }
     }
   }
@@ -307,6 +310,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (game && game.dbGame) {
       this.server.to(winnerSocket).emit('win');
       this.server.to(loserSocket).emit('lose');
+      this.sendToGame(game, 'redirectGame', game.id);
     }
   }
 
@@ -315,7 +319,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (game && (!game.player1 || !game.player2))
       return ;
     this.gamesMap.delete(game.id);
-    this.sendToGame(game, 'onGoingGames', await this.gameService.getStartedGames());
+    this.server.emit('onGoingGames', await this.gameService.getStartedGames());
   }
 
   sendToGame(game: GameI, event: string, data: any) {
@@ -386,6 +390,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
         dbGame: dbGame
       }
     }
+
     this.gamesMap.set(game.id, game);
     return game;
   }

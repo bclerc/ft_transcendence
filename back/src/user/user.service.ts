@@ -6,7 +6,7 @@ import { dataPlayerI } from 'src/pong/interfaces/player.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { newIntraUserDto } from './dto/newIntraUser.dto';
 import { updateUserDto } from './dto/updateUser.dto';
-import { BasicUserI } from './interface/basicUser.interface';
+import { BasicUserI, GameUser } from './interface/basicUser.interface';
 import { UserInfoI } from './interface/userInfo.interface';
 
 
@@ -391,7 +391,7 @@ export class UserService {
     }
   }
 
-  async setStates(users: BasicUserI[], status: UserState) {
+  async setStates(users: GameUser[], status: UserState) {
     if (users && status) {
       for (const user of users) {
         const loggedUser: boolean = this.onlineUserService.getUser(null, user.id) !== undefined;
@@ -437,7 +437,7 @@ export class UserService {
       },
     });
 
-    for (const friend of user.friends) {
+    for (let friend of user.friends) {
       friend.position_in_leaderboard = await this.getLeaderboardPosition(friend.id);
     }
     return user.friends;

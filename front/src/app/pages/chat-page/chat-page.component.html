@@ -32,18 +32,6 @@
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewMessage">
 									<img style="margin-right: 5px;" src="../../../assets/svg/oval-cream.svg" alt="">
-									<!-- <svg  style="margin-right: 5px;" width="12px" height="12px">
-										<title>Oval</title>
-										<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-											<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
-												<g id="Group-2" transform="translate(863.000000, 180.000000)">
-													<g id="Group-3" transform="translate(28.000000, 368.000000)">
-															<circle id="Oval" cx="80" cy="16" r="6"></circle>
-													</g>
-												</g>
-											</g>
-										</g>
-									</svg> -->
 								</ng-container>
 									Mes groupes
 							</ng-template>
@@ -62,40 +50,18 @@
 						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewDm">
-									<svg  style="margin-right: 5px;" width="12px" height="12px">
-										<title>Oval</title>
-										<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-											<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
-												<g id="Group-2" transform="translate(863.000000, 180.000000)">
-													<g id="Group-3" transform="translate(28.000000, 368.000000)">
-														<circle id="Oval" cx="80" cy="16" r="6"></circle>
-													</g>
-												</g>
-											</g>
-										</g>
-									</svg>
+									<img style="margin-right: 5px;" src="../../../assets/svg/oval-red.svg" alt="">
 								</ng-container>
 								Mes amis
 							</ng-template>
 							<ng-container *ngIf="!(dmRooms$ | async )">
-								<img src="../../../assets/img/illu-aucun-ami.png"  alt="empty">
+								<img width="244px" src="../../../assets/img/illu-aucun-ami.png"  alt="empty">
 							</ng-container>
 							<ul>
 								<li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
 									<p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).displayname }}
 										<ng-container *ngIf="!dm.seen">
-											<svg width="12px" height="12px">
-											<title>Oval</title>
-											<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-												<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
-													<g id="Group-2" transform="translate(863.000000, 180.000000)">
-														<g id="Group-3" transform="translate(28.000000, 368.000000)">
-															<circle id="Oval" cx="80" cy="16" r="6"></circle>
-														</g>
-													</g>
-												</g>
-											</g>
-											</svg>
+											<img style="margin-right: 5px;" src="../../../assets/svg/oval-red.svg" alt="">
 										</ng-container>
 									</p>
 								</li>
@@ -142,18 +108,7 @@
 						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewMessage">
-									<svg  style="margin-right: 5px;" width="12px" height="12px">
-										<title>Oval</title>
-										<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-											<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
-												<g id="Group-2" transform="translate(863.000000, 180.000000)">
-													<g id="Group-3" transform="translate(28.000000, 368.000000)">
-															<circle id="Oval" cx="80" cy="16" r="6"></circle>
-													</g>
-												</g>
-											</g>
-										</g>
-									</svg>
+									<img style="margin-right: 5px;" src="../../../assets/svg/oval-cream.svg" alt="">
 								</ng-container>
 								Mes groupes
 							</ng-template>
@@ -161,18 +116,7 @@
 								<li *ngFor="let room of (rooms$ | async)" [value]="room">
 									<p class="roomName" (click)="selectRoom(room)">{{room.name}}
 										<ng-container *ngIf="!room.seen">
-											<svg width="12px" height="12px">
-												<title>Oval</title>
-												<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#EE481E">
-														<g id="Group-2" transform="translate(863.000000, 180.000000)">
-															<g id="Group-3" transform="translate(28.000000, 368.000000)">
-																<circle id="Oval" cx="80" cy="16" r="6"></circle>
-															</g>
-														</g>
-													</g>
-												</g>
-											</svg>
+											<img style="margin-right: 5px;" src="../../../assets/svg/oval-red.svg" alt="">
 										</ng-container>
 									</p>
 								</li>
@@ -183,18 +127,7 @@
 						<mat-tab id="chat-page-mat-tab">
 							<ng-template mat-tab-label>
 								<ng-container *ngIf="haveNewDm">
-									<svg  style="margin-right: 5px;" width="12px" height="12px">
-										<title>Oval</title>
-										<g id="UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-											<g id="Chat-aucun-amis" transform="translate(-965.000000, -558.000000)" fill="#feefcf">
-												<g id="Group-2" transform="translate(863.000000, 180.000000)">
-													<g id="Group-3" transform="translate(28.000000, 368.000000)">
-														<circle id="Oval" cx="80" cy="16" r="6"></circle>
-													</g>
-												</g>
-											</g>
-										</g>
-									</svg>
+									<img style="margin-right: 5px;" src="../../../assets/svg/oval-red.svg" alt="">
 								</ng-container>
 								Mes amis
 							</ng-template>

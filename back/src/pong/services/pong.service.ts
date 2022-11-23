@@ -9,7 +9,7 @@ import { GameService } from 'src/game/game.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-const BALL_RADIUS = 4;
+const BALL_RADIUS = 5;
 const PLAYER_HEIGHT = 80;
 const PLAYER_WIDTH = 8;
 const WIDTHCANVAS = 850;
