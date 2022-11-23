@@ -15,7 +15,15 @@ export class GameService {
   constructor(
     private prisma: PrismaService,
     private userService: UserService
-  ) { }
+  ) { 
+      this.prisma.game.deleteMany({
+        where: {
+          state: {
+            not: GameState.ENDED
+          }
+        }
+      });
+  }
 
   async getAllGam(): Promise<Game[]> {
     return await this.prisma.game.findMany({
