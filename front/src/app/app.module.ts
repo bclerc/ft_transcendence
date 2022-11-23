@@ -30,8 +30,7 @@ import { HeaderService } from './services/user/header.service';
 import { CurrentUserService } from './services/user/current_user.service';
 import { FileUploaderComponent } from './pages/modify-my-profile/file-uploader/file-uploader.component';
 import { NewRoomComponent } from './pages/chat-page/new-room/new-room.component';
-import { PenaltyDialogComponent } from './src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
-import { EditDialogComponent } from './src/app/edit-room-chat/edit-dialog/edit-dialog.component';
+import { EditDialogComponent } from './pages/chat-page/edit-dialog/edit-dialog.component';
 import { ListUserBlockedComponent } from './pages/modify-my-profile/list-user-blocked/list-user-blocked.component';
 import { ListMyFriendComponent } from './pages/my-profile/list-my-friend/list-my-friend.component';
 import { ListMatchHistoryComponent } from './pages/my-profile/list-match-history/list-match-history.component';
@@ -46,13 +45,11 @@ import { InviteDialogComponent } from './pages/play-pong-pages/invite-dialog/inv
 import { ChatMobileService } from './services/chat-mobile.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
-// import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
-// import { MatTabsModule } from '@angular/material/tabs';
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -61,7 +58,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
-import { AddUserComponent } from './src/app/edit-room-chat/edit-dialog/add-user/add-user.component';
+import { AddUserComponent } from './pages/chat-page/edit-dialog/add-user/add-user.component';
+import { PenaltyDialogComponent } from './pages/chat-page/penalty-dialog/penalty-dialog.component';
 
 const config: SocketIoConfig = {
   url: 'http://'+ environment.host +':8181', options: {

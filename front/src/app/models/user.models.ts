@@ -9,7 +9,6 @@ export interface UserI {
     intra_id? :         number;
     displayname? :      string;
     description? :      string;
-    //password? :         string;
     username? :         string;
     staff? :            boolean;
     createdAt? :        Date;
@@ -51,7 +50,6 @@ export class User {
     intra_name? :       string;
     avatarURL! :        string;
     intra_id? :         number; 
-    //password? :         string;
     username! :         string;
     elo? :              number;
     staff? :            boolean;

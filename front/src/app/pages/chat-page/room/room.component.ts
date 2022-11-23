@@ -10,7 +10,7 @@ import { ChatService } from 'src/app/services/chat/chat.service';
 import { ChatRoom } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
 import { UserService } from 'src/app/services/user/user.service';
-import { EditDialogComponent } from 'src/app/src/app/edit-room-chat/edit-dialog/edit-dialog.component';
+import { EditDialogComponent } from 'src/app/pages/chat-page/edit-dialog/edit-dialog.component';
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
@@ -105,12 +105,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   closeRoom() : void{
-		console.log("cjscj", this.chatMobileService.room);
 		this.chatMobileService.hideRoom();
-		console.log("cjscj", this.chatMobileService.room);
 	}
-  // ejectUser(user: UserI) {
-  //   this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
-  // }
 }
 

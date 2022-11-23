@@ -57,7 +57,7 @@ services:
       ports:
         - 80:80
       networks:
-        - trans_network
+       trans_network:
 
 volumes:
   pgdata:

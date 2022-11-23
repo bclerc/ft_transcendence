@@ -145,6 +145,14 @@ export class GameService {
     return null;
   }
 
+  async deleteGame(id: number): Promise<Game> {
+    return await this.prisma.game.delete({
+      where: {
+        id: id
+      }
+    });
+  }
+
   async getStartedGames(): Promise<GameListI[]> {
     return await this.prisma.game.findMany({
       where: {
