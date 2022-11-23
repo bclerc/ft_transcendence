@@ -110,7 +110,7 @@ export class FriendsService {
   }
 
   async getFriends(userID: number): Promise<any[]> {
-    const friends = await this.prisma.user.findMany({
+    const friends: any = await this.prisma.user.findMany({
       where: {
         OR: [
           {
@@ -138,6 +138,9 @@ export class FriendsService {
         displayname: true,
       },
     });
+    for (let friend of friends) {
+      friend.position_in_leaderboard = await this.userService.getLeaderboardPosition(friend.id);
+    }
     return friends;
   }
 

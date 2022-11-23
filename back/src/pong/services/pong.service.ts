@@ -72,9 +72,6 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 //
 //
 
-////
-
-
 
 @Injectable()
 export class PongService {

@@ -26,6 +26,7 @@ const FONT = FONTSIZE + 'px visitor2';
 const WHITECOLOR = 'rgb(254, 239, 207)';
 const BLACKCOLOR = 'rgb(22,22,22)';
 const BLACKCOLOR2 = 'rgb(18,18,18)';
+
 ///
 // obstacls configs
 ///
