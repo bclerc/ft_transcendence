@@ -21,15 +21,12 @@ export class PlayPongPagesComponent implements AfterViewInit
   private var_interval: number;
   id!:                  string;
   user:                 UserI = {};
-  games:                GameListInfo[] = [];
+  games:                Observable<GameListInfo[]> = this.socket.fromEvent<GameListInfo[]>('onGoingGames');
 	inGame$:              Observable<boolean> = this.socket.fromEvent<boolean>('inGame');
 
   constructor(private router: Router, private socket: Socket,  private currentUser :CurrentUserService)
   {
     this.var_interval = 0;
-    this.socket.on('onGoingGames', (data: GameListInfo[]) => {
-      this.games = data;
-    });
     this.socket.emit('inGame');
   }
 
@@ -43,6 +40,7 @@ export class PlayPongPagesComponent implements AfterViewInit
           this.launchMode();
       }
     );
+    this.socket.emit('needOnGoingGames');
   }
   
   ngAfterInit(): void {

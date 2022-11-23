@@ -167,6 +167,8 @@ export class UserService {
         }
       }
     });
+    if (!user)
+      return null;
     user.position_in_leaderboard = await this.getLeaderboardPosition(user.id);
     return user;
   }
