@@ -9,6 +9,6 @@ export interface UserI {
     avatar_url?: string;
     level?: number;
     school42id?: number;
-  twoFactorAuthEnabled?: boolean;
-  twoFactorAuthenticationSecret?: string;
+    twoFactorAuthEnabled?: boolean;
+    twoFactorAuthenticationSecret?: string;
 }
