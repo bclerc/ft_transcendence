@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
         if (this.jwt.isTokenExpired(token))
         {
           this.token.removeToken();
-          this.snackBar.open("Le token est périmée", 'Undo', {
+          this.snackBar.open("Le token est périmée", 'X', {
           duration: 3000
         })
           return false;
@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
     else
     {
       this.token.removeToken();
-      this.snackBar.open("Vous devez vous connecter", 'Undo', {
+      this.snackBar.open("Vous devez vous connecter", 'X', {
         duration: 3000
       })
       return false;

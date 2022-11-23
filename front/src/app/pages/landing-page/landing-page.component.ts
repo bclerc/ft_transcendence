@@ -15,7 +15,7 @@ export class LandingPageComponent implements OnInit {
   
   constructor (
                 private token : TokenStorageService,
-                private router : Router
+                private router : Router,
               ) { }
 
   ngOnInit(): void {

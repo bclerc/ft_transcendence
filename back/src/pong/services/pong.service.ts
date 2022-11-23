@@ -18,7 +18,6 @@ const BACKSPACE = 40;
 const PLAYER1X = 0 + BACKSPACE;
 const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
 
-
 /////
 //obstacls configs
 /////
@@ -263,7 +262,6 @@ export class PongService {
       },
       points: 0,
     }
-    console.log("game = ", game);
     this.eventEmitter.emit('game.users.matched', game);
   }
 
@@ -283,7 +281,6 @@ export class PongService {
     var i = 0;
 
     let winnerId, looserId, winnerScore, looserScore;
-    console.log("Game finished");
 
     if (game.player1.points === MAX_SCORE) {
       winnerId = game.player1.user.id;
@@ -336,7 +333,6 @@ export class PongService {
         }, 1000 / 60);
       });
     }
-    console.log("final startgame");
     this.eventEmitter.emit('deleteGame', game);
   }
 
