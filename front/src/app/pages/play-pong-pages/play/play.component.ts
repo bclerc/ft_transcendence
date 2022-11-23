@@ -22,7 +22,7 @@ const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
 const SCOREHEIGHT = 60;
 const SCOREWIDTH = 60;
 const FONTSIZE = 60;
-const FONT = FONTSIZE + 'px visitor1';
+const FONT = FONTSIZE + 'px visitor2';
 
 ///
 // obstacls configs
