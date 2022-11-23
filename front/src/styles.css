@@ -91,5 +91,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   /* opacity: 10%; */
   backdrop-filter: blur(25px);
 }
+
+.mdc-menu-surface.mat-mdc-autocomplete-panel {
+    background-color: #161616 !important;
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

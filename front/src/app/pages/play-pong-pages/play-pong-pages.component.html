@@ -53,14 +53,14 @@
       <ng-container *ngFor="let match of (games | async)">
         <div class="match">
 					<div class="info">
-						<a class="profil" href="/#/profile/{{ match.users[0].id }}">
+						<a class="profil" href="/profile/{{ match.users[0].id }}">
 						 <img src="{{ match.users[0].avatar_url }}" alt="">
 							{{match.users[0].displayname}}
 						</a>
 						<div class="vs">
 							VS
 						</div>
-						<a class="profil" href="/#/profile/{{ match.users[1].id }}">
+						<a class="profil" href="/profile/{{ match.users[1].id }}">
 							<img src="{{ match.users[1].avatar_url }}" alt="">
 							{{match.users[1].displayname}}
             </a>

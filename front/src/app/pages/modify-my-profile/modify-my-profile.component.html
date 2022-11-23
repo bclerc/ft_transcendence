@@ -50,7 +50,10 @@
 		</div>
 		<div *ngIf="user?.twoFactorEnabled; then thenBlock else elseBlock"></div>
 		<ng-template #thenBlock>
-			<a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
+			<button>
+				<a href="javascript:void(0);" (click)="DesactivateFa()">Désactiver</a>
+				<img src="../../../../assets/svg/quit.svg" alt="">
+			</button>
 		</ng-template>
 		<ng-template #elseBlock>
 			<div *ngIf="!show" class="button-activate">

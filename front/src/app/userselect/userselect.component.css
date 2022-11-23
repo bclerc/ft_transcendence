@@ -74,17 +74,20 @@ mat-autocomplete{
 }
 mat-option{
 	background-color: #161616 !important;
+	padding: 20px;
+	margin: none
 }
 #user-name {
 	color: #feefcf;
 	font-family: ReadexPro-Medium;
 	font-size: 14px;
-	margin-top: -10px;
+	/* margin-top: -10px; */
 }
 #img-n-name{
 	display: flex;
 	flex-direction: row;
-	margin-top:20px;
+	padding: 10px;
+	/* margin-top:20px; */
 }
 mat-option img{
 
