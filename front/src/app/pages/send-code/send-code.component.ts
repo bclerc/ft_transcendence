@@ -35,7 +35,9 @@ export class SendCodeComponent implements OnInit {
           this.router.navigate(["myprofile"]);
           //location.reload();
           //this.tokenString = data;
-        },
+        }/*,
+        (error : any) => {
+        }*/
         );
         
 

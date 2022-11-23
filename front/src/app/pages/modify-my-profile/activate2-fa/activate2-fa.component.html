@@ -10,7 +10,7 @@
 	<!-- <a href="javascript:void(0);" (click)="RegenerateSecret()">Regénerer un secret</a> -->
 	
 	<form class="form" [formGroup]="FaForm" (ngSubmit)="ActivateFa()">
-		<input placeholder="Code" formControlName="codeFa">
+		<input placeholder="Code a 6 chiffres" formControlName="codeFa">
 		<button [disabled]="!FaForm.valid" type="submit" id="change-button">Valider</button>
 	</form>
 </section>
