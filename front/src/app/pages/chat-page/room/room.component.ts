@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { ChatService } from 'src/app/services/chat/chat.service';
 import { ChatRoom } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
 import { UserService } from 'src/app/services/user/user.service';
-import { EditDialogComponent } from 'src/app/pages/chat-page/edit-dialog/edit-dialog.component';
+import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
