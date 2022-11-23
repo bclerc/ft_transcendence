@@ -1,29 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { targetModulesByContainer } from '@nestjs/core/router/router-module';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Game, GameState, UserState } from '@prisma/client';
-import { connect } from 'http2';
-import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
-import { dbGame, GameI, GameListI } from 'src/pong/interfaces/game.interface';
+import { dbGame, GameListI } from 'src/pong/interfaces/game.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
-export class GameService {
+export class GameService implements OnModuleInit {
 
 
   constructor(
     private prisma: PrismaService,
     private userService: UserService
-  ) { 
-      this.prisma.game.deleteMany({
-        where: {
-          state: {
-            not: GameState.ENDED
-          }
+  ) { }
+  async onModuleInit() {
+    await this.prisma.game.deleteMany({
+      where: {
+        state: {
+          not: GameState.ENDED
         }
-      });
+      }
+    });
   }
+
+  ngOnInit(): void {
+    this.prisma.game.deleteMany({
+      where: {
+        state: {
+          not: GameState.ENDED
+        }
+      }
+    });
+    console.log("yo frero");
+  }
+
 
   async getAllGam(): Promise<Game[]> {
     return await this.prisma.game.findMany({
