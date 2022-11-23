@@ -71,7 +71,10 @@ export class ModifyMyProfileComponent implements OnInit {
       this.userService.ChangeDbInformation(this.user).subscribe(
           (data : any) => 
           {
-            this.snackBar.open("Changement de pseudo confirmé", 'Undo')
+            this.snackBar.open("Changement de pseudo confirmé", 'X')
+          },
+          (error : any) => {
+            this.user.displayname= switc;
           }
         );
     }
@@ -81,7 +84,7 @@ export class ModifyMyProfileComponent implements OnInit {
   DesactivateFa(): void {
     this.userService.DesactivateFacode().subscribe(
       (data : any) => {
-        this.snackBar.open("2FA desactivé", 'Undo');
+        this.snackBar.open("2FA desactivé", 'X');
         this.user.twoFactorEnabled = false;
       },
       );

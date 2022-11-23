@@ -31,11 +31,15 @@ export class SendCodeComponent implements OnInit {
     {
       await this.user.ValidateFaCode(this.FaForm.controls['Code'].getRawValue()).subscribe(
         (data : any) => {
+          console.log("coucou = ", data);
           this.token.saveToken(data.access_token);
           this.router.navigate(["myprofile"]);
           //location.reload();
           //this.tokenString = data;
-        },
+        }/*,
+        (error : any) => {
+          console.log("coucou = ", error);
+        }*/
         );
         
 

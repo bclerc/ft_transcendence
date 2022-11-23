@@ -31,9 +31,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 retry(2),
                 catchError((error: HttpErrorResponse) => {
                     let errorMessage = '';
+
             if (error.status === 401 && error.error.message === "2FA_REQUIRED")
             {
-              this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
+              this.snackBar.open("une connexion 2FA est demandée", 'X', {
                 duration: 3000
               })
               errorMessage = error.error.message;
@@ -42,15 +43,32 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             else if (error.status === 409 && error.error.message === "displayname already used")
             {
               errorMessage = error.error.message;
-              this.snackBar.open("Le pseudo est deja utilisé", 'Undo', 
+              this.snackBar.open("Le pseudo est deja utilisé", 'X', 
+              {
+                duration: 3000
+              })
+            }
+            else if (error.status === 401 && error.error.message === "Invalid 2FA code"){
+              errorMessage = error.error.message;
+              this.snackBar.open("Invalid 2FA code", 'X', 
+              {
+                duration: 3000
+              })
+            }
+            else if (error.status === 401 && error.error.message === "Wrong authentication code"){
+              errorMessage = error.error.message;
+              this.snackBar.open("Wrong authentication code", 'X', 
               {
                 duration: 3000
               })
             }
             else if (error.status === 401)
             {
+              // console.log("status ="  ,error.status)
+              console.log("status ="  ,error.status);
+              
               errorMessage = error.error.message;
-              this.snackBar.open("Vous devez connectez", 'Undo', 
+              this.snackBar.open("Vous devez connectez", 'X', 
               {
                 duration: 3000
               })
@@ -59,8 +77,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             }
             else
             {
-              errorMessage = "An error occured";
+              // console.log("status ="  ,error.status)
+              errorMessage = error.error.message;
             }
+            //  console.log(errorMessage);
                     
           return throwError(errorMessage);
                 })

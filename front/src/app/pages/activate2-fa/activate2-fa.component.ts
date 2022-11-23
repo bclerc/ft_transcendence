@@ -51,7 +51,7 @@ export class Activate2FaComponent implements OnInit {
       this.subscription2 =this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe
       (
         (data : any) => {
-          this.snackBar.open("2FA activé", 'Undo')
+          this.snackBar.open("2FA activé", 'X')
         },
         );
     }
