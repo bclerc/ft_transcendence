@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserI } from 'src/app/models/user.models';
 import { UserService } from 'src/app/services/user/user.service';
-import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
 
 @Component({
   selector: 'app-list-user-blocked',

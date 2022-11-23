@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { FriendsRequestAction } from 'src/app/models/friends/friendsrequest.enum';
 import { UserService } from 'src/app/services/user/user.service';

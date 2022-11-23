@@ -1,9 +1,9 @@
 // import { I } from '@angular/cdk/keycodes';
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, AfterViewInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatLegacySelectionListChange as MatSelectionListChange } from '@angular/material/legacy-list';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSelectionListChange } from '@angular/material/list';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
@@ -48,14 +48,10 @@ export class ChatPageComponent implements OnInit {
 	private userService: UserService,
 	private socket: Socket,
 	private router: Router,
-	private snackBar : MatSnackBar,
 	public chatMobileService : ChatMobileService
 	) { }
 
 	async ngOnInit() {
-    this.chatService.needRooms();
-    this.chatService.needPublicRooms();
-    this.chatService.needDmRooms();
 		await this.userService.getLoggedUser().subscribe(
 			(data : any) => {
 			  this.actualUser = data;
@@ -94,6 +90,9 @@ export class ChatPageComponent implements OnInit {
        this.haveNewDm = roomSeen;
     });
 
+    this.chatService.needRooms();
+    this.chatService.needPublicRooms();
+    this.chatService.needDmRooms();
 	}
 
 

@@ -12,7 +12,6 @@ import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PenaltiesService } from 'src/chat/services/penalties/penalties.service';
-import e from 'express';
 import { PusnishI } from 'src/chat/interfaces/punish.interface';
 import { BlockedUser } from 'src/chat/interfaces/blocked.interface';
 import { CreateChatDto } from 'src/chat/dto/create-chat.dto';
@@ -122,7 +121,6 @@ export class WschatService {
   }
 }
 
-
   async pardonUser(socketId: string, event: PardonI) {
     const info = {
       user: await this.userService.findOne(event.userId),
@@ -188,6 +186,20 @@ export class WschatService {
           promoter: user,
           room: roomToDemote
         })
+      }
+    }
+  }
+
+  async addUsersToRoom(socketId: string, event: {roomId: number, userId: number}) {
+    const user = this.onlineUserService.getUser(socketId);
+    const target = await this.userService.findOne(event.userId);
+    const room = await this.chatService.getRoomById(event.roomId);
+
+    if (user && target && room) {
+      if (user.id == room.ownerId) {
+        await this.chatService.addUsersToRoom(room.id, target.id);
+        this.eventEmitter.emit('room.user.invited',
+         { room: room, user: target, inviter: user });
       }
     }
   }

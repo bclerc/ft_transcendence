@@ -1,8 +1,6 @@
-
-import { C } from '@angular/cdk/keycodes';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ElementRef, Injectable } from '@angular/core';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
@@ -38,18 +36,12 @@ export class ChatService {
       return  this.socket.fromEvent<ChatRoom[]>('publicRooms');
     }
     
-
     getDmRooms(): Observable<ChatRoom[]> {
       return  this.socket.fromEvent<ChatRoom[]>('dmRooms');
     }
 
     createRoom(room: newRoom) {
-      this.http.post('http://'+ environment.host +':3000/api/v1/chat/create', room).subscribe(
-        (data : any) => {
-          this.snackBar.open(data.message, 'OK', {
-            duration: 2000,
-          });
-        });
+      this.http.post('http://'+ environment.host +':3000/api/v1/chat/create', room).subscribe();
     }
 
     editRoom(room: ChatRoom) {
