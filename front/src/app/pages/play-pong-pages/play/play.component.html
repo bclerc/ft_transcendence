@@ -1,34 +1,54 @@
 <!-- quand la partie est en attente ou en cours-->
 
-<ng-container *ngIf="this.state == 1" >
-  <div class="names">
-    <div class="playerNameLeft" id="leftName">
-      {{ game.users[0].displayname }}
-    </div>
-    <div class="playerNameRight" id="rightName">
-      {{ game.users[1] ? game.users[1].displayname  : "En attente" }}
-    </div>
-  </div>
-  
-  <div align="center">
-  <canvas #canvas class="pongCanvas" id='pong' width="850" height="480" (window:resize)="onResizeWin($event)"></canvas>
-  </div>
-  <!-- <div class="score_c" id="score">0 : 0</div> -->
-</ng-container>
+<html>
+	<head>
+		<title>Pong - Start to play</title>
+		<meta charset="utf-8" />
+		<meta name="description" content="Commence a jouer au pong" />
+		<meta name="author" content="Team transcendance 42" />
+		<meta name="copyright" content="© CC BY-NC-SA 4.0" />
+	</head>
+	<body>
+		<div class="center-pong">
+			
+			<ng-container *ngIf="this.state == 1" >
+				<div class="players">
+					<a href="">
+						<img src="../../../../assets/img/ambroise.jpg" alt="">
+						<div class="info">
+							<p>{{ game.users[0].displayname }}</p>
+							<span>#44</span>
+						</div>
+					</a>
+					<div class="player">
+						<a href="">
+							<img src="../../../../assets/img/ambroise.jpg" alt="">
+							<div class="info">
+								<p>{{ game.users[1] ? game.users[1].displayname  : "En attente" }}</p>
+								<span>#44</span>
+							</div>
+						</a>
+					</div>
+				</div>
+				
+				<div class="canvas-pong">
+					<canvas #canvas class="pongCanvas" id='pong' width="850" height="438" (window:resize)="onResizeWin($event)"></canvas>
+				</div>
+			</ng-container>
+		
+			<!-- Quand la partie termine -->
+			
+			<ng-container *ngIf="this.state == 2" >
+				<div style="display: flex; flex-direction: column; align-items: center">
+					<p>Cette partie est terminée</p>
+					<p>Vainqueur : {{ game.winner.displayname }}</p>
+					<img src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
+					<button mat-raised-button  (click)="goToGame()">Retour à l'accueil</button>
+				</div>
+			</ng-container>
+		</div>
+		
+		<app-footer></app-footer>
+	</body>
+</html>
 
-<!-- Quand la partie termine -->
-
-<ng-container *ngIf="this.state == 2" >
-  <div style="display: flex; flex-direction: column; align-items: center">
-    <p>Cette partie est terminée</p>
-    <p>Vainqueur : {{ game.winner.displayname }}</p>
-    <img src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
-    <button mat-raised-button  (click)="goToGame()">Retour à l'accueil</button>
-  </div>
-</ng-container>
-
-<footer>
-  <div class="footer">
-    <p>© 2022 - Pong</p>
-  </div>
-</footer>
