@@ -191,6 +191,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
   //////
 
   private searchGameMapAwaiting(normalOrNot: boolean, user: BasicUserI): GameI {
+    if (!user)
+      return ;
     if (normalOrNot) {
       for (let value of this.gamesMap.values()) 
       {
