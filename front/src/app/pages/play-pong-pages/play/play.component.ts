@@ -22,7 +22,10 @@ const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
 const SCOREHEIGHT = 60;
 const SCOREWIDTH = 60;
 const FONTSIZE = 60;
-const FONT = FONTSIZE + 'px visitor1';
+const FONT = FONTSIZE + 'px visitor2';
+const WHITECOLOR = 'rgb(254, 239, 207)';
+const BLACKCOLOR = 'rgb(22,22,22)';
+const BLACKCOLOR2 = 'rgb(18,18,18)';
 
 ///
 // obstacls configs
@@ -161,7 +164,7 @@ export class PlayComponent implements OnInit {
       var context = canvas.getContext('2d');
       if (context)
       {
-        context.fillStyle = 'white';
+        context.fillStyle = WHITECOLOR;
         context.font = FONT;
         const m = context.measureText('YOU WIN');
         context.fillText("YOU WIN", canvas.width / 2 - (m.width / 2), canvas.height / 2);
@@ -177,7 +180,7 @@ export class PlayComponent implements OnInit {
       var context = canvas.getContext('2d');
       if (context)
       {
-        context.fillStyle = 'white';
+        context.fillStyle = WHITECOLOR;
         context.font = FONT;
         const m = context.measureText('YOU LOSE');
         context.fillText("YOU LOSE", canvas.width / 2 - (m.width / 2), canvas.height / 2);
@@ -187,20 +190,21 @@ export class PlayComponent implements OnInit {
 
   drawText(text: string)
   {
-    // this.ratiox = this.getRatiox();
-    // this.ratioy = this.getRatioy();
+    document.fonts.load('visitor2');
+    document.fonts.ready.then(() => {
     const canvas = document.getElementById('pong') as HTMLCanvasElement | null;
     if (canvas)
     {
       var context = canvas.getContext('2d');
       if (context)
       {
-        context.fillStyle = 'rgb(254, 239, 207)';
+        context.fillStyle = WHITECOLOR;
         context.font = FONT;
         const m = context.measureText(text);
         context.fillText(text, (canvas.width) / 2 - m.width / 2, (canvas.height) / 2);
       }
     }
+  });
   }
 
   onResizeWin(event: any)
@@ -221,11 +225,11 @@ export class PlayComponent implements OnInit {
     {
       var ratiox = canvas.width / WIDTHCANVAS;
       var ratioy = canvas.height / HEIGHTCANVAS;
-      var ratio = canvas.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
+      var ratio = (canvas.width * canvas.height) / (WIDTHCANVAS * HEIGHTCANVAS);
         var context = canvas.getContext('2d');
         if (context)
         {
-          context.fillStyle = 'black';
+          context.fillStyle = BLACKCOLOR;
           context.beginPath();
           context.arc(CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
           context.lineTo(canvas.width - CANVAS_RADIUS, 0);   
@@ -237,7 +241,7 @@ export class PlayComponent implements OnInit {
           context.fill();
 
           //draw score
-          context.fillStyle = 'rgb(254, 239, 207)';
+          context.fillStyle = WHITECOLOR;
           context.font = FONT;
           const m = context.measureText(state.player1!.points.toString());
           context.fillText(state.player1!.points.toString(), (canvas.width) / 2 - SCOREWIDTH - m.width, SCOREHEIGHT);
@@ -245,21 +249,20 @@ export class PlayComponent implements OnInit {
 
           // Draw ball
           context.beginPath();
-          context.fillStyle = 'rgb(254, 239, 207)';
+          context.fillStyle = WHITECOLOR;
           if (state.ball && state.ball.radius)
             context.arc(state.ball.x * ratiox, state.ball.y * ratioy, state.ball.radius * ratio, 0, Math.PI * 2, false);
           context.fill();
 
           // Draw middle line
-          context.strokeStyle = 'rgb(254, 239, 207)';
+          context.strokeStyle = WHITECOLOR;
           context.beginPath();
           context.moveTo(canvas.width / 2, 0);
           context.lineTo(canvas.width / 2, canvas.height);
           context.stroke();
         
           // Draw paddle1
-        context.fillStyle = 'rgb(254, 239, 207)';
-        // context.fillStyle = 'white';
+        context.fillStyle = WHITECOLOR;
           if (state.player1 && state.player1.paddle)
           {
             context.beginPath();
@@ -301,7 +304,7 @@ export class PlayComponent implements OnInit {
         if (context)
         {
           // Draw rectangle noir
-          context.fillStyle = 'black';
+          context.fillStyle = BLACKCOLOR;
           context.beginPath();
           context.arc(CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
           context.lineTo(canvas.width - CANVAS_RADIUS, 0);   
@@ -313,14 +316,14 @@ export class PlayComponent implements OnInit {
           context.fill();
         
           // Draw middle line
-          context.strokeStyle = 'white';
+          context.strokeStyle = WHITECOLOR;
           context.beginPath();
           context.moveTo(canvas.width / 2, 0);
           context.lineTo(canvas.width / 2, canvas.height);
           context.stroke();
         
           // Draw obstacle1
-          context.fillStyle = 'white';
+          context.fillStyle = WHITECOLOR;
           context.beginPath();
           context.arc(MAP1_OBSTACLE1_POSX * ratiox + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_POSY * ratioy + MAP1_OBSTACLE1_RADIUS, MAP1_OBSTACLE1_RADIUS, Math.PI, Math.PI * 3 / 2);
           context.lineTo(MAP1_OBSTACLE1_W * ratiox - MAP1_OBSTACLE1_RADIUS + MAP1_OBSTACLE1_POSX * ratiox, MAP1_OBSTACLE1_POSY * ratioy);   
@@ -332,7 +335,7 @@ export class PlayComponent implements OnInit {
           context.fill();
 
           // Draw obstacle2
-          context.fillStyle = 'white';
+          context.fillStyle = WHITECOLOR;
           context.beginPath();
           context.arc(MAP1_OBSTACLE2_POSX * ratiox + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_POSY * ratioy + MAP1_OBSTACLE2_RADIUS, MAP1_OBSTACLE2_RADIUS, Math.PI, Math.PI * 3 / 2);
           context.lineTo(MAP1_OBSTACLE2_W * ratiox - MAP1_OBSTACLE2_RADIUS + MAP1_OBSTACLE2_POSX * ratiox, MAP1_OBSTACLE2_POSY * ratioy);   
@@ -345,7 +348,7 @@ export class PlayComponent implements OnInit {
 
 
           // Draw paddle1
-          context.fillStyle = 'white';
+          context.fillStyle = WHITECOLOR;
           if (state.player1 && state.player1.paddle)
           {
             context.beginPath();
@@ -375,7 +378,7 @@ export class PlayComponent implements OnInit {
 
           // Draw ball
           context.beginPath();
-          context.fillStyle = 'white';
+          context.fillStyle = WHITECOLOR;
           if (state.ball && state.ball.radius)
             context.arc(state.ball.x * ratiox, state.ball.y * ratioy, state.ball.radius * ratio, 0, Math.PI * 2, false);
           context.fill();
@@ -394,7 +397,7 @@ export class PlayComponent implements OnInit {
         if (context)
         {
           // Draw rectangle noir
-          context.fillStyle = 'black';
+          context.fillStyle = BLACKCOLOR;
           context.beginPath();
           context.arc(CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
           context.lineTo(canvas.width - CANVAS_RADIUS, 0);   
@@ -407,15 +410,15 @@ export class PlayComponent implements OnInit {
 
         
           // Draw middle line
-          context.strokeStyle = 'white';
+          context.strokeStyle = WHITECOLOR;
           context.beginPath();
           context.moveTo(canvas.width / 2, 0);
           context.lineTo(canvas.width / 2, canvas.height);
           context.stroke();
         
           // Draw obstacle
-          context.fillStyle = 'white';
-          // context.strokeStyle = 'white';
+          context.fillStyle = WHITECOLOR;
+          // context.strokeStyle = WHITECOLOR;
           context.beginPath();
           context.arc(state.obstacle.x * ratiox + MAP2_OBSTACLE_RADIUS, state.obstacle.y * ratioy + MAP2_OBSTACLE_RADIUS, MAP2_OBSTACLE_RADIUS, Math.PI, Math.PI * 3 / 2);
           context.lineTo(state.obstacle.width * ratiox - MAP2_OBSTACLE_RADIUS + state.obstacle.x * ratiox, state.obstacle.y * ratioy);   
@@ -428,7 +431,7 @@ export class PlayComponent implements OnInit {
 
 
           // Draw paddle1
-          context.fillStyle = 'white';
+          context.fillStyle = WHITECOLOR;
           if (state.player1 && state.player1.paddle)
           {
             context.beginPath();
@@ -458,7 +461,7 @@ export class PlayComponent implements OnInit {
 
           // Draw ball
           context.beginPath();
-          context.fillStyle = 'white';
+          context.fillStyle = WHITECOLOR;
           if (state.ball && state.ball.radius)
             context.arc(state.ball.x * ratiox, state.ball.y * ratioy, state.ball.radius * ratio, 0, Math.PI * 2, false);
           context.fill();
@@ -477,7 +480,7 @@ export class PlayComponent implements OnInit {
         if (context)
         {
           // Draw rectangle noir
-          context.fillStyle = 'black';
+          context.fillStyle = BLACKCOLOR;
           context.beginPath();
           context.arc(CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
           context.lineTo(canvas.width - CANVAS_RADIUS, 0);   
@@ -490,15 +493,15 @@ export class PlayComponent implements OnInit {
 
         
           // Draw middle line
-          context.strokeStyle = 'white';
+          context.strokeStyle = WHITECOLOR;
           context.beginPath();
           context.moveTo(canvas.width / 2, 0);
           context.lineTo(canvas.width / 2, canvas.height);
           context.stroke();
         
           // Draw obstacle
-          context.fillStyle = 'white';
-          // context.strokeStyle = 'white';
+          context.fillStyle = WHITECOLOR;
+          // context.strokeStyle = WHITECOLOR;
 
           context.beginPath();
           context.arc(MAP3_OBSTACLE1_POSX * ratiox + MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_POSY * ratioy + MAP3_OBSTACLE1_RADIUS, MAP3_OBSTACLE1_RADIUS, Math.PI, Math.PI * 3 / 2);
@@ -523,7 +526,7 @@ export class PlayComponent implements OnInit {
 
 
           // Draw paddle1
-          context.fillStyle = 'white';
+          context.fillStyle = WHITECOLOR;
           if (state.player1 && state.player1.paddle)
           {
             context.beginPath();
@@ -553,7 +556,7 @@ export class PlayComponent implements OnInit {
 
           // Draw ball
           context.beginPath();
-          context.fillStyle = 'white';
+          context.fillStyle = WHITECOLOR;
           if (state.ball && state.ball.radius)
             context.arc(state.ball.x * ratiox, state.ball.y * ratioy, state.ball.radius * ratio, 0, Math.PI * 2, false);
           context.fill();
@@ -570,8 +573,7 @@ export class PlayComponent implements OnInit {
     {
       var ratiox = canvas.width / WIDTHCANVAS;
       var ratioy = canvas.height / HEIGHTCANVAS;
-      var ratio = canvas.width * canvas!.height / (WIDTHCANVAS * HEIGHTCANVAS);
-    }
+      var ratio = (canvas.width * canvas.height) / (WIDTHCANVAS * HEIGHTCANVAS);
     var p1 = {
           paddle: {
           x: PLAYER1X * ratiox,
@@ -609,8 +611,8 @@ export class PlayComponent implements OnInit {
           width: MAP2_OBSTACLE_W * ratiox
       },
         ball: {
-          x: (WIDTHCANVAS * ratiox) / 2,
-          y: (HEIGHTCANVAS * ratioy) / 2,
+          x: canvas.width / 2,
+          y: canvas.height /2,
           dx: -2,
           dy: -2,
           speed: 2,
@@ -619,17 +621,13 @@ export class PlayComponent implements OnInit {
           radius: BALL_RADIUS * ratio
         },
       }
-      if (canvas)
-      {
           var context = canvas.getContext('2d');
           if (context)
           {
             //load font car il ne se charge pas des le chargement (??????)
-            context.font = FONT;
-            context.fillText('', 0, 0);
   
             // Draw rectangle noir
-            context.fillStyle = 'black';
+            context.fillStyle = BLACKCOLOR;
             context.beginPath();
             context.arc(CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   
             context.lineTo(canvas.width - CANVAS_RADIUS, 0);   
@@ -642,14 +640,14 @@ export class PlayComponent implements OnInit {
   
           
             // Draw middle line
-            context.strokeStyle = 'white';
+            context.strokeStyle = WHITECOLOR;
             context.beginPath();
             context.moveTo(canvas.width / 2, 0);
             context.lineTo(canvas.width / 2, canvas.height );
             context.stroke();
           
             // Draw paddle1
-            context.fillStyle = 'white';
+            context.fillStyle = WHITECOLOR;
             if (state.player1 && state.player1.paddle)
             {
               context.beginPath();
@@ -679,7 +677,7 @@ export class PlayComponent implements OnInit {
               
             // Draw ball
             context.beginPath();
-            context.fillStyle = 'white';
+            context.fillStyle = WHITECOLOR;
             if (state.ball && state.ball.radius)
               context.arc(state.ball.x, state.ball.y, state.ball.radius, 0, Math.PI * 2, false);
             context.fill();
