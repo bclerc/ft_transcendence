@@ -273,11 +273,18 @@ html, body, .flexbox {
 	// background-color: #9c9381;
 	// margin-bottom: -20px;
 }
+#status{
+	display:flex;
+	flex-direction: row;
+	align-items: center;
+	color: #9c9381;
+
+}
 .chat-box-header #friend-name {
 	font-family: Titan One;
-	font-size: 54px;
-	color: $color-red;
-
+	font-size: 45px;
+	color: $color-cream;
+	margin-bottom: 10px;
 }
 .chat-box-header #room-name {
 	font-family: Titan One;
@@ -313,17 +320,18 @@ html, body, .flexbox {
 
 
 
-.user-dm-avatar{
-  width: 50px; //ici tu changes en fonction
-  height: 50px; //ici tu changes en fonction
+#friend-img{
+  width: 70px;
+  min-width: 70px;
+  height: 70px;
   margin-right: 25px;
   margin-top: -8px;
   display: flex;
   flex-direction: row;
   object-fit: cover;
   border-radius: 50px;
-  border: 3px solid #343330;
-  box-shadow: -3px 3px #343330;
+  border: 3px solid $color-red;
+  box-shadow: -3px 3px $color-red;
 }
 
 
