@@ -9,7 +9,7 @@ import { GameService } from 'src/game/game.service';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-const BALL_RADIUS = 4;
+const BALL_RADIUS = 5;
 const PLAYER_HEIGHT = 80;
 const PLAYER_WIDTH = 8;
 const WIDTHCANVAS = 850;
@@ -363,7 +363,6 @@ export class PongService {
       game.ball.dy *= -1;
       game.ball.y = 0 + game.ball.radius;
     }
-
     else if (game.ball.y > HEIGHTCANVAS - game.ball.height)         //rebond vertical bas
     {
       game.ball.dy *= -1;
@@ -439,11 +438,11 @@ export class PongService {
 
     if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) {
       this.rebond(game.ball, game.player1.paddle);
-      game.ball.x = 0 + PLAYER_WIDTH + game.ball.radius;
+      game.ball.x = PLAYER1X + PLAYER_WIDTH + game.ball.radius;
     }
     else if ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle)) {
       this.rebond(game.ball, game.player2.paddle);
-      game.ball.x = WIDTHCANVAS - PLAYER_WIDTH - game.ball.radius;
+      game.ball.x = PLAYER2X - game.ball.radius;
     }
 
     if (game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
@@ -724,14 +723,13 @@ export class PongService {
     //////HORIZONT
     ////////
     game.ball.x += game.ball.dx;
-    if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle))  //sil y a rebond entre balle et paddle:
-    {
+    if ((game.ball.x < WIDTHCANVAS / 2) && this.colision(game.ball, game.player1.paddle)) {
       this.rebond(game.ball, game.player1.paddle);
-      game.ball.x = 0 + PLAYER_WIDTH + game.ball.radius;
+      game.ball.x = PLAYER1X + PLAYER_WIDTH + game.ball.radius;
     }
     else if ((game.ball.x > WIDTHCANVAS / 2) && this.colision(game.ball, game.player2.paddle)) {
       this.rebond(game.ball, game.player2.paddle);
-      game.ball.x = WIDTHCANVAS - PLAYER_WIDTH - game.ball.radius;
+      game.ball.x = PLAYER2X - game.ball.radius;
     }
     if (game.ball.x <= (0 + game.ball.width) || game.ball.x >= (WIDTHCANVAS - game.ball.radius))   //si le point est marqué:
     {

@@ -1,5 +1,3 @@
-import { Component, Input } from "@angular/core";
-
 export interface UserI {
     id? :               number;
     state?:             string;

@@ -24,11 +24,9 @@ const routes: Routes = [
   { path: 'game/:id', component: PlayComponent, canActivate: [AuthGuard] }, 
   { path: 'chat', component: ChatPageComponent, canActivate: [AuthGuard]  },
   { path: 'leaderbord', component: LeaderbordComponent, canActivate: [AuthGuard]  },
-  { path: 'myprofile', component: MyProfileComponent, canActivate: [AuthGuard]/*, resolve: { userList: UserResolver } */},
-  // { path: 'modifymyprofile', component: ModifyMyProfileComponent, canActivate: [AuthGuard], resolve: { userList : UserResolver } },
-  { path: 'profile/:id', component: ProfilePageComponent, canActivate: [AuthGuard]/*, resolve: { userList : UserResolver } */},
+  { path: 'myprofile', component: MyProfileComponent, canActivate: [AuthGuard]},
+  { path: 'profile/:id', component: ProfilePageComponent, canActivate: [AuthGuard]},
   { path: '**', component: UnfoundPagesComponent },
-
 ];
 
 

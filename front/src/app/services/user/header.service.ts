@@ -34,13 +34,17 @@ export class HeaderService  {
     this.visible = false; 
   }
 
+
   hide() { this.visible = false; }
 
   show() { this.visible = true; }
 
   toggle() { this.visible = !this.visible; }
 
-  redirectToGame(gameId: number) {
-    this.router.navigate(['/game/', gameId]);
+  async redirectToGame(gameId: number) {
+    this.router.navigate(['/game/']);
+    setTimeout(() => {
+      this.router.navigate(['/game/' + gameId]);
+    }, 100);
   }
 }
