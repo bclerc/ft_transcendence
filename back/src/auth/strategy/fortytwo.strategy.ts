@@ -32,7 +32,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
       email: profile.emails[0].value,
       intra_name: profile.username,
       intra_id: Number.parseInt(profile.id),
-      avatar_url: profile.photos[0].value,
+      avatar_url: profile._json.image.link,
       displayname: profile.username, 
     };
     const user = await this.userService.findByEmail(intraUser.email);
