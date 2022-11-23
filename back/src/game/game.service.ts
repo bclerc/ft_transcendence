@@ -43,8 +43,7 @@ export class GameService {
   }
 
   async createGame(userId: number, user2Id?: number): Promise<Game> {
-    if (isNaN(userId))
-    return ;
+
     if (userId) {
       let game = await this.prisma.game.create({
         data: {
