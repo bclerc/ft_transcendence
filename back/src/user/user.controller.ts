@@ -84,6 +84,11 @@ export class UserController {
   async findOne(@Request() req, @Param('id') id: number): Promise<BasicUserI> {
       return this.userService.getBasicUser(Number(id));
   }
+  @Get('/profile/:id')
+  @UseGuards(Jwt2faAuthGuard)
+  async getProfile(@Request() req, @Param('id') id: number): Promise<any> {
+      return this.userService.getProfileUser(Number(id));
+  }
 
   /**
    * @api {post} /user/ Creer un nouvel utilisateur
@@ -306,13 +311,13 @@ export class UserController {
   async newRequest(@Request() req: any, @Body() data: newFriendRequestDto) {
     if (req.user.id == data.toId)
       return { message: "You can't add yourself as a friend", state: 'error' };
-    if (await this.friendsService.haveFriend(req.user.id, data.toId))
+    if (await this.friendsService.haveFriend(req.user.id, Number(data.toId)))
       return { message: "You are already friends", state: 'error' };
-    if (await this.friendsService.haveFriendRequest(req.user.id, data.toId))
+    if (await this.friendsService.haveFriendRequest(req.user.id, Number(data.toId)))
       return { message: "You already have a friend request", state: 'error' };
-    if (await this.userService.isBlocked(req.user.id, data.toId))
+    if (await this.userService.isBlocked(req.user.id, Number(data.toId)))
       return { message: "Request failed", state: 'error'}
-      return await this.friendsService.addFriend(req.user.id, data.toId);
+      return await this.friendsService.addFriend(req.user.id, Number(data.toId));
   }
 
   @Get('friends/remove/:id')

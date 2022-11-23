@@ -1,21 +1,17 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserI } from 'src/app/models/user.models';
 import { UserService } from 'src/app/services/user/user.service';
-import {MatMenuModule} from '@angular/material/menu';
 
 @Component({
   selector: 'app-list-user-blocked',
   templateUrl: './list-user-blocked.component.html',
   styleUrls: ['./list-user-blocked.component.css']
 })
-export class ListUserBlockedComponent implements OnInit {
+export class ListUserBlockedComponent {
   @Input() user! : UserI;
   constructor (
                 public userService : UserService,
               ) { }
-
-  ngOnInit(): void {
-  }
 
   unblock(id : number | undefined): void{
       this.userService.unBlockUser(id).subscribe(

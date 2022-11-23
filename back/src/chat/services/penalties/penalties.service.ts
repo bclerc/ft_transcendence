@@ -30,7 +30,7 @@ export class PenaltiesService {
     });
   }
 
-  async getPenaltyById(id: number): Promise<ChatPenalty> {
+  async getPenaltyById(id: number): Promise<ChatPenalty | any> {
     return await this.prisma.chatPenalty.findFirst({
       where: {
         id: id

@@ -1,28 +1,135 @@
-<div>
-<p>{{user?.state}}</p>
-<p>{{user?.displayname}}</p>
-<p>{{user?.email}}</p>
-<p>{{user?.createdAt | date}}</p>
-<img style="width: 100px" [src]="user?.avatar_url" [alt]="user?.intra_name"/>
-<p>statistique :</p>
-<p>historique des matchs :</p>
-    <div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
-    <ng-template #thenBlock>
-        <a href="javascript:void(0);" (click)="removeFriend()">Enlever des amis</a>
-    </ng-template>
-    <ng-template #elseBlock>
-        <a href="javascript:void(0);" (click)="addFriend()">Ajouter en amis</a>
-    </ng-template>
-    <p></p>
-    <div *ngIf="alreadyBlocked; then thenBloc else elseBloc"></div>
-    <ng-template #thenBloc>
-        <a href="javascript:void(0);" (click)="unblockUser()">Debloquer l'utilisateur</a>
-    </ng-template>
-    <ng-template #elseBloc>
-        <a href="javascript:void(0);" (click)="blockUser()">Bloquer l'utilisateur</a>
-    </ng-template>
+<html>
 
-<!-- <div *ngIf="alreadyBlocked; then thenBlock else elseBlock"></div> -->
-<!-- <ng-template #thenBlock> </ng-template> -->
-<!-- <ng-template #elseBlock> </ng-template> -->
-</div>
+<head>
+	<title>Pong - Profile page</title>
+	<meta charset="utf-8" />
+	<meta name="description" content="Mon super profil" />
+	<meta name="author" content="Team transcendance 42" />
+	<meta name="copyright" content="© CC BY-NC-SA 4.0" />
+</head>
+
+<body>
+	<ng-container *ngIf=user>
+		<div class="center-profile">
+			<!-- HEAD -->
+			<div id="head">
+
+				<!-- USER INFO -->
+				<div id="user-info-profile">
+					<div class="profil-left">
+						<img [src]="user.avatar_url" [alt]="user.intra_name" />
+					</div>
+					<div class="profil-info">
+						<div id="name-n-param">
+							<p id="name">{{user.displayname}}</p>
+
+							<!-- BUTTONS -->
+							<div class="butttts">
+								<div *ngIf="alreadyFriend; then thenBlock else elseBlock"></div>
+								<ng-template #thenBlock>
+									<!-- <a href="javascript:void(0);" (click)="removeFriend()"> -->
+										<button id="action" matTooltip="Retirer des amis" (click)="removeFriend()">
+											<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+												<title>icon-delete-friend</title>
+												<g id="icon-delete-friend" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<rect id="BG" fill="#1F1F1F" x="0" y="0" width="40" height="40" rx="6"></rect>
+													<path d="M11.4884626,18 L28.8084626,18 C29.2226762,18 29.5584626,18.3357864 29.5584626,18.75 L29.5584626,21.25 C29.5584626,21.6642136 29.2226762,22 28.8084626,22 L11.4884626,22 C11.0742491,22 10.7384626,21.6642136 10.7384626,21.25 L10.7384626,18.75 C10.7384626,18.3357864 11.0742491,18 11.4884626,18 Z" id="Rectangle" fill="#feefcf" transform="translate(20.148463, 20.000000) rotate(-180.000000) translate(-20.148463, -20.000000) "></path>
+												</g>
+											</svg>
+										</button>
+										<!-- Enlever des amis -->
+									<!-- </a> -->
+								</ng-template>
+								<ng-template #elseBlock>
+									<button id="action" matTooltip="Ajouter en ami" (click)="addFriend()">
+										<svg width="40px" height="40px" viewBox="0 0 40 40">
+											<title>icon-ask-friend</title>
+											<g id="icon-ask-friend" stroke="none" stroke-width="1" fill="none"
+												fill-rule="evenodd">
+												<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1"
+													y="1" width="38" height="38" rx="6"></rect>
+												<path
+													d="M29.3488433,17.8945175 C29.3901095,17.9687965 29.4117647,18.0523668 29.4117647,18.1373389 L29.4117647,25.745098 C29.4117647,26.8496675 28.5163342,27.745098 27.4117647,27.745098 L12.5882353,27.745098 C11.4836658,27.745098 10.5882353,26.8496675 10.5882353,25.745098 L10.5882353,18.1373389 C10.5882353,17.8611966 10.8120929,17.6373389 11.0882353,17.6373389 C11.1732074,17.6373389 11.2567778,17.6589942 11.3310568,17.7002603 L19.5143571,22.2465382 C19.8163796,22.4143285 20.1836204,22.4143285 20.4856429,22.2465382 L28.6689432,17.7002603 C28.9103351,17.5661537 29.2147368,17.6531256 29.3488433,17.8945175 Z M27.8431373,12.3529412 C28.7094663,12.3529412 29.4117647,13.0552396 29.4117647,13.9215686 L29.4117647,15.1927872 C29.4117647,15.3760732 29.3114812,15.5446686 29.1504218,15.6321535 L20.4773141,20.3432526 C20.1796443,20.5049423 19.8203557,20.5049423 19.5226859,20.3432526 L10.8495782,15.6321535 C10.6885188,15.5446686 10.5882353,15.3760732 10.5882353,15.1927872 L10.5882353,13.9215686 C10.5882353,13.0552396 11.2905337,12.3529412 12.1568627,12.3529412 L27.8431373,12.3529412 Z"
+													id="icon" fill="#feefcf"></path>
+											</g>
+										</svg>
+									</button>
+								</ng-template>
+								<p></p>
+								<div *ngIf="alreadyBlocked; then thenBloc else elseBloc"></div>
+								<ng-template #thenBloc>
+									<button id="clic" matTooltip="Débloquer" (click)="unblockUser()">
+										<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+											<title>icon-block</title>
+											<g id="icon-block" stroke="none" stroke-width="1" fill="none"
+												fill-rule="evenodd">
+												<rect id="BG" stroke="#ef7e00" stroke-width="2" fill="#1F1F1F" x="1"
+													y="1" width="38" height="38" rx="6"></rect>
+												<path
+													d="M19.9386406,12.0983893 C24.4868679,12.0983893 28.1739347,15.7854561 28.1739347,20.3336835 C28.1739347,24.8819108 24.4868679,28.5689776 19.9386406,28.5689776 C15.3904132,28.5689776 11.7033465,24.8819108 11.7033465,20.3336835 C11.7033465,15.7854561 15.3904132,12.0983893 19.9386406,12.0983893 Z M24.8010307,17.5775269 L17.182484,25.1960735 C17.9958029,25.6580816 18.9364105,25.9219188 19.9386406,25.9219188 C23.0249377,25.9219188 25.5268759,23.4199806 25.5268759,20.3336835 C25.5268759,19.3314534 25.2630387,18.3908458 24.8010307,17.5775269 Z M19.9386406,14.7454482 C16.8523435,14.7454482 14.3504053,17.2473863 14.3504053,20.3336835 C14.3504053,21.3493125 14.6213442,22.3016604 15.0948866,23.1223917 L22.7273489,15.4899294 C21.9066175,15.016387 20.9542696,14.7454482 19.9386406,14.7454482 Z"
+													id="icon" fill="#ef7e00"></path>
+											</g>
+										</svg>
+									</button>
+								</ng-template>
+								<ng-template #elseBloc>
+									<button id="action" matTooltip="Bloquer" (click)="blockUser()">
+										<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+											<title>icon-block</title>
+											<g id="icon-block" stroke="none" stroke-width="1" fill="none"
+												fill-rule="evenodd">
+												<rect id="BG" stroke="#1F1F1F" stroke-width="2" fill="#1F1F1F" x="1"
+													y="1" width="38" height="38" rx="6"></rect>
+												<path
+													d="M19.9386406,12.0983893 C24.4868679,12.0983893 28.1739347,15.7854561 28.1739347,20.3336835 C28.1739347,24.8819108 24.4868679,28.5689776 19.9386406,28.5689776 C15.3904132,28.5689776 11.7033465,24.8819108 11.7033465,20.3336835 C11.7033465,15.7854561 15.3904132,12.0983893 19.9386406,12.0983893 Z M24.8010307,17.5775269 L17.182484,25.1960735 C17.9958029,25.6580816 18.9364105,25.9219188 19.9386406,25.9219188 C23.0249377,25.9219188 25.5268759,23.4199806 25.5268759,20.3336835 C25.5268759,19.3314534 25.2630387,18.3908458 24.8010307,17.5775269 Z M19.9386406,14.7454482 C16.8523435,14.7454482 14.3504053,17.2473863 14.3504053,20.3336835 C14.3504053,21.3493125 14.6213442,22.3016604 15.0948866,23.1223917 L22.7273489,15.4899294 C21.9066175,15.016387 20.9542696,14.7454482 19.9386406,14.7454482 Z"
+													id="icon" fill="#feefcf"></path>
+											</g>
+										</svg>
+									</button>
+								</ng-template>
+							</div>
+						</div>
+						<p id="email">{{user.email}}</p>
+						<div class="status">
+							<p>En ligne</p>
+							<img src="../../../assets/svg/online.svg" alt="online">
+						</div>
+					</div>
+				</div>
+				<!-- STATISTIQUES -->
+				<div id="stats">
+					<div class="classement">
+						<span id="yellow">#{{ user.score }}</span>
+						<p>Classement</p>
+					</div>
+					<div id="all-data">
+						<div class="data-classement">
+							<span id="yellow">#{{ user.position_in_leaderboard}}</span>
+							<p>Classement</p>
+						</div>
+						<div class="data">
+							<span>{{ user.score }}</span>
+							<p>Score</p>
+						</div>
+						<div class="data">
+							<span>{{ user._count?.games_win }}</span>
+							<p>Victoires</p>
+						</div>
+						<div class="data">
+							<span>{{ user._count?.games_lose }}</span>
+							<p>Défaites</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="my-profile-content">
+				<h2>Historique des matchs</h2>
+				<app-list-match-history [user]="games" [id]="id"></app-list-match-history>
+				<hr class="clear">
+			</div>
+		</div>
+	</ng-container>
+</body>
+<app-footer></app-footer>
+
+</html>

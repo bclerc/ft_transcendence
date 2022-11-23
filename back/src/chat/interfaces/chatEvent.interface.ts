@@ -54,7 +54,7 @@ export class UserPunishEvent {
 export class PardonEvent {
   room: ChatRoomI;
   user: BasicUserI;
-  pardoner: BasicUserI;
+  pardonner: BasicUserI;
   success: boolean;
   message?: string;
 }
@@ -77,4 +77,10 @@ export class DeleteRoomEvent {
   user: BasicUserI;
   success: boolean;
   message?: string;
+}
+
+export interface UserInvitedEvent {
+  room: ChatRoomI;
+  user: BasicUserI;
+  inviter: BasicUserI;
 }

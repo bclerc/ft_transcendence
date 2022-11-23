@@ -1,16 +1,14 @@
-// import { I } from '@angular/cdk/keycodes';
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionListChange } from '@angular/material/list';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
+import { ChatMobileService } from 'src/app/services/chat-mobile.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
-import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
-import { Message } from 'src/app/services/chat/message.interface';
+import { ChatRoom } from 'src/app/services/chat/chatRoom.interface';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -45,20 +43,18 @@ export class ChatPageComponent implements OnInit {
 
 	constructor(private chatService: ChatService,
 	private userService: UserService,
-  private socket: Socket,
-  private router: Router,
-  private snackBar : MatSnackBar
-  ) { }
-	
+	private socket: Socket,
+	private router: Router,
+	public chatMobileService : ChatMobileService
+	) { }
+
 	async ngOnInit() {
-    this.chatService.needRooms();
-    this.chatService.needPublicRooms();
-    this.chatService.needDmRooms();
-		this.userService.getLoggedUser().subscribe(
+		await this.userService.getLoggedUser().subscribe(
 			(data : any) => {
 			  this.actualUser = data;
 			},
 			);
+      
 		await this.rooms$.subscribe((rooms: ChatRoom[]) => {
       let roomChanged, roomSeen: boolean = false;
 				for (const room of rooms) {
@@ -91,14 +87,11 @@ export class ChatPageComponent implements OnInit {
        this.haveNewDm = roomSeen;
     });
 
+    this.chatService.needRooms();
+    this.chatService.needPublicRooms();
+    this.chatService.needDmRooms();
 	}
 
-	create() {
-		if (this.form.valid) {
-			this.chatService.createRoom(this.form.value);
-			this.form.reset();
-		}
-	}
 
 	initUser(user: any) {
 		return new FormControl({
@@ -174,16 +167,19 @@ export class ChatPageComponent implements OnInit {
 	selectRoom(room: ChatRoom) {
 		this.selectedRoom=room;
 		this.newRoom = false;
+		this.chatMobileService.showRoom();
 	}
 
 	newRoom: boolean = true;
 	async NewRoom() {
       if (this.newRoom) {
-        this.newRoom = false;
+        this.newRoom = true;
       } else {
         this.chatService.needPublicRooms();
         this.newRoom = true;
       }
+
+		this.chatMobileService.showNewRoom();
     }
 
   friend(chatRoom: ChatRoom): UserI {
@@ -199,6 +195,9 @@ export class ChatPageComponent implements OnInit {
     return this.actualUser;
   }
 
+  async haveFriends(): Promise<boolean> {
+      return false;
+  }
 
 
 }

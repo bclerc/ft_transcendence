@@ -14,7 +14,7 @@ export class FriendsService {
     private onlineUserService: OnlineUserService,
     private chatService: ChatService,
     private eventEmitter: EventEmitter2) { }
-  
+
 
 
   async addFriend(userId: number, friendId: number) {
@@ -33,8 +33,7 @@ export class FriendsService {
         status: FriendStatus.PENDING,
       },
     });
-    // TODO: send notification to friend
-   // sendToUser(friendId, 'notification', "Vous avez une nouvelle demande d'amis");
+    // sendToUser(friendId, 'notification', "Vous avez une nouvelle demande d'amis");
     return { message: 'Friend request sent', state: 'success' };
   }
 
@@ -66,7 +65,6 @@ export class FriendsService {
       }
     });
     //TODO send notification to friend
-    //this.onlineUserService.sendToUser(request.fromId, 'notification', "Votre demande d'amis a été acceptée");
     this.chatService.creatDm(request.fromId, request.toId);
     return { message: "Friend request accepted", state: 'error' };
   }
@@ -112,7 +110,7 @@ export class FriendsService {
   }
 
   async getFriends(userID: number): Promise<any[]> {
-    const friends = await this.prisma.user.findMany({
+    const friends: any = await this.prisma.user.findMany({
       where: {
         OR: [
           {
@@ -140,6 +138,9 @@ export class FriendsService {
         displayname: true,
       },
     });
+    for (let friend of friends) {
+      friend.position_in_leaderboard = await this.userService.getLeaderboardPosition(friend.id);
+    }
     return friends;
   }
 

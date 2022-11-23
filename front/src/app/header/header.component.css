@@ -49,9 +49,14 @@ header {
 	margin: 20px 0px 0px 0px;
 	width: 196px;
 }
+
 #burger-menu{
 	display: none;
 }
+.nav-mobile{
+	display: none;
+}
+
 .right{
 	float: right;
 	text-align: right;
@@ -59,18 +64,21 @@ header {
 }
 
 #header nav ul li{
-	display: inline-block;
 	font-family: Titan One;
 	font-size: 20px;
-	margin-right: 60px;
-}
-#header nav ul li:last-child{
-	margin-right: 0px;
 }
 #header nav ul li a{
 	color: #feefcf;
 	padding-bottom: 6px;
 	text-decoration: none;
+}
+
+#header .right ul li{
+	display: inline-block;
+	margin-right: 60px;
+}
+#header .right ul li:last-child{
+	margin-right: 0px;
 }
 #header nav ul li a:hover{
 	border-bottom: 7px solid #ee481e;
@@ -87,7 +95,7 @@ header {
 	.right{
 		padding-top: 36px;
 	}
-	#header nav ul li{
+	#header .right ul li{
 		font-size: 18px;
 	}
 	#logo{
@@ -103,7 +111,7 @@ header {
 	.right{
 		padding-top: 33px;
 	}
-	#header nav ul li{
+	#header .right ul li{
 		font-size: 16px;
 		margin-right: 50px;
 	}
@@ -112,7 +120,10 @@ header {
 /* All mobile sizes (devices and browsers) */
 @media only screen and (max-width: 950px) {
 	
-	#header nav ul li{
+	.right{
+		padding-top: 23px;
+	}
+	#header .right ul li{
 		display: none;
 	}
 	#logo{
@@ -121,10 +132,12 @@ header {
 	#burger-menu{
 		display: block;
 	}
-	.right{
-		padding-top: 23px;
+	.nav-mobile{
+		display: block;
 	}
-
+	#header .nav-mobile ul li{
+		margin-top: 50px;
+	}
 }
 
 /* Moblie Protrait size to Mobile Landscape size (devices and browsers) */

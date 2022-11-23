@@ -7,6 +7,7 @@ import { UserInfo } from 'os';
 import { Socket } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { jwtConstants } from 'src/auth/constants';
+import { dataPlayerI } from 'src/pong/interfaces/player.interface';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
 import { UserService } from 'src/user/user.service';
 
@@ -28,15 +29,15 @@ export class OnlineUserService {
   async initUser(socketId: string, user: BasicUserI) {
     this.onlineUsers.forEach((value, key) => {
       if (value.id == user.id) {
-        this.onlineUsers.delete(key);
+       this.onlineUsers.delete(key);
       }
     });
     this.onlineUsers.set(socketId, user);
     this.userService.setState(user.id, UserState.ONLINE);
   }
 
-  async newConnect(socket: Socket)
-  {
+  async newConnect(socket: Socket): Promise<BasicUserI> {
+  
     try {
       const token = socket.handshake.query['token'] as string;
       const res = this.jwtService.verify(token, {
@@ -45,11 +46,16 @@ export class OnlineUserService {
       });
       const user = await this.userService.findOne(res.sub);
       if (!user)
-        return socket.disconnect();
+      {
+        socket.disconnect();
+        return null;
+      }
       this.initUser(socket.id, user);
       socket.data.user = user;
+      return user;
     } catch (error) {
-      return socket.disconnect();
+      socket.disconnect();
+      return null; 
     }
   }
 
@@ -70,6 +76,31 @@ export class OnlineUserService {
           return value;
       }
     }
+  }
+
+
+  getDataPlayer(clientId: string): dataPlayerI {
+    let user = this.getUser(clientId);
+    if (user) {
+      return {
+        id: user.id,
+        displayname: user.displayname,
+        intra_name: user.intra_name,
+      }
+    }
+    return null;
+  }
+
+  getDataPlayerById(id: number): dataPlayerI {
+    let user = this.getUser(null, id);
+    if (user) {
+      return {
+        id: user.id,
+        displayname: user.displayname,
+        intra_name: user.intra_name,
+      }
+    }
+    return null;
   }
 
 

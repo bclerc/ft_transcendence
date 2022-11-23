@@ -1,0 +1,34 @@
+<!-- quand la partie est en attente ou en cours-->
+
+<ng-container *ngIf="this.state == 1" >
+  <div class="names">
+    <div class="playerNameLeft" id="leftName">
+      {{ game.users[0].displayname }}
+    </div>
+    <div class="playerNameRight" id="rightName">
+      {{ game.users[1] ? game.users[1].displayname  : "En attente" }}
+    </div>
+  </div>
+  
+  <div align="center">
+  <canvas #canvas class="pongCanvas" id='pong' width="850" height="480" (window:resize)="onResizeWin($event)"></canvas>
+  </div>
+  <!-- <div class="score_c" id="score">0 : 0</div> -->
+</ng-container>
+
+<!-- Quand la partie termine -->
+
+<ng-container *ngIf="this.state == 2" >
+  <div style="display: flex; flex-direction: column; align-items: center">
+    <p>Cette partie est terminée</p>
+    <p>Vainqueur : {{ game.winner.displayname }}</p>
+    <img src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
+    <button mat-raised-button  (click)="goToGame()">Retour à l'accueil</button>
+  </div>
+</ng-container>
+
+<footer>
+  <div class="footer">
+    <p>© 2022 - Pong</p>
+  </div>
+</footer>

@@ -1,13 +1,93 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
-html, body {
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../src/assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../src/assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../src/assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../src/assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../src/assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../src/assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'Qahiri-Regular';
+	src: url('../src/assets/fonts/Qahiri/Qahiri-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'Visitor1';
+	src: url('../src/assets/fonts/Visitor/visitor1.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'Visitor2';
+	src: url('../src/assets/fonts/Visitor/visitor2.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+body {
   background-color: #1F1F1F;
 }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-
-
-mat-dialog-container {
+.mat-mdc-dialog-container {
   background-color: #1F1F1F !important;
+  --mdc-dialog-container-color: #1F1F1F;
+  --mdc-dialog-container-radius: 20px !important;
+
+}
+
+.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label {
+  color: #feefcf !important;
+  font-family: ReadexPro-Medium !important;
+}
+
+.mat-mdc-checkbox label {
+  cursor: pointer;
+  color: #feefcf !important;
+  font-family: ReadexPro-Medium !important;
+}
+
+.custom-modalbox {
+  box-shadow: none;
   border-radius: 20px !important;
 }
+
+.backdropBackground {
+  /* background-color: rgba(22,22,22, 0.2); */
+  box-shadow: none;
+  /* opacity: 10%; */
+  backdrop-filter: blur(25px);
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

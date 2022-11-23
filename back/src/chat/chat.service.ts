@@ -72,11 +72,17 @@ export class ChatService {
             user: {
               id: userId,
             },
-            endTime: {
-              gte: new Date(),
-            },
+            OR: [
+              {
+                endTime: {
+                  gte: new Date(),
+                },
+              },
+              {
+                timetype: 'PERM',
+              } 
+            ]
           }
-
         },
         users: {
           some: {
@@ -264,8 +270,6 @@ export class ChatService {
 
 
   async getMessagesFromRoom(userId: number, room: ChatRoomI): Promise<Message[]> {
-
-
     const messages = await this.prisma.message.findMany({
       where: {
         room: {
@@ -389,7 +393,9 @@ export class ChatService {
     if (newRoom.password != null)
       hashedPassword = await this.passUtils.hashPass(newRoom.password);
 
-    const ret = this.prisma.chatRoom.create({
+    if (newRoom.users.length < 1 || newRoom.users.length > 10)
+        return ;
+     const ret = this.prisma.chatRoom.create({
       data: {
         name: newRoom.name || owner.intra_name + '\'s room',
         description: newRoom.description || 'Another room created by ' + owner.intra_name,
@@ -440,7 +446,7 @@ export class ChatService {
   }
 
   async deleteDm(user1Id: number, user2Id: number) {
-    // delete message befores
+    
     await this.prisma.message.deleteMany({
       where: {
         room: {
@@ -464,6 +470,7 @@ export class ChatService {
           },
         },
     });
+
 
     await this.prisma.chatRoom.deleteMany({
       where: {
@@ -625,13 +632,6 @@ export class ChatService {
         description: newRoom.description,
         public: newRoom.public,
         password: hashedPassword,
-        users: {
-          connect: newRoom.users.map((user: User) => {
-            return {
-              id: user.id
-            };
-          })
-        }
       },
     });
     return ret;
@@ -640,6 +640,13 @@ export class ChatService {
 
   async deleteRoom(roomId: number): Promise<void> {
 
+    await this.prisma.chatPenalty.deleteMany({
+      where: {
+        room: {
+          id: roomId,
+        }
+      }
+    });
 
     await this.prisma.message.deleteMany({
       where: {

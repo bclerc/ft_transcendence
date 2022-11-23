@@ -70,9 +70,17 @@ hr.clear{
 
 .new-room-container{
 	padding: 22px;
+	width: 100%;
 }
-#create-module{
-	height: calc(720px - 44px);
+/* #return-mobile{
+	display:flex;
+	flex-direction: row;
+} */
+#title-n-button #return{
+	display: none;
+}
+#title-n-button button{
+	display: none;
 }
 
 .demi-public ul{
@@ -83,7 +91,7 @@ hr.clear{
 }
 
 .demi-public ul li{
-	border: 2px solid #343330;
+	background-color: #2B2A28;
 	border-radius: 10px;
 	list-style-type: none;
 	margin-bottom: 12px;
@@ -95,6 +103,8 @@ hr.clear{
 }
 #title-list{
 	display: flex;
+	margin-bottom: 10px;
+	/* background-color: aqua; */
 }
 
 .demi-public .but{
@@ -102,8 +112,9 @@ hr.clear{
 }
 
 .demi-public li button{
-	background-color: #343330;
-	border: none;
+	background-color: transparent;
+	border: 2px solid #44433f;
+	/* border: none; */
 	border-radius: 4px;
 	width: 30px;
 	height: 30px;
@@ -114,7 +125,7 @@ hr.clear{
 	padding-top: 3px;
 }
 .demi-public li button:hover{
-	background-color: #feefcf;
+	border: 2px solid #ee481e;
 }
 /* .avatars li img{
 	width:11px;
@@ -125,13 +136,14 @@ hr.clear{
 .button-creer button{
 	font-family: Titan One;
 	font-size: 14px;
+	letter-spacing: normal;
 	color: #feefcf;
 	text-decoration: none;
 	background-color: #ee481e;
 	border-radius: 6px;
 	border: 3px solid #feefcf;
 	box-shadow: -3px 3px #feefcf;
-	padding: 10px 25px 10px 25px;
+	padding: 25px 30px 25px 30px;
 	margin-top: 20px;
 	cursor: pointer;
 }
@@ -151,26 +163,58 @@ hr.clear{
 
 /* typo -------------------------------------------------------------------------------- */
 
-.new-room-container #tt-h2{
+.new-room-container .demi-create #tt-h2{
 	font-family: Titan One;
 	font-size: 32px;
 	color: #feefcf;
 	margin-bottom: 25px;
 }
-/* .demi-public h2{
-	margin-left: 20px;
-} */
+.new-room-container .demi-public #tt-h2{
+	font-family: Titan One;
+	font-size: 32px;
+	color: #feefcf;
+}
+
 .demi-public #tt-h3{
 	font-family: ReadexPro-Bold;
 	font-size: 16px;
 	color: #feefcf;
-	margin-bottom: 10px;
-	margin-right: 4px;
+	margin-right: 7px;
 }
 .demi-public #description{
 	font-family: ReadexPro-Regular;
 	font-size: 12px;
 	margin-bottom: 15px;
+}
+
+#title-n-button{
+	display: flex;
+    flex-direction: row;
+	/* margin-top: 30px; */
+	margin-bottom: 25px;
+}
+#title-n-button button{
+    /* width: 35px; */
+    height: 35px;
+    margin-left: 25px;
+	font-family: ReadexPro-Medium;
+	color: #feefcf;
+	background-color: transparent;
+	border-radius: 6px;
+	border: 2px solid #343330;
+	padding: 4px 10px 4px 10px;
+	/* margin-top: 30px; */
+}
+#title-n-button button:hover{
+	color: #ee481e;
+	cursor: pointer;
+	border: 2px solid #ee481e;
+}
+#title-n-button button:focus{
+	outline: none;
+}
+#title-n-button button img{
+	margin-left: 4px;
 }
 
 /* champs de text ------------------------------------------------------------------------- */
@@ -229,10 +273,9 @@ textarea{
 	padding: 48px 0px 48px 0px;
 	/* background-color: blue; */
 	height: calc(720px - 44px);
-}
-.demi-public{
 	width: calc(50% - 10px);
 }
+
 .demi-publilc:nth-child(2n){
 	margin-right: 0px;
 }
@@ -242,8 +285,6 @@ textarea{
 	background-color: #161616;
 	border-radius: 10px;
 	height: calc(720px - 44px);
-}
-.demi-create{
 	width: calc(50% - 10px);
 }
 
@@ -269,5 +310,32 @@ textarea{
 	width: 30px;
 	height: 30px;
 	border: 2px solid #ee481e;
+}
+
+
+@media only screen and (max-width: 1145px) {
+
+	.demi-create{
+		float: none;
+		display: none;
+	}
+	#title-n-button #return{
+		display: flex;
+		width: 35px;
+		height: 35px;
+		margin-right: 20px;
+	}
+	#title-n-button button{
+		display: block;
+	}
+	.demi-public{
+		float: none;
+		/* margin-right: 20px;
+		padding: 48px 0px 48px 0px;
+		background-color: blue;
+		height: calc(720px - 44px); */
+		width: 100%;
+	}
+
 }
 

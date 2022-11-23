@@ -31,7 +31,6 @@ export class AuthService {
       qrcode,      
     };
  }
- // todo
   async verify2FACode(userId: number, code: string): Promise<Boolean> {
     const twoFactorAuthenticationSecret = await this.usersService.get2FASsecret(userId);
     if (!twoFactorAuthenticationSecret)

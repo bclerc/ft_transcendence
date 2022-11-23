@@ -3,12 +3,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable, Subscription } from 'rxjs';
+import { Socket } from 'ngx-socket-io';
 import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
+import { BurgerMenuService } from 'src/app/services/burger-menu.service';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
+import { HeaderService } from 'src/app/services/user/header.service';
 import { UserService } from 'src/app/services/user/user.service';
-import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'app-modify-my-profile',
@@ -33,6 +34,9 @@ export class ModifyMyProfileComponent implements OnInit {
                 private route : ActivatedRoute,
                 private router: Router, 
                 public currentUser : CurrentUserService,
+                public navbar : HeaderService,
+                public burgerMenu : BurgerMenuService,
+                public socket: Socket,
                 private snackBar : MatSnackBar,
                 private dialogRef: MatDialogRef<ModifyMyProfileComponent>,
                 @Inject(MAT_DIALOG_DATA) data : any
@@ -44,7 +48,6 @@ export class ModifyMyProfileComponent implements OnInit {
   
 
   ngOnInit(): void{
-      // console.log(this.user);
     if (this.user)
     {
       this.ChangeDisplaynameForm = this.fb.group({
@@ -78,10 +81,9 @@ export class ModifyMyProfileComponent implements OnInit {
   DesactivateFa(): void {
     this.userService.DesactivateFacode().subscribe(
       (data : any) => {
-        //  console.log("data =",data);
-        //this.ob = data;
+        this.snackBar.open("2FA desactivé", 'Undo');
+        this.user.twoFactorEnabled = false;
       },
-      //error => this.router.navigate([''])
       );
   }
 
@@ -97,6 +99,13 @@ showActivate2Fa(): void{
 hideActivate2Fa(): void {
   this.show = false;
 }
-  ChangeAvatar_url(): void{
-  }
+
+logOut() : void {
+  this.token.removeToken();
+  this.navbar.hide();
+  this.burgerMenu.show();
+  this.router.navigate(['']);
+  this.socket.emit('logout');
+  this.close();
+}
 }
