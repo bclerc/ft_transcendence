@@ -1,9 +1,8 @@
-import { JsonPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable, observable, Subscription, tap } from 'rxjs';
-import { User, UserI } from 'src/app/models/user.models';
+import { Subscription } from 'rxjs';
+import { UserI } from 'src/app/models/user.models';
 import { TokenStorageService } from 'src/app/services/auth/token.storage';
 import { CurrentUserService } from 'src/app/services/user/current_user.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -14,131 +13,104 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./profile-page.component.css']
 })
 export class ProfilePageComponent implements OnInit {
-  user? : UserI;
-  currentUser?: UserI;
-  id! : number;
-  subscription! : Subscription;
-  subscription2! : Subscription;
-  subscription3! : Subscription;
-  alreadyFriend : boolean = false;
-  alreadyBlocked : boolean = false;
-  
-  constructor(private userService: UserService, private router: Router, private route : ActivatedRoute, private token : TokenStorageService
-    ,public currentUserService : CurrentUserService, private snackBar : MatSnackBar) { }
+  @Output() games!: any;
+  @Output() id!: number;
+
+  user!: UserI;
+  currentUser!: UserI;
+  // id! : number;
+  subscription!: Subscription;
+  subscription2!: Subscription;
+  subscription3!: Subscription;
+  alreadyFriend: boolean = false;
+  alreadyBlocked: boolean = false;
+
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private token: TokenStorageService,
+    public currentUserService: CurrentUserService,
+    private snackBar: MatSnackBar,
+  ) { }
 
   ngOnInit(): void {
-    this.id= Number( this.router.url.split('/')[2]);
-    
-      this.searchFriend();
-      //this.searchBlockedUser();
-      this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
-        (data : any) => {
-          // console.log("data =",data);
-          this.user = data;
-          if (data === null)
-           this.router.navigate(['error']);
-        },
-        (error : any) =>
-        {
-        if (error.status === 401 && error.error.message === "2FA_REQUIRED")
-        {
-          this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
-            duration: 3000
-          })
-          this.router.navigate(['code'])
-        }
-        else
-        {
-          this.router.navigate(['error'])
-        }
+    this.router.routeReuseStrategy.shouldReuseRoute = function () { return false; };
+    this.id = this.route.snapshot.params['id'];
+    this.searchFriend();
+    this.subscription = this.userService.getUserIdFromBack(this.id).subscribe(
+      (data: any) => {
+        this.user = data;
+        if (this.user == null)
+          this.router.navigate(["error"]);
+      },
+    );
+
+    this.subscription3 = this.userService.GetUserHistory(this.id).subscribe(
+      (data: any) => {
+        this.games = data;
       }
-        );
-      if (this.id === this.token.getId() )
-        this.router.navigate(['/myprofile']);
+    );
+
+    if (this.id == this.token.getId()) {
+      this.router.navigate(['/myprofile']);
+    }
+
   }
 
   searchFriend(): void {
-     this.subscription2 = this.currentUserService.getCurrentUser().subscribe(
-      (data : any) => {
-        // console.log("current user" , data)
-        for (var i = 0; data.friendOf[i];i++)
-        {
-          if (this.id === data.friendOf[i].id)
-          {
+    this.subscription2 = this.currentUserService.getCurrentUser().subscribe(
+      (data: any) => {
+        for (var i = 0; data.friendOf[i]; i++) {
+          if (this.id == data.friendOf[i].id) {
             this.alreadyFriend = true;
             break;
           }
         }
-        for (var i = 0; data.blockedUsers[i];i++)
-        {
-          if (this.id === data.blockedUsers[i].id)
-          {
+        for (var i = 0; data.blockedUsers[i]; i++) {
+          if (this.id == data.blockedUsers[i].id) {
             this.alreadyBlocked = true;
             break;
           }
         }
-      },
-      (error : any) => 
-      {
-        if (error.status === 401 && error.error.message === "2FA_REQUIRED")
-        {
-          this.snackBar.open("une connexion 2FA est demandée", 'Undo', {
-            duration: 3000
-          })
-          this.router.navigate(['code'])
-        }
-        else
-        {
-          this.router.navigate([''])
-        }
       }
     )
-    
+
   }
 
-  ngOnDestroy() : void
-  {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe;
     this.subscription2.unsubscribe;
-    // this.subscription3.unsubscribe;
   }
 
-  addFriend() : void
-  {
+  addFriend(): void {
     this.userService.sendRequest(this.id).subscribe(
-      (data : any) =>{
-        this.alreadyFriend = true
-        //  console.log("friend request" , data)
+      (data: any) => {
+        this.alreadyFriend = true;
       }
     );
   }
 
-  removeFriend() : void
-  {
+  removeFriend(): void {
     this.userService.removeFriend(this.id).subscribe(
-      (data : any) =>{
+      (data: any) => {
         this.alreadyFriend = false
-        //  console.log("friend request" , data)
       }
     );
   }
 
-  blockUser() : void
-  {
+  blockUser(): void {
     this.userService.blockUser(this.id).subscribe(
-      (data : any) =>{
-        this.alreadyBlocked= true
-        //  console.log("block = " , data)
+      (data: any) => {
+        this.alreadyBlocked = true
       }
     )
   }
 
-  unblockUser() : void
-  {
+  unblockUser(): void {
     this.userService.unBlockUser(this.id).subscribe(
-      (data : any) =>{ 
-        this.alreadyBlocked= false
-        // console.log("unblock = " , data)
+      (data: any) => {
+        this.alreadyBlocked = false;
       }
     )
   }

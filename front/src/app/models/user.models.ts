@@ -9,15 +9,21 @@ export interface UserI {
     intra_id? :         number;
     displayname? :      string;
     description? :      string;
-    //password? :         string;
     username? :         string;
     staff? :            boolean;
     createdAt? :        Date;
     twoFactorEnabled? : boolean;
     friendOf? :         UserI[];
     friends? :          UserI[];
+    position_in_leaderboard?: number;
     blockedBy? :        UserI[];
     blockedUsers?:      UserI[];
+    score?:              number;
+    _count?: {
+       games_win: number,
+       games_lose: number,
+       games: number 
+      };
     games?:             any[];
 }
 
@@ -44,7 +50,6 @@ export class User {
     intra_name? :       string;
     avatarURL! :        string;
     intra_id? :         number; 
-    //password? :         string;
     username! :         string;
     elo? :              number;
     staff? :            boolean;

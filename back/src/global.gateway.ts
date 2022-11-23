@@ -11,9 +11,10 @@ import { ConnectableObservable } from 'rxjs';
 import { RequestEvent } from './friends/interfaces/friends.event';
 import { BasicUserI } from './user/interface/basicUser.interface';
 import { ChatRoomI } from './chat/interfaces/chatRoom.interface';
+import { ConfigService } from '@nestjs/config';
 
 
-@WebSocketGateway(8181, { cors: { origin: '*' } })
+@WebSocketGateway(8181, { cors: { origin: 'localhost' } })
 export class GlobalGateway implements  OnGatewayConnection, OnGatewayDisconnect  {
 
   @WebSocketServer() server;

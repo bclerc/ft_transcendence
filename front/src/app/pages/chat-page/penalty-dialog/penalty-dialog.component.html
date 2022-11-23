@@ -1,0 +1,35 @@
+<div class="penalty">
+
+	<div *ngIf="data.penalty == 'MUTE'" class="penalty-header">
+		<p>Mute {{data.target.intra_name}}</p>
+	</div>
+  <div *ngIf="data.penalty == 'BAN'" class="penalty-header">
+		<p>Bannir {{data.target.intra_name}}</p>
+	</div>
+	<div class="penalty-content">
+		<form [formGroup]="form">
+			<mat-checkbox class="penalty-check-box" matCheckBox formControlName="perm">Permanent</mat-checkbox>
+			<div id="all-entry">
+				<div class="penalty-entry">
+					<input class= "penalty-time-input" type="number" value="0" formControlName="days">
+					<p>Jours </p>
+				</div>
+				<div class="penalty-entry">
+					<input class= "penalty-time-input" type="number" value="0" formControlName="hours">
+					<p>Heures</p>
+				</div>
+				<div class="penalty-entry">
+					<input class= "penalty-time-input" type="number" value="0" formControlName="minutes">
+					<p>Minutes</p>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="penalty-footer">
+		<button id="cancel" (click)="close()">Annuler</button>
+		<button *ngIf="data.penalty == 'MUTE'" id="sanction" (click)="action()">Mute</button>
+		<button *ngIf="data.penalty == 'BAN'" id="sanction" (click)="action()">Bannir</button>
+
+	</div>
+</div>

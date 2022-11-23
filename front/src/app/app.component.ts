@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { TokenStorageService } from './services/auth/token.storage';
+import { BurgerMenuService } from './services/burger-menu.service';
 import { HeaderService } from './services/user/header.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit{
               private socket: Socket,
               private snackBar: MatSnackBar,
               public navbar : HeaderService,
+              public burgerMenu : BurgerMenuService,
               private token : TokenStorageService,
               private changeDetector: ChangeDetectorRef,) { 
                 if (token.getToken())

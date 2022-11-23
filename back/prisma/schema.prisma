@@ -34,6 +34,7 @@ model User {
   games_win                     Game[]          @relation("gameWinnerRelation")
   games_lose                    Game[]          @relation("gameLoserRelation")          
   penalities                    ChatPenalty[]
+  score                         Int             @default(0)
   twoFactorEnabled              Boolean         @default(false)
   twoFactorAuthenticationSecret String?         @unique
   createdAt                     DateTime        @default(now())

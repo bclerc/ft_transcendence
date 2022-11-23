@@ -1,18 +1,16 @@
-import { Component, ElementRef, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
-import { ConnectableObservable, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserI } from 'src/app/models/user.models';
+import { ChatMobileService } from 'src/app/services/chat-mobile.service';
 import { ChatService } from 'src/app/services/chat/chat.service';
-import { ChatRoom, ChatRoomI } from 'src/app/services/chat/chatRoom.interface';
+import { ChatRoom } from 'src/app/services/chat/chatRoom.interface';
 import { Message } from 'src/app/services/chat/message.interface';
 import { UserService } from 'src/app/services/user/user.service';
-import { EditDialogComponent } from 'src/app/src/app/edit-room-chat/edit-dialog/edit-dialog.component';
-import { PenaltyDialogComponent } from 'src/app/src/app/edit-room-chat/penalty-dialog/penalty-dialog.component';
-import { PenaltyType } from 'src/app/src/app/edit-room-chat/penalty-dialog/penalty.interface';
-
+import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
@@ -24,6 +22,8 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   @Input() room: ChatRoom = {};
   @Input() user: UserI = {};
   @Input() friend: UserI = {};
+  @Input() chatMobileService! : ChatMobileService ;
+
 
 
   messages$: Observable<Message[]> = this.chatService.getMessages(this.room);
@@ -38,6 +38,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
     private userService: UserService,
     private socket: Socket,
     public dialog: MatDialog,
+    // public chatMobileService : ChatMobileService,
     private router : Router) { }
               
              
@@ -103,8 +104,8 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  // ejectUser(user: UserI) {
-  //   this.socket.emit('ejectRoom', { roomId: this.room.id, targetId: user.id });
-  // }
+  closeRoom() : void{
+		this.chatMobileService.hideRoom();
+	}
 }
 

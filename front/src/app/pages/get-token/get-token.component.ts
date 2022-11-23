@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router} from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { TokenStorageService } from '../../services/auth/token.storage';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { HeaderService } from 'src/app/services/user/header.service';
@@ -22,13 +22,13 @@ export class GetTokenComponent implements OnInit {
                 private navbar: HeaderService,
                 @Inject(Socket) private socket: Socket,
                 private snackBar : MatSnackBar,
+                private route : ActivatedRoute,
               ) {}
 
   tokenString! : string;
   
   ngOnInit(): void {  
-    
-    this.tokenString = this.router.url.split('/')[2];
+    this.tokenString  = this.route.snapshot.params['id'];
 
     try {
       this.jwtHelper.decodeToken(this.tokenString);
@@ -37,32 +37,12 @@ export class GetTokenComponent implements OnInit {
       this.socket.ioSocket.io.opts.query = 'token=' + this.token.getToken();
       this.socket.connect();
       this.navbar.show();
-      this.router.navigate(['/chat']);
+      this.router.navigate(['/game']);
    } catch(Error) {
-     //console.log("error");
-    this.snackBar.open("Le token est invalide", 'Undo', {
-      duration: 3000
+    this.snackBar.open("Merci de vous reconnectez", 'X', {
+      duration: 3000,
     });
     this.router.navigate(['/']);
    }
-
-    //console.log("this.tokenString")
-   // console.log("id = ", this.jwtHelper.decodeToken(this.tokenString).sub);
-    //console.log(this.tokenString);
-    //this.loggedin.isUserLoggedIn.next(true);
-    
   }
-
-  
-
-  /*response: function(res) {
-    if(res.config.url.indexOf(API) === 0 && res.data.token) {
-      auth.saveToken(res.data.token);
-    }
-  
-    return res;
-  }*/
-
-
-
 }

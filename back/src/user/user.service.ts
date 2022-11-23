@@ -2,6 +2,7 @@ import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nest
 import { FriendRequest, Prisma, User, UserState } from '@prisma/client';
 import { ChatService } from 'src/chat/chat.service';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
+import { dataPlayerI } from 'src/pong/interfaces/player.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { newIntraUserDto } from './dto/newIntraUser.dto';
 import { updateUserDto } from './dto/updateUser.dto';
@@ -91,7 +92,7 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<UserInfoI> {
-    const user = await this.prisma.user.findUnique({
+    const user: UserInfoI = await this.prisma.user.findUnique({
       where: {
         id: Number(id),
       },
@@ -116,6 +117,14 @@ export class UserService {
         games: {
           orderBy: {
             createdAt: 'desc',
+          },
+          where: {
+            winnerId: {
+              not: null,
+            },
+            loserId: {
+              not: null,
+            },
           },
           select: {
             id: true,
@@ -142,14 +151,23 @@ export class UserService {
             },
             winnerScore: true,
             loserScore: true,
-          }
+          },
         },
         blockedUsers: true,
         twoFactorEnabled: true,
         createdAt: true,
         updatedAt: true,
+        score: true,
+        _count: {
+          select: {
+            games_win: true,
+            games_lose: true,
+            games: true,
+          }
+        }
       }
     });
+    user.position_in_leaderboard = await this.getLeaderboardPosition(user.id);
     return user;
   }
 
@@ -159,6 +177,21 @@ export class UserService {
         email: String(iemail),
       },
     });
+  }
+
+  async getDataPlayer(id: number): Promise<dataPlayerI>
+  {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+      select: {
+        id: true,
+        displayname: true,
+        intra_name: true,
+      },
+    });
+    return user;
   }
 
   async findByName(name: string): Promise<any> {
@@ -180,6 +213,65 @@ export class UserService {
     return users;
   }
 
+  async getProfileUser(userId: number): Promise<any> {
+    if (!userId)
+      return null;
+    const user:any = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        state: true,
+        intra_name: true,
+        displayname: true,
+        email: true,
+        avatar_url: true,
+        score: true,
+        games: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          where: {
+            winnerId: {
+              not: null,
+            },
+            loserId: {
+              not: null,
+            },
+          },
+          include: {
+            winner: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+            loser: {
+              select: {
+                id: true,
+                displayname: true,
+                avatar_url: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            games_win: true,
+            games_lose: true,
+            games: true,
+          }
+        }
+      },
+    });
+    user.position_in_leaderboard = await this.getLeaderboardPosition(user.id);
+    if (user === undefined)
+      return null;
+    return user;
+  }
+
   async getBasicUser(userId: number): Promise<BasicUserI> {
     if (!userId)
       return null;
@@ -194,6 +286,14 @@ export class UserService {
         displayname: true,
         email: true,
         avatar_url: true,
+        score: true,
+        _count: {
+          select: {
+            games_win: true,
+            games_lose: true,
+            games: true,
+          }
+        }
       },
     });
     if (user === undefined)
@@ -262,6 +362,7 @@ export class UserService {
         },
         data: {
           displayname: update.displayname,
+          avatar_url: update.avatar_url,
         }
       });
       return {
@@ -288,6 +389,70 @@ export class UserService {
     }
   }
 
+  async setStates(users: BasicUserI[], status: UserState) {
+    if (users && status) {
+      for (const user of users) {
+        const loggedUser: boolean = this.onlineUserService.getUser(null, user.id) !== undefined;
+        await this.prisma.user.update({
+          where: {
+            id: Number(user.id),
+          },
+          data: {
+            state: loggedUser ? status : UserState.OFFLINE,
+          },
+        });
+      }
+    }
+  }
+
+  async getFriends(userId: number): Promise<BasicUserI[]> {
+    const user: any = await this.prisma.user.findUnique({
+      where: {
+        id: Number(userId),
+      },
+      select: {
+        friends: {
+          select: {
+            id: true,
+            state: true,
+            displayname: true,
+            intra_name: true,
+            email: true,
+            avatar_url: true,
+            score: true,
+            _count: {
+              select: {
+                games_win: true,
+                games_lose: true,
+                games: true,
+              }
+            }
+          },
+          orderBy: {
+            state: 'desc',
+          },
+        },
+      },
+    });
+
+    for (const friend of user.friends) {
+      friend.position_in_leaderboard = await this.getLeaderboardPosition(friend.id);
+    }
+    return user.friends;
+  }
+
+  async getLeaderboardPosition(userId: number): Promise<number> {
+    const leaderboard = await this.prisma.user.findMany({
+      orderBy: {
+        score: 'desc',
+      },
+      select: {
+        id: true,
+      },
+    });
+    return leaderboard.findIndex((user) => user.id === userId) + 1;
+  }
+
   /**
    * Blocked user
    */
@@ -295,7 +460,7 @@ export class UserService {
   async isBlocked(userId: number, targetId: number): Promise<boolean> {
     let blocked = await this.prisma.user.findFirst({
       where: {
-        id: targetId,
+        id: Number(targetId),
         blockedBy: {
           some: {
             id: userId,

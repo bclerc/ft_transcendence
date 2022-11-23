@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { Secret } from 'src/app/models/secret.models';
 import { UserService } from 'src/app/services/user/user.service';
@@ -24,6 +25,7 @@ export class Activate2FaComponent implements OnInit {
   constructor ( 
                 private fb: FormBuilder,
                 private userService: UserService,
+                private snackBar : MatSnackBar,
               ) {}
 
   ngOnInit(): void {
@@ -46,24 +48,17 @@ export class Activate2FaComponent implements OnInit {
   ActivateFa(): void {
     if (this.FaForm.valid)
     {
-      // this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue());
       this.subscription2 =this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe
       (
         (data : any) => {
-           //console.log("data =",data);
+          this.snackBar.open("2FA activé", 'Undo')
         },
         );
     }
   }
 
   RegenerateSecret(): void {
-    this.subscription3 =this.userService.RegenerateSecretFa().subscribe(
-      (data : any) => {
-         //console.log("data =",data);
-        //this.ob = data;
-      },
-      //error => this.router.navigate([''])
-      );
+    this.subscription3 =this.userService.RegenerateSecretFa().subscribe();
   }
 
 }

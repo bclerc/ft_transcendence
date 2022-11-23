@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class SendCodeComponent implements OnInit {
   FaForm: FormGroup = this.fb.group({
-    Code: new FormControl(null, [Validators.required]),
+    Code: new FormControl(null, [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern("^[0-9]*$")]),
     });
     tokenString! : string;
 
@@ -26,12 +26,11 @@ export class SendCodeComponent implements OnInit {
     {
       await this.user.ValidateFaCode(this.FaForm.controls['Code'].getRawValue()).subscribe(
         (data : any) => {
-          console.log("data =",data);
           this.token.saveToken(data.access_token);
-          location.reload();
+          this.router.navigate(["myprofile"]);
+          //location.reload();
           //this.tokenString = data;
         },
-        error => this.router.navigate(['error'])
         );
         
 

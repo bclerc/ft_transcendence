@@ -1,0 +1,11 @@
+<section id="file-uploader">
+    <input style="display: none" type="file" (change)="onFileUpload($event)" #selectFile>
+    <div id="img-n-button">
+        <img id="image-preview" [src]="imagePreview">
+        <button id="select" (click)="selectFile.click()">Sélectionner un fichier</button>
+        <button id="upload" (click)="OnUploadFile()">
+            Télécharger
+            <img src="../../../../assets/svg/checked.svg" alt="save">
+        </button>
+    </div>
+</section>

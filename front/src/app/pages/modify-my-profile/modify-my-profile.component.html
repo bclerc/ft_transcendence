@@ -1,24 +1,95 @@
-<img id="close-settings" src="../../../../../assets/svg/return.svg" alt="return" (click)="close()">
-<p></p>
-<form class="form" [formGroup]="ChangeDisplaynameForm" (ngSubmit)="ChangeDisplayName()">
-    <input maxlength="10" matInput placeholder="Displayname" formControlName="displayname">
-    <p></p>
-    <button [disabled]="!ChangeDisplaynameForm.valid" type="submit" id="change-button">Change Display Name</button>
-  </form>
-  <p></p>
-<app-file-uploader></app-file-uploader>
-  <div *ngIf="user?.twoFactorEnabled; then thenBlock else elseBlock"></div>
-  <ng-template #thenBlock>
-      <p></p>
-    <a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
-    </ng-template>
-  <ng-template #elseBlock>
-    <p *ngIf="!show"><a href="javascript:void(0);" (click)="showActivate2Fa()">Activate authentification with google authentificator</a></p>
-    <p *ngIf="show"><a href="javascript:void(0);" (click)="hideActivate2Fa()">Cacher la barre</a>
-    <app-activate2-fa></app-activate2-fa></p>
-  <!-- <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a> -->
-  
- </ng-template>
- <p></p>
- <app-list-user-blocked [user]="user"></app-list-user-blocked>
+<div id="modify-profile-body">
 
+	<!-- HEADER -->
+	<div class="param-header">
+		<img id="close-settings" src="../../../assets/svg/return.svg" alt="return" (click)="close()">
+		<h2>Paramètres de mon profil</h2>
+		<button id="action" matTooltip="Cette action est irréversible" (click)="logOut()">
+			Se déconnecter
+			<img src="../../../../assets/svg/quit.svg" alt="">
+		</button>
+	</div>
+
+	<!-- EDITER LE PROFILE -->
+	<section id="edit">
+
+		<div id="title-n-button">
+			<h3>Éditer mon profil</h3>
+			<!-- <button matTooltip="Enregister les mofifications">
+				Sauvegarder
+				<img src="../../../../assets/svg/checked.svg" alt="save" >
+			</button> -->
+		</div>
+
+		<div id="edit-name">
+			<form class="form" [formGroup]="ChangeDisplaynameForm" (ngSubmit)="ChangeDisplayName()">
+				<div id="input-box">
+					<p id="input-title">Nom</p>
+					<div class="input-n-button">
+						<textarea id="input-text" maxlength="10" placeholder="Displayname" formControlName="displayname"> </textarea>
+						<button [disabled]="!ChangeDisplaynameForm.valid" type="submit" id="change-button">
+							Sauvegarder
+							<img src="../../../../assets/svg/checked.svg" alt="save">
+						</button>
+					</div>
+				</div>
+				<!-- <input maxlength="10" matInput placeholder="Displayname" formControlName="displayname"> -->
+			</form>
+		</div>
+
+		<!-- UPLOAD PHOTO DE PROFILE -->
+
+		<h4>Photo de profil</h4>
+		<app-file-uploader [user]="user"></app-file-uploader>
+	</section>
+
+
+	<section id="activate">
+		<div id="title-n-button">
+			<h3>Activer la double authentification</h3>
+		</div>
+		<div *ngIf="user?.twoFactorEnabled; then thenBlock else elseBlock"></div>
+		<ng-template #thenBlock>
+			<a href="javascript:void(0);" (click)="DesactivateFa()">Desactivate 2 Fa</a>
+		</ng-template>
+		<ng-template #elseBlock>
+			<div *ngIf="!show" class="button-activate">
+				<a id="text" href="javascript:void(0);" (click)="showActivate2Fa()">
+					S'autentifier avec google
+				</a>
+				<a href="javascript:void(0);" (click)="showActivate2Fa()">
+					<img src="../../../assets/svg/down-arrow.svg" alt="">
+				</a>
+			</div>
+			<div *ngIf="show" class="button-activate2">
+				<div id="two2">
+					<a id="text" href="javascript:void(0);" (click)="hideActivate2Fa()">
+						Fermer
+					</a>
+					<a href="javascript:void(0);" (click)="hideActivate2Fa()">
+						<img src="../../../assets/svg/little-close.svg" alt="">
+					</a>
+				</div>
+				<app-activate2-fa></app-activate2-fa>
+			</div>
+			<!-- <a routerLink="/modifymyprofile/activate2fa" routerLinkActive="active">Activate authentification with google authentificator</a> -->
+		</ng-template>
+	</section>
+		
+	<!-- UTILISATEURS BLOQUEÉS -->
+	<section id="blocked">
+		<div id="title-n-button">
+			<!-- <ng-container *ngIf="pandingFriends | async as request"> -->
+				<ng-container *ngIf =  user.blockedUsers>
+					<ng-container *ngIf =  user.blockedUsers[0]>
+
+						<h3>Utilisateurs bloqués</h3>
+					</ng-container>
+
+				</ng-container>
+			<!-- </ng-container> -->
+			
+		</div>
+		<app-list-user-blocked [user]="user"></app-list-user-blocked>
+	</section>
+</div>

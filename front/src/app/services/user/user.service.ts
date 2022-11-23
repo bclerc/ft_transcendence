@@ -1,5 +1,6 @@
+import { isPlatformServer, } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import {Injectable } from '@angular/core';
+import {Injectable, Inject, PLATFORM_ID, Optional } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
@@ -7,7 +8,7 @@ import { FriendsRequestAction } from 'src/app/models/friends/friendsrequest.enum
 import { Secret } from 'src/app/models/secret.models';
 import { environment } from 'src/environments/environment';
 import { __values } from 'tslib';
-import { User, UserI } from '../../models/user.models';
+import { UserI } from '../../models/user.models';
 import { TokenStorageService } from '../auth/token.storage';
 
 @Injectable(/*{
@@ -18,7 +19,14 @@ export class UserService {
 
   private backUrl = 'http://'+ environment.host +':3000/api/v1/';
 
-  constructor(private route: ActivatedRoute ,private http : HttpClient, private token : TokenStorageService, private jwtService : JwtHelperService, private router : Router)
+  constructor ( private route: ActivatedRoute,
+                private http : HttpClient,
+                private token : TokenStorageService,
+                private jwtService : JwtHelperService,
+                private router : Router,
+                @Inject(PLATFORM_ID) private platformId: any,
+                @Optional() @Inject(Request) private request: any
+              )
   {}
 
   ngOnInit(): void 
@@ -64,14 +72,14 @@ export class UserService {
   }
 
   
-  getUserIdFromBack(id: number): Observable<UserI | undefined>
+  getUserIdFromBack(id: number): Observable<any>
   {
-    return this.http.get<UserI | undefined>(this.backUrl + "user/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<UserI>(this.backUrl + "user/profile/" + id, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   getDataUserListFromBack(): Observable<UserI[]>
   {
-    return this.http.get<User[]>(this.backUrl + "user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
+    return this.http.get<UserI[]>(this.backUrl + "user/", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
   }
 
   ChangeDbInformation(user : UserI): Observable<any>
@@ -152,7 +160,6 @@ export class UserService {
 
   blockUser(Id: any)
   {
-    console.log(this.backUrl + "user/block/" + Id ,{headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})});
     return this.http.post(this.backUrl + "user/block/" + Id,  null, {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
 
@@ -165,5 +172,17 @@ export class UserService {
   {
     return this.http.get<boolean>(this.backUrl + "user/good" , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
   }
+
+  GetUserHistory(id : number)
+  {
+    return this.http.get(this.backUrl + "user/profile/" + id , {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+  GetLeaderBord(): Observable<any[]>
+  {
+    return this.http.get<any[]>(this.backUrl + "game/leaderboard", {headers: new HttpHeaders({'Authorization' : 'Bearer ' + this.token.getToken()})})/*.pipe(catchError())*/;
+  }
+
+
 
 }
