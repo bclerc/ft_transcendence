@@ -34,15 +34,17 @@ export class HeaderService  {
     this.visible = false; 
   }
 
+
   hide() { this.visible = false; }
 
   show() { this.visible = true; }
 
   toggle() { this.visible = !this.visible; }
 
-  redirectToGame(gameId: number) {
-    // if user is spectator when he is invited, he will be redirected to the game
+  async redirectToGame(gameId: number) {
     this.router.navigate(['/game/']);
-    this.router.navigate(['/game/', gameId]);
+    setTimeout(() => {
+      this.router.navigate(['/game/' + gameId]);
+    }, 100);
   }
 }

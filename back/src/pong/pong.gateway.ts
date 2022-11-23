@@ -307,6 +307,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (game && game.dbGame) {
       this.server.to(winnerSocket).emit('win');
       this.server.to(loserSocket).emit('lose');
+      this.sendToGame(game, 'redirectGame', game.id);
     }
   }
 

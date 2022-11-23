@@ -12,7 +12,7 @@
 	<body>
 		<div class="center-pong">
 			
-			<ng-container *ngIf="this.state == 1" >
+			<div *ngIf="state == 1" >
 				<div class="players">
 					<a href="">
 						<img src="{{ game.users[0].avatar_url }}" alt="">
@@ -35,14 +35,13 @@
 				<div class="canvas-pong">
 					<canvas #canvas class="pongCanvas" id='pong' width="850" height="438" (window:resize)="onResizeWin($event)"></canvas>
 				</div>
-			</ng-container>
+			</div>
 		
 			<!-- Quand la partie termine -->
 			
-			<ng-container *ngIf="this.state == 2" >
-				<div class="all-finish">
-				
+			<div *ngIf="state == 2" >
 
+				<div class="all-finish">
 					<div class="finish">
 						<img id="desktop" src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
 						<div>
@@ -57,7 +56,7 @@
 							
 					</div>
 				</div>
-			</ng-container>
+			</div>
 		</div>
 		
 		<app-footer></app-footer>
