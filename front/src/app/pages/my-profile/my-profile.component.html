@@ -95,7 +95,7 @@
 						<!-- <ng-template *ngIf =  "let request of (pandingFriends | async)"> -->
 						<ng-container *ngIf="pandingFriends | async as request">
 							<ng-container *ngIf =  request[0]>
-								<h2>Mes demandes d'ami</h2>
+								<h2 id="mes-match-h2">Mes demandes d'ami</h2>
 							</ng-container>
 						</ng-container>
 						<div class="mes-demandes-damis">

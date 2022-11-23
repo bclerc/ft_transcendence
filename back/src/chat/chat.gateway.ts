@@ -1,18 +1,16 @@
 import { AdminUpdateEvent, BlockedUserEvent, DeleteRoomEvent, MessageUpdateEvent, NewRoomEvent, PardonEvent, RoomUpdateEvent, UserCanChatEvent, UserInvitedEvent, UserJoinEvent, UserKickEvent, UserLeaveEvent, UserPunishEvent } from './interfaces/chatEvent.interface';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { ChatRoomI, MessageI, newChatRoomI, PardonI } from './interfaces/chatRoom.interface';
+import { ChatRoomI, MessageI, newChatRoomI } from './interfaces/chatRoom.interface';
 import { DemoteUserI, PromoteUserI } from './interfaces/promote-user-i.interface';
 import { OnlineUserService } from 'src/onlineusers/onlineuser.service';
 import { SubscribeRoomDto } from './dto/subscribe-room.dto';
-import { ChatRoom, User } from '@prisma/client';
+import { ChatRoom } from '@prisma/client';
 import { WschatService } from 'src/wschat/wschat.service';
-import { jwtConstants } from 'src/auth/constants';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from './chat.service';
 import { EjectRoomI } from 'src/chat/interfaces/eject-room-i.interface';
 import { JwtService } from '@nestjs/jwt';
 import { BasicUserI } from 'src/user/interface/basicUser.interface';
-import { eventNames } from 'process';
 import { Inject } from '@nestjs/common';
 import { Socket } from 'socket.io';
 import { OnEvent } from '@nestjs/event-emitter';
@@ -193,7 +191,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     try {
       this.wschatService.newMessage(client.id, message);
     } catch (error) {
-      // console.log(error);
+      client.emit('notification', 'Une erreur s\'est produite');
+      console.log(error);
     }
   }
 

@@ -41,29 +41,6 @@ export class AuthController {
     return this.authService.login(user.id, false);
   }
 
-
-  /**
-  * @api {get} /auth/debug/marcus Connexion avec Marcus
-  * @apiDescription Marcus est un compte de debug, cette route renvoi un JWT lie a Marcus.
-  * @apiName marcus
-  * @apiGroup Debug
-  * @apiSuccess {String} access_token Token de connexion.
-  *                      Le token de connexion permet d'accéder à toutes les ressources protégées
-  *                      et d'identifier l'utilisateur connecté.
-  * @apiSuccessExample {json} Exemple de réponse en cas de succès:
-  * {
-  *   "access_token": 'ACCESS_TOKEN',
-  * }
-  */
-
-  @Get('/debug/marcus')
-  async getmarcus(@Res() res)
-  {
-    const marcus = await this.userService.getCheatCode();
-    const token = await this.authService.login(marcus.id, false);
-    res.redirect(`${this.configService.get('FRONT_HOST')}/login/${token.access_token}`);
-  }
-
   @Get('/debug/paul')
   async getpaul(@Res() res)
   {

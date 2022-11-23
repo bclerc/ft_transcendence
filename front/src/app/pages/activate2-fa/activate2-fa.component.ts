@@ -48,25 +48,17 @@ export class Activate2FaComponent implements OnInit {
   ActivateFa(): void {
     if (this.FaForm.valid)
     {
-      // this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue());
       this.subscription2 =this.userService.ActivateFacode(this.FaForm.controls["codeFa"].getRawValue()).subscribe
       (
         (data : any) => {
           this.snackBar.open("2FA activé", 'Undo')
-           //console.log("data =",data);
         },
         );
     }
   }
 
   RegenerateSecret(): void {
-    this.subscription3 =this.userService.RegenerateSecretFa().subscribe(
-      (data : any) => {
-         //console.log("data =",data);
-        //this.ob = data;
-      },
-      //error => this.router.navigate([''])
-      );
+    this.subscription3 =this.userService.RegenerateSecretFa().subscribe();
   }
 
 }

@@ -29,7 +29,6 @@ export class NewRoomComponent implements OnInit {
 	form: FormGroup = this.initFormGroup();
 
 	constructor(private chatService: ChatService, 
-		// public chatMobileService : ChatMobileService,
 	private userService: UserService) { }
 	
 	async ngOnInit() {

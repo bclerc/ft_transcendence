@@ -26,16 +26,13 @@ async function bootstrap() {
 
   app.enableCors({
     origin: '*',
+    credentials: true,
     methods: 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
   })
 
   app.useGlobalFilters(new HttpExceptionFilter())
   app.use(passport.initialize());
   app.use(passport.session())
-
-  app.enableCors({
-    origin: "*"
-  });
 
   await app.listen(3000);
 }
