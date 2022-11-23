@@ -39,7 +39,6 @@ export class HeaderComponent implements OnInit {
       this.connect = true;
     this.needToDisplayNewMessage();
 
-    // if the server is down, we display a message
     this.socket.on('connect_error', (error: any) => {
       this.crash = true;
       this.snackBar.open("La connection au serveur a été perdue", "Fermer", {
@@ -49,7 +48,6 @@ export class HeaderComponent implements OnInit {
       });
     });
 
-    // if the server is re connected, we display a message
     this.socket.on('connect', () => {
      if (this.crash) 
       window.location.reload();

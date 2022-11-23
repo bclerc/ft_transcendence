@@ -8,15 +8,12 @@ import { UserService } from 'src/app/services/user/user.service';
   templateUrl: './add-friend-list.component.html',
   styleUrls: ['./add-friend-list.component.css']
 })
-export class AddFriendListComponent implements OnInit {
+export class AddFriendListComponent {
 
-  constructor (
-                private userService : UserService,
-                private snackBar : MatSnackBar,
-              ) { }
-
-  ngOnInit(): void {
-  }
+  constructor(
+    private userService: UserService,
+    private snackBar: MatSnackBar,
+  ) { }
 
   async addFriend(friendId: any) {
     await this.userService.sendRequest(friendId.id).subscribe(
@@ -26,16 +23,7 @@ export class AddFriendListComponent implements OnInit {
           verticalPosition: 'top',
           horizontalPosition: 'right',
         })
-        // console.log(res);
-        //this.updateInfo();
       }
     );
   }
-
-  /*async updateInfo() {
-    this.friends = this.userService.getFriends();
-    this.pandingFriends = this.userService.getFriendRequests();
-  }*/
-
-
 }

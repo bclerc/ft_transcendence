@@ -12,7 +12,8 @@ import { AddFriendListComponent } from '../add-friend-list/add-friend-list.compo
   templateUrl: './list-my-friend.component.html',
   styleUrls: ['./list-my-friend.component.css']
 })
-export class ListMyFriendComponent implements OnInit {
+export class ListMyFriendComponent {
+
   @Input() user! : UserI
   @Input()friends! : UserI[];
 
@@ -25,21 +26,6 @@ export class ListMyFriendComponent implements OnInit {
 
   
   subscriptionFriend!: Subscription;
-
-  ngOnInit(): void {
-    // console.log("yakoi", this.friends);
-    // this.subscriptionFriend =  this.userService.getFriends().subscribe(
-    //   (data : any) => {
-    //     this.friends = data;
-    //   }
-    // );
-  }
-
-  ngOnDestroy() : void
-    {
-      // if (this.subscriptionFriend != undefined)
-      //   this.subscriptionFriend.unsubscribe;
-    }
 
     removeFriend(id : number | undefined) : void
     {
