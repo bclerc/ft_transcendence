@@ -8,7 +8,27 @@ import { HeaderService } from './services/user/header.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: `
+  <div id="desktop">
+
+<div *ngIf="navbar.visible">
+  <app-header></app-header>
+</div>
+<router-outlet></router-outlet>
+
+</div>
+
+<div id="mobile">
+<div *ngIf="navbar.visible">
+  <app-header></app-header>
+</div>
+<div *ngIf="!burgerMenu.visible">
+<router-outlet name="mobile"></router-outlet>
+</div>
+
+
+</div>
+  `,
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
