@@ -255,6 +255,8 @@ export class PongService {
   async joinGame(client: Socket, game: GameI) {
     const player: dataPlayerI = await this.onlineUserService.getDataPlayer(client.id);
 
+    if (!player)
+      return ;
     await this.gameService.addPlayerToGame(game.id, player.id);
     game.player2 = {
       user: player,

@@ -61,6 +61,7 @@
 		</div>
 
 		<!-- MEMBRE -->
+
 		<div id="membre" *ngFor="let member of (room.users) ">
 			<div class="info">
 				<a [routerLink]="['/profile/' + member.id ]">
@@ -81,7 +82,7 @@
 				</div>
 			</div>
 
-			<div class="buts">
+			<div *ngIf="user.id != member.id" class="buts">
 
 				<!-- Admin -->
 				<ng-container *ngIf="room.ownerId == user.id">
