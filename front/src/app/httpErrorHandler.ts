@@ -63,10 +63,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               })
             }
             else if (error.status === 401)
-            {
-              // console.log("status ="  ,error.status)
-              console.log("status ="  ,error.status);
-              
+            {              
               errorMessage = error.error.message;
               this.snackBar.open("Vous devez connectez", 'X', 
               {
@@ -77,11 +74,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             }
             else
             {
-              // console.log("status ="  ,error.status)
               errorMessage = error.error.message;
             }
-            //  console.log(errorMessage);
-                    
           return throwError(errorMessage);
                 })
             )
