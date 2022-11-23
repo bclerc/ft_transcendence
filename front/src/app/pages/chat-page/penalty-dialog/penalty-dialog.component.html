@@ -1,9 +1,11 @@
 <div class="penalty">
 
-	<div class="penalty-header">
-		<p>Sanctionner {{data.target.intra_name}}</p>
+	<div *ngIf="data.penalty == 'MUTE'" class="penalty-header">
+		<p>Mute {{data.target.intra_name}}</p>
 	</div>
-
+  <div *ngIf="data.penalty == 'BAN'" class="penalty-header">
+		<p>Bannir {{data.target.intra_name}}</p>
+	</div>
 	<div class="penalty-content">
 		<form [formGroup]="form">
 			<mat-checkbox class="penalty-check-box" matCheckBox formControlName="perm">Permanent</mat-checkbox>
@@ -25,7 +27,9 @@
 	</div>
 
 	<div class="penalty-footer">
-		<button id="cancel">Annuler</button>
-		<button id="sanction" (click)="action()">Sanctionner</button>
+		<button id="cancel" (click)="close()">Annuler</button>
+		<button *ngIf="data.penalty == 'MUTE'" id="sanction" (click)="action()">Mute</button>
+		<button *ngIf="data.penalty == 'BAN'" id="sanction" (click)="action()">Bannir</button>
+
 	</div>
 </div>

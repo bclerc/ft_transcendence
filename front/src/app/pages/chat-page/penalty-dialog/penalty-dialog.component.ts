@@ -62,6 +62,10 @@ export class PenaltyDialogComponent implements OnInit {
     }
   }
 
+  close(): void {
+    this.dialogRef.close();
+  }
+
   get perm () {
     return this.form.get('perm');
   }
