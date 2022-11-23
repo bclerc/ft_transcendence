@@ -268,6 +268,7 @@ export class PongService {
       },
       points: 0,
     }
+    console.log("game = ", game);
     this.eventEmitter.emit('game.users.matched', game);
   }
 
@@ -287,6 +288,7 @@ export class PongService {
     var i = 0;
 
     let winnerId, looserId, winnerScore, looserScore;
+    console.log("Game finished");
 
     if (game.player1.points === MAX_SCORE) {
       winnerId = game.player1.user.id;
@@ -300,13 +302,45 @@ export class PongService {
       winnerScore = game.player2.points;
       looserScore = game.player1.points;
     }
-    
+    //Draw le final dune autre maniere pour les spectators !!!
+    // game.spectators[].socket.emit('');
     this.gameService.stopGame(game.dbGame.id, winnerId, looserId, looserScore, winnerScore);
     this.eventEmitter.emit('game.end', game, winnerId, looserId);
     this.eventEmitter.emit('deleteGame', game);
   }
 
+
+  // async function waitUntil(condition) {
+  //     return await new Promise(resolve => {
+  //       const interval = setInterval(() => {
+  //         if (condition) {
+  //           resolve('foo');
+  //           clearInterval(interval);
+  //         };
+  //       }, 1000);
+  //     });
+  //   }
+
+
+  //
+  ////LOOPGAME
+  //
+
+
+  // async function waitUntil(condition) {
+  //     return await new Promise(resolve => {
+  //       const interval = setInterval(() => {
+  //         if (condition) {
+  //           resolve('foo');
+  //           clearInterval(interval);
+  //         };
+  //       }, 1000);
+  //     });
+  //   }
+
   async startGame(game: GameI, mapid: number) {
+
+    // declare pointer function to call
 
     if (mapid === 0) {
       await new Promise(resolve => {
@@ -336,18 +370,19 @@ export class PongService {
         }, 1000 / 60);
       });
     }
+    console.log("final startgame");
     this.eventEmitter.emit('deleteGame', game);
   }
 
 
   loopGameNormal(game: GameI) {
-
     ////
     //MOUVEMENTS DES JOUEURS
     ////
     game.player1.paddle.y += game.player1.paddle.dy;
     game.player2.paddle.y += game.player2.paddle.dy;
 
+    //blocage des paddle pour au'il ne deborde pas en haut ou en bas
     if (game.player1.paddle.y < 0)
       game.player1.paddle.y = 0;
     else if (game.player1.paddle.y > HEIGHTCANVAS - game.player1.paddle.height)
@@ -760,12 +795,12 @@ export class PongService {
     ////////VERTICALEMENT
     ///////
     game.ball.y += game.ball.dy;
-    if (game.ball.y - game.ball.radius <= 0)
+    if (game.ball.y - game.ball.radius <= 0) //sil y a un rebond bordures terrain
     {
       game.ball.dy *= -1;
       game.ball.y = 0 + game.ball.radius;
     }
-    else if (game.ball.y + game.ball.radius >= HEIGHTCANVAS)
+    else if (game.ball.y + game.ball.radius >= HEIGHTCANVAS) //rebond horiz bas
     {
       game.ball.dy *= -1;
       game.ball.y = HEIGHTCANVAS - game.ball.radius;
