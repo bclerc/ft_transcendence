@@ -30,9 +30,6 @@ export class GetTokenComponent implements OnInit {
   ngOnInit(): void {  
     this.tokenString  = this.route.snapshot.params['id'];
 
-    
-    // this.tokenString = this.router.url.split('/')[2];
-
     try {
       this.jwtHelper.decodeToken(this.tokenString);
       this.token.saveToken(this.tokenString);
@@ -47,24 +44,5 @@ export class GetTokenComponent implements OnInit {
     });
     this.router.navigate(['/']);
    }
-
-    //console.log("this.tokenString")
-   // console.log("id = ", this.jwtHelper.decodeToken(this.tokenString).sub);
-    //console.log(this.tokenString);
-    //this.loggedin.isUserLoggedIn.next(true);
-    
   }
-
-  
-
-  /*response: function(res) {
-    if(res.config.url.indexOf(API) === 0 && res.data.token) {
-      auth.saveToken(res.data.token);
-    }
-  
-    return res;
-  }*/
-
-
-
 }

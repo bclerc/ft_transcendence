@@ -48,7 +48,6 @@ export class ModifyMyProfileComponent implements OnInit {
   
 
   ngOnInit(): void{
-      // console.log(this.user);
     if (this.user)
     {
       this.ChangeDisplaynameForm = this.fb.group({
@@ -83,11 +82,8 @@ export class ModifyMyProfileComponent implements OnInit {
     this.userService.DesactivateFacode().subscribe(
       (data : any) => {
         this.snackBar.open("2FA desactivé", 'Undo');
-        //  console.log("data =",data);
-        //this.ob = data;
         this.user.twoFactorEnabled = false;
       },
-      //error => this.router.navigate([''])
       );
   }
 

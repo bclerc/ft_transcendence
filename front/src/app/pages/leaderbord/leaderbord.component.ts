@@ -14,12 +14,7 @@ export class LeaderbordComponent implements OnInit {
               ) { }
 
   ngOnInit(): void {
-    this.userService.GetLeaderBord().subscribe(
-      (data : any) =>
-      {
-        // console.log(data);
-      }
-    )
+    this.userService.GetLeaderBord().subscribe();
   }
 
 }

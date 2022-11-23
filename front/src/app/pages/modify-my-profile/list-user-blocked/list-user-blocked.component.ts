@@ -7,15 +7,11 @@ import { UserService } from 'src/app/services/user/user.service';
   templateUrl: './list-user-blocked.component.html',
   styleUrls: ['./list-user-blocked.component.css']
 })
-export class ListUserBlockedComponent implements OnInit {
+export class ListUserBlockedComponent {
   @Input() user! : UserI;
   constructor (
                 public userService : UserService,
               ) { }
-
-  ngOnInit(): void {
-    // console.log(this.user);
-  }
 
   unblock(id : number | undefined): void{
       this.userService.unBlockUser(id).subscribe(

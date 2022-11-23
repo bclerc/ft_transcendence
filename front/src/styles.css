@@ -37,6 +37,13 @@
 	font-style: normal;
 	font-weight: 300;
 }
+@font-face {
+	font-family: 'Qahiri-Regular';
+	src: url('../src/assets/fonts/Qahiri/Qahiri-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
 
 body {
   background-color: #1F1F1F;

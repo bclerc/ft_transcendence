@@ -23,12 +23,7 @@ export class FriendsPageComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.friends.subscribe(
-      (res: any) => {
-        console.log(res);
-      }
-    )
-
+    this.friends.subscribe();
   }
 
  async addFriend(friendId: any) {
@@ -42,7 +37,6 @@ export class FriendsPageComponent implements OnInit {
   async removeFriend(friendId: any) {
     await this.userService.removeFriend(friendId).subscribe(
       (res: any) => {
-        console.log(res);
         this.updateInfo();
     });
   }
