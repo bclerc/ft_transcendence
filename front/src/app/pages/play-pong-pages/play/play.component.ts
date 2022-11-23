@@ -19,7 +19,10 @@ const HEIGHTCANVAS = 638;
 const BACKSPACE = 40;
 const PLAYER1X = 0 + BACKSPACE;
 const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
-const FONT = 33;
+const SCOREHEIGHT = 40;
+const SCOREWIDTH = 40;
+const FONTSIZE = 60;
+const FONT = FONTSIZE + 'px Qahiri-Regular';
 
 ///
 // obstacls configs
@@ -99,7 +102,7 @@ export class PlayComponent implements OnInit {
     this.socket.on('lose', this.lose);
     this.socket.on('drawInit', this.drawInit);
     this.socket.on('drawText', this.drawText);
-    this.socket.on('drawName', this.drawName);
+    // this.socket.on('drawName', this.drawName);
   }
   
   ngOnInit(): void {
@@ -159,8 +162,9 @@ export class PlayComponent implements OnInit {
       if (context)
       {
         context.fillStyle = 'white';
-        context.font = FONT + 'px streetartfont';
-        context.fillText("YOU WIN", WIDTHCANVAS / 2 - FONT * 2, HEIGHTCANVAS / 2 - 10);
+        context.font = FONT;
+        const m = context.measureText('YOU WIN');
+        context.fillText("YOU WIN", canvas.width / 2 - (m.width / 2), canvas.height / 2);
       }
     }
   }
@@ -174,9 +178,9 @@ export class PlayComponent implements OnInit {
       if (context)
       {
         context.fillStyle = 'white';
-        context.font = FONT + 'px streetartfont';
-        context.fillText("YOU LOSE", WIDTHCANVAS / 2 - FONT * 2, HEIGHTCANVAS / 2 - 10);
-        // context.fillText("YOU LOSE", 300, 300, 500);
+        context.font = FONT;
+        const m = context.measureText('YOU LOSE');
+        context.fillText("YOU LOSE", canvas.width / 2 - (m.width / 2), canvas.height / 2);
       }
     }
   }
@@ -191,12 +195,10 @@ export class PlayComponent implements OnInit {
       var context = canvas.getContext('2d');
       if (context)
       {
-        context.fillStyle = 'white';
-        context.font = FONT + 'px streetartfont';
-        if (text == "Start !")
-          context.fillText(text, (canvas.width) / 2, (canvas.height) / 2);
-        else
-          context.fillText(text, (canvas.width) / 2, (canvas.height) / 2);
+        context.fillStyle = 'rgb(254, 239, 207)';
+        context.font = FONT;
+        const m = context.measureText(text);
+        context.fillText(text, (canvas.width) / 2 - m.width / 2, (canvas.height) / 2);
       }
     }
   }
@@ -210,12 +212,6 @@ export class PlayComponent implements OnInit {
       canvas.width = event.target.innerWidth;
     }
     this.drawInit();
-  }
-
-  drawName(side: number)
-  {
-    const left = document.getElementById('leftName');
-    const right = document.getElementById('rightName');
   }
 
   drawNormalMap(state: GameI){
@@ -240,22 +236,30 @@ export class PlayComponent implements OnInit {
           context.arc(CANVAS_RADIUS, canvas.height - CANVAS_RADIUS, CANVAS_RADIUS, Math.PI * 1 / 2, Math.PI);
           context.fill();
 
+          //draw score
+          context.fillStyle = 'rgb(254, 239, 207)';
+          context.font = FONT;
+          const m = context.measureText(state.player1!.points.toString());
+          context.fillText(state.player1!.points.toString(), (canvas.width) / 2 - SCOREWIDTH - m.width, SCOREHEIGHT);
+          context.fillText(state.player2!.points.toString(), (canvas.width) / 2 + SCOREWIDTH, SCOREHEIGHT);
+
           // Draw ball
           context.beginPath();
-          context.fillStyle = 'white';
+          context.fillStyle = 'rgb(254, 239, 207)';
           if (state.ball && state.ball.radius)
             context.arc(state.ball.x * ratiox, state.ball.y * ratioy, state.ball.radius * ratio, 0, Math.PI * 2, false);
           context.fill();
 
           // Draw middle line
-          context.strokeStyle = 'white';
+          context.strokeStyle = 'rgb(254, 239, 207)';
           context.beginPath();
           context.moveTo(canvas.width / 2, 0);
           context.lineTo(canvas.width / 2, canvas.height);
           context.stroke();
         
           // Draw paddle1
-          context.fillStyle = 'white';
+        context.fillStyle = 'rgb(254, 239, 207)';
+        // context.fillStyle = 'white';
           if (state.player1 && state.player1.paddle)
           {
             context.beginPath();
@@ -557,58 +561,6 @@ export class PlayComponent implements OnInit {
       }
   }
 
-  initState()
-  {
-    var p1 = {
-      paddle: {
-        x: 0,
-        y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-        dx: 0,
-        dy: 0,
-        width: PLAYER_WIDTH,
-        height: PLAYER_HEIGHT
-      },
-      points: 0
-    };
-
-  var p2 = {
-      paddle: {
-        x: WIDTHCANVAS - PLAYER_WIDTH,
-        y: HEIGHTCANVAS / 2 - PLAYER_HEIGHT / 2,
-        dx: 0,
-        dy: 0,
-        width: PLAYER_WIDTH,
-        height: PLAYER_HEIGHT
-      },
-      points: 0
-  };
-
-  var state: GameI = {
-    id: "1",
-    player1: p1,
-    player2: p2,
-    obstacle: {
-      x: MAP2_OBSTACLE_POSX,
-      y: MAP2_OBSTACLE_POSY,
-      dx: 0,
-      dy: MAP2_OBSTACLE_SPEED,
-      height: MAP2_OBSTACLE_H,
-      width: MAP2_OBSTACLE_W,
-    },
-    ball: {
-      x: WIDTHCANVAS / 2,
-      y: HEIGHTCANVAS / 2,
-      dx: -2,
-      dy: -2,
-      speed: 2,
-      width: 5,
-      height: 5,
-      radius: BALL_RADIUS
-    },
-  }
-  return state;
-  }
-
   drawInit() {
     var ratiox = 1;
     var ratioy = 1;
@@ -672,6 +624,11 @@ export class PlayComponent implements OnInit {
           var context = canvas.getContext('2d');
           if (context)
           {
+            //load font car il ne se charge pas des le chargement (??????)
+            context.font = FONT;
+            context.fillText('', 0, 0);
+  
+            // Draw rectangle noir
             context.fillStyle = 'black';
             context.beginPath();
             context.arc(CANVAS_RADIUS, CANVAS_RADIUS, CANVAS_RADIUS, Math.PI, Math.PI * 3 / 2);   

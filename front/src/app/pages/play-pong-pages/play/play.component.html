@@ -13,8 +13,7 @@
   <div align="center">
   <canvas #canvas class="pongCanvas" id='pong' width="850" height="480" (window:resize)="onResizeWin($event)"></canvas>
   </div>
-  
-  <div class="score_c" id="score">0 : 0</div>
+  <!-- <div class="score_c" id="score">0 : 0</div> -->
 </ng-container>
 
 <!-- Quand la partie termine -->
@@ -27,3 +26,9 @@
     <button mat-raised-button  (click)="goToGame()">Retour à l'accueil</button>
   </div>
 </ng-container>
+
+<footer>
+  <div class="footer">
+    <p>© 2022 - Pong</p>
+  </div>
+</footer>

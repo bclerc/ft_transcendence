@@ -379,7 +379,10 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('stopSearch')
   stopSearch(client: Socket) {
     const user = this.onlineUserService.getUser(client.id);
-    for (const [key, value] of this.gamesMap) {
+    if (!user)
+      return ;
+    for (const [key, value] of this.gamesMap)
+    {
       if (value.player1.user.id == user.id || (value.player2 && value.player2.user && value.player2.user.id == user.id))
         this.gamesMap.delete(key);
     }
@@ -387,7 +390,9 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('inGame')
   inGame(client: Socket, idGame: number) {
-    const user: dataPlayerI = this.onlineUserService.getDataPlayer(client.id);
+    const user = this.onlineUserService.getUser(client.id);
+    if (!user)
+      return ;
     for (let game of this.gamesMap.values())
       if (game.player1.user.id == user.id || (game.player2 && game.player2.user && game.player2.user.id == user.id)) {
         client.emit('inGame', true);
