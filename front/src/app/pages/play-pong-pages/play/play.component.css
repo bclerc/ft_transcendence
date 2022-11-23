@@ -200,14 +200,17 @@ hr.clear{
   .finish #mobile{
     display: flex;
     height: 60%;
-    width: 60%;
-    min-width: 60%;
+    width: 100%;
+    min-width: 100%;
     border-radius: 6px;
     /* margin:auto; */
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     object-fit: cover;
     border: 3px solid #ee481e;
     box-shadow: -5px 5px #ee481e;
+  }
+  .finish #pouce-title{
+    margin-bottom: 20px;
   }
 
   .finish button{
