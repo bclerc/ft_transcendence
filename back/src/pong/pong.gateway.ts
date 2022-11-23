@@ -166,7 +166,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('responseInvite')
   async responseInvite(client: Socket, response: responseInvite) {
     const user = this.onlineUserService.getUser(client.id);
-    console.log(response, "===========");
     if (user && response.accepted) {
       this.sendToPlayers(user, 'notification', "vous avez accepté l'invitation");
       let game = this.gamesMap.get(response.gameId);
@@ -313,10 +312,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @OnEvent('deleteGame')
   async deleteGame(game: GameI) {
-    console.log("delete game");
     if (game && (!game.player1 || !game.player2))
       return ;
-    console.log("delete game");
     this.gamesMap.delete(game.id);
     this.sendToGame(game, 'onGoingGames', await this.gameService.getStartedGames());
   }
@@ -421,7 +418,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   public async creatNewGameMap(client: Socket, mapId: number): Promise<GameI> {
     const user: dataPlayerI = this.onlineUserService.getDataPlayer(client.id);
-    console.log(user);
     if (!user)
       return;
     var game: GameI = this.pongService.initState();

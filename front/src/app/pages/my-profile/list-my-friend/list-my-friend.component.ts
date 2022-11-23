@@ -73,8 +73,8 @@ export class ListMyFriendComponent {
       const dialogConfig = new MatDialogConfig();
   
       dialogConfig.autoFocus = true;
-      dialogConfig.height = '30%';
-      dialogConfig.width = '90%';
+      // dialogConfig.height = '20%';
+      // dialogConfig.width = '40%';
   
       dialogConfig.data = {
           user : this.user,

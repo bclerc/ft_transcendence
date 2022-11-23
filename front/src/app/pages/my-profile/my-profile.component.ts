@@ -44,7 +44,6 @@ export class MyProfileComponent implements OnInit {
 
     this.subscriptionFriend = this.userService.getFriends().subscribe(
       (data: any) => {
-        console.log("data = ", data);
         this.friends = data;
       }
     )
@@ -93,7 +92,4 @@ export class MyProfileComponent implements OnInit {
       }
     )
   }
-
-
-
 }

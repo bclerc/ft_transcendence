@@ -68,7 +68,6 @@ export class PlayPongPagesComponent implements AfterViewInit
   {
     if (id && id != 0)
     {
-      console.log("stopSearchLoop");
       window.clearInterval(id);
       this.var_interval = 0;
     }

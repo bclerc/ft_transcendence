@@ -17,10 +17,6 @@ const HEIGHTCANVAS = 638;
 const BACKSPACE = 40;
 const PLAYER1X = 0 + BACKSPACE;
 const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
-const MAX_SCORE = 5;
-const MAX_SPEED = 10; //ball
-const defaultSpeed = 5; //speed de la balle par default
-const SPEED_PLAYER = 8
 
 /////
 //obstacls configs
@@ -68,9 +64,11 @@ export const MAP3_OBSTACLE2_POSX = (WIDTHCANVAS / 2) - (MAP3_OBSTACLE2_W / 2); /
 export const MAP3_OBSTACLE2_POSY = (HEIGHTCANVAS / 2) + ((HEIGHTCANVAS / 2 - MAP3_OBSTACLE2_H) / 2); // position y
 export const MAP3_OBSTACLE2_SPEED = 1;
 export const MAP3_OBSTACLE2_RADIUS = 2;
-//
-//
 
+export const MAX_SCORE = 5;
+export const MAX_SPEED = 10; //ball
+export const defaultSpeed = 5; //speed de la balle par default
+export const SPEED_PLAYER = 8
 
 @Injectable()
 export class PongService {
@@ -264,7 +262,6 @@ export class PongService {
       },
       points: 0,
     }
-    console.log("game = ", game);
     this.eventEmitter.emit('game.users.matched', game);
   }
 
@@ -284,7 +281,6 @@ export class PongService {
     var i = 0;
 
     let winnerId, looserId, winnerScore, looserScore;
-    console.log("Game finished");
 
     if (game.player1.points === MAX_SCORE) {
       winnerId = game.player1.user.id;
@@ -337,7 +333,6 @@ export class PongService {
         }, 1000 / 60);
       });
     }
-    console.log("final startgame");
     this.eventEmitter.emit('deleteGame', game);
   }
 
