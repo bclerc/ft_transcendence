@@ -114,7 +114,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
         return;
       }
     }
-    let game: GameI = this.searchGameMapAwaiting(normalOrNot);
+    let game: GameI = this.searchGameMapAwaiting(normalOrNot, user);
     if (game) {
       this.pongService.joinGame(client, game);
       await this.pongService.delay(1500);
@@ -190,16 +190,19 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
   //OTHER
   //////
 
-  private searchGameMapAwaiting(normalOrNot: boolean): GameI {
+  private searchGameMapAwaiting(normalOrNot: boolean, user: BasicUserI): GameI {
+    if (!user)
+      return ;
     if (normalOrNot) {
-      for (let value of this.gamesMap.values()) {
-        if (value.mapId === NORMALGAME && value.player2 === undefined)
+      for (let value of this.gamesMap.values()) 
+      {
+        if (value.mapId === NORMALGAME && value.player2 === undefined && user.id !== value.player1.user.id)
           return value;
       }
     }
     else {
       for (let value of this.gamesMap.values()) {
-        if (value.mapId !== NORMALGAME && value.player2 === undefined)
+        if (value.mapId !== NORMALGAME && value.player2 === undefined && user.id !== value.player1.user.id)
           return value;
       }
     }
@@ -234,7 +237,9 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (game && game.dbGame) {
       this.sendToGame(game, 'redirectGame', game.id);
       this.sendToGame(game, 'drawInit', null);
-      this.sendToGame(game, 'drawText', "4");
+      await this.pongService.delay(1000);
+      this.sendToGame(game, 'drawInit', null);
+      this.sendToGame(game, 'drawText', "La partie va commencer");
       await this.pongService.delay(1000);
       this.sendToGame(game, 'drawInit', null);
       this.sendToGame(game, 'drawText', "3");
@@ -270,10 +275,14 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect {
         score2: game.player2.points
       }
       for (const user of [game.player1.user, game.player2.user, ...game.spectators]) {
+
         if (!user || !user.id)
           continue;
         const userSocket = this.connectedUsers.get(user.id);
+        if (!userSocket)
+          continue;
         if (user && user && user.id) {
+          const userSocket = this.connectedUsers.get(user.id);
           this.server.to(userSocket).emit(map, game);
           this.server.to(userSocket).emit('score', score);
         }

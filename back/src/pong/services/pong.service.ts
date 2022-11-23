@@ -17,6 +17,10 @@ const HEIGHTCANVAS = 638;
 const BACKSPACE = 40;
 const PLAYER1X = 0 + BACKSPACE;
 const PLAYER2X = WIDTHCANVAS - PLAYER_WIDTH - BACKSPACE;
+const MAX_SCORE = 5;
+const MAX_SPEED = 10; //ball
+const defaultSpeed = 5; //speed de la balle par default
+const SPEED_PLAYER = 8
 
 
 /////
@@ -68,14 +72,6 @@ export const MAP3_OBSTACLE2_RADIUS = 2;
 //
 //
 
-////
-
-export const MAX_SCORE = 5;
-export const MAX_SPEED = 10; //ball
-export const defaultSpeed = 5; //speed de la balle par default
-export const SPEED_PLAYER = 8
-
-
 
 @Injectable()
 export class PongService {
@@ -110,7 +106,7 @@ export class PongService {
     });
     return isInGame;
   }
-
+  
   private colision(ball: BallI, paddle: PointI): boolean {
     if (ball.x + ball.radius < PLAYER2X && ball.x - ball.radius > (PLAYER1X + paddle.width))
       return false;
@@ -182,7 +178,6 @@ export class PongService {
       },
       points: 0
     };
-
     var state: GameI = {
       id: 1,
       player1: p1,
@@ -310,35 +305,6 @@ export class PongService {
     this.eventEmitter.emit('game.end', game, winnerId, looserId);
     this.eventEmitter.emit('deleteGame', game);
   }
-
-
-  // async function waitUntil(condition) {
-  //     return await new Promise(resolve => {
-  //       const interval = setInterval(() => {
-  //         if (condition) {
-  //           resolve('foo');
-  //           clearInterval(interval);
-  //         };
-  //       }, 1000);
-  //     });
-  //   }
-
-
-  //
-  ////LOOPGAME
-  //
-
-
-  // async function waitUntil(condition) {
-  //     return await new Promise(resolve => {
-  //       const interval = setInterval(() => {
-  //         if (condition) {
-  //           resolve('foo');
-  //           clearInterval(interval);
-  //         };
-  //       }, 1000);
-  //     });
-  //   }
 
   async startGame(game: GameI, mapid: number) {
 
