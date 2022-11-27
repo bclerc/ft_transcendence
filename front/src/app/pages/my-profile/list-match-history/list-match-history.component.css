@@ -1,0 +1,282 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1f1f1f;
+}
+a{
+	color: inherit;
+}
+
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+/* HISTORIQUE DES MATCHS -------------------------------------------------------- */
+
+.match-list{
+	margin-top: 30px;
+	list-style-type: none;
+}
+
+.match-list #match{
+	display: flex;
+	flex-direction: row;
+	background-color: #2b2a28;
+	padding: 20px;
+	border-radius: 6px;
+	color: #feefcf;
+	margin-top: 30px;
+}
+
+.result{
+	/* background-color: blueviolet; */
+	width: 30%;
+	font-family: Titan One;
+	font-size: 22px;
+	text-align: center;
+	margin: auto;
+	margin-right: 30px;
+}
+.result #win{
+	color: #43ee1e;
+}
+.result #loose{
+	color: #ef7e00;
+}
+
+.VS{
+	/* background-color: blue; */
+	width: 100%;
+	margin: auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+
+}
+.VS #my-profile, #my-enemy{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	font-family: ReadexPro-SemiBold;
+	font-size: 20px;
+	width:100%;
+}
+.VS #my-profile{
+	justify-content: flex-end;
+}
+
+.VS #my-profile img, #my-enemy img{
+	width: 50px; /* TODO: pb en responsive */
+	min-width: 50px;
+	height: 50px;
+	object-fit: cover;
+	border-radius: 40px;
+	border: 2px solid #ee481e;
+	box-shadow: -2px 2px #ee481e;
+	margin-right: 10px;
+}
+.VS #my-profile a, #my-enemy a{
+	display: flex;
+	align-items: center;
+}
+.VS #my-profile a:hover, #my-enemy a:hover{
+	color: #ee481e;
+	cursor: pointer;
+}
+
+#scores{
+	margin: 0px 70px 0px 70px;
+	display:flex;
+	flex-direction: row;
+}
+.VS #scores #score-lol{
+	background-color: #343330;
+	padding: 12px 12px 12px 12px;
+	min-width: 90px;
+	margin-right: 20px;
+	border-radius: 6px;
+	font-family: Titan One;
+	font-size: 52px;
+	text-align: center;
+
+}
+#scores #score-lol:last-child{
+	margin-right: 0px;
+}
+#scores #loser-score{
+	color: #9c9381;
+}
+
+@media only screen and (max-width: 1292px) {
+
+	#scores{
+		/* background-color: #EE481E; */
+		margin: 0px 40px 0px 40px;
+	}
+} 
+
+@media only screen and (max-width: 950px) {
+
+
+	.match-list #match{
+		display: flex;
+		flex-direction: column;
+		/* padding: 20px;
+		margin-top: 30px; */
+	}
+	
+	.result{
+		/* background-color: blueviolet; */
+		width: 100%;
+		margin-bottom: 10px;
+		font-size: 16px;
+		margin-right: 0px;
+	}
+
+	.VS #my-profile, #my-enemy{
+		/* background-color: blue; */
+		font-size: 16px;
+	}
+	
+	.VS #my-profile img, #my-enemy img{
+		width: 35px;
+		min-width: 35px;
+		height: 35px;
+	}
+
+	.VS #scores #score-lol{
+		padding: 12px;
+		min-width: 70px;
+		margin-right: 15px;
+		font-size: 35px;
+	}
+	#scores #score-lol:last-child{
+		margin-right: 0px;
+	}
+}
+
+@media only screen and (max-width: 830px) {
+
+}
+
+@media only screen and (max-width: 780px) {
+
+	#scores{
+		margin: 0px 20px 0px 20px;
+	}
+
+	.VS #my-profile, #my-enemy{
+		/* background-color: blue; */
+		font-size: 12px;
+	}
+	.VS #my-profile img, #my-enemy img{
+		width: 30px;
+		min-width: 30px;
+		height: 30px;
+	}
+	.VS #scores #score-lol{
+		padding: 12px;
+		min-width: 50px;
+		margin-right: 15px;
+		font-size: 25px;
+	}
+	#scores #score-lol:last-child{
+		margin-right: 0px;
+	}
+}
+
+@media only screen and (max-width: 610px) {
+
+	#friend-n-match h2{
+		font-size: 25px;
+	}
+}
+
+@media only screen and (max-width: 553px) {
+
+	.match-list #match{
+		display:flex;
+		flex-direction: column;
+		align-items: center;
+		font-size: 16px;
+		text-align: center;
+		padding: 15px;
+		margin-top: 20px;
+	}
+
+	.result{
+		/* background-color: blueviolet; */
+		width: 100%;
+		margin-bottom: 10px;
+		font-size: 16px;
+		margin-right: 0px;
+	}
+
+	.VS #my-profile, #my-enemy{
+		/* background-color: blue; */
+		font-size: 11px;
+	}
+
+	.VS #my-profile img, #my-enemy img{
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 490px) {
+
+}
+
+@media only screen and (max-width: 400px) {
+
+}

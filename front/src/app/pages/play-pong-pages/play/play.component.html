@@ -1,0 +1,63 @@
+<!-- quand la partie est en attente ou en cours-->
+<!-- <link rel="preload" href="../../../../assets/fonts/Visitor/visitor1.ttf" as="font" type="font/ttf" crossorigin> -->
+
+<html>
+	<head>
+		<title>Pong - Start to play</title>
+		<meta charset="utf-8" />
+		<meta name="description" content="Commence a jouer au pong" />
+		<meta name="author" content="Team transcendance 42" />
+		<meta name="copyright" content="© CC BY-NC-SA 4.0" />
+	</head>
+	<body>
+		<div class="center-pong">
+			
+			<div *ngIf="state == 1" >
+				<div class="players">
+					<div class="player">
+						<img src="{{ game.users[0].avatar_url }}" alt="">
+						<div class="info">
+							<p>{{ game.users[0].displayname }}</p>
+							<span>#{{ game.users[0].rank }}</span>
+						</div>
+					</div>
+					<div class="player">
+						<img src="{{ game.users[1].avatar_url }}" alt="">
+						<div class="info">
+							<p>{{ game.users[1] ? game.users[1].displayname  : "En attente" }}</p>
+							<span>#{{ game.users[1].rank }}</span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="canvas-pong">
+					<canvas #canvas class="pongCanvas" id='pong' width="850" height="438" (window:resize)="onResizeWin($event)"></canvas>
+				</div>
+			</div>
+		
+			<!-- Quand la partie termine -->
+			
+			<div *ngIf="state == 2" >
+
+				<div class="all-finish">
+					<div class="finish">
+						<img id="desktop" src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
+						<div>
+							<div id="pouce-title">
+								<img id="pouce" src="../../../../assets/svg/illu-pouce.svg" alt="">
+								<span>Match terminé</span>
+							</div>
+							<img id="mobile" src="{{ game.winner.avatar_url }}" alt="avatar" class="avatar" width="100px" height="100px">
+							<h1>{{ game.winner.displayname }} a gagné!</h1>
+							<button (click)="goToGame()">Retour à l'accueil</button>
+						</div>
+							
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<app-footer></app-footer>
+	</body>
+</html>
+

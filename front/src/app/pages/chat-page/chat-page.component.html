@@ -1,0 +1,175 @@
+<html>
+	<head>
+		<title>Pong - the chat page</title>
+		<meta charset="utf-8" />
+		<meta name="description" content="Discutes avec tes amis et c'est parti pour des heures de fun !" />
+		<meta name="author" content="Team transcendance 42" />
+		<meta name="copyright" content="© CC BY-NC-SA 4.0" />
+	</head>
+	<body>
+		<div class="center">
+
+			<!-- DESKTOP -->
+			<div class="main-container">
+
+				<!-- SIDEBAR -->
+				<aside class="sidebar">
+
+					<!-- USER -->
+					<div class="user-bloc">
+						<img src="{{ actualUser.avatar_url }}" alt="ma belle gueule">
+						<div id="user-info">
+							<a class="intraName" routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ actualUser.displayname }}</a>
+							<span class="intraEmail">{{actualUser.email}}</span>
+						</div>
+					</div>
+
+					<!-- SWITCH -->
+					<mat-tab-group class="switch-groupes-amis" [selectedIndex]="selected.value" style="width: 100%;">
+
+						<!-- MES GROUPES -->
+						<mat-tab id="chat-page-mat-tab">
+							<ng-template mat-tab-label>
+								<ng-container *ngIf="haveNewMessage">
+									<img style="margin-right: 5px;" src="../../../assets/svg/oval-cream.svg" alt="">
+								</ng-container>
+									Mes groupes
+							</ng-template>
+							<ul>
+								<li *ngFor="let room of (rooms$ | async)" [value]="room">
+									<p class="roomName" (click)="selectRoom(room)">{{room.name}}
+										<ng-container *ngIf="!room.seen">
+											<img style="margin-left: 2px; margin-bottom: -1px;" src="../../../assets/svg/oval-red.svg" alt="">
+										</ng-container>
+									</p>
+								</li>
+							</ul>
+						</mat-tab>
+
+						<!-- MES AMIS -->
+						<mat-tab id="chat-page-mat-tab">
+							<ng-template mat-tab-label>
+								<ng-container *ngIf="haveNewDm">
+									<img style="margin-right: 5px;" src="../../../assets/svg/oval-red.svg" alt="">
+								</ng-container>
+								Mes amis
+							</ng-template>
+							<ng-container *ngIf="!(dmRooms$ | async )">
+								<img width="244px" src="../../../assets/img/illu-aucun-ami.png"  alt="empty">
+							</ng-container>
+							<ul>
+								<li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
+									<p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).displayname }}
+										<ng-container *ngIf="!dm.seen">
+											<img style="margin-right: 5px;" src="../../../assets/svg/oval-red.svg" alt="">
+										</ng-container>
+									</p>
+								</li>
+							</ul>
+						</mat-tab>
+					</mat-tab-group>
+
+					<!-- BOUTON NOUVEAU GROUPE -->
+					<a class="button-new-room" (click)="NewRoom()">+ Nouveau groupe</a>
+
+				</aside> <!-- Sidebar -->
+
+				<!-- MAIN CONTENT -->
+				<main class="content-chat-page">
+					<ng-container *ngIf="!newRoom">
+						<app-room [friend] = "friend(selectedRoom)" [room]="selectedRoom" [user]="actualUser" [chatMobileService]="chatMobileService"></app-room>
+					</ng-container>
+					<ng-container *ngIf="newRoom">
+						<app-new-room [chatMobileService]="chatMobileService"></app-new-room>
+					</ng-container>
+				</main>
+			</div>
+
+
+			<!-- MOBILE -->
+			<div class="main-container-mobile">
+
+				<!-- SIDEBAR -->
+				<aside *ngIf="!chatMobileService.toggle()" class="sidebar">
+
+					<!-- USER -->
+					<div class="user-bloc">
+						<img src="{{ actualUser.avatar_url }}" alt="ma belle gueule">
+						<div id="user-info">
+							<a class="intraName" routerLink="/myprofile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ actualUser.displayname }}</a>
+							<span class="intraEmail">{{actualUser.email}}</span>
+						</div>
+					</div>
+
+					<!-- SWITCH -->
+					<mat-tab-group class="switch-groupes-amis" [selectedIndex]="selected.value">
+
+						<!-- MES GROUPES -->
+						<mat-tab id="chat-page-mat-tab">
+							<ng-template mat-tab-label>
+								<ng-container *ngIf="haveNewMessage">
+									<img style="margin-right: 5px;" src="../../../assets/svg/oval-cream.svg" alt="">
+								</ng-container>
+								Mes groupes
+							</ng-template>
+							<ul>
+								<li *ngFor="let room of (rooms$ | async)" [value]="room">
+									<p class="roomName" (click)="selectRoom(room)">{{room.name}}
+										<ng-container *ngIf="!room.seen">
+											<img style="margin-right: 5px;" src="../../../assets/svg/oval-red.svg" alt="">
+										</ng-container>
+									</p>
+								</li>
+							</ul>
+						</mat-tab>
+
+						<!-- MES AMIS -->
+						<mat-tab id="chat-page-mat-tab">
+							<ng-template mat-tab-label>
+								<ng-container *ngIf="haveNewDm">
+									<img style="margin-right: 5px;" src="../../../assets/svg/oval-red.svg" alt="">
+								</ng-container>
+								Mes amis
+							</ng-template>
+							<!-- <ng-container *ngIf="(dmRooms$ | async )">
+								<img src="../../../assets/img/illu-aucun-ami.png"  alt="empty">
+							</ng-container> -->
+							<ul>
+								<li *ngFor="let dm of (dmRooms$ | async)" [value]="dm">
+									<p class="roomName" (click)="selectRoom(dm)">{{ friend(dm).displayname }}
+									</p>
+								</li>
+							</ul>
+						</mat-tab>
+					</mat-tab-group>
+
+					<!-- BOUTON NOUVEAU GROUPE -->
+					<a class="button-new-room" (click)="NewRoom()">+ Nouveau groupe</a>
+
+				</aside> <!-- Sidebar -->
+
+				<!-- MAIN CONTENT -->
+				<main *ngIf="chatMobileService.toggle()" class="content-chat-page">
+					<ng-container *ngIf="!newRoom">
+						<!-- <ng-container *ngIf="chatMobileService.room"> -->
+							<app-room [friend] = "friend(selectedRoom)" [room]="selectedRoom" [user]="actualUser" [chatMobileService]="chatMobileService"></app-room>
+						<!-- </ng-container> -->
+					</ng-container>
+					<ng-container *ngIf="newRoom">
+						<!-- <ng-container *ngIf="chatMobileService.newroom"> -->
+							<app-new-room [chatMobileService]="chatMobileService"></app-new-room>
+						<!-- </ng-container> -->
+					</ng-container>
+				</main>
+			</div>
+		</div>
+	</body>
+</html>
+
+
+<ng-template #no_rooms>
+	<p class="no-room" >Vous n'avez pas encore de groupe</p>
+</ng-template>
+
+<app-footer></app-footer>
+

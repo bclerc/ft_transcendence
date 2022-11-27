@@ -1,0 +1,171 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1f1f1f;
+}
+a{
+	color: inherit;
+}
+
+.center{
+	margin: auto;
+	max-width: 1290px;
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+footer{
+    color: #feefcf;
+    /* background-color: black; */
+    margin-top: 50px;
+    padding: 40px 0px 40px 0px;
+    display: flex;
+    flex-direction: row;
+}
+
+.logo{
+    width: 100px;
+}
+
+footer .constructeurs{
+    /* background-color: violet; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: right;
+    width: 100%;
+    font-family: ReadexPro-Medium;
+    font-size: 16px;
+}
+
+#creator{
+    margin-right: 30px;
+    font-size: 12px;
+}
+
+footer .constructeurs a, footer .constructeurs-mobile a{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 40px;
+}
+footer .constructeurs a:last-child{
+    margin-right: 0px;
+}
+
+footer .constructeurs img, footer .constructeurs-mobile img{
+    width: 40px;
+	min-width: 40px;
+	height: 40px;
+	object-fit: cover;
+	border-radius: 100px;
+	border: 3px solid #ee481e;
+	box-shadow: -3px 3px #ee481e;
+    margin-right: 15px;
+}
+footer .constructeurs-mobile{
+	display: none;
+}
+
+@media only screen and (max-width: 1292px) {
+
+	.center{
+		margin: 0px 30px 0px 30px;
+	}
+}
+
+
+@media only screen and (max-width: 900px) {
+
+	footer .constructeurs{
+		display: none;
+	}
+	footer .constructeurs-mobile #contructs{
+		display: flex;
+		flex-direction: row;
+	}
+	
+	footer .constructeurs-mobile #lol{
+		width:fit-content;
+		display: flex;
+		flex-direction: column;
+		align-self: right;
+		margin-right: 20px;
+		/* margin-top: 30px; */
+	}
+	footer .constructeurs-mobile #lol:last-child{
+		margin-right: 0px;
+	}
+
+	footer .constructeurs-mobile{
+		display: flex;
+		flex-direction: column;
+		/* align-self: right; */
+		margin-left: 30px;
+		width: 100%;
+		font-family: ReadexPro-Medium;
+		font-size: 16px;
+	}
+
+	footer .constructeurs-mobile a{
+		margin-right: 0px;
+		margin-bottom: 20px;
+	}
+
+	footer .constructeurs-mobile a:last-child{
+		margin-bottom: 0px;
+	}
+}

@@ -1,0 +1,16 @@
+<section id="activate2-fa">
+	<ng-container *ngIf="Secret">
+		<div>
+			<p>secret : {{Secret.secret}} </p>
+			<!-- <p>otpauthUrl : {{Secret.otpauthUrl}} </p> -->
+			<img [src]="Secret.qrcode" [alt]="Secret.qrcode"/>
+		</div>
+	</ng-container>
+	
+	<!-- <a href="javascript:void(0);" (click)="RegenerateSecret()">Regénerer un secret</a> -->
+	
+	<form class="form" [formGroup]="FaForm" (ngSubmit)="ActivateFa()">
+		<input placeholder="Code a 6 chiffres" formControlName="codeFa">
+		<button [disabled]="!FaForm.valid" type="submit" id="change-button">Valider</button>
+	</form>
+</section>

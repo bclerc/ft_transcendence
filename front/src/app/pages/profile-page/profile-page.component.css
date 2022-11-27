@@ -1,0 +1,573 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1f1f1f;
+}
+a{
+	color: inherit;
+}
+
+.center-profile{
+	margin: auto;
+	max-width: 1290px;
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+#head{
+    display: flex;
+    flex-direction: row;
+	margin-bottom: 30px;
+}
+
+#user-info-profile, #stats{
+	background-color: #2B2A28;
+	border-radius: 20px;
+}
+#user-info-profile{
+    display: flex;
+    flex-direction: row;
+	width: 100%;
+	padding: 60px;
+}
+.profil-left img{
+	width: 140px;
+	min-width: 140px;
+	height: 140px;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 4px solid #ee481e;
+	box-shadow: -7px 7px #ee481e;
+}
+.profil-info{
+	width: 100%;
+	padding-left: 30px;
+	align-self: center;
+	/* background-color: cadetblue; */
+}
+
+.status{
+	display: flex;
+	flex-direction: row;
+	align-self: center;
+	background-color: #44433f;
+	/* border: 2px solid #44433f; */
+	width: fit-content;
+	padding: 4px 10px 5px 10px;
+	border-radius: 20px;
+}
+.status p{
+	margin-bottom: 0px;
+	font-family: ReadexPro-Light;
+	font-size: 14px;
+	color:#FEEFCF;
+	margin-right: 6px;
+}
+.status img{
+	margin-top: 1px;
+}
+.profil-info #name{
+	font-family: Titan One;
+	font-size: 60px;
+	color:#FEEFCF;
+	margin-bottom: 20px;
+}
+.profil-info #email{
+	font-family: ReadexPro-Medium;
+	font-size: 16px;
+	color:#FEEFCF;
+	margin-bottom: 10px;
+}
+.profil-info #date{
+	font-family: ReadexPro-Light;
+	font-size: 14px;
+	color:#FEEFCF;
+}
+.profil-info #name-n-param{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	/* align-items: center; */
+	/* background-color: blue; */
+}
+
+.butttts{
+	display: flex;
+	flex-direction: row;
+}
+
+.profil-info button{
+    margin-left: 20px;
+	height: 40px;
+	width: 40px;
+	border: none;
+	background-color: transparent;
+}
+
+.profil-info button:hover{
+	cursor: pointer;
+}
+
+#icon-admin:hover #icon{
+	fill: #f42323;
+}
+#icon-admin:hover #BG{
+	fill: #f42323;
+	stroke: #f42323;
+	opacity: 20%;
+}
+
+#icon-invite-game:hover #icon{
+	fill: #ee481e;
+}
+#icon-invite-game:hover #BG{
+	fill: #ee481e;
+	stroke: #ee481e;
+	opacity: 20%;
+}
+
+#icon-ask-friend:hover #icon{
+	fill: #ef5f00;
+}
+#icon-ask-friend:hover #BG{
+	fill: #ef5f00;
+	stroke: #ef5f00;
+	opacity: 20%;
+}
+
+#icon-mute:hover #icon{
+	fill: #f1a726;
+}
+#icon-mute:hover #BG{
+	fill: #f1a726;
+	stroke: #f1a726;
+	opacity: 20%;
+}
+
+#icon-block:hover #icon{
+	fill: #ef7e00;
+}
+#icon-block:hover #BG{
+	fill: #ef7e00;
+	stroke: #ef7e00;
+	opacity: 20%;
+}
+
+#icon-exclure:hover #icon{
+	fill: #ffcc00;
+}
+#icon-exclure:hover #BG{
+	fill: #ffcc00;
+	stroke: #ffcc00;
+	opacity: 20%;
+}
+
+#icon-bannir:hover #icon{
+	fill: #f9e131;
+}
+#icon-bannir:hover #BG{
+	fill: #f9e131;
+	stroke: #f9e131;
+	opacity: 20%;
+}
+
+
+/* .profil-right button{
+	background-color: transparent;
+	padding: 10px 25px 10px 30px;
+	font-family: ReadexPro-SemiBold;
+	color: #FEEFCF;
+	font-size: 14px;
+	border: 2px solid #44433f;
+	border-radius: 6px;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+.profil-right button a{
+	display: flex;
+	align-items: center;
+}
+.profil-right button img{
+	margin-left: 10px;
+	width: 20px;
+	height: 20px;
+}
+.profil-right button:hover{
+	border: 2px solid #ee481e;
+	color: #ee481e;
+} */
+
+.data-classement{
+	display: none;
+}
+
+#stats{
+	width: 50%;
+	margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+	align-items: center;
+	padding: 50px 30px 50px 30px;
+	text-align: center;
+}
+#stats .classement{
+	display: flex;
+	margin-bottom: 30px;
+}
+#stats #all-data{
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+#stats .data, #stats .classement{
+	display: flex;
+	flex-direction: column;
+	color: #feefcf;
+}
+#stats .data{
+	width:calc(33.333% - calc(20px / 3));
+	margin-right: 30px;
+}
+#stats .data:last-child{
+	margin-right: 0%;
+}
+
+#stats span{
+	font-family: Titan One;
+	font-size: 35px;
+	margin-bottom: 10px;
+}
+
+#stats #yellow {
+	color: #ffcc00;
+}
+#stats p{
+	font-family: ReadexPro-Medium;
+	font-size: 13px;
+	color: #feefcf;
+	margin-bottom: 0px;
+}
+
+.my-profile-content{
+	border: 2px solid #feefcf;
+	border-radius: 20px;
+	padding: 40px;
+}
+
+/* #stats{
+	width: 50%;
+	margin-left: 30px;
+    display: flex;
+    flex-direction: row;
+	align-items: center;
+	padding: 50px 30px 50px 30px;
+	text-align: center;
+}
+.data{
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+}
+.data span{
+	font-family: Titan One;
+	font-size: 35px;
+	margin-bottom: 10px;
+}
+#red {
+	color: #43ee1e;
+}
+#orange {
+	color: #EF7E00;
+}
+#yellow {
+	color: #efc10a;
+}
+.data p{
+	font-family: ReadexPro-Medium;
+	font-size: 13px;
+	color:#FEEFCF;
+}
+
+.my-profile-content{
+	border: 2px solid #FEEFCF;
+	border-radius: 20px;
+	padding: 40px;
+} */
+
+/* Styles for tab labels */
+#friend-n-match .mat-tab-label {
+	padding: 15px;
+	border-radius: 40px;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	font-size: 14px;
+	text-decoration: none;
+	letter-spacing: -0,16;
+}
+
+/* Styles for the active tab label */
+#friend-n-match .mat-tab-label.mat-tab-label-active {
+	padding: 15px;
+	background-color: #ee481e;
+	border-radius: 40px;
+	border: 2px solid #feefcf;
+	color: #feefcf;
+	font-family: ReadexPro-Medium;
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+/* Styles for the ink bar */
+.mat-ink-bar {
+	display: none;
+	box-shadow: none;
+}
+
+/* Mes demandes d'amis */
+.mes-demandes-damis{
+	margin-bottom: 100px;
+}
+
+.my-profile-content h2{
+	font-family: Titan One;
+	font-size: 35px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	color: #feefcf;
+}
+
+
+
+@media only screen and (max-width: 1292px) {
+
+	.center-profile{
+		margin: 0px 30px 0px 30px;
+	}
+    #head{
+		display: block;
+	}
+	#stats{
+		width: 100%;
+		margin-left: 0px;
+		flex-direction: row;
+	}
+	#user-info-profile{
+		margin-bottom: 30px;
+	}
+
+	#stats .classement{
+		display: none;
+	}
+
+	.data-classement{
+		display: flex;
+		flex-direction: column;
+		width: calc(25% - 22.5px);
+		margin-right: 30px;
+	}
+
+	#stats .data{
+		width: calc(25% - 22.5px);
+		margin-right: 30px;
+	}
+	#stats .data:nth-child(3n){
+		margin-right: 30px;
+	}
+	#stats .data:last-child{
+		margin-right: 0px;
+	}
+} 
+
+@media only screen and (max-width: 950px) {
+
+}
+
+@media only screen and (max-width: 830px) {
+
+	.profil-info #name{
+		font-size: 50px;
+	}
+}
+
+@media only screen and (max-width: 780px) {
+
+	#user-info-profile, #stats{
+		border-radius: 10px;
+	}
+	#stats{
+		padding: 30px;
+	}
+	#user-info-profile{
+		padding: 40px;
+		display: block;
+		text-align: center;
+	}
+	.profil-left img{
+		margin: auto;
+		margin-bottom: 30px;
+	}
+	.profil-info{
+		display:block;
+		padding-left: 0px;
+	}
+	.profil-info #name-n-param{
+		justify-content: center;
+	}
+
+	.status{
+		margin:auto;
+	}
+
+	#scores{
+		margin: 0px 20px 0px 20px;
+	}
+}
+
+
+@media only screen and (max-width: 610px) {
+
+	.demandes li {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.info-demande {
+		margin-bottom: 25px;
+		justify-content: center;
+	}
+
+	.demandes .buttts{
+		min-width: none;
+		width: 100%;
+		justify-content: center;
+		/* background-color: aqua; */
+	}
+	.demandes .buttts button:first-child{
+		margin-left: 0px;
+	}
+}
+
+@media only screen and (max-width: 610px) {
+
+	#friend-n-match h2{
+		font-size: 25px;
+	}
+}
+
+@media only screen and (max-width: 553px) {
+	
+	.profil-left img{
+		width: 100px;
+		min-width: 100px;
+		height: 100px;
+		border: 4px solid #ee481e;
+		box-shadow: -4px 4px #ee481e;
+	}
+	.profil-info #name{
+		font-size: 40px;
+	}
+	.profil-info #name-n-param img{
+		width: 35px;
+		height: 35px;
+		padding-top: 5px;
+		padding-bottom: 0px;
+		margin-left: 15px;
+	}
+
+}
+
+@media only screen and (max-width: 490px) {
+
+	/* Styles for tab labels */
+	#friend-n-match .mat-tab-label {
+		font-size: 12px;
+	}
+
+	/* Styles for the active tab label */
+	#friend-n-match .mat-tab-label.mat-tab-label-active {
+		font-size: 12px;
+	}
+
+	.data{
+		width: 90px;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+
+	/* Styles for tab labels */
+	#friend-n-match .mat-tab-label {
+		padding: 10px;
+		font-size: 10px;
+	}
+
+	/* Styles for the active tab label */
+	#friend-n-match .mat-tab-label.mat-tab-label-active {
+		padding: 10px;
+		font-size: 10px;
+	}
+
+	.data{
+		width: 70px;
+	}
+	.data span{
+		font-size: 25px;
+	}
+	.data p{
+		font-size: 12px;
+	}
+}
+

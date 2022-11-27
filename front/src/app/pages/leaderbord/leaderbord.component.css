@@ -1,0 +1,331 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Light';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Light.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Regular';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Regular.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Medium';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Medium.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-SemiBold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-SemiBold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+@font-face {
+	font-family: 'ReadexPro-Bold';
+	src: url('../../../assets/fonts/Readex_Pro/ReadexPro-Bold.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 300;
+}
+
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1f1f1f;
+}
+a{
+	color: inherit;
+}
+
+.center{
+	margin: auto;
+	max-width: 1290px;
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+#title-classement{
+    color: #feefcf;
+    text-align: center;
+    font-family: Titan One;
+    font-size: 32px;
+    margin-top: 40px;
+    line-height: 45px;
+}
+
+/* PODIUM --------------------------------------- */
+
+.podium{
+    max-width: 630px;
+    margin: auto;
+    clear: both;
+    display: flex;
+    flex-direction: row;
+    margin-top: 100px;
+    margin-bottom: 120px
+}
+
+.tiers{
+	margin-right: 30px;
+    height: 368px;
+    width:calc(33.333% - calc(20px / 3));
+    display: flex;
+    flex-direction: column;
+}
+.tiers:nth-child(3n){
+	margin-right: 0px;
+}
+
+.podium .profil{
+    margin: auto;
+    padding-bottom: 20px;
+    display: flex;
+    align-items: end;
+}
+.podium #profil-down{
+    /* background-color: #ee481e; */
+    color: #feefcf;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.podium .profil img{
+    height: 80px;
+    width: 80px;
+    min-width: 80px;
+    margin-bottom: 15px;
+    object-fit: cover;
+	border-radius: 60px;
+	border: 3px solid #ee481e;
+	box-shadow: -3px 3px #ee481e;
+}
+.podium .profil span{
+    color: #feefcf;
+    text-align: center;
+    font-family: Titan One;
+    font-size: 27px;
+}
+
+
+.podium .step1, .podium .step2, .podium .step3{
+    color: #feefcf;
+    text-align: center;
+    font-family: Titan One;
+    font-size: 70px;
+    padding-top: 20px;
+    border-radius: 6px;
+}
+.podium .step2{
+    background-color: #ef7e00;
+}
+.podium .step1{
+    background-color: #ee481e;
+}
+.podium .step3{
+    background-color: #ffcc00;
+}
+.podium #s1{
+    height: 70%;
+}
+.podium #s2{
+    height: 50%;
+}
+.podium #s3{
+    height: 30%;
+}
+
+/* LISTE DU CLASSEMENT ---------------------------------- */
+
+.classement .member{
+    background-color: #2b2a28;
+    padding: 30px;
+    color: #feefcf;
+    font-family: Titan One;
+    font-size: 30px;
+    border-radius: 6px;
+    margin-bottom: 30px;
+}
+
+.classement .member #classement-content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.classement .member .rank{
+    color: #ffcc00;
+    margin-right: 80px;
+}
+
+.classement .member .user{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 80px;
+}
+.classement .member .user:hover{
+    color: #9c9381;
+}
+.classement .member .user img{
+    height: 40px;
+    width: 40px;
+    min-width: 40px;
+    object-fit: cover;
+	border-radius: 60px;
+	border: 3px solid #ee481e;
+	box-shadow: -3px 3px #ee481e;
+    margin-right: 15px;
+}
+.classement .member .user span{
+    font-family: ReadexPro-SemiBold;
+    font-size: 20px;
+}
+
+.classement .member .data{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 60px;
+}
+.classement .member .data:last-child{
+    margin-right: 0px;
+}
+
+.classement .member .data #number{
+    margin-right: 15px;
+}
+.classement .member .data #data-name{
+    font-family: ReadexPro-Medium;
+    font-size: 14px;
+}
+
+
+/* GRILLE ------------------------------------------------ */
+
+@media only screen and (max-width: 1292px) {
+
+	.center{
+		margin: 0px 30px 0px 30px;
+	}
+}
+
+@media only screen and (max-width: 1100px) {
+
+    .classement .member{
+        font-size: 25px;
+    }
+
+    .classement .member .rank, .classement .member .user{
+        margin-right: 60px;
+    }
+
+    .classement .member .user span{
+        font-size: 16px;
+    }
+    .classement .member .data{
+        margin-right: 45px;
+    }
+    .classement .member .data #number{
+        margin-right: 15px;
+    }
+    
+}
+
+@media only screen and (max-width: 900px) {
+    
+    .classement .member{
+        font-size: 20px;
+    }
+    
+    .classement .member .user img{
+        height: 35px;
+        width: 35px;
+        min-width: 35px;
+    }
+    .classement .member .rank, .classement .member .user{
+        margin-right: 50px;
+    }
+    
+    .classement .member .data{
+        margin-right: 40px;
+    }
+    
+    .classement .member .data #data-name{
+        font-size: 12px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    
+    .classement .member{
+        font-size: 25px;
+    }
+    
+    .classement .member .user img{
+        height: 45px;
+        width: 45px;
+        min-width: 45px;
+    }
+    .classement .member .user{
+        margin-right: 0px;
+    }
+    .classement .member .user span{
+        font-size: 20px;
+    }
+    
+    .classement .member .data{
+        display: none;
+    }
+}
+
+
+@media only screen and (max-width: 690px) {
+
+    .tiers{
+        height: 290px;
+    }
+
+    .podium{
+        max-width: calc(100% - 60px);
+    }
+
+    .podium .profil span{
+        font-size: 16px;
+    }
+
+    .podium .profil img{
+        height: 60px;
+        width: 60px;
+        min-width: 60px;
+    }
+
+
+    .podium .step1, .podium .step2, .podium .step3{
+        font-size: 50px;
+        padding-top: 18px;
+    }
+}

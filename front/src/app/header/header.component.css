@@ -1,0 +1,149 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none;}
+
+
+*{
+	box-sizing: border-box;
+	transition: all ease 0.4s;
+}
+img{
+	max-width: 100%;
+	height: auto;
+}
+
+body{
+	background-color: #1F1F1F;
+	height: 100%
+}
+a{
+	color: inherit; /*pk ?*/
+}
+
+@font-face {
+	font-family: 'Titan One';
+	src: url('../../assets/fonts/Titan_One/TitanOne-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+.center{
+	margin: auto;
+	max-width: 1290px;
+	clear: both;
+}
+hr.clear{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	border: none;
+	height: 0px;
+	display: block;
+}
+
+header {
+	background-color: #1F1F1F;
+	padding: 30px;
+}
+#logo{
+	float: left;
+	margin: 20px 0px 0px 0px;
+	width: 196px;
+}
+
+#burger-menu{
+	display: none;
+}
+.nav-mobile{
+	display: none;
+}
+
+.right{
+	float: right;
+	text-align: right;
+	padding-top: 38px;
+}
+
+#header nav ul li{
+	font-family: Titan One;
+	font-size: 20px;
+}
+#header nav ul li a{
+	color: #feefcf;
+	padding-bottom: 6px;
+	text-decoration: none;
+}
+
+#header .right ul li{
+	display: inline-block;
+	margin-right: 60px;
+}
+#header .right ul li:last-child{
+	margin-right: 0px;
+}
+#header nav ul li a:hover{
+	border-bottom: 7px solid #ee481e;
+	/* text-decoration-line: 30% solid #ee481e; */
+}
+.active {
+	border-bottom: 7px solid #ee481e;
+}
+
+
+/* All mobile sizes (devices and browsers) */
+@media only screen and (max-width: 1080px) {
+
+	.right{
+		padding-top: 36px;
+	}
+	#header .right ul li{
+		font-size: 18px;
+	}
+	#logo{
+		width: 170px;
+	}
+}
+
+@media only screen and (max-width: 999px) {
+
+	*{
+		transition: none;
+	}
+	.right{
+		padding-top: 33px;
+	}
+	#header .right ul li{
+		font-size: 16px;
+		margin-right: 50px;
+	}
+}
+
+/* All mobile sizes (devices and browsers) */
+@media only screen and (max-width: 950px) {
+	
+	.right{
+		padding-top: 23px;
+	}
+	#header .right ul li{
+		display: none;
+	}
+	#logo{
+		margin: 15px 0px 0px 0px;
+	}
+	#burger-menu{
+		display: block;
+	}
+	.nav-mobile{
+		display: block;
+	}
+	#header .nav-mobile ul li{
+		margin-top: 50px;
+	}
+}
+
+/* Moblie Protrait size to Mobile Landscape size (devices and browsers) */
+@media only screen and (max-width: 675px) {
+	/* #logo{
+		width: 130px;
+		min-width: 130px;
+	} */
+}

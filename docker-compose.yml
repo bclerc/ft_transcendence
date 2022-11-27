@@ -1,0 +1,68 @@
+version:  '3.9'
+
+services:
+  postgresdb:
+    container_name: postgres
+    image: postgres:12
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      trans_network:
+        aliases: 
+          - postgres
+
+  backend:
+      image: back-end
+      container_name: trans_back-end
+      build:
+        context: back/
+        dockerfile: Dockerfile
+      restart: always
+      env_file:
+        - .env
+      environment:
+        DATABASE_URL: ${DATABASE_URL}
+      volumes:
+        - ./back/src:/app/src
+        - ./back/dist:/app/dist
+        - .env:/.env
+      ports:
+        - 3000:3000
+        - 8181:8181
+      networks:
+        - trans_network
+      depends_on:
+        - postgresdb
+
+  frontend:
+      image: frond-end
+      container_name: trans_front-end
+      build:
+        context: front/
+        dockerfile: Dockerfile
+      env_file:
+        - .env
+      environment:
+        HOST: ${HOST}
+      restart: always
+      volumes:
+        - ./front/src:/app/src/
+        - ./front/dist:/app/dist/
+      ports:
+        - 80:80
+      networks:
+       trans_network:
+
+volumes:
+  pgdata:
+
+networks:
+  trans_network:
+    driver: bridge
+
